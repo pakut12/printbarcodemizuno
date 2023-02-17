@@ -51,18 +51,18 @@
                             เลือก Stkcker
                         </div>
                         <div class="card-body">
-                            <div class="row">
+                            <div class="row ">
                                 <div class="col-sm-12 col-md-6">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                         <label class="form-check-label" for="flexRadioDefault1">
-                                            Default radio
+                                            รหัสเดียวในกล่อง
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
                                         <label class="form-check-label" for="flexRadioDefault2">
-                                            Default checked radio
+                                            สองรหัสในกล่อง
                                         </label>
                                     </div>
                                 </div>
@@ -70,13 +70,13 @@
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault1">
                                         <label class="form-check-label" for="flexRadioDefault1">
-                                            Default radio
+                                            สามรหัสในกล่อง
                                         </label>
                                     </div>
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="flexRadioDefault" id="flexRadioDefault2" >
                                         <label class="form-check-label" for="flexRadioDefault2">
-                                            Default checked radio
+                                            สี่รหัสในกล่อง
                                         </label>
                                     </div>
                                 </div>

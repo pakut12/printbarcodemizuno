@@ -9,6 +9,14 @@
         <servlet-name>Chklogout</servlet-name>
         <servlet-class>com.pg.lib.Servlet.Chklogout</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Detail</servlet-name>
+        <servlet-class>com.pg.lib.Servlet.Detail</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>Customer</servlet-name>
+        <servlet-class>com.pg.lib.Servlet.Customer</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Chklogin</servlet-name>
         <url-pattern>/Chklogin</url-pattern>
@@ -16,6 +24,14 @@
     <servlet-mapping>
         <servlet-name>Chklogout</servlet-name>
         <url-pattern>/Chklogout</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Detail</servlet-name>
+        <url-pattern>/Detail</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Customer</servlet-name>
+        <url-pattern>/Customer</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

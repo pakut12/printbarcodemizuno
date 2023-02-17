@@ -29,16 +29,11 @@ public class ConnectDB {
     public static Connection getConnection() throws ClassNotFoundException, SQLException, NamingException {
         // DB Orcacle
         Class.forName("oracle.jdbc.driver.OracleDriver");
-        Connection con = (Connection) DriverManager.getConnection("jdbc:oracle:thin:@10.0.62.18:1521:stock", "comp", "pmoc4");
+        Connection con = (Connection) DriverManager.getConnection("jdbc:oracle:thin:@10.0.62.18:1521:stock", "tsg", "gst666");
 
         return con;
     }
 
-    public static Connection getConnectionPGCA() throws ClassNotFoundException, SQLException, NamingException {
-        Class.forName("oracle.jdbc.driver.OracleDriver");
-        Connection con = (Connection) DriverManager.getConnection("jdbc:oracle:thin:@10.0.62.18:1521:stock", "pgca", "acgpg");
-        return con;
-    }
 
     public static void closeConnection(Connection conn) throws SQLException {
         conn.close();
