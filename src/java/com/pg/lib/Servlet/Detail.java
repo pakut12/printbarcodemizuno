@@ -4,11 +4,17 @@
  */
 package com.pg.lib.Servlet;
 
+import com.pg.lib.service.DetailService;
 import java.io.*;
 import java.net.*;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -22,13 +28,39 @@ public class Detail extends HttpServlet {
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
             String type = request.getParameter("type");
             if (type.equals("adddetails")) {
+                String customer_num = request.getParameter("customer_num");
+                String quantity_box = request.getParameter("quantity_box");
+                String initial = request.getParameter("initial");
+                String numberbox_start = request.getParameter("numberbox_start");
+                String numberbox_end = request.getParameter("numberbox_end");
+                String po = request.getParameter("po");
+                String gw = request.getParameter("gw");
+                String nw = request.getParameter("nw");
+                String country = request.getParameter("country");
+                String quantitytotal_box = request.getParameter("quantitytotal_box");
+                String description = request.getParameter("description");
+                String[] customer1_id = request.getParameterValues("customer1_id[]");
+                String[] customer2_id = request.getParameterValues("customer2_id[]");
+                String[] customer3_id = request.getParameterValues("customer3_id[]");
+                String[] customer4_id = request.getParameterValues("customer4_id[]");
+
+
+                DetailService ds = new DetailService();
+                Boolean status = ds.AddDataToMIZUNONEWBARBOXHD(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id);
+                JSONObject obj = new JSONObject();
+                if (status) {
+                    obj.put("status", "true");
+                } else {
+                    obj.put("status", "false");
+                }
                 
+                out.print(obj);
             }
         } finally {
             out.close();
@@ -43,7 +75,13 @@ public class Detail extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** 
@@ -53,7 +91,13 @@ public class Detail extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (JSONException ex) {
+            Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** 

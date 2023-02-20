@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 /**
  *
@@ -29,7 +31,7 @@ public class Customer extends HttpServlet {
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, ClassNotFoundException, SQLException, NamingException {
+            throws ServletException, IOException, ClassNotFoundException, SQLException, NamingException, JSONException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -42,24 +44,28 @@ public class Customer extends HttpServlet {
                 String customer_color = request.getParameter("customer_color");
                 String customer_size = request.getParameter("customer_size");
                 Boolean status = cs.AddDetailCustomer(customer_no, customer_barcode, customer_color, customer_size);
-
+                JSONObject obj = new JSONObject();
                 if (status) {
-                    out.print("true");
+                    obj.put("status", "true");
                 } else {
-                    out.print("true");
+                    obj.put("status", "false");
                 }
+
+                out.print(obj);
+
             } else if (type.equals("GetTableCustomer")) {
                 CustomerService cs = new CustomerService();
+                int num = 1;
                 List<BCCustomer> listcustomerdetail = cs.getDetailCustomer();
                 String html = "";
-                html += "<table class='table table-striped' id='mytable'>";
+                html += "<table class='table table-striped table-sm' id='mytable'>";
                 html += "<thead>";
                 html += "<tr>";
+                html += "<th>≈”¥—∫</th>";
                 html += "<th>√À— ≈Ÿ°§È“</th>";
                 html += "<th>√À— ∫“√Ï‚§È¥</th>";
                 html += "<th>Color</th>";
                 html += "<th>Size</th>";
-                html += "<th>®”π«πµ—«</th>";
                 html += "<th>‡‡°È‰¢</th>";
                 html += "<th>≈∫</th>";
                 html += "</tr>";
@@ -67,19 +73,89 @@ public class Customer extends HttpServlet {
                 html += "<tbody>";
                 for (BCCustomer list : listcustomerdetail) {
                     html += "<tr>";
+                    html += "<td>" + num + "</td>";
                     html += "<td>" + list.getCustomer_no() + "</td>";
                     html += "<td>" + list.getCustomer_barcode() + "</td>";
                     html += "<td>" + list.getCustomer_color() + "</td>";
                     html += "<td>" + list.getCustomer_size() + "</td>";
-                    html += "<td>" + list.getCustomer_quantity() + "</td>";
-                    html += "<td><button class='btn btn-warning btn-sm' type='button' id='bt_edit'>‡‡°È‰¢</button></td>";
-                    html += "<td><button class='btn btn-danger btn-sm' type='button' id='bt_del'>≈∫</button></td>";
+                    html += "<td><button class='btn btn-warning btn-sm' type='button' onclick='edit_customer(" + list.getCustomer_id() + ")' id='bt_edit'>‡‡°È‰¢</button></td>";
+                    html += "<td><button class='btn btn-danger btn-sm' type='button'  onclick='del_customer(" + list.getCustomer_id() + ")' id='bt_del'>≈∫</button></td>";
                     html += "</tr>";
+                    num++;
                 }
                 html += "</tbody>";
                 html += "</table>";
 
                 out.print(html);
+            } else if (type.equals("del_customer")) {
+                String customer_id = request.getParameter("customer_id");
+                CustomerService cs = new CustomerService();
+                Boolean statusdel = cs.DelDetailCustomer(customer_id);
+                String statusjson = "";
+
+                if (statusdel) {
+                    statusjson = "true";
+                } else {
+                    statusjson = "false";
+                }
+
+                JSONObject obj = new JSONObject();
+                obj.put("status", statusjson);
+
+                out.print(obj);
+
+            } else if (type.equals("GetCustomerByID")) {
+                CustomerService cs = new CustomerService();
+                String id = request.getParameter("customer_id");
+                List<BCCustomer> listcustomerdetail = cs.getDetailCustomerByID(id);
+
+                JSONObject obj = new JSONObject();
+                obj.put("customer_id", listcustomerdetail.get(0).getCustomer_id());
+                obj.put("customer_no", listcustomerdetail.get(0).getCustomer_no());
+                obj.put("customer_barcode", listcustomerdetail.get(0).getCustomer_barcode());
+                obj.put("customer_color", listcustomerdetail.get(0).getCustomer_color());
+                obj.put("customer_size", listcustomerdetail.get(0).getCustomer_size());
+
+                out.print(obj);
+
+            } else if (type.equals("update_customer")) {
+                CustomerService cs = new CustomerService();
+                String customer_id = request.getParameter("customer_id");
+                String customer_no = request.getParameter("customer_no");
+                String customer_barcode = request.getParameter("customer_barcode");
+                String customer_color = request.getParameter("customer_color");
+                String customer_size = request.getParameter("customer_size");
+
+                Boolean statusupdate = cs.UpdateDetailCustomer(customer_id, customer_no, customer_barcode, customer_color, customer_size);
+
+                JSONObject obj = new JSONObject();
+                if (statusupdate) {
+                    obj.put("status", "true");
+                } else {
+                    obj.put("status", "false");
+                }
+
+                out.print(obj);
+
+            } else if (type.equals("update_customer")) {
+                CustomerService cs = new CustomerService();
+                String customer_id = request.getParameter("customer_id");
+                String customer_no = request.getParameter("customer_no");
+                String customer_barcode = request.getParameter("customer_barcode");
+                String customer_color = request.getParameter("customer_color");
+                String customer_size = request.getParameter("customer_size");
+
+                Boolean statusupdate = cs.UpdateDetailCustomer(customer_id, customer_no, customer_barcode, customer_color, customer_size);
+
+                JSONObject obj = new JSONObject();
+                if (statusupdate) {
+                    obj.put("status", "true");
+                } else {
+                    obj.put("status", "false");
+                }
+
+                out.print(obj);
+
             }
         } finally {
             out.close();
@@ -95,7 +171,11 @@ public class Customer extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            processRequest(request, response);
+            try {
+                processRequest(request, response);
+            } catch (JSONException ex) {
+                Logger.getLogger(Customer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Customer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
@@ -113,7 +193,11 @@ public class Customer extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            processRequest(request, response);
+            try {
+                processRequest(request, response);
+            } catch (JSONException ex) {
+                Logger.getLogger(Customer.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Customer.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
