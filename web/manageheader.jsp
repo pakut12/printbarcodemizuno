@@ -24,16 +24,12 @@
                         <div class="col">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                             </div>
                         </div>
+                        
                         <div class="col">
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-                            </div>
+                            <button type="button" class="btn btn-outline-success btn-sm w-25 ">ค้นหา</button>
                         </div>
                     </div>
                     
@@ -47,7 +43,7 @@
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
-                                    <select class="form-select form-select-sm" id="">
+                                    <select class="form-select form-select-sm text-center" id="">
                                         <option value="MUS">MUS</option>
                                         <option value="MCA">MCA</option>
                                         <option value="MCL">MCL</option>
@@ -62,28 +58,28 @@
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่กล่องจาก</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนกล่องทั้งหมด</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                         </div>
@@ -91,13 +87,13 @@
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                         </div>
@@ -105,21 +101,21 @@
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                 </div>
                             </div>
                             <div class="col">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                    <input type="text" class="form-control" aria-label="Sizing example input" value="THAILAND">
+                                    <input type="text" class="form-control text-center" aria-label="Sizing example input" value="THAILAND">
                                 </div>
                             </div>
                         </div>
@@ -129,16 +125,16 @@
                                     <div class="">รหัสลูกค้า</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             <div class="col">
@@ -146,16 +142,16 @@
                                     <div class="text-start">รหัสบาร์โค้ด</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             <div class="col">
@@ -163,16 +159,16 @@
                                     <div class="text-start">Color</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             <div class="col">
@@ -180,16 +176,16 @@
                                     <div class="text-start">Size</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                             <div class="col">
@@ -197,16 +193,16 @@
                                     <div class="">จำนวนตัว</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm w-75" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                    <input type="text" class="form-control form-control-sm" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
                                 </div>
                             </div>
                         </div>

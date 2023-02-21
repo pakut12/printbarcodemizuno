@@ -111,11 +111,12 @@
                                 <h5 class="card-header">Õ—æ‚À≈¥¢ÈÕ¡Ÿ≈</h5>
                                 <div class="card-body">
                                     <form id="myformupload">
-                                        <div class="row text-end mb-3">
+                                        <div class="row text-end mb-1">
                                             <a href="attachfile/download_master/master.xls"><button type="button" class="btn btn-outline-success btn-sm w-25 " >‚À≈¥‰ø≈Ï Master</button></a>
                                         </div>
                                         <div class="row justify-content-center mb-3">
                                             <div class="col-sm-12 col-md-8">
+                                                <label for="customer_file">File : </label>
                                                 <input type="file" class="form-control form-control-sm text-center" name="customer_file" id="customer_file" required>
                                             </div>
                                         </div>
