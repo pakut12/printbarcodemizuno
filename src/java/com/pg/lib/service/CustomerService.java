@@ -25,20 +25,64 @@ public class CustomerService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    public Boolean AddDetailCustomer(String customer_no, String customer_barcode, String customer_color, String customer_size) throws ClassNotFoundException, SQLException, NamingException {
-        List<BCCustomer> listcustomerdetail = new ArrayList<BCCustomer>();
+    public List<BCCustomer> ChackDetailCustomerAll(String CUSTOMER_NO) throws ClassNotFoundException, SQLException, NamingException {
+
+        List<BCCustomer> list = new ArrayList<BCCustomer>();
+        int primarykey = getprimarykey() + 1;
+        try {
+            String sql = "select * from  MIZUNOCUSTOMER  c  where c.CUSTOMER_NO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, CUSTOMER_NO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                BCCustomer cs = new BCCustomer();
+                cs.setCustomer_id(rs.getString("customer_id"));
+                cs.setCustomer_no(rs.getString("customer_no"));
+                cs.setCustomer_barcode(rs.getString("customer_barcode"));
+                cs.setCustomer_color(rs.getString("customer_color"));
+                cs.setCustomer_size(rs.getString("customer_size"));
+                cs.setCustomer_description(rs.getString("customer_description"));
+                list.add(cs);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return list;
+
+    }
+
+    private String ChackDetailCustomer(String CUSTOMER_NO) throws ClassNotFoundException, SQLException, NamingException {
+        String key = "";
+        int primarykey = getprimarykey() + 1;
+        try {
+            String sql = "select * from  MIZUNOCUSTOMER  c  where  c.CUSTOMER_NO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, CUSTOMER_NO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                key = rs.getString("CUSTOMER_ID");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return key;
+    }
+
+    public Boolean AddDetailCustomerMultiple(List<BCCustomer> list) throws ClassNotFoundException, SQLException, NamingException {
         Boolean status = true;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size) VALUES (?, ?, ?, ?,?)";
+            String sql = SqlAddDetailCustomerMultiple(list);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setInt(1, primarykey);
-            ps.setString(2, customer_no.toUpperCase());
-            ps.setString(3, customer_barcode);
-            ps.setString(4, customer_color.toUpperCase());
-            ps.setString(5, customer_size.toUpperCase());
-
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {
@@ -50,23 +94,79 @@ public class CustomerService {
             ConnectDB.closeConnection(conn);
             ps.close();
         }
+        return status;
+    }
+
+    private String SqlAddDetailCustomerMultiple(List<BCCustomer> list) throws ClassNotFoundException, SQLException, NamingException {
+        String sql = "INSERT ALL ";
+        int primarykey = getprimarykey() + 1;
+        for (int n = 0; n < list.size(); n++) {
+            if (!ChackDetailCustomer(list.get(n).getCustomer_no()).equals("")) {
+                UpdateDetailCustomer(ChackDetailCustomer(list.get(n).getCustomer_no()), list.get(n).getCustomer_no(), list.get(n).getCustomer_barcode(), list.get(n).getCustomer_color(), list.get(n).getCustomer_size(), list.get(n).getCustomer_description());
+            } else {
+                sql += " INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_description) VALUES (";
+                sql += "'" + primarykey + "',";
+                sql += "'" + list.get(n).getCustomer_no() + "',";
+                sql += "'" + list.get(n).getCustomer_barcode() + "',";
+                sql += "'" + list.get(n).getCustomer_color() + "',";
+                sql += "'" + list.get(n).getCustomer_size() + "',";
+                sql += "'" + list.get(n).getCustomer_description() + "')";
+            }
+            primarykey++;
+        }
+        sql += " SELECT * FROM dual";
+        return sql;
+    }
+
+    public Boolean AddDetailCustomer(String customer_no, String customer_barcode, String customer_color, String customer_size, String customer_description) throws ClassNotFoundException, SQLException, NamingException {
+        List<BCCustomer> listcustomerdetail = new ArrayList<BCCustomer>();
+        Boolean status = false;
+        int primarykey = getprimarykey() + 1;
+        try {
+            if (!ChackDetailCustomer(customer_no).equals("")) {
+                status = UpdateDetailCustomer(ChackDetailCustomer(customer_no), customer_no, customer_barcode, customer_color, customer_size, customer_description);
+            } else {
+                String sql = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_description) VALUES (?, ?, ?, ?,?,?)";
+                conn = ConnectDB.getConnection();
+                ps = conn.prepareStatement(sql);
+                ps.setInt(1, primarykey);
+                ps.setString(2, customer_no.toUpperCase());
+                ps.setString(3, customer_barcode);
+                ps.setString(4, customer_color.toUpperCase());
+                ps.setString(5, customer_size.toUpperCase());
+                ps.setString(6, customer_description.toUpperCase());
+
+                if (ps.executeUpdate() > 0) {
+                    status = true;
+                } else {
+                    status = false;
+                }
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
 
 
         return status;
     }
 
-    public Boolean UpdateDetailCustomer(String customer_id, String customer_no, String customer_barcode, String customer_color, String customer_size) throws ClassNotFoundException, SQLException, NamingException {
+    public Boolean UpdateDetailCustomer(String customer_id, String customer_no, String customer_barcode, String customer_color, String customer_size, String customer_description) throws ClassNotFoundException, SQLException, NamingException {
 
-        Boolean status = true;
+        Boolean status = false;
         try {
-            String sql = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ? where c.CUSTOMER_ID = ?";
+            String sql = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?  where c.CUSTOMER_ID = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, customer_no);
             ps.setString(2, customer_barcode);
             ps.setString(3, customer_color);
             ps.setString(4, customer_size);
-            ps.setString(5, customer_id);
+            ps.setString(5, customer_description);
+            ps.setString(6, customer_id);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -87,7 +187,7 @@ public class CustomerService {
     public Boolean DelDetailCustomer(String customer_id) throws ClassNotFoundException, SQLException, NamingException {
 
         List<BCCustomer> listcustomerdetail = new ArrayList<BCCustomer>();
-        Boolean status = true;
+        Boolean status = false;
         try {
             String sql = "delete from MIZUNOCUSTOMER where customer_id = ?";
             conn = ConnectDB.getConnection();
@@ -123,6 +223,7 @@ public class CustomerService {
                 customerdetail.setCustomer_barcode(rs.getString("customer_barcode"));
                 customerdetail.setCustomer_color(rs.getString("customer_color"));
                 customerdetail.setCustomer_size(rs.getString("customer_size"));
+                customerdetail.setCustomer_description(rs.getString("customer_description"));
                 listcustomerdetail.add(customerdetail);
             }
         } catch (Exception e) {
@@ -150,6 +251,7 @@ public class CustomerService {
                 customerdetail.setCustomer_barcode(rs.getString("customer_barcode"));
                 customerdetail.setCustomer_color(rs.getString("customer_color"));
                 customerdetail.setCustomer_size(rs.getString("customer_size"));
+                customerdetail.setCustomer_description(rs.getString("customer_description"));
                 listcustomerdetail.add(customerdetail);
             }
         } catch (Exception e) {

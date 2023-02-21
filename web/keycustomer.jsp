@@ -43,6 +43,10 @@
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Size</span>
                                 <input type="text" class="form-control text-center" id="edit_customer_size" maxlength="3" required>
                             </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
+                                <input type="text" class="form-control text-center" id="edit_customer_description" required>
+                            </div>
                         </div>
                     </form>
                     <div class="modal-footer">
@@ -66,25 +70,31 @@
                                             <div class="col-sm-12 col-md-6">
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
-                                                    <input type="text" class="form-control" name="customer_no" id="customer_no" required>
+                                                    <input type="text" class="form-control text-center" name="customer_no" id="customer_no" required>
                                                 </div>
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">รหัสบาร์โค้ด</span>
-                                                    <input type="number" class="form-control" name="customer_barcode" id="customer_barcode" required>
+                                                    <input type="number" class="form-control text-center" name="customer_barcode" id="customer_barcode" required>
                                                 </div>
                                                 
                                             </div>
                                             <div class="col-sm-12 col-md-6">
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">Color</span>
-                                                    <input type="text" class="form-control" name="customer_no" id="customer_color" maxlength="2" required>
+                                                    <input type="text" class="form-control text-center" name="customer_color" id="customer_color" maxlength="2" required>
                                                 </div>
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">Size</span>
-                                                    <input type="text" class="form-control" name="customer_barcode" id="customer_size" maxlength="3" required>
+                                                    <input type="text" class="form-control text-center" name="customer_barcode" id="customer_size" maxlength="3" required>
                                                 </div>
                                             </div>
-                                            
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
+                                                    <input type="text" class="form-control text-center" name="customer_description" id="customer_description" required>
+                                                </div>
+                                                
+                                            </div>
                                         </div>
                                     </form>
                                     <div class="row text-center">
@@ -101,18 +111,18 @@
                                 <h5 class="card-header">อัพโหลดข้อมูล</h5>
                                 <div class="card-body">
                                     <form id="myformupload">
-                                        <div class="row justify-content-end mb-3">
-                                            <button type="button" class="btn btn-outline-success btn-sm w-25 " >โหลดไฟล์ Master</button>
+                                        <div class="row text-end mb-3">
+                                            <a href="attachfile/download_master/master.xls"><button type="button" class="btn btn-outline-success btn-sm w-25 " >โหลดไฟล์ Master</button></a>
                                         </div>
                                         <div class="row justify-content-center mb-3">
                                             <div class="col-sm-12 col-md-8">
-                                                <input type="file" class="form-control form-control-sm" name="customer_file" id="customer_file" required>
+                                                <input type="file" class="form-control form-control-sm text-center" name="customer_file" id="customer_file" required>
                                             </div>
                                         </div>
                                     </form>
                                     <div class="row text-center">
                                         <div class="col-sm-12 col-md-12 ">
-                                            <button type="button" class="btn btn-outline-primary btn-sm " onclick="senddata()">บันทึกข้อมูล</button>
+                                            <button type="button" class="btn btn-outline-primary btn-sm " onclick="uploadfile()">อัพโหลดข้อมูล</button>
                                             <button type="button" class="btn btn-outline-danger btn-sm" onclick="inputclean()">เครียร์ข้อมูล</button>
                                         </div>
                                     </div>
@@ -136,6 +146,9 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            
+           
+            
             function edit_customer(id){
                 $.ajax({
                     type:'post',
@@ -152,7 +165,7 @@
                         $("#edit_customer_barcode").val(js.customer_barcode);
                         $("#edit_customer_color").val(js.customer_color);
                         $("#edit_customer_size").val(js.customer_size);
-                        
+                        $("#edit_customer_description").val(js.customer_description);
                     }
                 })
             }
@@ -162,6 +175,7 @@
                 $("#customer_barcode").val("")
                 $("#customer_color").val("")
                 $("#customer_size").val("")
+                $("#customer_description").val("")
             }
 
             function update_customer(){
@@ -174,7 +188,8 @@
                         customer_no:$("#edit_customer_no").val(),
                         customer_barcode:$("#edit_customer_barcode").val(),
                         customer_color:$("#edit_customer_color").val(),
-                        customer_size:$("#edit_customer_size").val()
+                        customer_size:$("#edit_customer_size").val(),
+                        customer_description:$("#edit_customer_description").val()
                     },
                     success:function(msg){
                     
@@ -240,9 +255,54 @@
                         })
                     }
                 })
-               
             }
-    
+            
+            function uploadfile(){
+                
+                var file = document.getElementById('customer_file').files[0];
+                //$("#form_oreder").addClass("was-validated");
+                if(file){
+                    var formdata = new FormData(); 
+                    formdata.append('uploadfile', file);
+                    $.ajax({
+                        type: "POST",
+                        encType: "multipart/form-data",
+                        url: "UploadFiles",
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        data: formdata,
+                        success: function(data){
+                            var js = JSON.parse(data);
+                            if(js.status == 'true'){
+                                Swal.fire({
+                                    title:"อัพโหลด",
+                                    icon:"success",
+                                    text:"อัพโหลดสำเร็จ"
+                                })
+                            }else if(js.status == 'false'){
+                                Swal.fire({
+                                    title:"อัพโหลด",
+                                    icon:"error",
+                                    text:"อัพโหลดไม่สำเร็จ"
+                                })
+                            }
+                            gettable();
+                        },
+                        error: function(msg){
+                            console.log(msg);
+                        }
+                    });
+                }else{
+                    Swal.fire({
+                        title:"ผิดพลาด",
+                        text:"กรุณากรอกข้อมูลให้ถูกต้อง",
+                        icon:"error"
+                    })
+                }
+                
+            }
+            
             function gettable(){
                 $.ajax({
                     type:'post',
@@ -262,9 +322,9 @@
                 var customer_barcode = $("#customer_barcode").val()
                 var customer_color = $("#customer_color").val()
                 var customer_size = $("#customer_size").val()
-                //var customer_quantity = $("#customer_quantity").val()
+                var customer_description = $("#customer_description").val()
                 $("#myform").addClass("was-validated");
-                if(customer_no &&customer_barcode && customer_color && customer_size ){
+                if(customer_no &&customer_barcode && customer_color && customer_size && customer_description ){
                     
                     $.ajax({
                         type:'post',
@@ -274,7 +334,8 @@
                             customer_no:customer_no,
                             customer_barcode:customer_barcode,
                             customer_color:customer_color,
-                            customer_size:customer_size
+                            customer_size:customer_size,
+                            customer_description:customer_description
                         },
                         success:function(msg){
                             var js = JSON.parse(msg);
@@ -305,6 +366,7 @@
     
             $(document).ready(function () {
                 gettable();
+             
             });
     
         </script>

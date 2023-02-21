@@ -17,6 +17,10 @@
         <servlet-name>Customer</servlet-name>
         <servlet-class>com.pg.lib.Servlet.Customer</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>UploadFiles</servlet-name>
+        <servlet-class>com.pg.lib.Servlet.UploadFiles</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Chklogin</servlet-name>
         <url-pattern>/Chklogin</url-pattern>
@@ -32,6 +36,10 @@
     <servlet-mapping>
         <servlet-name>Customer</servlet-name>
         <url-pattern>/Customer</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>UploadFiles</servlet-name>
+        <url-pattern>/UploadFiles</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -132,16 +132,16 @@
                                         <div class="text-center">รหัสบาร์โค้ด</div>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_barcode" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_barcode" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_barcode" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_barcode" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_barcode" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_barcode" readonly>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -149,16 +149,16 @@
                                         <div class="text-center">Color</div>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_color" >
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_color" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_color" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_color" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_color" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_color" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center" id="customer4_color" >
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer4_color" readonly>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -166,16 +166,16 @@
                                         <div class="text-center">Size</div>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_size" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_size" readonly >
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_size" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_size" readonly>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" readonly>
                                     </div>
                                 </div>
                                 <div class="col">
@@ -214,6 +214,79 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            function chack_customer1(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer1_barcode").val(js.customer_barcode)
+                        $("#customer1_color").val(js.customer_color)
+                        $("#customer1_size").val(js.customer_size)
+                        $("#customer1_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+            function chack_customer2(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer2_barcode").val(js.customer_barcode)
+                        $("#customer2_color").val(js.customer_color)
+                        $("#customer2_size").val(js.customer_size)
+                        $("#customer2_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+            function chack_customer3(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer3_barcode").val(js.customer_barcode)
+                        $("#customer3_color").val(js.customer_color)
+                        $("#customer3_size").val(js.customer_size)
+                        $("#customer3_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+            function chack_customer4(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer4_barcode").val(js.customer_barcode)
+                        $("#customer4_color").val(js.customer_color)
+                        $("#customer4_size").val(js.customer_size)
+                        $("#customer4_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+           
             function customer_text(){
                 var text = $("#customer").val();
                 if(text == 'MUS'){
@@ -281,7 +354,7 @@
                             })
                         }else if(js.status == 'false'){
                             Swal.fire({
-                                icon: 'success',
+                                icon: 'error',
                                 title: 'บันทึก',
                                 text: 'บันทึกไม่สำเร็จ'
                             })
@@ -293,6 +366,21 @@
 
             $(document).ready(function () {
                 getcustomer_text()
+                $("#customer1_id").on('input', function() {
+                    chack_customer1($(this).val())
+                });
+                $("#customer2_id").on('input', function() {
+                    chack_customer2($(this).val())
+                });
+                $("#customer3_id").on('input', function() {
+                    chack_customer3($(this).val())
+                });
+                $("#customer4_id").on('input', function() {
+                    chack_customer4($(this).val())
+                });
+                $("#numberbox_end").on('input', function() {
+                    $("#quantitytotal_box").val($(this).val())
+                });
             });
             
     

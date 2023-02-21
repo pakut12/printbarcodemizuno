@@ -9,6 +9,7 @@ import java.io.*;
 import java.net.*;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.*;
@@ -34,6 +35,7 @@ public class Detail extends HttpServlet {
         try {
             String type = request.getParameter("type");
             if (type.equals("adddetails")) {
+
                 String customer_num = request.getParameter("customer_num");
                 String quantity_box = request.getParameter("quantity_box");
                 String initial = request.getParameter("initial");
@@ -50,18 +52,23 @@ public class Detail extends HttpServlet {
                 String[] customer3_id = request.getParameterValues("customer3_id[]");
                 String[] customer4_id = request.getParameterValues("customer4_id[]");
 
-
                 DetailService ds = new DetailService();
-                Boolean status = ds.AddDataToMIZUNONEWBARBOXHD(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id);
+
+
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id);
+                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id);
                 JSONObject obj = new JSONObject();
-                if (status) {
+                if (statusdt && statushd) {
                     obj.put("status", "true");
                 } else {
                     obj.put("status", "false");
                 }
-                
+
                 out.print(obj);
+
+
             }
+
         } finally {
             out.close();
         }
