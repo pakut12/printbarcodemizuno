@@ -175,6 +175,7 @@ public class Customer extends HttpServlet {
                 obj.put("customer_description", list.get(0).getCustomer_description());
                 out.print(obj);
             }
+            
         } finally {
             out.close();
         }

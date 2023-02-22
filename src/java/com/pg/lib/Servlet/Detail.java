@@ -168,20 +168,16 @@ public class Detail extends HttpServlet {
 
                 out.print(obj);
             } else if (type.equals("deletedetailsall")) {
-                String pobefore = request.getParameter("pobefore").trim();
-
+                String posearch = request.getParameter("posearch");
                 DetailService ds = new DetailService();
-                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore);
-                Boolean statusHD = ds.DeleteDetailBoxMIZUNONEWBARBOXHDAll(pobefore);
-               
+                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(posearch);
+                Boolean statusHD = ds.DeleteDetailBoxMIZUNONEWBARBOXHDAll(posearch);
                 JSONObject obj = new JSONObject();
-
                 if (statusDT && statusHD) {
                     obj.put("status", "true");
                 } else {
                     obj.put("status", "false");
                 }
-
                 out.print(obj);
             }
         } finally {

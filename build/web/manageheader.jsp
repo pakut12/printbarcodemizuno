@@ -227,7 +227,7 @@
                         <div class="row">
                             <div class="col-sm-12 col-md-12 text-center">
                                 <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="updatedata()">เเก้ไขข้อมูล</button>
-                                <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="location.reload()">ลบข้อมูล</button>
+                                <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="deletedata()">ลบข้อมูล</button>
                                 
                             </div>
                             
@@ -524,6 +524,21 @@
                     }
                 })
                 
+            }
+              
+            function deletedata(){
+                var posearch = $("#posearch").val();
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"deletedetailsall",
+                        posearch:posearch
+                    },
+                    success:function(msg){
+                        console.log(msg)
+                    }
+                })
             }
             
             $(document).ready(function () {
