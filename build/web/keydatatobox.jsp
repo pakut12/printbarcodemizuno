@@ -23,7 +23,7 @@
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                         <select class="form-select form-select-sm text-center" id="customer_num">
                                             <option value="MUS">MUS</option>
                                             <option value="MCA">MCA</option>

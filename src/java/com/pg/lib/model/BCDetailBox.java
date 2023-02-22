@@ -13,67 +13,44 @@ public class BCDetailBox {
     private String po;
     private String startbox;
     private String endbox;
-    private String qtypebox;
-    private String firstdigit;
     private String allbox;
+    private String firstdigit;
+    private String shipfrom;
+    private String shipto;
+    private String qtyperbox;
     private String desctxt;
-    private String gw;
-    private String nw;
-    private String country;
-    private String customer;
-    private String customer1_id;
-    private String customer1_barcode;
-    private String customer1_color;
-    private String customer1_size;
-    private String customer1_qty;
-    private String customer2_id;
-    private String customer2_barcode;
-    private String customer2_color;
-    private String customer2_size;
-    private String customer2_qty;
-    private String customer3_id;
-    private String customer3_barcode;
-    private String customer3_color;
-    private String customer3_size;
-    private String customer3_qty;
-    private String customer4_id;
-    private String customer4_barcode;
-    private String customer4_color;
-    private String customer4_size;
-    private String customer4_qty;
+    private String grossweight;
+    private String netweight;
+    private String country_origin;
+    private String sku_item1;
+    private String upc_code1;
+    private String qty1;
+    private String sizen01;
+    private String colorn01;
+    private String sku_item2;
+    private String upc_code2;
+    private String qty2;
+    private String sizen02;
+    private String colorn02;
+    private String sku_item3;
+    private String upc_code3;
+    private String qty3;
+    private String sizen03;
+    private String colorn03;
+    private String sku_item4;
+    private String upc_code4;
+    private String qty4;
+    private String sizen04;
+    private String colorn04;
 
-    public BCDetailBox(String po, String startbox, String endbox, String qtypebox, String firstdigit, String allbox, String desctxt, String gw, String nw, String country, String customer, String customer1_id, String customer1_barcode, String customer1_color, String customer1_size, String customer1_qty, String customer2_id, String customer2_barcode, String customer2_color, String customer2_size, String customer2_qty, String customer3_id, String customer3_barcode, String customer3_color, String customer3_size, String customer3_qty, String customer4_id, String customer4_barcode, String customer4_color, String customer4_size, String customer4_qty) {
-        this.po = po;
-        this.startbox = startbox;
-        this.endbox = endbox;
-        this.qtypebox = qtypebox;
-        this.firstdigit = firstdigit;
-        this.allbox = allbox;
-        this.desctxt = desctxt;
-        this.gw = gw;
-        this.nw = nw;
-        this.country = country;
-        this.customer = customer;
-        this.customer1_id = customer1_id;
-        this.customer1_barcode = customer1_barcode;
-        this.customer1_color = customer1_color;
-        this.customer1_size = customer1_size;
-        this.customer1_qty = customer1_qty;
-        this.customer2_id = customer2_id;
-        this.customer2_barcode = customer2_barcode;
-        this.customer2_color = customer2_color;
-        this.customer2_size = customer2_size;
-        this.customer2_qty = customer2_qty;
-        this.customer3_id = customer3_id;
-        this.customer3_barcode = customer3_barcode;
-        this.customer3_color = customer3_color;
-        this.customer3_size = customer3_size;
-        this.customer3_qty = customer3_qty;
-        this.customer4_id = customer4_id;
-        this.customer4_barcode = customer4_barcode;
-        this.customer4_color = customer4_color;
-        this.customer4_size = customer4_size;
-        this.customer4_qty = customer4_qty;
+   
+
+    public String getShipto() {
+        return shipto;
+    }
+
+    public void setShipto(String shipto) {
+        this.shipto = shipto;
     }
 
     public String getAllbox() {
@@ -84,180 +61,44 @@ public class BCDetailBox {
         this.allbox = allbox;
     }
 
-    public String getCountry() {
-        return country;
+    public String getColorn01() {
+        return colorn01;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setColorn01(String colorn01) {
+        this.colorn01 = colorn01;
     }
 
-    public String getCustomer() {
-        return customer;
+    public String getColorn02() {
+        return colorn02;
     }
 
-    public void setCustomer(String customer) {
-        this.customer = customer;
+    public void setColorn02(String colorn02) {
+        this.colorn02 = colorn02;
     }
 
-    public String getCustomer1_barcode() {
-        return customer1_barcode;
+    public String getColorn03() {
+        return colorn03;
     }
 
-    public void setCustomer1_barcode(String customer1_barcode) {
-        this.customer1_barcode = customer1_barcode;
+    public void setColorn03(String colorn03) {
+        this.colorn03 = colorn03;
     }
 
-    public String getCustomer1_color() {
-        return customer1_color;
+    public String getColorn04() {
+        return colorn04;
     }
 
-    public void setCustomer1_color(String customer1_color) {
-        this.customer1_color = customer1_color;
+    public void setColorn04(String colorn04) {
+        this.colorn04 = colorn04;
     }
 
-    public String getCustomer1_id() {
-        return customer1_id;
+    public String getCountry_origin() {
+        return country_origin;
     }
 
-    public void setCustomer1_id(String customer1_id) {
-        this.customer1_id = customer1_id;
-    }
-
-    public String getCustomer1_qty() {
-        return customer1_qty;
-    }
-
-    public void setCustomer1_qty(String customer1_qty) {
-        this.customer1_qty = customer1_qty;
-    }
-
-    public String getCustomer1_size() {
-        return customer1_size;
-    }
-
-    public void setCustomer1_size(String customer1_size) {
-        this.customer1_size = customer1_size;
-    }
-
-    public String getCustomer2_barcode() {
-        return customer2_barcode;
-    }
-
-    public void setCustomer2_barcode(String customer2_barcode) {
-        this.customer2_barcode = customer2_barcode;
-    }
-
-    public String getCustomer2_color() {
-        return customer2_color;
-    }
-
-    public void setCustomer2_color(String customer2_color) {
-        this.customer2_color = customer2_color;
-    }
-
-    public String getCustomer2_id() {
-        return customer2_id;
-    }
-
-    public void setCustomer2_id(String customer2_id) {
-        this.customer2_id = customer2_id;
-    }
-
-    public String getCustomer2_qty() {
-        return customer2_qty;
-    }
-
-    public void setCustomer2_qty(String customer2_qty) {
-        this.customer2_qty = customer2_qty;
-    }
-
-    public String getCustomer2_size() {
-        return customer2_size;
-    }
-
-    public void setCustomer2_size(String customer2_size) {
-        this.customer2_size = customer2_size;
-    }
-
-    public String getCustomer3_barcode() {
-        return customer3_barcode;
-    }
-
-    public void setCustomer3_barcode(String customer3_barcode) {
-        this.customer3_barcode = customer3_barcode;
-    }
-
-    public String getCustomer3_color() {
-        return customer3_color;
-    }
-
-    public void setCustomer3_color(String customer3_color) {
-        this.customer3_color = customer3_color;
-    }
-
-    public String getCustomer3_id() {
-        return customer3_id;
-    }
-
-    public void setCustomer3_id(String customer3_id) {
-        this.customer3_id = customer3_id;
-    }
-
-    public String getCustomer3_qty() {
-        return customer3_qty;
-    }
-
-    public void setCustomer3_qty(String customer3_qty) {
-        this.customer3_qty = customer3_qty;
-    }
-
-    public String getCustomer3_size() {
-        return customer3_size;
-    }
-
-    public void setCustomer3_size(String customer3_size) {
-        this.customer3_size = customer3_size;
-    }
-
-    public String getCustomer4_barcode() {
-        return customer4_barcode;
-    }
-
-    public void setCustomer4_barcode(String customer4_barcode) {
-        this.customer4_barcode = customer4_barcode;
-    }
-
-    public String getCustomer4_color() {
-        return customer4_color;
-    }
-
-    public void setCustomer4_color(String customer4_color) {
-        this.customer4_color = customer4_color;
-    }
-
-    public String getCustomer4_id() {
-        return customer4_id;
-    }
-
-    public void setCustomer4_id(String customer4_id) {
-        this.customer4_id = customer4_id;
-    }
-
-    public String getCustomer4_qty() {
-        return customer4_qty;
-    }
-
-    public void setCustomer4_qty(String customer4_qty) {
-        this.customer4_qty = customer4_qty;
-    }
-
-    public String getCustomer4_size() {
-        return customer4_size;
-    }
-
-    public void setCustomer4_size(String customer4_size) {
-        this.customer4_size = customer4_size;
+    public void setCountry_origin(String country_origin) {
+        this.country_origin = country_origin;
     }
 
     public String getDesctxt() {
@@ -284,20 +125,20 @@ public class BCDetailBox {
         this.firstdigit = firstdigit;
     }
 
-    public String getGw() {
-        return gw;
+    public String getGrossweight() {
+        return grossweight;
     }
 
-    public void setGw(String gw) {
-        this.gw = gw;
+    public void setGrossweight(String grossweight) {
+        this.grossweight = grossweight;
     }
 
-    public String getNw() {
-        return nw;
+    public String getNetweight() {
+        return netweight;
     }
 
-    public void setNw(String nw) {
-        this.nw = nw;
+    public void setNetweight(String netweight) {
+        this.netweight = netweight;
     }
 
     public String getPo() {
@@ -308,12 +149,116 @@ public class BCDetailBox {
         this.po = po;
     }
 
-    public String getQtypebox() {
-        return qtypebox;
+    public String getQty1() {
+        return qty1;
     }
 
-    public void setQtypebox(String qtypebox) {
-        this.qtypebox = qtypebox;
+    public void setQty1(String qty1) {
+        this.qty1 = qty1;
+    }
+
+    public String getQty2() {
+        return qty2;
+    }
+
+    public void setQty2(String qty2) {
+        this.qty2 = qty2;
+    }
+
+    public String getQty3() {
+        return qty3;
+    }
+
+    public void setQty3(String qty3) {
+        this.qty3 = qty3;
+    }
+
+    public String getQty4() {
+        return qty4;
+    }
+
+    public void setQty4(String qty4) {
+        this.qty4 = qty4;
+    }
+
+    public String getQtyperbox() {
+        return qtyperbox;
+    }
+
+    public void setQtyperbox(String qtyperbox) {
+        this.qtyperbox = qtyperbox;
+    }
+
+    public String getShipfrom() {
+        return shipfrom;
+    }
+
+    public void setShipfrom(String shipfrom) {
+        this.shipfrom = shipfrom;
+    }
+
+    public String getSizen01() {
+        return sizen01;
+    }
+
+    public void setSizen01(String sizen01) {
+        this.sizen01 = sizen01;
+    }
+
+    public String getSizen02() {
+        return sizen02;
+    }
+
+    public void setSizen02(String sizen02) {
+        this.sizen02 = sizen02;
+    }
+
+    public String getSizen03() {
+        return sizen03;
+    }
+
+    public void setSizen03(String sizen03) {
+        this.sizen03 = sizen03;
+    }
+
+    public String getSizen04() {
+        return sizen04;
+    }
+
+    public void setSizen04(String sizen04) {
+        this.sizen04 = sizen04;
+    }
+
+    public String getSku_item1() {
+        return sku_item1;
+    }
+
+    public void setSku_item1(String sku_item1) {
+        this.sku_item1 = sku_item1;
+    }
+
+    public String getSku_item2() {
+        return sku_item2;
+    }
+
+    public void setSku_item2(String sku_item2) {
+        this.sku_item2 = sku_item2;
+    }
+
+    public String getSku_item3() {
+        return sku_item3;
+    }
+
+    public void setSku_item3(String sku_item3) {
+        this.sku_item3 = sku_item3;
+    }
+
+    public String getSku_item4() {
+        return sku_item4;
+    }
+
+    public void setSku_item4(String sku_item4) {
+        this.sku_item4 = sku_item4;
     }
 
     public String getStartbox() {
@@ -322,5 +267,37 @@ public class BCDetailBox {
 
     public void setStartbox(String startbox) {
         this.startbox = startbox;
+    }
+
+    public String getUpc_code1() {
+        return upc_code1;
+    }
+
+    public void setUpc_code1(String upc_code1) {
+        this.upc_code1 = upc_code1;
+    }
+
+    public String getUpc_code2() {
+        return upc_code2;
+    }
+
+    public void setUpc_code2(String upc_code2) {
+        this.upc_code2 = upc_code2;
+    }
+
+    public String getUpc_code3() {
+        return upc_code3;
+    }
+
+    public void setUpc_code3(String upc_code3) {
+        this.upc_code3 = upc_code3;
+    }
+
+    public String getUpc_code4() {
+        return upc_code4;
+    }
+
+    public void setUpc_code4(String upc_code4) {
+        this.upc_code4 = upc_code4;
     }
 }

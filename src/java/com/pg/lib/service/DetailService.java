@@ -4,13 +4,16 @@
  */
 package com.pg.lib.service;
 
+import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.utility.ConnectDB;
 import com.sun.org.apache.bcel.internal.generic.AALOAD;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  *
@@ -21,6 +24,72 @@ public class DetailService {
     private static Connection conn;
     private static PreparedStatement ps;
     private static ResultSet rs;
+
+    public List<BCDetailBox> GetDetailBox(String PO, String STARTBOX, String ENDBOX) throws SQLException {
+
+        List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
+
+        try {
+            String sql = "SELECT * FROM MIZUNONEWBARBOXHD WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            ps.setString(2, STARTBOX);
+            ps.setString(3, ENDBOX);
+            rs = ps.executeQuery();
+       
+            while (rs.next()) {
+               
+                BCDetailBox box = new BCDetailBox();
+                box.setPo(rs.getString("po"));
+                box.setStartbox(rs.getString("startbox"));
+                box.setEndbox(rs.getString("endbox"));
+                box.setFirstdigit(rs.getString("firstdigit"));
+                box.setShipfrom(rs.getString("shipfrom"));
+                box.setShipto(rs.getString("shipto"));
+                box.setQtyperbox(rs.getString("qtyperbox"));
+                box.setDesctxt(rs.getString("desctxt"));
+                box.setGrossweight(rs.getString("grossweight"));
+                box.setNetweight(rs.getString("netweight"));
+                box.setCountry_origin(rs.getString("country_origin"));
+                box.setAllbox(rs.getString("allbox"));
+                box.setSku_item1(rs.getString("sku_item1"));
+                box.setUpc_code1(rs.getString("upc_code1"));
+                box.setQty1(rs.getString("qty1"));
+                box.setSizen01(rs.getString("sizeno1"));
+                box.setColorn01(rs.getString("colorno1"));
+
+                box.setSku_item2(rs.getString("sku_item2"));
+                box.setUpc_code2(rs.getString("upc_code2"));
+                box.setQty2(rs.getString("qty2"));
+                box.setSizen02(rs.getString("sizeno2"));
+                box.setColorn02(rs.getString("colorno2"));
+
+                box.setSku_item3(rs.getString("sku_item3"));
+                box.setUpc_code3(rs.getString("upc_code3"));
+                box.setQty3(rs.getString("qty3"));
+                box.setSizen03(rs.getString("sizeno3"));
+                box.setColorn03(rs.getString("colorno3"));
+
+                box.setSku_item4(rs.getString("sku_item4"));
+                box.setUpc_code4(rs.getString("upc_code4"));
+                box.setQty4(rs.getString("qty4"));
+                box.setSizen04(rs.getString("sizeno4"));
+                box.setColorn04(rs.getString("colorno4"));
+
+                listdetail.add(box);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return listdetail;
+    }
 
     private HashMap<String, String> GetAddress(String address) {
         HashMap<String, String> listaddress = new HashMap<String, String>();
@@ -110,7 +179,7 @@ public class DetailService {
             String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            
+
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {
