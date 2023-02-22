@@ -160,16 +160,16 @@
                                     <div class="text-center">√À— ∫“√Ï‚§È¥</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_barcode" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_barcode" readonly >
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_barcode" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_barcode" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer4_barcode" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer4_barcode" readonly >
                                 </div>
                             </div>
                             <div class="col">
@@ -177,16 +177,16 @@
                                     <div class="text-center">Color</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center" id="customer1_color" >
+                                    <input type="text" class="form-control form-control-sm text-center" id="customer1_color" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_color" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_color" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_color" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_color" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center" id="customer4_color" >
+                                    <input type="text" class="form-control form-control-sm text-center" id="customer4_color" readonly>
                                 </div>
                             </div>
                             <div class="col">
@@ -194,16 +194,16 @@
                                     <div class="text-center">Size</div>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_size"  >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_size" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_size" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_size" readonly>
                                 </div>
                                 <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" >
+                                    <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" readonly>
                                 </div>
                             </div>
                             <div class="col">
@@ -226,8 +226,8 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12 col-md-12 text-center">
-                                <button class="btn btn-outline-success mx-3 mb-3" type="button" id="bt_sava" onclick="senddata()">‡‡°È‰¢¢ÈÕ¡Ÿ≈</button>
-                                <button class="btn btn-outline-danger  mb-3" type="button" id="bt_reset" onclick="location.reload()">≈∫¢ÈÕ¡Ÿ≈</button>
+                                <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="updatedata()">‡‡°È‰¢¢ÈÕ¡Ÿ≈</button>
+                                <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="location.reload()">≈∫¢ÈÕ¡Ÿ≈</button>
                                 
                             </div>
                             
@@ -241,11 +241,186 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            function chack_customer1(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer1_barcode").val(js.customer_barcode)
+                        $("#customer1_color").val(js.customer_color)
+                        $("#customer1_size").val(js.customer_size)
+                        $("#customer1_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+            function chack_customer2(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer2_barcode").val(js.customer_barcode)
+                        $("#customer2_color").val(js.customer_color)
+                        $("#customer2_size").val(js.customer_size)
+                        $("#customer2_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+            function chack_customer3(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer3_barcode").val(js.customer_barcode)
+                        $("#customer3_color").val(js.customer_color)
+                        $("#customer3_size").val(js.customer_size)
+                        $("#customer3_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+            function chack_customer4(customer_id){
+                $.ajax({
+                    type:'post',
+                    url:'Customer',
+                    data:{
+                        type:"chack_customer",
+                        customer_id:customer_id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        console.log(js)
+                        $("#customer4_barcode").val(js.customer_barcode)
+                        $("#customer4_color").val(js.customer_color)
+                        $("#customer4_size").val(js.customer_size)
+                        $("#customer4_number").val($("#quantity_box").val())
+                    }
+                })
+            }
+            
+            function updatedata(){
+                var pobefore = $("#posearch").val();
+                var startboxbefore  = $("#numstart").val();
+                var endboxbefore =  $("#numend").val();
+        
+        
+                var shipto = $("#customer_num").val();
+                var qtyperbox  = $("#quantity_box").val();
+                var firstdigit =  $("#initial").val();
+                var startbox  = $("#numberbox_start").val();
+                var endbox  =  $("#numberbox_end").val();
+                var allbox  =   $("#quantitytotal_box").val();    
+                var po =  $("#po").val();
+                var desctxt = $("#description").val();
+                var grossweight = $("#gw").val();
+                var netweight  = $("#nw").val();
+                var country_origin  = $("#country").val();
+                        
+                var sku_item1  = $("#customer1_id").val();
+                var upc_code1  =  $("#customer1_barcode").val();
+                var colorno1  =  $("#customer1_color").val();
+                var sizeno1  =  $("#customer1_size").val();
+                var qty1  =  $("#customer1_number").val();
+
+                var sku_item2 =  $("#customer2_id").val();
+                var upc_code2  = $("#customer2_barcode").val();
+                var colorno2  =  $("#customer2_color").val();
+                var sizeno2   =  $("#customer2_size").val();
+                var qty2  =  $("#customer2_number").val();
+                        
+                var sku_item3  =  $("#customer3_id").val();
+                var upc_code3 =  $("#customer3_barcode").val();
+                var colorno3 =  $("#customer3_color").val();
+                var sizeno3  =  $("#customer3_size").val();
+                var qty3   =  $("#customer3_number").val();
+                        
+                var sku_item4  = $("#customer4_id").val();
+                var upc_code4  = $("#customer4_barcode").val();
+                var colorno4 =  $("#customer4_color").val();
+                var sizeno4  =  $("#customer4_size").val();
+                var qty4  = $("#customer4_number").val();
+                
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"updatedetailsall",
+                        pobefore:pobefore,
+                        startboxbefore:startboxbefore,
+                        endboxbefore:endboxbefore,
+                        shipto:shipto,
+                        qtyperbox:qtyperbox,
+                        firstdigit:firstdigit,
+                        startbox:startbox,
+                        endbox:endbox,
+                        allbox:allbox,
+                        po:po,
+                        desctxt:desctxt,
+                        grossweight:grossweight,
+                        netweight:netweight,
+                        country_origin:country_origin,
+                        sku_item1:sku_item1,
+                        upc_code1:upc_code1,
+                        colorno1:colorno1,
+                        sizeno1:sizeno1,
+                        qty1:qty1,
+                        sku_item2:sku_item2,
+                        upc_code2:upc_code2,
+                        colorno2:colorno2,
+                        sizeno2:sizeno2,
+                        qty2:qty2,
+                        sku_item3:sku_item3,
+                        upc_code3: upc_code3,
+                        colorno3:colorno3,
+                        sizeno3:sizeno3,
+                        qty3: qty3,
+                        sku_item4:sku_item4,
+                        upc_code4:upc_code4,
+                        colorno4:colorno4,
+                        sizeno4:sizeno4,
+                        qty4:qty4
+                    },
+                    success:function(msg){
+                      
+                        var js = JSON.parse(msg);
+                        if(js.status == "true"){
+                            Swal.fire({
+                                title:"‡‡°È‰¢",
+                                icon:"success",
+                                text:"‡‡°È‰¢ ”‡√Á®"
+                            })
+                        }else if(js.status == "false"){
+                            Swal.fire({
+                                title:"‡‡°È‰¢",
+                                icon:"error",
+                                text:"‡‡°È‰¢‰¡Ë ”‡√Á®"
+                            })
+                        }
+                    }
+                })
+        
+            }
+            
             function clearinput(){
                 $("#customer_num").empty();
                 $("#customer_num").append("<option value=''></option>");
-                        
-        
+
                 $("#quantity_box").val("");
                 $("#initial").val("");
                 $("#numberbox_start").val("");
@@ -298,13 +473,11 @@
                         numend:numend
                     },
                     success:function(msg){
-                        if(msg){
-                            
+                        if(msg){  
                             var js = JSON.parse(msg);
                             $("#customer_num").empty();
                             $("#customer_num").append("<option value='"+js.shipto+"'>"+js.shipto+"</option>");
-                        
-        
+ 
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
                             $("#numberbox_start").val(js.startbox);
@@ -349,18 +522,27 @@
                             clearinput()
                         }
                     }
-                    
                 })
                 
-
             }
             
             $(document).ready(function () {
                 $("#bt_search").click(function(){
                     searchpo()
-                })
+                });
+                $("#customer1_id").on('input', function() {
+                    chack_customer1($(this).val())
+                });
+                $("#customer2_id").on('input', function() {
+                    chack_customer2($(this).val())
+                });
+                $("#customer3_id").on('input', function() {
+                    chack_customer3($(this).val())
+                });
+                $("#customer4_id").on('input', function() {
+                    chack_customer4($(this).val())
+                });
       
-    
             });
         </script>
     </body>

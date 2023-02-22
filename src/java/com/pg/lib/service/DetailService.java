@@ -25,7 +25,114 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    public List<BCDetailBox> GetDetailBox(String PO, String STARTBOX, String ENDBOX) throws SQLException {
+    public Boolean DeleteDetailBoxMIZUNONEWBARBOXDTAll(String PO) throws SQLException {
+        Boolean status = false;
+        try {
+            String sql = "DELETE FROM MIZUNONEWBARBOXDT WHERE PO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return status;
+    }
+
+    public Boolean DeleteDetailBoxMIZUNONEWBARBOXHDAll(String PO) throws SQLException {
+        Boolean status = false;
+        try {
+            String sql = "DELETE FROM MIZUNONEWBARBOXHD WHERE PO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return status;
+    }
+
+    public Boolean UpdateDetailBoxAll(String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4) throws SQLException {
+
+        Boolean status = false;
+
+        try {
+            String sql = "update MIZUNONEWBARBOXHD set allbox =  ?,FIRSTDIGIT = ?,SHIPFROM = ?,SHIPTO = ?,QTYPERBOX  = ?,DESCTXT  = ?,GROSSWEIGHT  = ?,NETWEIGHT  = ?,COUNTRY_ORIGIN  = ?,SKU_ITEM1  = ?,UPC_CODE1  = ?,COLORNO1  = ?,SIZENO1  = ?,QTY1  = ?,SKU_ITEM2  = ?,UPC_CODE2  = ?,COLORNO2  = ?,SIZENO2  = ?,QTY2  = ?,SKU_ITEM3  = ?,UPC_CODE3  = ?,COLORNO3  = ?,SIZENO3  = ?,QTY3  = ?,SKU_ITEM4  = ?,UPC_CODE4  = ?,COLORNO4  = ?,SIZENO4  = ?,QTY4  = ?,PO = ? ,STARTBOX = ? ,ENDBOX = ? WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, allbox);
+            ps.setString(2, firstdigit);
+            ps.setString(3, "TSG");
+            ps.setString(4, shipto);
+            ps.setString(5, qtyperbox);
+            ps.setString(6, desctxt);
+            ps.setString(7, grossweight);
+            ps.setString(8, netweight);
+            ps.setString(9, country_origin);
+            ps.setString(10, sku_item1);
+            ps.setString(11, upc_code1);
+            ps.setString(12, colorno1);
+            ps.setString(13, sizeno1);
+            ps.setString(14, qty1);
+            ps.setString(15, sku_item2);
+            ps.setString(16, upc_code2);
+            ps.setString(17, colorno2);
+            ps.setString(18, sizeno2);
+            ps.setString(19, qty2);
+            ps.setString(20, sku_item3);
+            ps.setString(21, upc_code3);
+            ps.setString(22, colorno3);
+            ps.setString(23, sizeno3);
+            ps.setString(24, qty3);
+            ps.setString(25, sku_item4);
+            ps.setString(26, upc_code4);
+            ps.setString(27, colorno4);
+            ps.setString(28, sizeno4);
+            ps.setString(29, qty4);
+            ps.setString(30, po);
+            ps.setString(31, startbox);
+            ps.setString(32, endbox);
+            ps.setString(33, pobefore);
+            ps.setString(34, startboxbefore);
+            ps.setString(35, endboxbefore);
+
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return status;
+    }
+
+    public List<BCDetailBox> GetDetailBoxAll(String PO, String STARTBOX, String ENDBOX) throws SQLException {
 
         List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
 
@@ -37,9 +144,9 @@ public class DetailService {
             ps.setString(2, STARTBOX);
             ps.setString(3, ENDBOX);
             rs = ps.executeQuery();
-       
+
             while (rs.next()) {
-               
+
                 BCDetailBox box = new BCDetailBox();
                 box.setPo(rs.getString("po"));
                 box.setStartbox(rs.getString("startbox"));
