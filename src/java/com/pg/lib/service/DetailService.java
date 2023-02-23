@@ -6,7 +6,7 @@ package com.pg.lib.service;
 
 import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.utility.ConnectDB;
-import com.sun.org.apache.bcel.internal.generic.AALOAD;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -25,50 +25,123 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    public Boolean UpdateDetailBox(String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4) throws SQLException {
+    public Boolean DeleteDetailBox(String PO,String BOXNO) throws SQLException {
+        Boolean status = false;
+        try {
+            String sql = "DELETE FROM MIZUNONEWBARBOXDT WHERE PO = ? AND BOXNO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            ps.setString(2, BOXNO);
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return status;
+    }
+
+    public Boolean UpdateDetailBox(
+            String BOXALL, String SHIPFROM, String SFADDRESS1, String SFADDRESS2, String SFADDRESS3, String SFADDRESS4,
+            String SHIPTO, String STADDRESS1, String STADDRESS2, String STADDRESS3, String STADDRESS4, String QTYPERBOX, String DESCTXT,
+            String GROSSWEIGHT, String NETWEIGHT, String COUNTRY_ORIGIN,
+            String SKU_ITEM1, String UPC_CODE1, String COLORNO1, String SIZENO1, String QTY1,
+            String SKU_ITEM2, String UPC_CODE2, String COLORNO2, String SIZENO2, String QTY2,
+            String SKU_ITEM3, String UPC_CODE3, String COLORNO3, String SIZENO3, String QTY3,
+            String SKU_ITEM4, String UPC_CODE4, String COLORNO4, String SIZENO4, String QTY4,
+            String PO, String BOXNO) throws SQLException {
 
         Boolean status = false;
 
         try {
-            String sql = "UPDATE MIZUNONEWBARBOXDT SET BOXALL = ?, SHIPFROM = ?, SFADDRESS1 = ?, SFADDRESS2 = ?, SFADDRESS3 = ?, SFADDRESS4 = ?, SHIPTO = ?, STADDRESS1 = ?, STADDRESS2 = ?, STADDRESS3 = ?, STADDRESS4 = ?, QTYPERBOX  = ?, DESCTXT  = ?, GROSSWEIGHT  = ?, NETWEIGHT  = ?, COUNTRY_ORIGIN  = ?, SKU_ITEM1  = ?, UPC_CODE1  = ?, COLORNO1  = ?, SIZENO1  = ?, QTY1  = ?, SKU_ITEM2  = ?, UPC_CODE2  = ?, COLORNO2  = ?, SIZENO2  = ?, QTY2  = ?, SKU_ITEM3  = ?, UPC_CODE3  = ?, COLORNO3  = ?, SIZENO3  = ?, QTY3  = ?, SKU_ITEM4  = ?, UPC_CODE4  = ?, COLORNO4  = ?, SIZENO4  = ?, QTY4  = ?, STATUSSHOOT  = ? WHERE PO = ? AND BOXNO = ?;";
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET " +
+                    "BOXALL = ?," +
+                    "SHIPFROM = ?," +
+                    "SFADDRESS1 = ?," +
+                    "SFADDRESS2 = ?," +
+                    "SFADDRESS3 = ?," +
+                    "SFADDRESS4 = ?," +
+                    "SHIPTO = ?," +
+                    "STADDRESS1 = ?," +
+                    "STADDRESS2 = ?," +
+                    "STADDRESS3 = ?," +
+                    "STADDRESS4 = ?," +
+                    "QTYPERBOX  = ?," +
+                    "DESCTXT  = ?," +
+                    "GROSSWEIGHT  = ?," +
+                    "NETWEIGHT  = ?," +
+                    "COUNTRY_ORIGIN  = ?," +
+                    "SKU_ITEM1  = ?," +
+                    "UPC_CODE1  = ?," +
+                    "COLORNO1  = ?," +
+                    "SIZENO1  = ?," +
+                    "QTY1  = ?," +
+                    "SKU_ITEM2  = ?," +
+                    "UPC_CODE2  = ?," +
+                    "COLORNO2  = ?," +
+                    "SIZENO2  = ?," +
+                    "QTY2  = ?," +
+                    "SKU_ITEM3  = ?," +
+                    "UPC_CODE3  = ?," +
+                    "COLORNO3  = ?," +
+                    "SIZENO3  = ?," +
+                    "QTY3  = ?," +
+                    "SKU_ITEM4  = ?," +
+                    "UPC_CODE4  = ?," +
+                    "COLORNO4  = ?," +
+                    "SIZENO4  = ?," +
+                    "QTY4  = ?," +
+                    "STATUSSHOOT  = ?" +
+                    "WHERE PO = ? AND BOXNO = ?";
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, allbox);
-            ps.setString(2, firstdigit);
-            ps.setString(3, "TSG");
-            ps.setString(4, shipto);
-            ps.setString(5, qtyperbox);
-            ps.setString(6, desctxt);
-            ps.setString(7, grossweight);
-            ps.setString(8, netweight);
-            ps.setString(9, country_origin);
-            ps.setString(10, sku_item1);
-            ps.setString(11, upc_code1);
-            ps.setString(12, colorno1);
-            ps.setString(13, sizeno1);
-            ps.setString(14, qty1);
-            ps.setString(15, sku_item2);
-            ps.setString(16, upc_code2);
-            ps.setString(17, colorno2);
-            ps.setString(18, sizeno2);
-            ps.setString(19, qty2);
-            ps.setString(20, sku_item3);
-            ps.setString(21, upc_code3);
-            ps.setString(22, colorno3);
-            ps.setString(23, sizeno3);
-            ps.setString(24, qty3);
-            ps.setString(25, sku_item4);
-            ps.setString(26, upc_code4);
-            ps.setString(27, colorno4);
-            ps.setString(28, sizeno4);
-            ps.setString(29, qty4);
-            ps.setString(30, po);
-            ps.setString(31, startbox);
-            ps.setString(32, endbox);
-            ps.setString(33, pobefore);
-            ps.setString(34, startboxbefore);
-            ps.setString(35, endboxbefore);
-
+            ps.setString(1, BOXALL);
+            ps.setString(2, "TSG");
+            ps.setString(3, GetAddress("TSG").get("address1"));
+            ps.setString(4, GetAddress("TSG").get("address2"));
+            ps.setString(5, GetAddress("TSG").get("address3"));
+            ps.setString(6, GetAddress("TSG").get("address4"));
+            ps.setString(7, SHIPTO);
+            ps.setString(8, GetAddress(SHIPTO).get("address1"));
+            ps.setString(9, GetAddress(SHIPTO).get("address2"));
+            ps.setString(10, GetAddress(SHIPTO).get("address3"));
+            ps.setString(11, GetAddress(SHIPTO).get("address4"));
+            ps.setString(12, QTYPERBOX);
+            ps.setString(13, DESCTXT);
+            ps.setString(14, GROSSWEIGHT);
+            ps.setString(15, NETWEIGHT);
+            ps.setString(16, COUNTRY_ORIGIN);
+            ps.setString(17, SKU_ITEM1);
+            ps.setString(18, UPC_CODE1);
+            ps.setString(19, COLORNO1);
+            ps.setString(20, SIZENO1);
+            ps.setString(21, QTY1);
+            ps.setString(22, SKU_ITEM2);
+            ps.setString(23, UPC_CODE2);
+            ps.setString(24, COLORNO2);
+            ps.setString(25, SIZENO2);
+            ps.setString(26, QTY2);
+            ps.setString(27, SKU_ITEM3);
+            ps.setString(28, UPC_CODE3);
+            ps.setString(29, COLORNO3);
+            ps.setString(30, SIZENO3);
+            ps.setString(31, QTY3);
+            ps.setString(32, SKU_ITEM4);
+            ps.setString(33, UPC_CODE4);
+            ps.setString(34, COLORNO4);
+            ps.setString(35, SIZENO4);
+            ps.setString(36, QTY4);
+            ps.setString(37, "N");
+            ps.setString(38, PO);
+            ps.setString(39, BOXNO);
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {

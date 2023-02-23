@@ -58,12 +58,12 @@
         </div>
         <div class="container mt-5">
             <div class="card shadow-lg">
-                <h5 class="card-header">คีย์ข้อมูลลูกค้า</h5>
+                <div class="card-header">คีย์ข้อมูลลูกค้า</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
                             <div class="card shadow-lg">
-                                <h5 class="card-header">เพิ่มข้อมูล</h5>
+                                <div class="card-header">เพิ่มข้อมูล</div>
                                 <div class="card-body">
                                     <form id="myform">
                                         <div class="row justify-content-center">
@@ -108,7 +108,7 @@
                         </div>
                         <div class="col-sm-12 col-md-6">
                             <div class="card shadow-lg">
-                                <h5 class="card-header">อัพโหลดข้อมูล</h5>
+                                <div class="card-header">อัพโหลดข้อมูล</div>
                                 <div class="card-body">
                                     <form id="myformupload">
                                         <div class="row text-end mb-1">
@@ -133,7 +133,7 @@
                         
                     </div>
                     <div class="card shadow-lg mt-3">
-                        <h5 class="card-header">เเสดงข้อมูล</h5>
+                        <div class="card-header">เเสดงข้อมูล</div>
                         <div class="card-body">
                             <div id="table_customer">
                                 

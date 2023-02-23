@@ -109,7 +109,7 @@
                 </div>
             </div>
             <div class="card shadow-lg mt-3">
-                <h5 class="card-header">เเสดงข้อมูล</h5>
+                <div class="card-header">เเสดงข้อมูล</div>
                 <div class="card-body">
                     <table>
                         <thead>

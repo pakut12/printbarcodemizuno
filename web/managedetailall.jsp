@@ -47,7 +47,7 @@
                 </div>
             </div>
             <div class="card shadow-lg mt-3">
-                <h5 class="card-header">คีย์ข้อมูล</h5>
+                <div class="card-header">คีย์ข้อมูล</div>
                 <div class="card-body">
                     <div class="container">
                         <div class="row mb-3">

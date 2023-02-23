@@ -16,7 +16,7 @@
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-5">
             <div class="card shadow-lg">
-                <h5 class="card-header">คู่มือโปรเเกรม</h5>
+                <div class="card-header">คู่มือโปรเเกรม</div>
                 <div class="card-body">
                    
                 </div>

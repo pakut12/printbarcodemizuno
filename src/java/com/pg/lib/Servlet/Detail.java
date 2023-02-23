@@ -200,7 +200,7 @@ public class Detail extends HttpServlet {
                 obj.put("qtyperbox", detailbox.get(0).getQtyperbox());
                 obj.put("boxno", detailbox.get(0).getBoxno());
                 obj.put("desctxt", detailbox.get(0).getDesctxt());
-                
+
                 obj.put("grossweight", detailbox.get(0).getGrossweight());
                 obj.put("netweight", detailbox.get(0).getNetweight());
                 obj.put("country_origin", detailbox.get(0).getCountry_origin());
@@ -242,7 +242,72 @@ public class Detail extends HttpServlet {
                 obj.put("statusshoot", detailbox.get(0).getStatusshoot());
 
                 out.print(obj);
+            } else if (type.equals("updatedetails")) {
+                String pobefore = request.getParameter("pobefore").trim();
+                String BOXNO = request.getParameter("startboxbefore").trim();
+
+                String SHIPTO = request.getParameter("shipto").trim();
+                String QTYPERBOX = request.getParameter("qtyperbox").trim();
+
+                String BOXALL = request.getParameter("allbox").trim();
+                String PO = request.getParameter("po").trim();
+                String DESCTXT = request.getParameter("desctxt").trim();
+                String GROSSWEIGHT = request.getParameter("grossweight").trim();
+                String NETWEIGHT = request.getParameter("netweight").trim();
+                String COUNTRY_ORIGIN = request.getParameter("country_origin").trim();
+
+                String SKU_ITEM1 = request.getParameter("sku_item1").trim();
+                String UPC_CODE1 = request.getParameter("upc_code1").trim();
+                String COLORNO1 = request.getParameter("colorno1").trim();
+                String SIZENO1 = request.getParameter("sizeno1").trim();
+                String QTY1 = request.getParameter("qty1").trim();
+
+                String SKU_ITEM2 = request.getParameter("sku_item2").trim();
+                String UPC_CODE2 = request.getParameter("upc_code2").trim();
+                String COLORNO2 = request.getParameter("colorno2").trim();
+                String SIZENO2 = request.getParameter("sizeno2").trim();
+                String QTY2 = request.getParameter("qty2").trim();
+
+                String SKU_ITEM3 = request.getParameter("sku_item3").trim();
+                String UPC_CODE3 = request.getParameter("upc_code3").trim();
+                String COLORNO3 = request.getParameter("colorno3").trim();
+                String SIZENO3 = request.getParameter("sizeno3").trim();
+                String QTY3 = request.getParameter("qty3").trim();
+
+                String SKU_ITEM4 = request.getParameter("sku_item4").trim();
+                String UPC_CODE4 = request.getParameter("upc_code4").trim();
+                String COLORNO4 = request.getParameter("colorno4").trim();
+                String SIZENO4 = request.getParameter("sizeno4").trim();
+                String QTY4 = request.getParameter("qty4").trim();
+
+                DetailService ds = new DetailService();
+
+                JSONObject obj = new JSONObject();
+                Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, PO, BOXNO);
+                if (status) {
+                    obj.put("status", "true");
+                } else {
+                    obj.put("status", "false");
+                }
+
+                out.print(obj);
+            } else if (type.equals("deletedetails")) {
+                String po = request.getParameter("posearch").trim();
+                String boxno = request.getParameter("boxno").trim();
+
+                DetailService ds = new DetailService();
+                Boolean status = ds.DeleteDetailBox(po, boxno);
+
+                JSONObject obj = new JSONObject();
+                if (status) {
+                    obj.put("status", "true");
+                } else {
+                    obj.put("status", "false");
+                }
+                out.print(obj);
             }
+
+
         } finally {
             out.close();
         }

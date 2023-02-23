@@ -16,7 +16,7 @@
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-5">
             <div class="card shadow-lg">
-                <h5 class="card-header">คีย์ข้อมูล</h5>
+                <div class="card-header">คีย์ข้อมูล</div>
                 <div class="card-body">
                     <form id="myform">
                         <div class="container">

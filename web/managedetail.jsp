@@ -73,7 +73,7 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                    <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="">
+                                    <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" readonly>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-4">
@@ -85,7 +85,7 @@
                             <div class="col-sm-12 col-md-4">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
-                                    <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="">
+                                    <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" readonly>
                                 </div>
                             </div>
                             
@@ -94,7 +94,7 @@
                             <div class="col-sm-12 col-md-6">
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                    <input type="text" class="form-control text-center" name="po" id="po" >
+                                    <input type="text" class="form-control text-center" name="po" id="po" readonly >
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-6">
@@ -332,7 +332,7 @@
             function updatedata(){
                 var pobefore = $("#posearch").val();
                 var startboxbefore  = $("#numstart").val();
-                var endboxbefore =  $("#numend").val();
+               
         
         
                 var shipto = $("#customer_num").val();
@@ -372,15 +372,11 @@
                     type:"post",
                     url:"Detail",
                     data:{
-                        type:"updatedetailsall",
+                        type:"updatedetails",
                         pobefore:pobefore,
                         startboxbefore:startboxbefore,
-                        endboxbefore:endboxbefore,
                         shipto:shipto,
                         qtyperbox:qtyperbox,
-                        firstdigit:firstdigit,
-                        startbox:startbox,
-                        endbox:endbox,
                         allbox:allbox,
                         po:po,
                         desctxt:desctxt,
@@ -437,7 +433,7 @@
                 $("#boxno").val("");
                 $("#numberbox_start").val("");
                 $("#numberbox_end").val("");
-                $("#last_box").val("");
+                $("#boxall").val("");
                         
                 $("#po").val("");
                 $("#description").val("");
@@ -541,12 +537,15 @@
               
             function deletedata(){
                 var posearch = $("#posearch").val();
+                var boxno = $("#numstart").val();
+                
                 $.ajax({
                     type:"post",
                     url:"Detail",
                     data:{
-                        type:"deletedetailsall",
-                        posearch:posearch
+                        type:"deletedetails",
+                        posearch:posearch,
+                        boxno:boxno
                     },
                     success:function(msg){
                         var js = JSON.parse(msg);
