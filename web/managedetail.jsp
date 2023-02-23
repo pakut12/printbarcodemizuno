@@ -42,182 +42,184 @@
                     </div>
                 </div>
             </div>
-            <div class="card shadow-lg mt-3">
-                <h5 class="card-header">คีย์ข้อมูล</h5>
-                <div class="card-body">
-                    <div class="container">
-                        <div class="row mb-3">
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                    <select class="form-select form-select-sm text-center" id="customer_num" disabled>
-                                        
-                                    </select>
+            <div id="myform">
+                <div class="card shadow-lg mt-3">
+                    <h5 class="card-header">คีย์ข้อมูล</h5>
+                    <div class="card-body">
+                        <div class="container">
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
+                                        <select class="form-select form-select-sm text-center" id="customer_num" disabled>
+                                            
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div id="customer_text"></div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">กำหนดปลายทาง</span>
+                                        <select class="form-select form-select-sm text-center" id="">
+                                            <option value="MUS">MUS</option>
+                                            <option value="MCA">MCA</option>
+                                            <option value="MCL">MCL</option>
+                                        </select>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div id="customer_text"></div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">กำหนดปลายทาง</span>
-                                    <select class="form-select form-select-sm text-center" id="">
-                                        <option value="MUS">MUS</option>
-                                        <option value="MCA">MCA</option>
-                                        <option value="MCL">MCL</option>
-                                    </select>
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                        <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" readonly>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                    <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" readonly>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
+                                        <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
-                                    <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="">
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
+                                        <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" readonly>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
-                                    <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" readonly>
-                                </div>
-                            </div>
-                            
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-12 col-md-6">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                    <input type="text" class="form-control text-center" name="po" id="po" readonly >
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-6">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
-                                    <input type="text" class="form-control text-center" name="description" id="description" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
-                                    <input type="text" class="form-control text-center" name="gw" id="gw" >
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
-                                    <input type="text" class="form-control text-center" name="nw" id="nw" >
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
-                                </div>
-                            </div>
-                            <div class="col-sm-12 col-md-4">
-                                <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                    <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col">
-                                <div class="row">
-                                    <div class="text-center">รหัสลูกค้า</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center" id="customer1_id" >
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_id" >
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_id" >
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center" id="customer4_id" >
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="text-center">รหัสบาร์โค้ด</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_barcode" readonly >
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_barcode" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer4_barcode" readonly >
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="text-center">Color</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center" id="customer1_color" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_color" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_color" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center" id="customer4_color" readonly>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="row">
-                                    <div class="text-center">Size</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_size" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_size" readonly>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" readonly>
-                                </div>
-                            </div>
-                            <div class="col">
-                                <div class="row ">
-                                    <div class="text-center">จำนวนตัว</div>
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center" id="customer1_number" >
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer2_number" >
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer3_number" >
-                                </div>
-                                <div class="row mb-2">
-                                    <input type="text" class="form-control form-control-sm text-center"  id="customer4_number" >
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-sm-12 col-md-12 text-center">
-                                <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="updatedata()">เเก้ไขข้อมูล</button>
-                                <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="deletedata()">ลบข้อมูล</button>
                                 
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
+                                        <input type="text" class="form-control text-center" name="po" id="po" readonly >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-6">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
+                                        <input type="text" class="form-control text-center" name="description" id="description" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
+                                        <input type="text" class="form-control text-center" name="gw" id="gw" >
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
+                                        <input type="text" class="form-control text-center" name="nw" id="nw" >
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
+                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="text-center">รหัสลูกค้า</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_id" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_id" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_id" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer4_id" >
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="text-center">รหัสบาร์โค้ด</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_barcode" readonly >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_barcode" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_barcode" readonly >
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="text-center">Color</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_color" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_color" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_color" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer4_color" readonly>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row">
+                                        <div class="text-center">Size</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_size" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_size" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" readonly>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="text-center">จำนวนตัว</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_number" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_number" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_number" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_number" >
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 text-center">
+                                    <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="updatedata()">เเก้ไขข้อมูล</button>
+                                    <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="deletedata()">ลบข้อมูล</button>
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -522,6 +524,7 @@
                             $("#customer4_color").val(js.colorno4);
                             $("#customer4_size").val(js.sizeno4);
                             $("#customer4_number").val(js.qty4);
+                            $("#myform :input").attr("disabled", false);
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",
@@ -583,7 +586,7 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
-      
+                $("#myform :input").attr("disabled", true);
             });
         </script>
     </body>

@@ -35,7 +35,7 @@
     
     <style>
         body {
-            background: url('https://images.unsplash.com/photo-1604762511479-33b9bfdc9767?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fA%3D%3D&w=1000&q=80') no-repeat center center fixed;
+            background: url('https://wallpaperaccess.com/full/4150324.jpg') no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
