@@ -250,12 +250,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer1_barcode").val(js.customer_barcode)
-                        $("#customer1_color").val(js.customer_color)
-                        $("#customer1_size").val(js.customer_size)
-                        $("#customer1_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer1_barcode").val(js.customer_barcode)
+                            $("#customer1_color").val(js.customer_color)
+                            $("#customer1_size").val(js.customer_size)
+                            $("#customer1_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer1_barcode").val("")
+                            $("#customer1_color").val("")
+                            $("#customer1_size").val("")
+                            $("#customer1_number").val("")
+                        }
                     }
                 })
             }
@@ -268,12 +275,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer2_barcode").val(js.customer_barcode)
-                        $("#customer2_color").val(js.customer_color)
-                        $("#customer2_size").val(js.customer_size)
-                        $("#customer2_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer2_barcode").val(js.customer_barcode)
+                            $("#customer2_color").val(js.customer_color)
+                            $("#customer2_size").val(js.customer_size)
+                            $("#customer2_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer2_barcode").val("")
+                            $("#customer2_color").val("")
+                            $("#customer2_size").val("")
+                            $("#customer2_number").val("")
+                        }
                     }
                 })
             }
@@ -286,12 +300,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer3_barcode").val(js.customer_barcode)
-                        $("#customer3_color").val(js.customer_color)
-                        $("#customer3_size").val(js.customer_size)
-                        $("#customer3_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer3_barcode").val(js.customer_barcode)
+                            $("#customer3_color").val(js.customer_color)
+                            $("#customer3_size").val(js.customer_size)
+                            $("#customer3_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer3_barcode").val("")
+                            $("#customer3_color").val("")
+                            $("#customer3_size").val("")
+                            $("#customer3_number").val("")
+                        }
                     }
                 })
             }
@@ -304,12 +325,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer4_barcode").val(js.customer_barcode)
-                        $("#customer4_color").val(js.customer_color)
-                        $("#customer4_size").val(js.customer_size)
-                        $("#customer4_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer4_barcode").val(js.customer_barcode)
+                            $("#customer4_color").val(js.customer_color)
+                            $("#customer4_size").val(js.customer_size)
+                            $("#customer4_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer4_barcode").val("")
+                            $("#customer4_color").val("")
+                            $("#customer4_size").val("")
+                            $("#customer4_number").val("")
+                        }
                     }
                 })
             }
@@ -467,7 +495,7 @@
                     type:"post",
                     url:"Detail",
                     data:{
-                        type:"getdetails",
+                        type:"getdetailsall",
                         posearch:posearch,
                         numstart:numstart,
                         numend:numend
@@ -536,7 +564,21 @@
                         posearch:posearch
                     },
                     success:function(msg){
-                        console.log(msg)
+                        var js = JSON.parse(msg);
+                        if(js.status == "true"){
+                            Swal.fire({
+                                title:"ลบ",
+                                icon:"success",
+                                text:"ลบสำเร็จ"
+                            })
+                            clearinput()
+                        }else if(js.status == "false"){
+                            Swal.fire({
+                                title:"ลบ",
+                                icon:"error",
+                                text:"ลบไม่สำเร็จ"
+                            })
+                        }
                     }
                 })
             }
@@ -557,7 +599,9 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
-      
+                $("#numberbox_end").on('input', function() {
+                    $("#quantitytotal_box").val($(this).val())
+                });
             });
         </script>
     </body>

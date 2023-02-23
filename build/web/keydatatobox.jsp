@@ -197,12 +197,9 @@
                                 </div>
                             </div>
                             <div class="row">
-                                
-                                <div class="col text-center">
-                                    <button class="btn btn-outline-success" type="button" id="bt_sava" onclick="senddata()">บันทึกข้อมูล</button>
-                                </div>
-                                <div class="col text-center">
-                                    <button class="btn btn-outline-danger" type="button" id="bt_reset" onclick="location.reload()">ยกเลิกข้อมูล</button>
+                                <div class="col-sm-12 col-md-12 text-center">
+                                    <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="senddata()">บันทึกข้อมูล</button>
+                                    <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="location.reload()">ยกเลิกข้อมูล</button>
                                 </div>
                             </div>
                         </div>
@@ -223,12 +220,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer1_barcode").val(js.customer_barcode)
-                        $("#customer1_color").val(js.customer_color)
-                        $("#customer1_size").val(js.customer_size)
-                        $("#customer1_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer1_barcode").val(js.customer_barcode)
+                            $("#customer1_color").val(js.customer_color)
+                            $("#customer1_size").val(js.customer_size)
+                            $("#customer1_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer1_barcode").val("")
+                            $("#customer1_color").val("")
+                            $("#customer1_size").val("")
+                            $("#customer1_number").val("")
+                        }
                     }
                 })
             }
@@ -241,12 +245,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer2_barcode").val(js.customer_barcode)
-                        $("#customer2_color").val(js.customer_color)
-                        $("#customer2_size").val(js.customer_size)
-                        $("#customer2_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer2_barcode").val(js.customer_barcode)
+                            $("#customer2_color").val(js.customer_color)
+                            $("#customer2_size").val(js.customer_size)
+                            $("#customer2_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer2_barcode").val("")
+                            $("#customer2_color").val("")
+                            $("#customer2_size").val("")
+                            $("#customer2_number").val("")
+                        }
                     }
                 })
             }
@@ -259,12 +270,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer3_barcode").val(js.customer_barcode)
-                        $("#customer3_color").val(js.customer_color)
-                        $("#customer3_size").val(js.customer_size)
-                        $("#customer3_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer3_barcode").val(js.customer_barcode)
+                            $("#customer3_color").val(js.customer_color)
+                            $("#customer3_size").val(js.customer_size)
+                            $("#customer3_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer3_barcode").val("")
+                            $("#customer3_color").val("")
+                            $("#customer3_size").val("")
+                            $("#customer3_number").val("")
+                        }
                     }
                 })
             }
@@ -277,12 +295,19 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg)
-                        console.log(js)
-                        $("#customer4_barcode").val(js.customer_barcode)
-                        $("#customer4_color").val(js.customer_color)
-                        $("#customer4_size").val(js.customer_size)
-                        $("#customer4_number").val($("#quantity_box").val())
+                        if(msg){
+                            var js = JSON.parse(msg)
+                            console.log(js)
+                            $("#customer4_barcode").val(js.customer_barcode)
+                            $("#customer4_color").val(js.customer_color)
+                            $("#customer4_size").val(js.customer_size)
+                            $("#customer4_number").val($("#quantity_box").val())
+                        }else{
+                            $("#customer4_barcode").val("")
+                            $("#customer4_color").val("")
+                            $("#customer4_size").val("")
+                            $("#customer4_number").val("")
+                        }
                     }
                 })
             }

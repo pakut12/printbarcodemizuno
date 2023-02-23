@@ -25,6 +25,142 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
+    public Boolean UpdateDetailBox(String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4) throws SQLException {
+
+        Boolean status = false;
+
+        try {
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET BOXALL = ?, SHIPFROM = ?, SFADDRESS1 = ?, SFADDRESS2 = ?, SFADDRESS3 = ?, SFADDRESS4 = ?, SHIPTO = ?, STADDRESS1 = ?, STADDRESS2 = ?, STADDRESS3 = ?, STADDRESS4 = ?, QTYPERBOX  = ?, DESCTXT  = ?, GROSSWEIGHT  = ?, NETWEIGHT  = ?, COUNTRY_ORIGIN  = ?, SKU_ITEM1  = ?, UPC_CODE1  = ?, COLORNO1  = ?, SIZENO1  = ?, QTY1  = ?, SKU_ITEM2  = ?, UPC_CODE2  = ?, COLORNO2  = ?, SIZENO2  = ?, QTY2  = ?, SKU_ITEM3  = ?, UPC_CODE3  = ?, COLORNO3  = ?, SIZENO3  = ?, QTY3  = ?, SKU_ITEM4  = ?, UPC_CODE4  = ?, COLORNO4  = ?, SIZENO4  = ?, QTY4  = ?, STATUSSHOOT  = ? WHERE PO = ? AND BOXNO = ?;";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, allbox);
+            ps.setString(2, firstdigit);
+            ps.setString(3, "TSG");
+            ps.setString(4, shipto);
+            ps.setString(5, qtyperbox);
+            ps.setString(6, desctxt);
+            ps.setString(7, grossweight);
+            ps.setString(8, netweight);
+            ps.setString(9, country_origin);
+            ps.setString(10, sku_item1);
+            ps.setString(11, upc_code1);
+            ps.setString(12, colorno1);
+            ps.setString(13, sizeno1);
+            ps.setString(14, qty1);
+            ps.setString(15, sku_item2);
+            ps.setString(16, upc_code2);
+            ps.setString(17, colorno2);
+            ps.setString(18, sizeno2);
+            ps.setString(19, qty2);
+            ps.setString(20, sku_item3);
+            ps.setString(21, upc_code3);
+            ps.setString(22, colorno3);
+            ps.setString(23, sizeno3);
+            ps.setString(24, qty3);
+            ps.setString(25, sku_item4);
+            ps.setString(26, upc_code4);
+            ps.setString(27, colorno4);
+            ps.setString(28, sizeno4);
+            ps.setString(29, qty4);
+            ps.setString(30, po);
+            ps.setString(31, startbox);
+            ps.setString(32, endbox);
+            ps.setString(33, pobefore);
+            ps.setString(34, startboxbefore);
+            ps.setString(35, endboxbefore);
+
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return status;
+    }
+
+    public List<BCDetailBox> GetDetailBox(String posearch, String numstart) throws SQLException {
+
+        List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
+
+        try {
+            String sql = "SELECT * FROM MIZUNONEWBARBOXDT WHERE PO = ? AND BOXNO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, posearch);
+            ps.setString(2, numstart);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+
+                BCDetailBox box = new BCDetailBox();
+                box.setPo(rs.getString("po"));
+
+
+                box.setShipfrom(rs.getString("shipfrom"));
+                box.setShipto(rs.getString("shipto"));
+                box.setQtyperbox(rs.getString("qtyperbox"));
+
+                box.setGrossweight(rs.getString("grossweight"));
+                box.setNetweight(rs.getString("netweight"));
+                box.setCountry_origin(rs.getString("country_origin"));
+                box.setAllbox(rs.getString("boxall"));
+                box.setBoxno(rs.getString("boxno"));
+                box.setSku_item1(rs.getString("sku_item1"));
+                box.setUpc_code1(rs.getString("upc_code1"));
+                box.setQty1(rs.getString("qty1"));
+                box.setSizen01(rs.getString("sizeno1"));
+                box.setColorn01(rs.getString("colorno1"));
+                box.setDesctxt(rs.getString("desctxt"));
+                box.setSku_item2(rs.getString("sku_item2"));
+                box.setUpc_code2(rs.getString("upc_code2"));
+                box.setQty2(rs.getString("qty2"));
+                box.setSizen02(rs.getString("sizeno2"));
+                box.setColorn02(rs.getString("colorno2"));
+
+                box.setSku_item3(rs.getString("sku_item3"));
+                box.setUpc_code3(rs.getString("upc_code3"));
+                box.setQty3(rs.getString("qty3"));
+                box.setSizen03(rs.getString("sizeno3"));
+                box.setColorn03(rs.getString("colorno3"));
+
+                box.setSku_item4(rs.getString("sku_item4"));
+                box.setUpc_code4(rs.getString("upc_code4"));
+                box.setQty4(rs.getString("qty4"));
+                box.setSizen04(rs.getString("sizeno4"));
+                box.setColorn04(rs.getString("colorno4"));
+
+                box.setSfaddress1(rs.getString("sfaddress1"));
+                box.setSfaddress2(rs.getString("sfaddress2"));
+                box.setSfaddress3(rs.getString("sfaddress3"));
+                box.setSfaddress4(rs.getString("sfaddress4"));
+                box.setStaddress1(rs.getString("staddress1"));
+                box.setStaddress2(rs.getString("staddress2"));
+                box.setStaddress3(rs.getString("staddress3"));
+                box.setStaddress4(rs.getString("staddress4"));
+                box.setStatusshoot(rs.getString("statusshoot"));
+
+                listdetail.add(box);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return listdetail;
+    }
+
     public Boolean DeleteDetailBoxMIZUNONEWBARBOXDTAll(String PO) throws SQLException {
         Boolean status = false;
         try {

@@ -37,7 +37,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="keycustomer.jsp">คีย์ข้อมูลลูกค้า</a></li>
                         <li><a class="dropdown-item" href="keydatatobox.jsp">คีย์ข้อมูลกล่อง</a></li>
-                        <li><a class="dropdown-item" href="manageheader.jsp">เเก้ไข/ลบ ข้อมูล หลายกล่อง</a></li>
+                        <li><a class="dropdown-item" href="managedetailall.jsp">เเก้ไข/ลบ ข้อมูล หลายกล่อง</a></li>
                         <li><a class="dropdown-item" href="managedetail.jsp">เเก้ไข/ลบ ข้อมูล ทีล่ะกล่อง</a></li>
                     </ul>
                 </li>

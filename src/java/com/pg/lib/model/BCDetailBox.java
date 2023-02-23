@@ -42,8 +42,96 @@ public class BCDetailBox {
     private String qty4;
     private String sizen04;
     private String colorn04;
+    private String sfaddress1;
+    private String sfaddress2;
+    private String sfaddress3;
+    private String sfaddress4;
+    private String staddress1;
+    private String staddress2;
+    private String staddress3;
+    private String statusshoot;
+    private String boxno;
 
-   
+    public String getBoxno() {
+        return boxno;
+    }
+
+    public void setBoxno(String boxno) {
+        this.boxno = boxno;
+    }
+
+    public String getStatusshoot() {
+        return statusshoot;
+    }
+
+    public void setStatusshoot(String statusshoot) {
+        this.statusshoot = statusshoot;
+    }
+
+    public String getSfaddress1() {
+        return sfaddress1;
+    }
+
+    public void setSfaddress1(String sfaddress1) {
+        this.sfaddress1 = sfaddress1;
+    }
+
+    public String getSfaddress2() {
+        return sfaddress2;
+    }
+
+    public void setSfaddress2(String sfaddress2) {
+        this.sfaddress2 = sfaddress2;
+    }
+
+    public String getSfaddress3() {
+        return sfaddress3;
+    }
+
+    public void setSfaddress3(String sfaddress3) {
+        this.sfaddress3 = sfaddress3;
+    }
+
+    public String getSfaddress4() {
+        return sfaddress4;
+    }
+
+    public void setSfaddress4(String sfaddress4) {
+        this.sfaddress4 = sfaddress4;
+    }
+
+    public String getStaddress1() {
+        return staddress1;
+    }
+
+    public void setStaddress1(String staddress1) {
+        this.staddress1 = staddress1;
+    }
+
+    public String getStaddress2() {
+        return staddress2;
+    }
+
+    public void setStaddress2(String staddress2) {
+        this.staddress2 = staddress2;
+    }
+
+    public String getStaddress3() {
+        return staddress3;
+    }
+
+    public void setStaddress3(String staddress3) {
+        this.staddress3 = staddress3;
+    }
+
+    public String getStaddress4() {
+        return staddress4;
+    }
+
+    public void setStaddress4(String staddress4) {
+        this.staddress4 = staddress4;
+    }
+    private String staddress4;
 
     public String getShipto() {
         return shipto;
