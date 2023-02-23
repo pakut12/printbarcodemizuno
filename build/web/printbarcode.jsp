@@ -23,22 +23,22 @@
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-12 col-md-3">
+                                <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="po">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-5">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxstart">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                        <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                                        <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxend">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
-                                    <button type="button" class="btn btn-success btn-sm">ค้นหา</button>
+                                    <button type="button" class="btn btn-success btn-sm" onclick="barcode()">ค้นหา</button>
                                 </div>
                             </div>
                         </div>
@@ -80,9 +80,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -103,7 +101,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
@@ -129,8 +126,28 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            function barcode(){
+                var po = $("#po").val();
+                var boxstart = $("#boxstart").val();
+                var boxend = $("#boxend").val();
+                
+                $.ajax({
+                    type:'post',
+                    url:'Detail',
+                    data:{
+                        type:"test",
+                        po:po,
+                        boxstart:boxstart,
+                        boxend:boxend
+                    },
+                    success:function(msg){
+                        console.log(msg)
+                    }
+                })
+            } 
+            
             $(document).ready(function () {
-                //alert('asd');
+               
             });
         </script>
     </body>

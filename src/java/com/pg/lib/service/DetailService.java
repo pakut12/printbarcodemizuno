@@ -25,7 +25,87 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    public Boolean DeleteDetailBox(String PO,String BOXNO) throws SQLException {
+    private String SqlDetailBoxForPrint(String po, String start, String end) {
+
+        int boxstart = Integer.parseInt(start.substring(1));
+        int boxend = Integer.parseInt(end.substring(1));
+        String letter = end.substring(0, 1);
+
+        String sql = "select * from MIZUNONEWBARBOXDT where po = '" + po + "' and boxno in (";
+
+        for (int n = boxstart; n < boxend + 1; n++) {
+            String num = letter + String.valueOf(n);
+            if (n < boxend) {
+                sql += "'" + num + "',";
+            } else {
+                sql += "'" + num + "')";
+            }
+        }
+        return sql;
+    }
+
+    public List<BCDetailBox> GetDetailBoxForPrint(String po, String start, String end) throws SQLException {
+        List<BCDetailBox> listbox = new ArrayList();
+        try {
+            String sql = SqlDetailBoxForPrint(po, start, end);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                BCDetailBox box = new BCDetailBox();
+                box.setPo(rs.getString("po"));
+                box.setShipfrom(rs.getString("shipfrom"));
+                box.setShipto(rs.getString("shipto"));
+                box.setQtyperbox(rs.getString("qtyperbox"));
+                box.setGrossweight(rs.getString("grossweight"));
+                box.setNetweight(rs.getString("netweight"));
+                box.setCountry_origin(rs.getString("country_origin"));
+                box.setAllbox(rs.getString("boxall"));
+                box.setBoxno(rs.getString("boxno"));
+                box.setSku_item1(rs.getString("sku_item1"));
+                box.setUpc_code1(rs.getString("upc_code1"));
+                box.setQty1(rs.getString("qty1"));
+                box.setSizen01(rs.getString("sizeno1"));
+                box.setColorn01(rs.getString("colorno1"));
+                box.setDesctxt(rs.getString("desctxt"));
+                box.setSku_item2(rs.getString("sku_item2"));
+                box.setUpc_code2(rs.getString("upc_code2"));
+                box.setQty2(rs.getString("qty2"));
+                box.setSizen02(rs.getString("sizeno2"));
+                box.setColorn02(rs.getString("colorno2"));
+                box.setSku_item3(rs.getString("sku_item3"));
+                box.setUpc_code3(rs.getString("upc_code3"));
+                box.setQty3(rs.getString("qty3"));
+                box.setSizen03(rs.getString("sizeno3"));
+                box.setColorn03(rs.getString("colorno3"));
+                box.setSku_item4(rs.getString("sku_item4"));
+                box.setUpc_code4(rs.getString("upc_code4"));
+                box.setQty4(rs.getString("qty4"));
+                box.setSizen04(rs.getString("sizeno4"));
+                box.setColorn04(rs.getString("colorno4"));
+                box.setSfaddress1(rs.getString("sfaddress1"));
+                box.setSfaddress2(rs.getString("sfaddress2"));
+                box.setSfaddress3(rs.getString("sfaddress3"));
+                box.setSfaddress4(rs.getString("sfaddress4"));
+                box.setStaddress1(rs.getString("staddress1"));
+                box.setStaddress2(rs.getString("staddress2"));
+                box.setStaddress3(rs.getString("staddress3"));
+                box.setStaddress4(rs.getString("staddress4"));
+                box.setStatusshoot(rs.getString("statusshoot"));
+                listbox.add(box);
+               
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return listbox;
+    }
+
+    public Boolean DeleteDetailBox(String PO, String BOXNO) throws SQLException {
         Boolean status = false;
         try {
             String sql = "DELETE FROM MIZUNONEWBARBOXDT WHERE PO = ? AND BOXNO = ?";

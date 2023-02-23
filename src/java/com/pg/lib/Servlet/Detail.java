@@ -305,6 +305,17 @@ public class Detail extends HttpServlet {
                     obj.put("status", "false");
                 }
                 out.print(obj);
+            } else if (type.equals("test")) {
+                String po = request.getParameter("po").trim();
+                String boxstart = request.getParameter("boxstart");
+                String boxend = request.getParameter("boxend");
+
+                DetailService ds = new DetailService();
+                List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend);
+                
+                out.print(listbox.size());
+
+                
             }
 
 
