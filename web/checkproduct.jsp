@@ -124,7 +124,7 @@
                             <div class="row mb-3">
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">รหัสลูกค้า</div>
+                                        <div class="text-center fw-bold">รหัสลูกค้า</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center" id="customer1_id" >
@@ -141,7 +141,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">รหัสบาร์โค้ด</div>
+                                        <div class="text-center fw-bold">รหัสบาร์โค้ด</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" readonly>
@@ -158,7 +158,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">Color</div>
+                                        <div class="text-center fw-bold">Color</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center" id="customer1_color" readonly>
@@ -175,7 +175,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">Size</div>
+                                        <div class="text-center fw-bold">Size</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" readonly>
@@ -192,7 +192,24 @@
                                 </div>
                                 <div class="col">
                                     <div class="row ">
-                                        <div class="text-center">จำนวนตัวนับได้</div>
+                                        <div class="text-center fw-bold">จำนวนตัว</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_qty" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_qty" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_qty" >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_qty" >
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="row ">
+                                        <div class="text-center fw-bold">จำนวนตัวนับได้</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center" id="customer1_number" >
@@ -277,24 +294,28 @@
                             $("#customer1_barcode").val(js.upc_code1);
                             $("#customer1_color").val(js.colorno1);
                             $("#customer1_size").val(js.sizeno1);
+                            $("#customer1_qty").val(js.qty1);
                             $("#customer1_number").val(0);
 
                             $("#customer2_id").val(js.sku_item2);
                             $("#customer2_barcode").val(js.upc_code2);
                             $("#customer2_color").val(js.colorno2);
                             $("#customer2_size").val(js.sizeno2);
+                            $("#customer2_qty").val(js.qty2);
                             $("#customer2_number").val(0);
                         
                             $("#customer3_id").val(js.sku_item3);
                             $("#customer3_barcode").val(js.upc_code3);
                             $("#customer3_color").val(js.colorno3);
                             $("#customer3_size").val(js.sizeno3);
+                            $("#customer3_qty").val(js.qty3);
                             $("#customer3_number").val(0);
                         
                             $("#customer4_id").val(js.sku_item4);
                             $("#customer4_barcode").val(js.upc_code4);
                             $("#customer4_color").val(js.colorno4);
                             $("#customer4_size").val(js.sizeno4);
+                            $("#customer4_qty").val(js.qty4);
                             $("#customer4_number").val(0);
                             
                             $("#barcode_box").attr("disabled", false);
@@ -352,7 +373,6 @@
                     searchpo()
                 });
                 $("#barcode_box").on('input', function() {
-                  
                     checkbarcode()
                 });
                 

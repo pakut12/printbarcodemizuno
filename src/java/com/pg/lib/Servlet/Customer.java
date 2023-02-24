@@ -44,7 +44,8 @@ public class Customer extends HttpServlet {
                 String customer_color = request.getParameter("customer_color").trim();
                 String customer_size = request.getParameter("customer_size").trim();
                 String customer_description = request.getParameter("customer_description").trim();
-                Boolean status = cs.AddDetailCustomer(customer_no, customer_barcode, customer_color, customer_size, customer_description);
+                String customer_product = request.getParameter("customer_product").trim();
+                Boolean status = cs.AddDetailCustomer(customer_no, customer_barcode, customer_color, customer_size, customer_description, customer_product);
                 JSONObject obj = new JSONObject();
                 if (status) {
                     obj.put("status", "true");
@@ -67,6 +68,7 @@ public class Customer extends HttpServlet {
                 html += "<th>√À— ∫“√Ï‚§È¥</th>";
                 html += "<th>Color</th>";
                 html += "<th>Size</th>";
+                html += "<th>√À—  ‘π§È“</th>";
                 html += "<th>Description</th>";
                 html += "<th>‡‡°È‰¢</th>";
                 html += "<th>≈∫</th>";
@@ -80,6 +82,7 @@ public class Customer extends HttpServlet {
                     html += "<td>" + list.getCustomer_barcode() + "</td>";
                     html += "<td>" + list.getCustomer_color() + "</td>";
                     html += "<td>" + list.getCustomer_size() + "</td>";
+                    html += "<td>" + list.getCustomer_product() + "</td>";
                     html += "<td>" + list.getCustomer_description() + "</td>";
                     html += "<td><button class='btn btn-warning btn-sm' type='button' onclick='edit_customer(" + list.getCustomer_id() + ")' id='bt_edit'>‡‡°È‰¢</button></td>";
                     html += "<td><button class='btn btn-danger btn-sm' type='button'  onclick='del_customer(" + list.getCustomer_id() + ")' id='bt_del'>≈∫</button></td>";
@@ -118,6 +121,7 @@ public class Customer extends HttpServlet {
                 obj.put("customer_barcode", listcustomerdetail.get(0).getCustomer_barcode());
                 obj.put("customer_color", listcustomerdetail.get(0).getCustomer_color());
                 obj.put("customer_size", listcustomerdetail.get(0).getCustomer_size());
+                obj.put("customer_product", listcustomerdetail.get(0).getCustomer_product());
                 obj.put("customer_description", listcustomerdetail.get(0).getCustomer_description());
 
                 out.print(obj);
@@ -130,28 +134,9 @@ public class Customer extends HttpServlet {
                 String customer_color = request.getParameter("customer_color").trim();
                 String customer_size = request.getParameter("customer_size").trim();
                 String customer_description = request.getParameter("customer_description").trim();
+                String customer_product = request.getParameter("customer_product").trim();
 
-                Boolean statusupdate = cs.UpdateDetailCustomer(customer_id, customer_no, customer_barcode, customer_color, customer_size, customer_description);
-
-                JSONObject obj = new JSONObject();
-                if (statusupdate) {
-                    obj.put("status", "true");
-                } else {
-                    obj.put("status", "false");
-                }
-
-                out.print(obj);
-
-            } else if (type.equals("update_customer")) {
-                CustomerService cs = new CustomerService();
-                String customer_id = request.getParameter("customer_id").trim();
-                String customer_no = request.getParameter("customer_no").trim();
-                String customer_barcode = request.getParameter("customer_barcode").trim();
-                String customer_color = request.getParameter("customer_color").trim();
-                String customer_size = request.getParameter("customer_size").trim();
-                String customer_description = request.getParameter("customer_description").trim();
-
-                Boolean statusupdate = cs.UpdateDetailCustomer(customer_id, customer_no, customer_barcode, customer_color, customer_size, customer_description);
+                Boolean statusupdate = cs.UpdateDetailCustomer(customer_id, customer_no, customer_barcode, customer_color, customer_size, customer_description, customer_product);
 
                 JSONObject obj = new JSONObject();
                 if (statusupdate) {
@@ -161,6 +146,7 @@ public class Customer extends HttpServlet {
                 }
 
                 out.print(obj);
+
             } else if (type.equals("chack_customer")) {
                 String customer_id = request.getParameter("customer_id").trim();
                 CustomerService cs = new CustomerService();
@@ -172,10 +158,11 @@ public class Customer extends HttpServlet {
                 obj.put("customer_color", list.get(0).getCustomer_color());
                 obj.put("customer_size", list.get(0).getCustomer_size());
                 obj.put("customer_quantity", list.get(0).getCustomer_quantity());
+                obj.put("customer_product", list.get(0).getCustomer_product());
                 obj.put("customer_description", list.get(0).getCustomer_description());
                 out.print(obj);
             }
-            
+
         } finally {
             out.close();
         }

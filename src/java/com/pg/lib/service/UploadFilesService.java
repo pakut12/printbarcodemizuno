@@ -139,13 +139,15 @@ public class UploadFilesService {
                     if (cell.getColumnIndex() == 0) {
                         customer.setCustomer_no(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 1) {
-                        customer.setCustomer_barcode(cell.getStringCellValue());
-                    } else if (cell.getColumnIndex() == 2) {
-                        customer.setCustomer_description(cell.getStringCellValue());
-                    } else if (cell.getColumnIndex() == 3) {
                         customer.setCustomer_color(cell.getStringCellValue());
-                    } else if (cell.getColumnIndex() == 4) {
+                    } else if (cell.getColumnIndex() == 2) {
                         customer.setCustomer_size(cell.getStringCellValue());
+                    } else if (cell.getColumnIndex() == 3) {
+                        customer.setCustomer_barcode(cell.getStringCellValue());
+                    } else if (cell.getColumnIndex() == 4) {
+                        customer.setCustomer_product(cell.getStringCellValue());
+                    } else if (cell.getColumnIndex() == 5) {
+                        customer.setCustomer_description(cell.getStringCellValue());
                     }
 
                 }
@@ -159,5 +161,4 @@ public class UploadFilesService {
         return listorder;
 
     }
-    
 }

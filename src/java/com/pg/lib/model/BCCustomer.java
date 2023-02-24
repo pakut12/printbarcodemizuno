@@ -15,8 +15,17 @@ public class BCCustomer {
     private String customer_barcode;
     private String customer_color;
     private String customer_size;
+    private String customer_product;
     private int customer_quantity;
     private String customer_description;
+
+    public String getCustomer_product() {
+        return customer_product;
+    }
+
+    public void setCustomer_product(String customer_product) {
+        this.customer_product = customer_product;
+    }
 
     public String getCustomer_description() {
         return customer_description;

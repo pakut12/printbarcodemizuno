@@ -55,5 +55,9 @@
             border-bottom: 1px; 
         }
         
+        .input-group-text{
+            font-weight: bold;
+        }
+        
     </style>
 </html>

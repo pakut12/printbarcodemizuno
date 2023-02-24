@@ -18,7 +18,6 @@
             <div class="card">
                 <div class="card-header">
                     ค้นหา
-                    
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -60,16 +59,6 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div id="customer_text"></div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">กำหนดปลายทาง</span>
-                                        <select class="form-select form-select-sm text-center" id="">
-                                            <option value="MUS">MUS</option>
-                                            <option value="MCA">MCA</option>
-                                            <option value="MCL">MCL</option>
-                                        </select>
-                                    </div>
-                                </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
@@ -90,7 +79,6 @@
                                         <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" readonly>
                                     </div>
                                 </div>
-                                
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-6">
@@ -101,37 +89,33 @@
                                 </div>
                                 <div class="col-sm-12 col-md-6">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
-                                        <input type="text" class="form-control text-center" name="description" id="description" >
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
+                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
                                     </div>
                                 </div>
+                                
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-sm-12 col-md-6">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
                                         <input type="text" class="form-control text-center" name="gw" id="gw" >
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-sm-12 col-md-6">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
                                         <input type="text" class="form-control text-center" name="nw" id="nw" >
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
-                                    </div>
-                                </div>
+                                
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">รหัสลูกค้า</div>
+                                        <div class="text-center fw-bold">รหัสลูกค้า</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center" id="customer1_id" >
@@ -148,7 +132,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">รหัสบาร์โค้ด</div>
+                                        <div class="text-center fw-bold">รหัสบาร์โค้ด</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center"  id="customer1_barcode" readonly>
@@ -165,7 +149,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">Color</div>
+                                        <div class="text-center fw-bold">Color</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center" id="customer1_color" readonly>
@@ -182,7 +166,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="row">
-                                        <div class="text-center">Size</div>
+                                        <div class="text-center fw-bold">Size</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center"  id="customer1_size" readonly>
@@ -198,8 +182,25 @@
                                     </div>
                                 </div>
                                 <div class="col">
+                                    <div class="row">
+                                        <div class="text-center fw-bold">Description</div>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_description" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_description" readonly >
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_description" readonly>
+                                    </div>
+                                    <div class="row mb-2">
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_description" readonly>
+                                    </div>
+                                </div>
+                                <div class="col">
                                     <div class="row ">
-                                        <div class="text-center">จำนวนตัว</div>
+                                        <div class="text-center fw-bold">จำนวนตัว</div>
                                     </div>
                                     <div class="row mb-2">
                                         <input type="text" class="form-control form-control-sm text-center" id="customer1_number" >
@@ -246,8 +247,10 @@
                             $("#customer1_barcode").val(js.customer_barcode)
                             $("#customer1_color").val(js.customer_color)
                             $("#customer1_size").val(js.customer_size)
+                            $("#customer1_description").val(js.customer_description)
                             $("#customer1_number").val($("#quantity_box").val())
                         }else{
+                            $("#customer2_description").val("")
                             $("#customer1_barcode").val("")
                             $("#customer1_color").val("")
                             $("#customer1_size").val("")
@@ -271,8 +274,10 @@
                             $("#customer2_barcode").val(js.customer_barcode)
                             $("#customer2_color").val(js.customer_color)
                             $("#customer2_size").val(js.customer_size)
+                            $("#customer2_description").val(js.customer_description)
                             $("#customer2_number").val($("#quantity_box").val())
                         }else{
+                            $("#customer2_description").val("")
                             $("#customer2_barcode").val("")
                             $("#customer2_color").val("")
                             $("#customer2_size").val("")
@@ -296,8 +301,10 @@
                             $("#customer3_barcode").val(js.customer_barcode)
                             $("#customer3_color").val(js.customer_color)
                             $("#customer3_size").val(js.customer_size)
+                            $("#customer3_description").val(js.customer_description)
                             $("#customer3_number").val($("#quantity_box").val())
                         }else{
+                            $("#customer3_description").val("")
                             $("#customer3_barcode").val("")
                             $("#customer3_color").val("")
                             $("#customer3_size").val("")
@@ -321,8 +328,10 @@
                             $("#customer4_barcode").val(js.customer_barcode)
                             $("#customer4_color").val(js.customer_color)
                             $("#customer4_size").val(js.customer_size)
+                            $("#customer4_description").val(js.customer_description)
                             $("#customer4_number").val($("#quantity_box").val())
                         }else{
+                            $("#customer4_description").val("")
                             $("#customer4_barcode").val("")
                             $("#customer4_color").val("")
                             $("#customer4_size").val("")

@@ -39,10 +39,10 @@ public class CustomerService {
                 BCCustomer cs = new BCCustomer();
                 cs.setCustomer_id(rs.getString("customer_id"));
                 cs.setCustomer_no(rs.getString("customer_no"));
-                cs.setCustomer_barcode(rs.getString("customer_barcode"));
-                cs.setCustomer_color(rs.getString("customer_color"));
-                cs.setCustomer_size(rs.getString("customer_size"));
-                cs.setCustomer_description(rs.getString("customer_description"));
+                cs.setCustomer_barcode(rs.getString("customer_barcode").toUpperCase());
+                cs.setCustomer_color(rs.getString("customer_color").toUpperCase());
+                cs.setCustomer_size(rs.getString("customer_size").toUpperCase());
+                cs.setCustomer_description(rs.getString("customer_description").toUpperCase());
                 list.add(cs);
             }
         } catch (Exception e) {
@@ -77,7 +77,7 @@ public class CustomerService {
     }
 
     public Boolean AddDetailCustomerMultiple(List<BCCustomer> list) throws ClassNotFoundException, SQLException, NamingException {
-        Boolean status = true;
+        Boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
             String sql = SqlAddDetailCustomerMultiple(list);
@@ -102,15 +102,16 @@ public class CustomerService {
         int primarykey = getprimarykey() + 1;
         for (int n = 0; n < list.size(); n++) {
             if (!ChackDetailCustomer(list.get(n).getCustomer_no()).equals("")) {
-                UpdateDetailCustomer(ChackDetailCustomer(list.get(n).getCustomer_no()), list.get(n).getCustomer_no(), list.get(n).getCustomer_barcode(), list.get(n).getCustomer_color(), list.get(n).getCustomer_size(), list.get(n).getCustomer_description());
+                UpdateDetailCustomer(ChackDetailCustomer(list.get(n).getCustomer_no()), list.get(n).getCustomer_no(), list.get(n).getCustomer_barcode(), list.get(n).getCustomer_color(), list.get(n).getCustomer_size(), list.get(n).getCustomer_description(), list.get(n).getCustomer_product());
             } else {
-                sql += " INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_description) VALUES (";
+                sql += " INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (";
                 sql += "'" + primarykey + "',";
                 sql += "'" + list.get(n).getCustomer_no() + "',";
                 sql += "'" + list.get(n).getCustomer_barcode() + "',";
-                sql += "'" + list.get(n).getCustomer_color() + "',";
-                sql += "'" + list.get(n).getCustomer_size() + "',";
-                sql += "'" + list.get(n).getCustomer_description() + "')";
+                sql += "'" + list.get(n).getCustomer_color().toUpperCase() + "',";
+                sql += "'" + list.get(n).getCustomer_size().toUpperCase() + "',";
+                sql += "'" + list.get(n).getCustomer_product().toUpperCase() + "',";
+                sql += "'" + list.get(n).getCustomer_description().toUpperCase() + "')";
             }
             primarykey++;
         }
@@ -118,15 +119,15 @@ public class CustomerService {
         return sql;
     }
 
-    public Boolean AddDetailCustomer(String customer_no, String customer_barcode, String customer_color, String customer_size, String customer_description) throws ClassNotFoundException, SQLException, NamingException {
+    public Boolean AddDetailCustomer(String customer_no, String customer_barcode, String customer_color, String customer_size, String customer_description, String customer_product) throws ClassNotFoundException, SQLException, NamingException {
         List<BCCustomer> listcustomerdetail = new ArrayList<BCCustomer>();
         Boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
             if (!ChackDetailCustomer(customer_no).equals("")) {
-                status = UpdateDetailCustomer(ChackDetailCustomer(customer_no), customer_no, customer_barcode, customer_color, customer_size, customer_description);
+                status = UpdateDetailCustomer(ChackDetailCustomer(customer_no), customer_no, customer_barcode, customer_color, customer_size, customer_description, customer_product);
             } else {
-                String sql = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_description) VALUES (?, ?, ?, ?,?,?)";
+                String sql = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (?, ?, ?, ?,?,?,?)";
                 conn = ConnectDB.getConnection();
                 ps = conn.prepareStatement(sql);
                 ps.setInt(1, primarykey);
@@ -134,7 +135,8 @@ public class CustomerService {
                 ps.setString(3, customer_barcode);
                 ps.setString(4, customer_color.toUpperCase());
                 ps.setString(5, customer_size.toUpperCase());
-                ps.setString(6, customer_description.toUpperCase());
+                ps.setString(6, customer_product.toUpperCase());
+                ps.setString(7, customer_description.toUpperCase());
 
                 if (ps.executeUpdate() > 0) {
                     status = true;
@@ -154,19 +156,20 @@ public class CustomerService {
         return status;
     }
 
-    public Boolean UpdateDetailCustomer(String customer_id, String customer_no, String customer_barcode, String customer_color, String customer_size, String customer_description) throws ClassNotFoundException, SQLException, NamingException {
+    public Boolean UpdateDetailCustomer(String customer_id, String customer_no, String customer_barcode, String customer_color, String customer_size, String customer_description, String customer_product) throws ClassNotFoundException, SQLException, NamingException {
 
         Boolean status = false;
         try {
-            String sql = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?  where c.CUSTOMER_ID = ?";
+            String sql = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?,c.customer_product = ?  where c.CUSTOMER_ID = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, customer_no);
             ps.setString(2, customer_barcode);
-            ps.setString(3, customer_color);
-            ps.setString(4, customer_size);
-            ps.setString(5, customer_description);
-            ps.setString(6, customer_id);
+            ps.setString(3, customer_color.toUpperCase());
+            ps.setString(4, customer_size.toUpperCase());
+            ps.setString(5, customer_description.toUpperCase());
+            ps.setString(6, customer_product.toUpperCase());
+            ps.setString(7, customer_id);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -224,6 +227,7 @@ public class CustomerService {
                 customerdetail.setCustomer_color(rs.getString("customer_color"));
                 customerdetail.setCustomer_size(rs.getString("customer_size"));
                 customerdetail.setCustomer_description(rs.getString("customer_description"));
+                customerdetail.setCustomer_product(rs.getString("customer_product"));
                 listcustomerdetail.add(customerdetail);
             }
         } catch (Exception e) {
@@ -252,6 +256,7 @@ public class CustomerService {
                 customerdetail.setCustomer_color(rs.getString("customer_color"));
                 customerdetail.setCustomer_size(rs.getString("customer_size"));
                 customerdetail.setCustomer_description(rs.getString("customer_description"));
+                customerdetail.setCustomer_product(rs.getString("customer_product"));
                 listcustomerdetail.add(customerdetail);
             }
         } catch (Exception e) {

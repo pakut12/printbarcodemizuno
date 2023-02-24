@@ -37,11 +37,15 @@
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Color</span>
-                                <input type="text" class="form-control text-center"  id="edit_customer_color" maxlength="2" required>
+                                <input type="text" class="form-control text-center"  id="edit_customer_color" maxlength="4" required>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Size</span>
                                 <input type="text" class="form-control text-center" id="edit_customer_size" maxlength="3" required>
+                            </div>
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
+                                <input type="text" class="form-control text-center" id="edit_customer_product" required>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
@@ -58,7 +62,7 @@
         </div>
         <div class="container mt-5">
             <div class="card shadow-lg">
-                <div class="card-header">คีย์ข้อมูลลูกค้า</div>
+                <div class="card-header">จัดการข้อมูลลูกค้า</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-6">
@@ -81,7 +85,7 @@
                                             <div class="col-sm-12 col-md-6">
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">Color</span>
-                                                    <input type="text" class="form-control text-center" name="customer_color" id="customer_color" maxlength="2" required>
+                                                    <input type="text" class="form-control text-center" name="customer_color" id="customer_color" maxlength="4" required>
                                                 </div>
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">Size</span>
@@ -90,10 +94,15 @@
                                             </div>
                                             <div class="col-sm-12 col-md-12">
                                                 <div class="input-group input-group-sm mb-3">
+                                                    <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
+                                                    <input type="text" class="form-control text-center" name="customer_description" id="customer_product" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-12 col-md-12">
+                                                <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
                                                     <input type="text" class="form-control text-center" name="customer_description" id="customer_description" required>
                                                 </div>
-                                                
                                             </div>
                                         </div>
                                     </form>
@@ -117,7 +126,7 @@
                                         <div class="row justify-content-center mb-3">
                                             <div class="col-sm-12 col-md-8">
                                                 <label for="customer_file">File : </label>
-                                                <input type="file" class="form-control form-control-sm text-center" name="customer_file" id="customer_file" required>
+                                                <input type="file" class="form-control form-control-sm text-center" name="customer_file" id="customer_file" accept=".xls" required>
                                             </div>
                                         </div>
                                     </form>
@@ -143,6 +152,7 @@
                 </div>
             </div>
         </div>
+        
         <footer>
             <%@ include file="share/footer.jsp" %>
         </footer>
@@ -159,13 +169,17 @@
                         customer_id:id
                     },
                     success:function(msg){
+                        
                         var js = JSON.parse(msg);
+                        
+                        console.log(js);
                         $("#modal_edit").modal('show');
                         $("#edit_customer_id").val(js.customer_id);
                         $("#edit_customer_no").val(js.customer_no);
                         $("#edit_customer_barcode").val(js.customer_barcode);
                         $("#edit_customer_color").val(js.customer_color);
                         $("#edit_customer_size").val(js.customer_size);
+                        $("#edit_customer_product").val(js.customer_product);
                         $("#edit_customer_description").val(js.customer_description);
                     }
                 })
@@ -176,6 +190,7 @@
                 $("#customer_barcode").val("")
                 $("#customer_color").val("")
                 $("#customer_size").val("")
+                $("#customer_product").val("")
                 $("#customer_description").val("")
             }
 
@@ -189,6 +204,7 @@
                         customer_no:$("#edit_customer_no").val(),
                         customer_barcode:$("#edit_customer_barcode").val(),
                         customer_color:$("#edit_customer_color").val(),
+                        customer_product:$("#edit_customer_product").val(),
                         customer_size:$("#edit_customer_size").val(),
                         customer_description:$("#edit_customer_description").val()
                     },
@@ -273,7 +289,18 @@
                         processData: false,
                         contentType: false,
                         data: formdata,
+                        beforeSend: function() {
+                            Swal.fire({
+                                title: 'Loading...',
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                didOpen: () => {
+                                    Swal.showLoading()
+                                }
+                            });
+                        },
                         success: function(data){
+                            Swal.close();
                             var js = JSON.parse(data);
                             if(js.status == 'true'){
                                 Swal.fire({
@@ -323,9 +350,10 @@
                 var customer_barcode = $("#customer_barcode").val()
                 var customer_color = $("#customer_color").val()
                 var customer_size = $("#customer_size").val()
+                var customer_product = $("#customer_product").val()
                 var customer_description = $("#customer_description").val()
                 $("#myform").addClass("was-validated");
-                if(customer_no &&customer_barcode && customer_color && customer_size && customer_description ){
+                if(customer_no &&customer_barcode && customer_color && customer_size && customer_description &&  customer_product ){
                     
                     $.ajax({
                         type:'post',
@@ -336,6 +364,7 @@
                             customer_barcode:customer_barcode,
                             customer_color:customer_color,
                             customer_size:customer_size,
+                            customer_product: customer_product,
                             customer_description:customer_description
                         },
                         success:function(msg){
@@ -367,7 +396,8 @@
     
             $(document).ready(function () {
                 gettable();
-             
+                
+                
             });
     
         </script>
