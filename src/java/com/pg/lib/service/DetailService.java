@@ -314,13 +314,28 @@ public class DetailService {
         return listdetail;
     }
 
-    public Boolean DeleteDetailBoxMIZUNONEWBARBOXDTAll(String PO) throws SQLException {
+    private String SQLDeleteDetailBoxMIZUNONEWBARBOXDTAll(String PO, String firstdigit, String startbox, String endbox) throws SQLException {
+        String sql = "DELETE FROM MIZUNONEWBARBOXDT WHERE PO = '" + PO + "' and BOXNO in (";
+
+        for (int s = Integer.parseInt(startbox); s < Integer.parseInt(endbox) + 1; s++) {
+            if (s < Integer.parseInt(endbox)) {
+                sql += "'" + firstdigit + String.valueOf(s) + "',";
+            } else {
+                sql += "'" + firstdigit + String.valueOf(s) + "')";
+            }
+        }
+
+        return sql;
+    }
+
+    public Boolean DeleteDetailBoxMIZUNONEWBARBOXDTAll(String PO, String firstdigit, String startbox, String endbox) throws SQLException {
         Boolean status = false;
         try {
-            String sql = "DELETE FROM MIZUNONEWBARBOXDT WHERE PO = ?";
+            String sql = SQLDeleteDetailBoxMIZUNONEWBARBOXDTAll(PO, firstdigit, startbox, endbox);
+    
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, PO);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -337,13 +352,16 @@ public class DetailService {
         return status;
     }
 
-    public Boolean DeleteDetailBoxMIZUNONEWBARBOXHDAll(String PO) throws SQLException {
+    public Boolean DeleteDetailBoxMIZUNONEWBARBOXHDAll(String PO, String firstdigit, String startbox, String endbox) throws SQLException {
         Boolean status = false;
         try {
-            String sql = "DELETE FROM MIZUNONEWBARBOXHD WHERE PO = ?";
+            String sql = "DELETE FROM MIZUNONEWBARBOXHD WHERE PO = ? and firstdigit = ? and startbox = ? and endbox = ? ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
+            ps.setString(2, firstdigit);
+            ps.setString(3, startbox);
+            ps.setString(4, endbox);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -360,12 +378,12 @@ public class DetailService {
         return status;
     }
 
-    public Boolean UpdateDetailBoxAll(String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4) throws SQLException {
+    public Boolean UpdateDetailBoxAll(String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4, String pallet, String prodorder) throws SQLException {
 
         Boolean status = false;
 
         try {
-            String sql = "update MIZUNONEWBARBOXHD set allbox =  ?,FIRSTDIGIT = ?,SHIPFROM = ?,SHIPTO = ?,QTYPERBOX  = ?,DESCTXT  = ?,GROSSWEIGHT  = ?,NETWEIGHT  = ?,COUNTRY_ORIGIN  = ?,SKU_ITEM1  = ?,UPC_CODE1  = ?,COLORNO1  = ?,SIZENO1  = ?,QTY1  = ?,SKU_ITEM2  = ?,UPC_CODE2  = ?,COLORNO2  = ?,SIZENO2  = ?,QTY2  = ?,SKU_ITEM3  = ?,UPC_CODE3  = ?,COLORNO3  = ?,SIZENO3  = ?,QTY3  = ?,SKU_ITEM4  = ?,UPC_CODE4  = ?,COLORNO4  = ?,SIZENO4  = ?,QTY4  = ?,PO = ? ,STARTBOX = ? ,ENDBOX = ? WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
+            String sql = "update MIZUNONEWBARBOXHD set allbox =  ?,FIRSTDIGIT = ?,SHIPFROM = ?,SHIPTO = ?,QTYPERBOX  = ?,DESCTXT  = ?,GROSSWEIGHT  = ?,NETWEIGHT  = ?,COUNTRY_ORIGIN  = ?,SKU_ITEM1  = ?,UPC_CODE1  = ?,COLORNO1  = ?,SIZENO1  = ?,QTY1  = ?,SKU_ITEM2  = ?,UPC_CODE2  = ?,COLORNO2  = ?,SIZENO2  = ?,QTY2  = ?,SKU_ITEM3  = ?,UPC_CODE3  = ?,COLORNO3  = ?,SIZENO3  = ?,QTY3  = ?,SKU_ITEM4  = ?,UPC_CODE4  = ?,COLORNO4  = ?,SIZENO4  = ?,QTY4  = ?,PO = ? ,STARTBOX = ? ,ENDBOX = ? ,pallet = ? ,prod_order = ?  WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, allbox);
@@ -400,9 +418,11 @@ public class DetailService {
             ps.setString(30, po);
             ps.setString(31, startbox);
             ps.setString(32, endbox);
-            ps.setString(33, pobefore);
-            ps.setString(34, startboxbefore);
-            ps.setString(35, endboxbefore);
+            ps.setString(33, pallet);
+            ps.setString(34, prodorder);
+            ps.setString(35, pobefore);
+            ps.setString(36, startboxbefore);
+            ps.setString(37, endboxbefore);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -421,17 +441,18 @@ public class DetailService {
         return status;
     }
 
-    public List<BCDetailBox> GetDetailBoxAll(String PO, String STARTBOX, String ENDBOX) throws SQLException {
+    public List<BCDetailBox> GetDetailBoxAll(String PO, String STARTBOX, String ENDBOX, String firstdigit) throws SQLException {
 
         List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = "SELECT * FROM MIZUNONEWBARBOXHD WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
+            String sql = "SELECT * FROM MIZUNONEWBARBOXHD WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ? AND firstdigit = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
             ps.setString(2, STARTBOX);
             ps.setString(3, ENDBOX);
+            ps.setString(4, firstdigit);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -472,6 +493,9 @@ public class DetailService {
                 box.setQty4(rs.getString("qty4"));
                 box.setSizen04(rs.getString("sizeno4"));
                 box.setColorn04(rs.getString("colorno4"));
+
+                box.setPallet(rs.getString("pallet"));
+                box.setProdorder(rs.getString("prod_order"));
 
                 listdetail.add(box);
             }
@@ -566,7 +590,7 @@ public class DetailService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-      
+
         return sql;
     }
 

@@ -70,12 +70,15 @@ public class Detail extends HttpServlet {
 
 
             } else if (type.equals("getdetailsall")) {
+
                 String posearch = request.getParameter("posearch");
                 String numstart = request.getParameter("numstart");
                 String numend = request.getParameter("numend");
+                String firstdigit = request.getParameter("firstdigit");
+
                 String status = "";
                 DetailService ds = new DetailService();
-                List<BCDetailBox> detailbox = ds.GetDetailBoxAll(posearch, numstart, numend);
+                List<BCDetailBox> detailbox = ds.GetDetailBoxAll(posearch, numstart, numend, firstdigit);
 
 
                 JSONObject obj = new JSONObject();
@@ -116,8 +119,12 @@ public class Detail extends HttpServlet {
                 obj.put("sizeno4", detailbox.get(0).getSizen04());
                 obj.put("colorno4", detailbox.get(0).getColorn04());
 
+                obj.put("pallet", detailbox.get(0).getPallet());
+                obj.put("prodorder", detailbox.get(0).getProdorder());
                 out.print(obj);
+
             } else if (type.equals("updatedetailsall")) {
+                
                 String pobefore = request.getParameter("pobefore").trim();
                 String startboxbefore = request.getParameter("startboxbefore").trim();
                 String endboxbefore = request.getParameter("endboxbefore").trim();
@@ -163,33 +170,47 @@ public class Detail extends HttpServlet {
                 String[] listinput3 = {sku_item3, upc_code3, colorno3, sizeno3, qty3};
                 String[] listinput4 = {sku_item4, upc_code4, colorno4, sizeno4, qty4};
 
+                String pallet = request.getParameter("pallet").trim();
+                String prodorder = request.getParameter("prodorder").trim();
+
                 DetailService ds = new DetailService();
-                Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4);
-                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore);
-            //Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4);
-/*
-            JSONObject obj = new JSONObject();
-            
-            if (statusupdate && statusDT && statusdt) {
-            obj.put("status", "true");
-            } else {
-            obj.put("status", "false");
-            }
-            
-            out.print(obj);
-             */
-            } else if (type.equals("deletedetailsall")) {
-                String posearch = request.getParameter("posearch").trim();
-                DetailService ds = new DetailService();
-                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(posearch);
-                Boolean statusHD = ds.DeleteDetailBoxMIZUNONEWBARBOXHDAll(posearch);
+                Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder);
+                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder);
+
                 JSONObject obj = new JSONObject();
-                if (statusDT && statusHD) {
+
+                if (statusupdate && statusDT && statusdt) {
                     obj.put("status", "true");
                 } else {
                     obj.put("status", "false");
                 }
+
                 out.print(obj);
+
+
+            } else if (type.equals("deletedetailsall")) {
+
+                try {
+                    String firstdigit = request.getParameter("firstdigit").trim();
+                    String pobefore = request.getParameter("posearch").trim();
+                    String startbox = request.getParameter("startbox").trim();
+                    String endbox = request.getParameter("endbox").trim();
+
+                    DetailService ds = new DetailService();
+                    Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
+                    Boolean statusHD = ds.DeleteDetailBoxMIZUNONEWBARBOXHDAll(pobefore, firstdigit, startbox, endbox);
+                    JSONObject obj = new JSONObject();
+                    if (statusDT && statusHD) {
+                        obj.put("status", "true");
+                    } else {
+                        obj.put("status", "false");
+                    }
+                    out.print(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             } else if (type.equals("getdetails")) {
                 String posearch = request.getParameter("posearch").trim();
                 String numstart = request.getParameter("numstart").trim();

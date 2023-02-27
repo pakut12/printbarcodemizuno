@@ -51,6 +51,24 @@ public class BCDetailBox {
     private String staddress3;
     private String statusshoot;
     private String boxno;
+    private String prodorder;
+
+    public String getPallet() {
+        return pallet;
+    }
+
+    public void setPallet(String pallet) {
+        this.pallet = pallet;
+    }
+
+    public String getProdorder() {
+        return prodorder;
+    }
+
+    public void setProdorder(String prodorder) {
+        this.prodorder = prodorder;
+    }
+    private String pallet;
 
     public String getBoxno() {
         return boxno;
