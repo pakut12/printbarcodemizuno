@@ -505,7 +505,8 @@
                 $("#numberbox_start").val("");
                 $("#numberbox_end").val("");
                 $("#quantitytotal_box").val("");
-                    
+                
+                $("#pallet").val("");    
                 $("#pobefore").val("");    
                 $("#prodorder").val("");
                 $("#po").val("");
@@ -556,7 +557,7 @@
                         firstdigit:firstdigit
                     },
                     success:function(msg){
-                        console.log(msg)
+                       
                         if(msg){  
                             var js = JSON.parse(msg);
                             console.log(js)
@@ -690,9 +691,7 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
-                $("#numberbox_end").on('input', function() {
-                    $("#quantitytotal_box").val($(this).val())
-                });
+               
                 
                 $("#myform :input").attr("disabled", true);
             });

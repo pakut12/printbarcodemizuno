@@ -300,6 +300,8 @@ public class DetailService {
                 box.setStaddress4(rs.getString("staddress4"));
                 box.setStatusshoot(rs.getString("statusshoot"));
 
+                box.setPallet(rs.getString("pallet"));
+                box.setProdorder(rs.getString("prod_order"));
                 listdetail.add(box);
             }
 
@@ -332,7 +334,7 @@ public class DetailService {
         Boolean status = false;
         try {
             String sql = SQLDeleteDetailBoxMIZUNONEWBARBOXDTAll(PO, firstdigit, startbox, endbox);
-    
+
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);

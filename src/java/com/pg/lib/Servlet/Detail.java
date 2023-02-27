@@ -124,7 +124,7 @@ public class Detail extends HttpServlet {
                 out.print(obj);
 
             } else if (type.equals("updatedetailsall")) {
-                
+
                 String pobefore = request.getParameter("pobefore").trim();
                 String startboxbefore = request.getParameter("startboxbefore").trim();
                 String endboxbefore = request.getParameter("endboxbefore").trim();
@@ -263,6 +263,9 @@ public class Detail extends HttpServlet {
                 obj.put("staddress2", detailbox.get(0).getStaddress2());
                 obj.put("staddress3", detailbox.get(0).getStaddress3());
                 obj.put("staddress4", detailbox.get(0).getStaddress4());
+               
+                obj.put("pallet", detailbox.get(0).getPallet());
+                obj.put("prod_order", detailbox.get(0).getProdorder());
 
                 obj.put("statusshoot", detailbox.get(0).getStatusshoot());
 

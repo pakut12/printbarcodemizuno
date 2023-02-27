@@ -34,7 +34,7 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 ">
-                            <div class="d-flex justify-content-center ">
+                            <div class="d-flex justify-content-center justify-content-md-start ">
                                 <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
                                 <button class="btn btn-outline-danger btn-sm w-25  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
                             </div>
@@ -51,7 +51,7 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                        <select class="form-select form-select-sm text-center" id="customer_num" disabled>
+                                        <select class="form-select form-select-sm text-center" id="customer" >
                                             
                                         </select>
                                     </div>
@@ -64,7 +64,7 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" readonly>
+                                        <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" >
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
@@ -76,41 +76,63 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
-                                        <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" readonly>
+                                        <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" >
                                     </div>
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                        <input type="text" class="form-control text-center" name="po" id="po" readonly >
+                                        <input type="text" class="form-control text-center" name="po" id="po" >
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">PO เดิม</span>
+                                        <input type="text" class="form-control text-center" name="pobefore" id="pobefore" disabled >
                                     </div>
                                 </div>
-                                
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">PROD.ORDER</span>
+                                        <input type="text" class="form-control text-center" name="prodorder" id="prodorder" >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
+                                        <input type="text" class="form-control text-center" name="pallet" id="pallet" >
+                                    </div>
+                                </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
                                         <input type="text" class="form-control text-center" name="gw" id="gw" >
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
                                         <input type="text" class="form-control text-center" name="nw" id="nw" >
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
-                                
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
+                                        <input type="text" class="form-control text-center" name="description" id="description" >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
+                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
+                                    </div>
+                                </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
@@ -181,23 +203,7 @@
                                         <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" readonly>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="text-center fw-bold">Description</div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_description" readonly>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_description" readonly >
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_description" readonly>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_description" readonly>
-                                    </div>
-                                </div>
+                                
                                 <div class="col">
                                     <div class="row ">
                                         <div class="text-center fw-bold">จำนวนตัว</div>
@@ -495,9 +501,21 @@
                     success:function(msg){
                         if(msg){  
                             var js = JSON.parse(msg);
+                            
                             console.log(js)
-                            $("#customer_num").empty();
-                            $("#customer_num").append("<option value='"+js.shipto+"'>"+js.shipto+"</option>");
+            
+            
+                            if(js.shipto == "MUS"){
+                                $("#customer").empty();
+                                $("#customer").append("<option value='MUS'>MUS</option><option value='MCA'>MCA</option><option value='MCL'>MCL</option>");
+                            }else if(js.shipto == "MCA"){
+                                $("#customer").empty();
+                                $("#customer").append("<option value='MCA'>MCA</option><option value='MCL'>MCL</option><option value='MUS'>MUS</option>");
+                            }else if(js.shipto == "MCL"){
+                                $("#customer").empty();
+                                $("#customer").append("<option value='MCL'>MCL</option><option value='MUS'>MUS</option><option value='MCA'>MCA</option>");
+                            }
+                            
  
                             $("#quantity_box").val(js.qtyperbox);
                             $("#boxno").val(js.boxno);
@@ -505,7 +523,7 @@
                           
                             $("#quantitytotal_box").val(js.allbox);
                         
-                            $("#po").val(js.po);
+                            $("#pobefore").val(js.po);
                             $("#description").val(js.desctxt);
                             $("#gw").val(js.grossweight);
                             $("#nw").val(js.netweight);
@@ -535,6 +553,12 @@
                             $("#customer4_size").val(js.sizeno4);
                             $("#customer4_number").val(js.qty4);
                             $("#myform :input").attr("disabled", false);
+                            $("#pobefore").attr("disabled", true);
+                            
+                            $("#prodorder").val(js.prod_order);
+                            $("#pallet").val(js.pallet);
+                            
+    
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",
