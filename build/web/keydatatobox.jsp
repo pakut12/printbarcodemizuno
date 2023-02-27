@@ -24,17 +24,26 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                        <select class="form-select form-select-sm text-center" id="customer_num">
+                                        <select class="form-select form-select-sm text-center" id="customer">
                                             <option value="MUS">MUS</option>
                                             <option value="MCA">MCA</option>
                                             <option value="MCL">MCL</option>
                                         </select>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <div id="customer_text"></div>
+                                <div class="col-sm-12 col-md-4 align-items-md-center">
+                                    <div id="customer_text" class="p-1"></div>
                                 </div>
-                                
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
+                                        <select class="form-select form-select-sm text-center" id="customer_num">
+                                            <option value="ADC">ADC</option>
+                                            <option value="ODC">ODC</option>
+                                            <option value="SCCR">SCCR</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-3">
@@ -65,36 +74,58 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                         <input type="text" class="form-control text-center" name="po" id="po" >
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">PO เดิม</span>
+                                        <input type="text" class="form-control text-center" name="pobefore" id="pobefore" disabled >
                                     </div>
                                 </div>
-                                
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">PROD.ORDER</span>
+                                        <input type="text" class="form-control text-center" name="prodorder" id="prodorder" >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
+                                        <input type="text" class="form-control text-center" name="pallet" id="pallet" >
+                                    </div>
+                                </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
                                         <input type="text" class="form-control text-center" name="gw" id="gw" >
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
                                         <input type="text" class="form-control text-center" name="nw" id="nw" >
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
-                                
+                                <div class="col-sm-12 col-md-5">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
+                                        <input type="text" class="form-control text-center" name="description" id="description" >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
+                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
+                                    </div>
+                                </div>
                             </div>
                             <div class="row mb-3">
                                 <div class="col">
@@ -165,23 +196,7 @@
                                         <input type="text" class="form-control form-control-sm text-center"  id="customer4_size" readonly>
                                     </div>
                                 </div>
-                                <div class="col">
-                                    <div class="row">
-                                        <div class="text-center fw-bold">Description</div>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer1_description" readonly>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_description" readonly >
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_description" readonly>
-                                    </div>
-                                    <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_description" readonly>
-                                    </div>
-                                </div>
+                                
                                 <div class="col">
                                     <div class="row ">
                                         <div class="text-center fw-bold">จำนวนตัว</div>
@@ -230,10 +245,10 @@
                             $("#customer1_barcode").val(js.customer_barcode)
                             $("#customer1_color").val(js.customer_color)
                             $("#customer1_size").val(js.customer_size)
-                            $("#customer1_description").val(js.customer_description)
+                            $("#description").val(js.customer_description)
                             $("#customer1_number").val($("#quantity_box").val())
                         }else{
-                            $("#customer2_description").val("")
+                           
                             $("#customer1_barcode").val("")
                             $("#customer1_color").val("")
                             $("#customer1_size").val("")
@@ -257,10 +272,10 @@
                             $("#customer2_barcode").val(js.customer_barcode)
                             $("#customer2_color").val(js.customer_color)
                             $("#customer2_size").val(js.customer_size)
-                            $("#customer2_description").val(js.customer_description)
+                            
                             $("#customer2_number").val($("#quantity_box").val())
                         }else{
-                            $("#customer2_description").val("")
+                            
                             $("#customer2_barcode").val("")
                             $("#customer2_color").val("")
                             $("#customer2_size").val("")
@@ -284,10 +299,10 @@
                             $("#customer3_barcode").val(js.customer_barcode)
                             $("#customer3_color").val(js.customer_color)
                             $("#customer3_size").val(js.customer_size)
-                            $("#customer3_description").val(js.customer_description)
+                            
                             $("#customer3_number").val($("#quantity_box").val())
                         }else{
-                            $("#customer3_description").val("")
+                           
                             $("#customer3_barcode").val("")
                             $("#customer3_color").val("")
                             $("#customer3_size").val("")
@@ -311,10 +326,8 @@
                             $("#customer4_barcode").val(js.customer_barcode)
                             $("#customer4_color").val(js.customer_color)
                             $("#customer4_size").val(js.customer_size)
-                            $("#customer4_description").val(js.customer_description)
                             $("#customer4_number").val($("#quantity_box").val())
                         }else{
-                            $("#customer4_description").val("")
                             $("#customer4_barcode").val("")
                             $("#customer4_color").val("")
                             $("#customer4_size").val("")
@@ -343,7 +356,7 @@
             }
     
             function senddata(){
-                var customer_num = $("#customer_num").val();
+                var customer = $("#customer").val();
                 var quantity_box = $("#quantity_box").val();
                 var initial = $("#initial").val();
                 var numberbox_start = $("#numberbox_start").val();
@@ -359,13 +372,15 @@
                 var customer3_id = [$("#customer3_id").val(),$("#customer3_barcode").val(),$("#customer3_color").val(),$("#customer3_size").val(),$("#customer3_number").val()];
                 var customer4_id = [$("#customer4_id").val(),$("#customer4_barcode").val(),$("#customer4_color").val(),$("#customer4_size").val(),$("#customer4_number").val()];
                 var quantitytotal_box = $("#quantitytotal_box").val();
+                var prodorder = $("#prodorder").val();
+                var pallet = $("#pallet").val();
                 
                 $.ajax({
                     type:"post",
                     url:"Detail",
                     data:{
                         type:"adddetails",
-                        customer_num:customer_num,
+                        customer:customer,
                         quantity_box:quantity_box,
                         initial:initial,
                         numberbox_start:numberbox_start,
@@ -379,9 +394,13 @@
                         customer1_id:customer1_id,
                         customer2_id:customer2_id,
                         customer3_id:customer3_id,
-                        customer4_id:customer4_id
+                        customer4_id:customer4_id,
+                        pallet:pallet,
+                        prodorder:prodorder
                     },
                     success:function(msg){
+                      
+                   
                         var js = JSON.parse(msg)
                         if(js.status == 'true'){
                             Swal.fire({
@@ -396,12 +415,14 @@
                                 text: 'บันทึกไม่สำเร็จ'
                             })
                         }
+                        
                     }
                 })
         
             }
 
             $(document).ready(function () {
+            
                 getcustomer_text()
                 $("#customer1_id").on('input', function() {
                     chack_customer1($(this).val())
@@ -415,9 +436,7 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
-                $("#numberbox_end").on('input', function() {
-                    $("#quantitytotal_box").val($(this).val())
-                });
+               
             });
             
     

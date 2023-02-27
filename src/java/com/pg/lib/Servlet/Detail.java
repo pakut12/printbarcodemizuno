@@ -38,26 +38,27 @@ public class Detail extends HttpServlet {
             String type = request.getParameter("type");
             if (type.equals("adddetails")) {
 
-                String customer_num = request.getParameter("customer_num");
-                String quantity_box = request.getParameter("quantity_box");
-                String initial = request.getParameter("initial");
-                String numberbox_start = request.getParameter("numberbox_start");
-                String numberbox_end = request.getParameter("numberbox_end");
-                String po = request.getParameter("po");
-                String gw = request.getParameter("gw");
-                String nw = request.getParameter("nw");
-                String country = request.getParameter("country");
-                String quantitytotal_box = request.getParameter("quantitytotal_box");
-                String description = request.getParameter("description");
+                String customer = request.getParameter("customer").trim();
+                String quantity_box = request.getParameter("quantity_box").trim();
+                String initial = request.getParameter("initial").trim();
+                String numberbox_start = request.getParameter("numberbox_start").trim();
+                String numberbox_end = request.getParameter("numberbox_end").trim();
+                String po = request.getParameter("po").trim();
+                String gw = request.getParameter("gw").trim();
+                String nw = request.getParameter("nw").trim();
+                String country = request.getParameter("country").trim();
+                String quantitytotal_box = request.getParameter("quantitytotal_box").trim();
+                String description = request.getParameter("description").trim().replaceAll("'", "#");
                 String[] customer1_id = request.getParameterValues("customer1_id[]");
                 String[] customer2_id = request.getParameterValues("customer2_id[]");
                 String[] customer3_id = request.getParameterValues("customer3_id[]");
                 String[] customer4_id = request.getParameterValues("customer4_id[]");
+                String pallet = request.getParameter("pallet").trim();
+                String prodorder = request.getParameter("prodorder").trim();
 
                 DetailService ds = new DetailService();
-
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id);
-                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder);
+                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder);
                 JSONObject obj = new JSONObject();
                 if (statusdt && statushd) {
                     obj.put("status", "true");
@@ -66,6 +67,8 @@ public class Detail extends HttpServlet {
                 }
 
                 out.print(obj);
+
+
             } else if (type.equals("getdetailsall")) {
                 String posearch = request.getParameter("posearch");
                 String numstart = request.getParameter("numstart");
@@ -163,17 +166,18 @@ public class Detail extends HttpServlet {
                 DetailService ds = new DetailService();
                 Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4);
                 Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore);
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4);
-
-                JSONObject obj = new JSONObject();
-
-                if (statusupdate && statusDT && statusdt) {
-                    obj.put("status", "true");
-                } else {
-                    obj.put("status", "false");
-                }
-
-                out.print(obj);
+            //Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4);
+/*
+            JSONObject obj = new JSONObject();
+            
+            if (statusupdate && statusDT && statusdt) {
+            obj.put("status", "true");
+            } else {
+            obj.put("status", "false");
+            }
+            
+            out.print(obj);
+             */
             } else if (type.equals("deletedetailsall")) {
                 String posearch = request.getParameter("posearch").trim();
                 DetailService ds = new DetailService();

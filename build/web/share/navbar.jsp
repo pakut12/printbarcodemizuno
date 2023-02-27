@@ -9,9 +9,9 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 
 
-<nav class="navbar navbar-expand-lg bg-body-tertiary shadow-lg sticky-top">
+<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow sticky-top">
     <div class="container">
-        <a class="navbar-brand" href="#"><img src="img/mizunoicon.png" style="height: 30px;width: 100px;"> โปรเเกรมพิมพ์ป้ายบารโค้ด TSG</a>
+        <a class="navbar-brand" href="#"><img src="img/mizunoicon.png" style="height: 30px;width: 100px;"> โปรเเกรมพิมพ์บาร์โค้ด TSG</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>

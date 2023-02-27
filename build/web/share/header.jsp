@@ -35,14 +35,14 @@
     
     <style>
         body {
-            background: url('https://wallpaperaccess.com/full/4150324.jpg') no-repeat center center fixed;
+            background: url('') no-repeat center center fixed;
             -webkit-background-size: cover;
             -moz-background-size: cover;
             -o-background-size: cover;
             background-size: cover;
             background-color:#f8f9fa;
             font-family: 'Krub', sans-serif;
-            zoom:87%;
+            zoom:90%;
         }
         
         .modal-backdrop {
