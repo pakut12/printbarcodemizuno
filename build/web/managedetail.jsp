@@ -350,10 +350,8 @@
             function updatedata(){
                 var pobefore = $("#posearch").val();
                 var startboxbefore  = $("#numstart").val();
-               
-        
-        
-                var shipto = $("#customer_num").val();
+              
+                var shipto = $("#customer").val();
                 var qtyperbox  = $("#quantity_box").val();
                 var allbox  =   $("#boxall").val();    
                 var po =  $("#po").val();
@@ -423,7 +421,6 @@
                         qty4:qty4
                     },
                     success:function(msg){
-                      
                         var js = JSON.parse(msg);
                         if(js.status == "true"){
                             Swal.fire({

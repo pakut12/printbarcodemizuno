@@ -138,7 +138,7 @@ public class DetailService {
             String SKU_ITEM4, String UPC_CODE4, String COLORNO4, String SIZENO4, String QTY4,
             String PO, String BOXNO) throws SQLException {
 
-        Boolean status = false;
+        Boolean status = null;
 
         try {
             String sql = "UPDATE MIZUNONEWBARBOXDT SET " +
