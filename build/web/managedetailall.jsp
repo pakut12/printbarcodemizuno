@@ -58,12 +58,22 @@
                     <div class="card-body">
                         <form id="myform">
                             <div class="container">
+                                <div class="row">
+                                    <div class="d-flex justify-content-end mb-3">
+                                        <div class="col-sm-12 col-md-3">
+                                            <div class="input-group input-group-sm mb-3">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                                <input type="date" class="form-control text-center" name="date" id="date"  disabled>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                             <select class="form-select form-select-sm text-center" id="customer">
-                                               
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -74,7 +84,7 @@
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
                                             <select class="form-select form-select-sm text-center" id="destination">
-                                             
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -252,7 +262,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 text-center">
                                         <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="updatedata()">เเก้ไขข้อมูล</button>
-                                        <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="deletedata()">ลบข้อมูล</button>
+                                        <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_del" onclick="deletedata()">ลบข้อมูล</button>
                                     </div>
                                 </div>
                             </div>
@@ -265,6 +275,15 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            function today(){
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+             
+               var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
+                $("#date").val(today)
+            }
             function chack_customer1(customer_id){
                 $.ajax({
                     type:'post',
@@ -428,79 +447,87 @@
                 var pallet = $("#pallet").val();
                 var prodorder = $("#prodorder").val();
                 
-        
-                $.ajax({
-                    type:"post",
-                    url:"Detail",
-                    data:{
-                        type:"updatedetailsall",
-                        pobefore:pobefore,
-                        startboxbefore:startboxbefore,
-                        endboxbefore:endboxbefore,
-                        shipto:shipto,
-                        qtyperbox:qtyperbox,
-                        firstdigit:firstdigit,
-                        startbox:startbox,
-                        endbox:endbox,
-                        allbox:allbox,
-                        po:po,
-                        desctxt:desctxt,
-                        grossweight:grossweight,
-                        netweight:netweight,
-                        country_origin:country_origin,
-                        sku_item1:sku_item1,
-                        upc_code1:upc_code1,
-                        colorno1:colorno1,
-                        sizeno1:sizeno1,
-                        qty1:qty1,
-                        sku_item2:sku_item2,
-                        upc_code2:upc_code2,
-                        colorno2:colorno2,
-                        sizeno2:sizeno2,
-                        qty2:qty2,
-                        sku_item3:sku_item3,
-                        upc_code3: upc_code3,
-                        colorno3:colorno3,
-                        sizeno3:sizeno3,
-                        qty3: qty3,
-                        sku_item4:sku_item4,
-                        upc_code4:upc_code4,
-                        colorno4:colorno4,
-                        sizeno4:sizeno4,
-                        qty4:qty4,
-                        pallet:pallet,
-                        prodorder:prodorder,
-                        destination:destination
-                    },
-                    success:function(msg){
-                        if(msg){
-                            var js = JSON.parse(msg);
-                            if(js.status == "true"){
-                                Swal.fire({
-                                    title:"เเก้ไข",
-                                    icon:"success",
-                                    text:"เเก้ไขสำเร็จ"
-                                })
-                            }else if(js.status == "false"){
+                var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
+           
+                if(sumqty_result == parseInt($("#quantity_box").val())){
+                    $.ajax({
+                        type:"post",
+                        url:"Detail",
+                        data:{
+                            type:"updatedetailsall",
+                            pobefore:pobefore,
+                            startboxbefore:startboxbefore,
+                            endboxbefore:endboxbefore,
+                            shipto:shipto,
+                            qtyperbox:qtyperbox,
+                            firstdigit:firstdigit,
+                            startbox:startbox,
+                            endbox:endbox,
+                            allbox:allbox,
+                            po:po,
+                            desctxt:desctxt,
+                            grossweight:grossweight,
+                            netweight:netweight,
+                            country_origin:country_origin,
+                            sku_item1:sku_item1,
+                            upc_code1:upc_code1,
+                            colorno1:colorno1,
+                            sizeno1:sizeno1,
+                            qty1:qty1,
+                            sku_item2:sku_item2,
+                            upc_code2:upc_code2,
+                            colorno2:colorno2,
+                            sizeno2:sizeno2,
+                            qty2:qty2,
+                            sku_item3:sku_item3,
+                            upc_code3: upc_code3,
+                            colorno3:colorno3,
+                            sizeno3:sizeno3,
+                            qty3: qty3,
+                            sku_item4:sku_item4,
+                            upc_code4:upc_code4,
+                            colorno4:colorno4,
+                            sizeno4:sizeno4,
+                            qty4:qty4,
+                            pallet:pallet,
+                            prodorder:prodorder,
+                            destination:destination
+                        },
+                        success:function(msg){
+                            if(msg){
+                                var js = JSON.parse(msg);
+                                if(js.status == "true"){
+                                    Swal.fire({
+                                        title:"เเก้ไข",
+                                        icon:"success",
+                                        text:"เเก้ไขสำเร็จ"
+                                    })
+                                }else if(js.status == "false"){
+                                    Swal.fire({
+                                        title:"เเก้ไข",
+                                        icon:"error",
+                                        text:"เเก้ไขไม่สำเร็จ"
+                                    })
+                                }
+                          
+                            }else{
                                 Swal.fire({
                                     title:"เเก้ไข",
                                     icon:"error",
                                     text:"เเก้ไขไม่สำเร็จ"
                                 })
-                            }
-                          
-                        }else{
-                            Swal.fire({
-                                title:"เเก้ไข",
-                                icon:"error",
-                                text:"เเก้ไขไม่สำเร็จ"
-                            })
                            
+                            }
+                            clearinput(); 
                         }
-                        clearinput(); 
-                    }
-                })
-                   
+                    })
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ผิดพลาด',
+                        text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
+                    })
+                }
             }
             
             function clearinput(){
@@ -589,8 +616,8 @@
                     success:function(msg){
                        
                         if(msg){  
+                            today()
                             var js = JSON.parse(msg);
-                           
                             if(js.shipto == "MUS"){
                                 $("#customer").empty();
                                 $("#customer").append("<option value='MUS'>MUS</option><option value='MCA'>MCA</option><option value='MCL'>MCL</option>");
@@ -655,6 +682,7 @@
                             
                             $("#myform :input").attr("disabled", false);
                             $("#pobefore").attr("disabled", true);
+                            $("#date").attr("disabled", true);
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

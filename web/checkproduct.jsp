@@ -11,6 +11,7 @@
 <html>
     <head>
         <%@ include file="share/header.jsp" %>
+        
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
@@ -34,9 +35,9 @@
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 ">
-                            <div class="d-flex justify-content-center ">
-                                <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
-                                <button class="btn btn-outline-danger btn-sm w-25  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
+                            <div class="d-flex justify-content-center justify-content-md-start">
+                                <button type="button" class="btn btn-outline-primary btn-sm  w-25" id="bt_search">ค้นหา</button>
+                                
                             </div>
                         </div>
                     </div>
@@ -47,6 +48,16 @@
                     <div class="card-header">คีย์ข้อมูล</div>
                     <div class="card-body">
                         <div class="container">
+                            <div class="row">
+                                <div class="d-flex justify-content-end mb-3">
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                            <input type="date" class="form-control text-center" name="date" id="date"  disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-6">
                                     <div class="input-group input-group-sm mb-3">
@@ -225,7 +236,12 @@
                                     </div>
                                 </div>
                             </div>
-                            
+                            <div class="row">
+                                <div class="col-sm-12 col-md-12 text-center">
+                                    <button class="btn btn-outline-success btn-sm mx-3  " type="button" id="bt_sava" onclick="updatedata()">บันทึกข้อมูล</button>
+                                    <button class="btn btn-outline-danger btn-sm  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -235,6 +251,105 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            
+            function today(){
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+             
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
+                $("#date").val(today)
+            }
+            
+            
+            function updatedata(){
+                var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
+                
+                if(parseInt($("#customer1_number").val()) > parseInt($("#customer1_qty").val())){
+                    Swal.fire({
+                        icon:'error',
+                        title:'ผิดพลาด',
+                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
+                    })
+                }else if(parseInt($("#customer2_number").val()) > parseInt($("#customer2_qty").val())){
+                    Swal.fire({
+                        icon:'error',
+                        title:'ผิดพลาด',
+                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
+                    })
+                }else if(parseInt($("#customer3_number").val()) > parseInt($("#customer3_qty").val())){
+                    Swal.fire({
+                        icon:'error',
+                        title:'ผิดพลาด',
+                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
+                    })
+                }else if(parseInt($("#customer4_number").val()) > parseInt($("#customer4_qty").val())){
+                    Swal.fire({
+                        icon:'error',
+                        title:'ผิดพลาด',
+                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
+                    })
+                }else{
+                    var posearch = $("#posearch").val();
+                    var numstart = $("#numstart").val();
+                    
+                    var qty_result1 = $("#customer1_number").val();
+                    var qty_result2 = $("#customer2_number").val();
+                    var qty_result3 = $("#customer3_number").val();
+                    var qty_result4 = $("#customer4_number").val();
+                    var date = new Date().format('d-m-Y H:i:s');
+                    
+                    $.ajax({
+                        type:"post",
+                        url:"Detail",
+                        data:{
+                            type:"updateqtyfrombarcode",
+                            posearch:posearch,
+                            boxno:numstart,
+                            qty_result1:qty_result1,
+                            qty_result2:qty_result2,
+                            qty_result3:qty_result3,
+                            qty_result4:qty_result4,
+                            date:date
+                        },
+                        success:function(msg){
+                            if(msg){
+                                var js = JSON.parse(msg);
+                                if(js.status == "true"){
+                                    Swal.fire({
+                                        title:"บันทึก",
+                                        icon:"success",
+                                        text:"บันทึกสำเร็จ"
+                                    })
+                                    clearinput()
+                                }else if(js.status == "false"){
+                                    Swal.fire({
+                                        title:"บันทึก",
+                                        icon:"error",
+                                        text:"บันทึกไม่สำเร็จ"
+                                    })
+                                }
+                                clearinput()
+                                
+                            }else{
+                                Swal.fire({
+                                    icon:'error',
+                                    title:'บันทึก',
+                                    text:'บันทึกไม่สำเร็จ'
+                                })  
+                            }
+                           
+                        
+                        }
+                    })
+                }
+                
+            }
+            function clearinput(){
+                $("#myform :input").val("");
+            }
+            
             function checkbarcode(){
                 var barcode = $("#barcode_box").val();
                 var customer1_barcode = $("#customer1_barcode").val();
@@ -274,7 +389,9 @@
                     success:function(msg){
                         if(msg){  
                             var js = JSON.parse(msg);
-                            console.log(js)
+                         
+                            today()
+                      
                             $("#customer_num").empty();
                             $("#customer_num").append("<option value='"+js.shipto+"'>"+js.shipto+"</option>");
  
@@ -295,35 +412,36 @@
                             $("#customer1_color").val(js.colorno1);
                             $("#customer1_size").val(js.sizeno1);
                             $("#customer1_qty").val(js.qty1);
-                            $("#customer1_number").val(0);
+                            $("#customer1_number").val(js.qty_result1);
 
                             $("#customer2_id").val(js.sku_item2);
                             $("#customer2_barcode").val(js.upc_code2);
                             $("#customer2_color").val(js.colorno2);
                             $("#customer2_size").val(js.sizeno2);
                             $("#customer2_qty").val(js.qty2);
-                            $("#customer2_number").val(0);
+                            $("#customer2_number").val(js.qty_result2);
                         
                             $("#customer3_id").val(js.sku_item3);
                             $("#customer3_barcode").val(js.upc_code3);
                             $("#customer3_color").val(js.colorno3);
                             $("#customer3_size").val(js.sizeno3);
                             $("#customer3_qty").val(js.qty3);
-                            $("#customer3_number").val(0);
+                            $("#customer3_number").val(js.qty_result3);
                         
                             $("#customer4_id").val(js.sku_item4);
                             $("#customer4_barcode").val(js.upc_code4);
                             $("#customer4_color").val(js.colorno4);
                             $("#customer4_size").val(js.sizeno4);
                             $("#customer4_qty").val(js.qty4);
-                            $("#customer4_number").val(0);
+                            $("#customer4_number").val(js.qty_result4);
                             
                             $("#barcode_box").attr("disabled", false);
                             $("#customer1_number").attr("disabled", false);
                             $("#customer2_number").attr("disabled", false);
                             $("#customer3_number").attr("disabled", false);
                             $("#customer4_number").attr("disabled", false);
-                           
+                            $("#bt_sava").attr("disabled", false);
+                            $("#bt_reset").attr("disabled", false);
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",
@@ -336,37 +454,7 @@
                 })
             }
               
-            function deletedata(){
-                var posearch = $("#posearch").val();
-                var boxno = $("#numstart").val();
-                
-                $.ajax({
-                    type:"post",
-                    url:"Detail",
-                    data:{
-                        type:"deletedetails",
-                        posearch:posearch,
-                        boxno:boxno
-                    },
-                    success:function(msg){
-                        var js = JSON.parse(msg);
-                        if(js.status == "true"){
-                            Swal.fire({
-                                title:"ลบ",
-                                icon:"success",
-                                text:"ลบสำเร็จ"
-                            })
-                            clearinput()
-                        }else if(js.status == "false"){
-                            Swal.fire({
-                                title:"ลบ",
-                                icon:"error",
-                                text:"ลบไม่สำเร็จ"
-                            })
-                        }
-                    }
-                })
-            }
+           
             
             $(document).ready(function () {
                 $("#bt_search").click(function(){
@@ -375,9 +463,9 @@
                 $("#barcode_box").on('input', function() {
                     checkbarcode()
                 });
-                
-                $("#myform :input").attr("disabled", true);
                
+                $("#myform :input").attr("disabled", true);
+          
             });
         </script>
     </body>

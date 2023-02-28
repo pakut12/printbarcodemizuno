@@ -53,6 +53,42 @@ public class BCDetailBox {
     private String boxno;
     private String prodorder;
     private String destination;
+    private String qty_result1;
+    private String qty_result2;
+    private String qty_result3;
+    private String qty_result4;
+
+    public String getQty_result1() {
+        return qty_result1;
+    }
+
+    public void setQty_result1(String qty_result1) {
+        this.qty_result1 = qty_result1;
+    }
+
+    public String getQty_result2() {
+        return qty_result2;
+    }
+
+    public void setQty_result2(String qty_result2) {
+        this.qty_result2 = qty_result2;
+    }
+
+    public String getQty_result3() {
+        return qty_result3;
+    }
+
+    public void setQty_result3(String qty_result3) {
+        this.qty_result3 = qty_result3;
+    }
+
+    public String getQty_result4() {
+        return qty_result4;
+    }
+
+    public void setQty_result4(String qty_result4) {
+        this.qty_result4 = qty_result4;
+    }
 
     public String getDestination() {
         return destination;

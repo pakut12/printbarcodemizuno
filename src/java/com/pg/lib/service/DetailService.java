@@ -25,6 +25,37 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
+ 
+
+    public Boolean UpdateQtyResultFromBarcode(String PO, String BOXNO, String QTY_RESULT1, String QTY_RESULT2, String QTY_RESULT3, String QTY_RESULT4, String Date) throws SQLException {
+        Boolean status = false;
+     
+        try {
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET QTY_RESULT1 = ?,QTY_RESULT2 = ?,QTY_RESULT3 = ?,QTY_RESULT4 = ?,DATE_MODIFY =TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO = ? AND BOXNO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, QTY_RESULT1);
+            ps.setString(2, QTY_RESULT2);
+            ps.setString(3, QTY_RESULT3);
+            ps.setString(4, QTY_RESULT4);
+            ps.setString(5, Date);
+            ps.setString(6, PO);
+            ps.setString(7, BOXNO);
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return status;
+    }
+
     private String SqlDetailBoxForPrint(String po, String start, String end) {
 
         int boxstart = Integer.parseInt(start.substring(1));
@@ -230,7 +261,7 @@ public class DetailService {
             ps.setString(40, prodorder);
             ps.setString(41, pallet);
             ps.setString(42, destination);
-            
+
             ps.setString(43, pobefore);
             ps.setString(44, boxnobefore);
             if (ps.executeUpdate() > 0) {
@@ -313,6 +344,12 @@ public class DetailService {
                 box.setPallet(rs.getString("pallet"));
                 box.setProdorder(rs.getString("prod_order"));
                 box.setDestination(rs.getString("destination"));
+
+                box.setQty_result1(rs.getString("qty_result1"));
+                box.setQty_result2(rs.getString("qty_result2"));
+                box.setQty_result3(rs.getString("qty_result3"));
+                box.setQty_result4(rs.getString("qty_result4"));
+
                 listdetail.add(box);
             }
 

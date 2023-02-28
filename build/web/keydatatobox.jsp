@@ -20,6 +20,16 @@
                 <div class="card-body">
                     <form id="myform">
                         <div class="container">
+                            <div class="row">
+                                <div class="d-flex justify-content-end mb-3">
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                            <input type="date" class="form-control text-center" name="date" id="date"  disabled>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
@@ -230,6 +240,16 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+          
+            function today(){
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+             
+               var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                today = yyyy + '-' + mm + '-' + dd;
+                $("#date").val(today)
+            }
             function chack_customer1(customer_id){
                 $.ajax({
                     type:'post',
@@ -275,7 +295,6 @@
                             
                             $("#customer2_number").val($("#quantity_box").val())
                         }else{
-                            
                             $("#customer2_barcode").val("")
                             $("#customer2_color").val("")
                             $("#customer2_size").val("")
@@ -375,51 +394,61 @@
                 var prodorder = $("#prodorder").val();
                 var pallet = $("#pallet").val();
                 var destination = $("#destination").val();
-                
-                $.ajax({
-                    type:"post",
-                    url:"Detail",
-                    data:{
-                        type:"adddetails",
-                        customer:customer,
-                        quantity_box:quantity_box,
-                        initial:initial,
-                        numberbox_start:numberbox_start,
-                        numberbox_end:numberbox_end,
-                        po:po,
-                        description:description,
-                        gw:gw,
-                        nw:nw,
-                        country:country,
-                        quantitytotal_box:quantitytotal_box,
-                        customer1_id:customer1_id,
-                        customer2_id:customer2_id,
-                        customer3_id:customer3_id,
-                        customer4_id:customer4_id,
-                        pallet:pallet,
-                        prodorder:prodorder,
-                        destination:destination
-                    },
-                    success:function(msg){
+                var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
+           
+                if(sumqty_result == parseInt($("#quantity_box").val())){
+                    $.ajax({
+                        type:"post",
+                        url:"Detail",
+                        data:{
+                            type:"adddetails",
+                            customer:customer,
+                            quantity_box:quantity_box,
+                            initial:initial,
+                            numberbox_start:numberbox_start,
+                            numberbox_end:numberbox_end,
+                            po:po,
+                            description:description,
+                            gw:gw,
+                            nw:nw,
+                            country:country,
+                            quantitytotal_box:quantitytotal_box,
+                            customer1_id:customer1_id,
+                            customer2_id:customer2_id,
+                            customer3_id:customer3_id,
+                            customer4_id:customer4_id,
+                            pallet:pallet,
+                            prodorder:prodorder,
+                            destination:destination
+                        },
+                        success:function(msg){
                       
                    
-                        var js = JSON.parse(msg)
-                        if(js.status == 'true'){
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'บันทึก',
-                                text: 'บันทึกสำเร็จ'
-                            })
-                        }else if(js.status == 'false'){
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'บันทึก',
-                                text: 'บันทึกไม่สำเร็จ'
-                            })
-                        }
+                            var js = JSON.parse(msg)
+                            if(js.status == 'true'){
+                                Swal.fire({
+                                    icon: 'success',
+                                    title: 'บันทึก',
+                                    text: 'บันทึกสำเร็จ'
+                                })
+                            }else if(js.status == 'false'){
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'บันทึก',
+                                    text: 'บันทึกไม่สำเร็จ'
+                                })
+                            }
                         
-                    }
-                })
+                        }
+                    })
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'ผิดพลาด',
+                        text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
+                    })
+                }
+               
         
             }
 

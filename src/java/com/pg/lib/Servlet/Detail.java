@@ -271,6 +271,11 @@ public class Detail extends HttpServlet {
                 obj.put("pallet", detailbox.get(0).getPallet());
                 obj.put("prod_order", detailbox.get(0).getProdorder());
                 obj.put("destination", detailbox.get(0).getDestination());
+                
+                obj.put("qty_result1", detailbox.get(0).getQty_result1());
+                obj.put("qty_result2", detailbox.get(0).getQty_result2());
+                obj.put("qty_result3", detailbox.get(0).getQty_result3());
+                obj.put("qty_result4", detailbox.get(0).getQty_result4());
 
                 obj.put("statusshoot", detailbox.get(0).getStatusshoot());
 
@@ -319,11 +324,11 @@ public class Detail extends HttpServlet {
                     String pallet = request.getParameter("pallet").trim();
                     String prodorder = request.getParameter("prodorder").trim();
                     String destination = request.getParameter("destination").trim();
-                    
+
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
-                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder,destination);
+                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination);
                     if (status) {
                         obj.put("status", "true");
                     } else {
@@ -469,6 +474,31 @@ public class Detail extends HttpServlet {
                 html += "</table>";
 
                 out.print(html);
+            } else if (type.equals("updateqtyfrombarcode")) {
+                try {
+                    String po = request.getParameter("posearch").trim();
+                    String boxno = request.getParameter("boxno").trim();
+
+                    String qty_result1 = request.getParameter("qty_result1").trim();
+                    String qty_result2 = request.getParameter("qty_result2").trim();
+                    String qty_result3 = request.getParameter("qty_result3").trim();
+                    String qty_result4 = request.getParameter("qty_result4").trim();
+                    
+                    String date = request.getParameter("date").trim();
+
+                    DetailService ds = new DetailService();
+                    Boolean status = ds.UpdateQtyResultFromBarcode(po, boxno, qty_result1, qty_result2, qty_result3, qty_result4,date);
+
+                    JSONObject obj = new JSONObject();
+                    if (status) {
+                        obj.put("status", "true");
+                    } else {
+                        obj.put("status", "false");
+                    }
+                    out.print(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
 
