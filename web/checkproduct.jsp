@@ -389,9 +389,26 @@
                     success:function(msg){
                         if(msg){  
                             var js = JSON.parse(msg);
-                         
+                            
                             today()
-                      
+                            var qty_result1 = js.qty_result1  
+                            var qty_result2 = js.qty_result2  
+                            var qty_result3 = js.qty_result3   
+                            var qty_result4 = js.qty_result4   
+                            
+                            if(!qty_result1){
+                                qty_result1 = 0
+                            }
+                            if(!qty_result2){
+                                qty_result2 = 0
+                            }
+                            if(!qty_result3){
+                                qty_result3 = 0
+                            }
+                            if(!qty_result4){
+                                qty_result4 = 0
+                            }
+                            
                             $("#customer_num").empty();
                             $("#customer_num").append("<option value='"+js.shipto+"'>"+js.shipto+"</option>");
  
@@ -412,28 +429,28 @@
                             $("#customer1_color").val(js.colorno1);
                             $("#customer1_size").val(js.sizeno1);
                             $("#customer1_qty").val(js.qty1);
-                            $("#customer1_number").val(js.qty_result1);
+                            $("#customer1_number").val(qty_result1);
 
                             $("#customer2_id").val(js.sku_item2);
                             $("#customer2_barcode").val(js.upc_code2);
                             $("#customer2_color").val(js.colorno2);
                             $("#customer2_size").val(js.sizeno2);
                             $("#customer2_qty").val(js.qty2);
-                            $("#customer2_number").val(js.qty_result2);
+                            $("#customer2_number").val(qty_result2);
                         
                             $("#customer3_id").val(js.sku_item3);
                             $("#customer3_barcode").val(js.upc_code3);
                             $("#customer3_color").val(js.colorno3);
                             $("#customer3_size").val(js.sizeno3);
                             $("#customer3_qty").val(js.qty3);
-                            $("#customer3_number").val(js.qty_result3);
+                            $("#customer3_number").val(qty_result3);
                         
                             $("#customer4_id").val(js.sku_item4);
                             $("#customer4_barcode").val(js.upc_code4);
                             $("#customer4_color").val(js.colorno4);
                             $("#customer4_size").val(js.sizeno4);
                             $("#customer4_qty").val(js.qty4);
-                            $("#customer4_number").val(js.qty_result4);
+                            $("#customer4_number").val(qty_result4);
                             
                             $("#barcode_box").attr("disabled", false);
                             $("#customer1_number").attr("disabled", false);

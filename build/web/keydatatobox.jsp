@@ -245,7 +245,7 @@
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
              
-               var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
                 today = yyyy + '-' + mm + '-' + dd;
                 $("#date").val(today)
@@ -396,6 +396,7 @@
                 var destination = $("#destination").val();
                 var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
            
+                var date = new Date().format('d-m-Y H:i:s');
                 if(sumqty_result == parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
@@ -419,11 +420,10 @@
                             customer4_id:customer4_id,
                             pallet:pallet,
                             prodorder:prodorder,
-                            destination:destination
+                            destination:destination,
+                            date:date
                         },
                         success:function(msg){
-                      
-                   
                             var js = JSON.parse(msg)
                             if(js.status == 'true'){
                                 Swal.fire({
@@ -438,7 +438,6 @@
                                     text: 'บันทึกไม่สำเร็จ'
                                 })
                             }
-                        
                         }
                     })
                 }else{
@@ -448,8 +447,6 @@
                         text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
                     })
                 }
-               
-        
             }
 
             $(document).ready(function () {
@@ -467,7 +464,7 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
-               
+                today()
             });
             
     

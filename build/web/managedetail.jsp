@@ -422,8 +422,12 @@
                 }else{
                     po =  $("#posearch").val();
                 }
+                var date = new Date().format('d-m-Y H:i:s');
+                console.log(date)
+        
+        
                 var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
-           
+      
                 if(sumqty_result == parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
@@ -463,9 +467,11 @@
                             boxno:boxno,
                             pallet:pallet,
                             prodorder:prodorder,
-                            destination:destination
+                            destination:destination,
+                            date:date
                         },
                         success:function(msg){
+                           
                             if(msg){
                                 var js = JSON.parse(msg);
                                 if(js.status == "true"){
@@ -500,6 +506,7 @@
                         text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
                     })
                 }
+             
             }
             
             function customer_text(){

@@ -279,7 +279,7 @@
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
              
-               var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
                 today = yyyy + '-' + mm + '-' + dd;
                 $("#date").val(today)
@@ -443,7 +443,7 @@
                 }else{
                     po =  $("#posearch").val();
                 }
-               
+                var date = new Date().format('d-m-Y H:i:s');
                 var pallet = $("#pallet").val();
                 var prodorder = $("#prodorder").val();
                 
@@ -491,9 +491,11 @@
                             qty4:qty4,
                             pallet:pallet,
                             prodorder:prodorder,
-                            destination:destination
+                            destination:destination,
+                            date:date
                         },
                         success:function(msg){
+                            
                             if(msg){
                                 var js = JSON.parse(msg);
                                 if(js.status == "true"){
@@ -614,7 +616,6 @@
                         firstdigit:firstdigit
                     },
                     success:function(msg){
-                       
                         if(msg){  
                             today()
                             var js = JSON.parse(msg);
