@@ -55,10 +55,12 @@ public class Detail extends HttpServlet {
                 String[] customer4_id = request.getParameterValues("customer4_id[]");
                 String pallet = request.getParameter("pallet").trim();
                 String prodorder = request.getParameter("prodorder").trim();
+                String destination = request.getParameter("destination").trim();
+
 
                 DetailService ds = new DetailService();
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder);
-                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination);
+                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination);
                 JSONObject obj = new JSONObject();
                 if (statusdt && statushd) {
                     obj.put("status", "true");
@@ -79,7 +81,6 @@ public class Detail extends HttpServlet {
                 String status = "";
                 DetailService ds = new DetailService();
                 List<BCDetailBox> detailbox = ds.GetDetailBoxAll(posearch, numstart, numend, firstdigit);
-
 
                 JSONObject obj = new JSONObject();
                 obj.put("po", detailbox.get(0).getPo());
@@ -121,6 +122,8 @@ public class Detail extends HttpServlet {
 
                 obj.put("pallet", detailbox.get(0).getPallet());
                 obj.put("prodorder", detailbox.get(0).getProdorder());
+                obj.put("destination", detailbox.get(0).getDestination());
+
                 out.print(obj);
 
             } else if (type.equals("updatedetailsall")) {
@@ -172,11 +175,12 @@ public class Detail extends HttpServlet {
 
                 String pallet = request.getParameter("pallet").trim();
                 String prodorder = request.getParameter("prodorder").trim();
+                String destination = request.getParameter("destination").trim();
 
                 DetailService ds = new DetailService();
-                Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder);
+                Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination);
                 Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination);
 
                 JSONObject obj = new JSONObject();
 
@@ -266,6 +270,7 @@ public class Detail extends HttpServlet {
 
                 obj.put("pallet", detailbox.get(0).getPallet());
                 obj.put("prod_order", detailbox.get(0).getProdorder());
+                obj.put("destination", detailbox.get(0).getDestination());
 
                 obj.put("statusshoot", detailbox.get(0).getStatusshoot());
 
@@ -313,11 +318,12 @@ public class Detail extends HttpServlet {
 
                     String pallet = request.getParameter("pallet").trim();
                     String prodorder = request.getParameter("prodorder").trim();
-
+                    String destination = request.getParameter("destination").trim();
+                    
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
-                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO,pallet,prodorder);
+                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder,destination);
                     if (status) {
                         obj.put("status", "true");
                     } else {
@@ -359,22 +365,6 @@ public class Detail extends HttpServlet {
                 html += "<th>PO</th>";
                 html += "<th>BOXNO</th>";
                 html += "<th>BOXALL</th>";
-                html += "<th>SHIPFROM</th>";
-                html += "<th>SFADDRESS1</th>";
-                html += "<th>SFADDRESS2</th>";
-                html += "<th>SFADDRESS3</th>";
-                html += "<th>SFADDRESS4</th>";
-                html += "<th>SHIPTO</th>";
-                html += "<th>STADDRESS1</th>";
-                html += "<th>STADDRESS2</th>";
-                html += "<th>STADDRESS3</th>";
-                html += "<th>STADDRESS4</th>";
-                html += "<th>QTYPERBOX</th>";
-                html += "<th>DESCTXT</th>";
-                html += "<th>GROSSWEIGHT</th>";
-                html += "<th>NETWEIGHT</th>";
-                html += "<th>COUNTRY_ORIGIN</th>";
-
                 html += "<th>SKU_ITEM1</th>";
                 html += "<th>UPC_CODE1</th>";
                 html += "<th>QTY1</th>";
@@ -398,6 +388,24 @@ public class Detail extends HttpServlet {
                 html += "<th>QTY4</th>";
                 html += "<th>SIZENO4</th>";
                 html += "<th>COLORNO4</th>";
+
+                html += "<th>SHIPFROM</th>";
+                html += "<th>SFADDRESS1</th>";
+                html += "<th>SFADDRESS2</th>";
+                html += "<th>SFADDRESS3</th>";
+                html += "<th>SFADDRESS4</th>";
+                html += "<th>SHIPTO</th>";
+                html += "<th>STADDRESS1</th>";
+                html += "<th>STADDRESS2</th>";
+                html += "<th>STADDRESS3</th>";
+                html += "<th>STADDRESS4</th>";
+                html += "<th>QTYPERBOX</th>";
+                html += "<th>DESCTXT</th>";
+                html += "<th>GROSSWEIGHT</th>";
+                html += "<th>NETWEIGHT</th>";
+                html += "<th>COUNTRY_ORIGIN</th>";
+
+
                 html += "<th>STATUSSHOOT</th>";
 
                 html += "</tr>";
@@ -409,21 +417,6 @@ public class Detail extends HttpServlet {
                     html += "<td>" + listbox.get(i).getPo() + "</td>";
                     html += "<td>" + listbox.get(i).getBoxno() + "</td>";
                     html += "<td>" + listbox.get(i).getAllbox() + "</td>";
-                    html += "<td>" + listbox.get(i).getShipfrom() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress1() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress2() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress3() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress4() + "</td>";
-                    html += "<td>" + listbox.get(i).getShipto() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress1() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress2() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress3() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress4() + "</td>";
-                    html += "<td>" + listbox.get(i).getQtyperbox() + "</td>";
-                    html += "<td>" + listbox.get(i).getDesctxt() + "</td>";
-                    html += "<td>" + listbox.get(i).getGrossweight() + "</td>";
-                    html += "<td>" + listbox.get(i).getNetweight() + "</td>";
-                    html += "<td>" + listbox.get(i).getCountry_origin() + "</td>";
 
                     html += "<td>" + listbox.get(i).getSku_item1() + "</td>";
                     html += "<td>" + listbox.get(i).getUpc_code1() + "</td>";
@@ -448,6 +441,24 @@ public class Detail extends HttpServlet {
                     html += "<td>" + listbox.get(i).getQty4() + "</td>";
                     html += "<td>" + listbox.get(i).getSizen04() + "</td>";
                     html += "<td>" + listbox.get(i).getColorn04() + "</td>";
+
+                    html += "<td>" + listbox.get(i).getShipfrom() + "</td>";
+                    html += "<td>" + listbox.get(i).getSfaddress1() + "</td>";
+                    html += "<td>" + listbox.get(i).getSfaddress2() + "</td>";
+                    html += "<td>" + listbox.get(i).getSfaddress3() + "</td>";
+                    html += "<td>" + listbox.get(i).getSfaddress4() + "</td>";
+                    html += "<td>" + listbox.get(i).getShipto() + "</td>";
+                    html += "<td>" + listbox.get(i).getStaddress1() + "</td>";
+                    html += "<td>" + listbox.get(i).getStaddress2() + "</td>";
+                    html += "<td>" + listbox.get(i).getStaddress3() + "</td>";
+                    html += "<td>" + listbox.get(i).getStaddress4() + "</td>";
+                    html += "<td>" + listbox.get(i).getQtyperbox() + "</td>";
+                    html += "<td>" + listbox.get(i).getDesctxt() + "</td>";
+                    html += "<td>" + listbox.get(i).getGrossweight() + "</td>";
+                    html += "<td>" + listbox.get(i).getNetweight() + "</td>";
+                    html += "<td>" + listbox.get(i).getCountry_origin() + "</td>";
+
+
 
                     html += "<td>" + listbox.get(i).getStatusshoot() + "</td>";
 

@@ -37,7 +37,7 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
-                                        <select class="form-select form-select-sm text-center" id="customer_num">
+                                        <select class="form-select form-select-sm text-center" id="destination">
                                             <option value="ADC">ADC</option>
                                             <option value="ODC">ODC</option>
                                             <option value="SCCR">SCCR</option>
@@ -374,6 +374,7 @@
                 var quantitytotal_box = $("#quantitytotal_box").val();
                 var prodorder = $("#prodorder").val();
                 var pallet = $("#pallet").val();
+                var destination = $("#destination").val();
                 
                 $.ajax({
                     type:"post",
@@ -396,7 +397,8 @@
                         customer3_id:customer3_id,
                         customer4_id:customer4_id,
                         pallet:pallet,
-                        prodorder:prodorder
+                        prodorder:prodorder,
+                        destination:destination
                     },
                     success:function(msg){
                       

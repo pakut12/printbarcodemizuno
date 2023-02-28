@@ -340,7 +340,10 @@
                     },
                     success:function(msg){
                         $("#table_customer").html(msg);
-                        $("#mytable").DataTable();
+                        $("#mytable").DataTable({
+                            scrollX: true,
+                            scrollCollapse: true
+                        });
                     }
                 })
             }

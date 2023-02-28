@@ -63,9 +63,7 @@
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                             <select class="form-select form-select-sm text-center" id="customer">
-                                                <option value="MUS">MUS</option>
-                                                <option value="MCA">MCA</option>
-                                                <option value="MCL">MCL</option>
+                                               
                                             </select>
                                         </div>
                                     </div>
@@ -75,10 +73,8 @@
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
-                                            <select class="form-select form-select-sm text-center" id="customer_num">
-                                                <option value="ADC">ADC</option>
-                                                <option value="ODC">ODC</option>
-                                                <option value="SCCR">SCCR</option>
+                                            <select class="form-select form-select-sm text-center" id="destination">
+                                             
                                             </select>
                                         </div>
                                     </div>
@@ -421,7 +417,8 @@
                 var colorno4 =  $("#customer4_color").val();
                 var sizeno4  =  $("#customer4_size").val();
                 var qty4  = $("#customer4_number").val();
-                
+                var destination  = $("#destination").val();
+               
                 if(po){
                     po =  $("#po").val();
                 }else{
@@ -472,7 +469,8 @@
                         sizeno4:sizeno4,
                         qty4:qty4,
                         pallet:pallet,
-                        prodorder:prodorder 
+                        prodorder:prodorder,
+                        destination:destination
                     },
                     success:function(msg){
                         if(msg){
@@ -489,25 +487,28 @@
                                     icon:"error",
                                     text:"เเก้ไขไม่สำเร็จ"
                                 })
-                                clearinput();
                             }
+                          
                         }else{
                             Swal.fire({
                                 title:"เเก้ไข",
                                 icon:"error",
                                 text:"เเก้ไขไม่สำเร็จ"
                             })
-                            clearinput();
+                           
                         }
-                        
+                        clearinput(); 
                     }
                 })
                    
             }
             
             function clearinput(){
+                $("#customer_text").empty();
                 $("#customer").empty();
                 $("#customer").append("<option value=''></option>");
+                $("#destination").empty();
+                $("#destination").append("<option value=''></option>");
 
                 $("#quantity_box").val("");
                 $("#initial").val("");
@@ -551,6 +552,24 @@
                 $("#myform :input").attr("disabled", true);
             }
             
+            function customer_text(){
+                var text = $("#customer").val();
+                if(text == 'MUS'){
+                    $("#customer_text").text('MIZUNO USA INC.');
+                }else if(text == 'MCA'){
+                    $("#customer_text").text('MIZUNO CORPORATION');
+                }else if(text == 'MCL'){
+                    $("#customer_text").text('MIZUNO CANADA INC-TDC');
+                }
+            }
+            
+            function getcustomer_text(){
+                customer_text();
+                $('#customer').on('change', function() {
+                    customer_text();
+                });
+            }
+            
             function searchpo(){
                 var posearch = $("#posearch").val();
                 var numstart = $("#numstart").val();
@@ -571,7 +590,7 @@
                        
                         if(msg){  
                             var js = JSON.parse(msg);
-                            console.log(js)
+                           
                             if(js.shipto == "MUS"){
                                 $("#customer").empty();
                                 $("#customer").append("<option value='MUS'>MUS</option><option value='MCA'>MCA</option><option value='MCL'>MCL</option>");
@@ -582,7 +601,18 @@
                                 $("#customer").empty();
                                 $("#customer").append("<option value='MCL'>MCL</option><option value='MUS'>MUS</option><option value='MCA'>MCA</option>");
                             }
-                          
+                            
+                            if(js.destination == "ADC"){
+                                $("#destination").empty();
+                                $("#destination").append("<option value='ADC'>ADC</option><option value='ODC'>ODC</option><option value='SCCR'>SCCR</option>");
+                            }else if(js.destination == "ODC"){
+                                $("#destination").empty();
+                                $("#destination").append("<option value='ODC'>ODC</option><option value='SCCR'>SCCR</option><option value='ADC'>ADC</option>");
+                            }else if(js.destination == "SCCR"){
+                                $("#destination").empty();
+                                $("#destination").append("<option value='SCCR'>SCCR</option><option value='ADC'>ADC</option><option value='ODC'>ODC</option>");
+                            }
+                            getcustomer_text()
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
                             $("#numberbox_start").val(js.startbox);
@@ -679,6 +709,7 @@
                                         text:"ลบไม่สำเร็จ"
                                     })
                                 }
+                                clearinput()
                             }
                         })
                     }
@@ -689,6 +720,7 @@
             $(document).ready(function () {
                 $("#bt_search").click(function(){
                     searchpo()
+                  
                 });
                 $("#customer1_id").on('input', function() {
                     chack_customer1($(this).val())
@@ -702,7 +734,7 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
-               
+              
                 
                 $("#myform :input").attr("disabled", true);
             });

@@ -136,7 +136,7 @@ public class DetailService {
             String SKU_ITEM2, String UPC_CODE2, String COLORNO2, String SIZENO2, String QTY2,
             String SKU_ITEM3, String UPC_CODE3, String COLORNO3, String SIZENO3, String QTY3,
             String SKU_ITEM4, String UPC_CODE4, String COLORNO4, String SIZENO4, String QTY4,
-            String pobefore, String boxnobefore, String boxno, String PO, String pallet, String prodorder) throws SQLException {
+            String pobefore, String boxnobefore, String boxno, String PO, String pallet, String prodorder, String destination) throws SQLException {
 
         Boolean status = null;
 
@@ -182,7 +182,8 @@ public class DetailService {
                     "PO  = ?," +
                     "BOXNO = ?," +
                     "PROD_ORDER = ?," +
-                    "PALLET = ?" +
+                    "PALLET = ?," +
+                    "DESTINATION = ?" +
                     "WHERE PO = ? AND BOXNO = ?";
 
             conn = ConnectDB.getConnection();
@@ -228,9 +229,10 @@ public class DetailService {
             ps.setString(39, boxno);
             ps.setString(40, prodorder);
             ps.setString(41, pallet);
+            ps.setString(42, destination);
             
-            ps.setString(42, pobefore);
-            ps.setString(43, boxnobefore);
+            ps.setString(43, pobefore);
+            ps.setString(44, boxnobefore);
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {
@@ -264,7 +266,6 @@ public class DetailService {
 
                 BCDetailBox box = new BCDetailBox();
                 box.setPo(rs.getString("po"));
-
 
                 box.setShipfrom(rs.getString("shipfrom"));
                 box.setShipto(rs.getString("shipto"));
@@ -311,6 +312,7 @@ public class DetailService {
 
                 box.setPallet(rs.getString("pallet"));
                 box.setProdorder(rs.getString("prod_order"));
+                box.setDestination(rs.getString("destination"));
                 listdetail.add(box);
             }
 
@@ -389,12 +391,12 @@ public class DetailService {
         return status;
     }
 
-    public Boolean UpdateDetailBoxAll(String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4, String pallet, String prodorder) throws SQLException {
+    public Boolean UpdateDetailBoxAll(String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4, String pallet, String prodorder, String destination) throws SQLException {
 
         Boolean status = false;
 
         try {
-            String sql = "update MIZUNONEWBARBOXHD set allbox =  ?,FIRSTDIGIT = ?,SHIPFROM = ?,SHIPTO = ?,QTYPERBOX  = ?,DESCTXT  = ?,GROSSWEIGHT  = ?,NETWEIGHT  = ?,COUNTRY_ORIGIN  = ?,SKU_ITEM1  = ?,UPC_CODE1  = ?,COLORNO1  = ?,SIZENO1  = ?,QTY1  = ?,SKU_ITEM2  = ?,UPC_CODE2  = ?,COLORNO2  = ?,SIZENO2  = ?,QTY2  = ?,SKU_ITEM3  = ?,UPC_CODE3  = ?,COLORNO3  = ?,SIZENO3  = ?,QTY3  = ?,SKU_ITEM4  = ?,UPC_CODE4  = ?,COLORNO4  = ?,SIZENO4  = ?,QTY4  = ?,PO = ? ,STARTBOX = ? ,ENDBOX = ? ,pallet = ? ,prod_order = ?  WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
+            String sql = "update MIZUNONEWBARBOXHD set allbox =  ?,FIRSTDIGIT = ?,SHIPFROM = ?,SHIPTO = ?,QTYPERBOX  = ?,DESCTXT  = ?,GROSSWEIGHT  = ?,NETWEIGHT  = ?,COUNTRY_ORIGIN  = ?,SKU_ITEM1  = ?,UPC_CODE1  = ?,COLORNO1  = ?,SIZENO1  = ?,QTY1  = ?,SKU_ITEM2  = ?,UPC_CODE2  = ?,COLORNO2  = ?,SIZENO2  = ?,QTY2  = ?,SKU_ITEM3  = ?,UPC_CODE3  = ?,COLORNO3  = ?,SIZENO3  = ?,QTY3  = ?,SKU_ITEM4  = ?,UPC_CODE4  = ?,COLORNO4  = ?,SIZENO4  = ?,QTY4  = ?,PO = ? ,STARTBOX = ? ,ENDBOX = ? ,pallet = ? ,prod_order = ?,destination = ? WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, allbox);
@@ -431,9 +433,11 @@ public class DetailService {
             ps.setString(32, endbox);
             ps.setString(33, pallet);
             ps.setString(34, prodorder);
-            ps.setString(35, pobefore);
-            ps.setString(36, startboxbefore);
-            ps.setString(37, endboxbefore);
+            ps.setString(35, destination);
+
+            ps.setString(36, pobefore);
+            ps.setString(37, startboxbefore);
+            ps.setString(38, endboxbefore);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -507,6 +511,7 @@ public class DetailService {
 
                 box.setPallet(rs.getString("pallet"));
                 box.setProdorder(rs.getString("prod_order"));
+                box.setDestination(rs.getString("destination"));
 
                 listdetail.add(box);
             }
@@ -550,11 +555,11 @@ public class DetailService {
         return listaddress;
     }
 
-    private String SqlAddDataToMIZUNONEWBARBOXDT(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder) {
+    private String SqlAddDataToMIZUNONEWBARBOXDT(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination) {
         String sql = "INSERT ALL ";
         try {
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXDT (PO,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT) VALUES (";
+                sql += " INTO MIZUNONEWBARBOXDT (PO,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION) VALUES (";
                 sql += "'" + po + "',";
                 sql += "'" + initial + n + "',";
                 sql += "'" + initial + quantitytotal_box + "',";
@@ -595,7 +600,8 @@ public class DetailService {
                 sql += "'" + customer4_id[4] + "',";
                 sql += "'" + pallet + "',";
                 sql += "'" + prodorder + "',";
-                sql += "'N')";
+                sql += "'N',";
+                sql += "'" + destination + "')";
             }
             sql += " SELECT * FROM dual";
         } catch (Exception e) {
@@ -605,11 +611,11 @@ public class DetailService {
         return sql;
     }
 
-    public Boolean AddDataToMIZUNONEWBARBOXDT(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder) throws SQLException {
+    public Boolean AddDataToMIZUNONEWBARBOXDT(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination) throws SQLException {
         Boolean status = false;
 
         try {
-            String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder);
+            String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination);
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -630,12 +636,12 @@ public class DetailService {
         return status;
     }
 
-    public Boolean AddDataToMIZUNONEWBARBOXHD(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder) throws SQLException {
+    public Boolean AddDataToMIZUNONEWBARBOXHD(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination) throws SQLException {
         Boolean status = false;
 
         try {
-            String sql = "INSERT INTO MIZUNONEWBARBOXHD (PO,FIRSTDIGIT,STARTBOX,ENDBOX,ALLBOX,SHIPFROM,SHIPTO,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER) " +
-                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+            String sql = "INSERT INTO MIZUNONEWBARBOXHD (PO,FIRSTDIGIT,STARTBOX,ENDBOX,ALLBOX,SHIPFROM,SHIPTO,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,DESTINATION) " +
+                    "VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, po);
@@ -672,6 +678,7 @@ public class DetailService {
             ps.setString(32, customer4_id[4]);
             ps.setString(33, pallet);
             ps.setString(34, prodorder);
+            ps.setString(35, destination);
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {

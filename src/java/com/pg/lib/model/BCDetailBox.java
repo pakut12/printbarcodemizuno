@@ -52,6 +52,15 @@ public class BCDetailBox {
     private String statusshoot;
     private String boxno;
     private String prodorder;
+    private String destination;
+
+    public String getDestination() {
+        return destination;
+    }
+
+    public void setDestination(String destination) {
+        this.destination = destination;
+    }
 
     public String getPallet() {
         return pallet;

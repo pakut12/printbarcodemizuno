@@ -60,7 +60,7 @@ public class Customer extends HttpServlet {
                 int num = 1;
                 List<BCCustomer> listcustomerdetail = cs.getDetailCustomer();
                 String html = "";
-                html += "<table class='table table-striped table-sm' id='mytable'>";
+                html += "<table class='table table-striped table-sm w-100' id='mytable'>";
                 html += "<thead>";
                 html += "<tr>";
                 html += "<th>�ӴѺ</th>";

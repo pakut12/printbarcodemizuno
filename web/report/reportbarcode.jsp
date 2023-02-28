@@ -180,6 +180,7 @@
         
         <script>
             JsBarcode(".barcode").init();
+            window.onafterprint = window.close;
             window.print();
         </script>
     </body>
