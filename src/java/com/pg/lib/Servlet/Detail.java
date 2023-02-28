@@ -273,7 +273,7 @@ public class Detail extends HttpServlet {
             } else if (type.equals("updatedetails")) {
                 try {
                     String pobefore = request.getParameter("pobefore").trim();
-                    String BOXNO = request.getParameter("startboxbefore").trim();
+                    String boxnobefore = request.getParameter("startboxbefore").trim();
 
                     String SHIPTO = request.getParameter("shipto").trim();
                     String QTYPERBOX = request.getParameter("qtyperbox").trim();
@@ -309,10 +309,15 @@ public class Detail extends HttpServlet {
                     String SIZENO4 = request.getParameter("sizeno4").trim();
                     String QTY4 = request.getParameter("qty4").trim();
 
+                    String boxno = request.getParameter("boxno").trim();
+
+                    String pallet = request.getParameter("pallet").trim();
+                    String prodorder = request.getParameter("prodorder").trim();
+
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
-                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, BOXNO);
+                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO,pallet,prodorder);
                     if (status) {
                         obj.put("status", "true");
                     } else {

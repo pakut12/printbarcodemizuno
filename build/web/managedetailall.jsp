@@ -472,34 +472,42 @@
                         sizeno4:sizeno4,
                         qty4:qty4,
                         pallet:pallet,
-                        prodorder:prodorder
-                        
+                        prodorder:prodorder 
                     },
                     success:function(msg){
-                        console.log(msg)
-                        var js = JSON.parse(msg);
-                        if(js.status == "true"){
-                            Swal.fire({
-                                title:"‡‡°È‰¢",
-                                icon:"success",
-                                text:"‡‡°È‰¢ ”‡√Á®"
-                            })
-                        }else if(js.status == "false"){
+                        if(msg){
+                            var js = JSON.parse(msg);
+                            if(js.status == "true"){
+                                Swal.fire({
+                                    title:"‡‡°È‰¢",
+                                    icon:"success",
+                                    text:"‡‡°È‰¢ ”‡√Á®"
+                                })
+                            }else if(js.status == "false"){
+                                Swal.fire({
+                                    title:"‡‡°È‰¢",
+                                    icon:"error",
+                                    text:"‡‡°È‰¢‰¡Ë ”‡√Á®"
+                                })
+                                clearinput();
+                            }
+                        }else{
                             Swal.fire({
                                 title:"‡‡°È‰¢",
                                 icon:"error",
                                 text:"‡‡°È‰¢‰¡Ë ”‡√Á®"
                             })
+                            clearinput();
                         }
-                        clearinput();
+                        
                     }
                 })
                    
             }
             
             function clearinput(){
-                $("#customer_num").empty();
-                $("#customer_num").append("<option value=''></option>");
+                $("#customer").empty();
+                $("#customer").append("<option value=''></option>");
 
                 $("#quantity_box").val("");
                 $("#initial").val("");
@@ -539,6 +547,8 @@
                 $("#customer4_color").val("");
                 $("#customer4_size").val("");
                 $("#customer4_number").val("");
+                
+                $("#myform :input").attr("disabled", true);
             }
             
             function searchpo(){

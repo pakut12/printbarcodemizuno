@@ -36,7 +36,7 @@
                         <div class="col-sm-12 col-md-4 ">
                             <div class="d-flex justify-content-center justify-content-md-start ">
                                 <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
-                                <button class="btn btn-outline-danger btn-sm w-25  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
+                                <button class="btn btn-outline-danger btn-sm w-25 mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
                             </div>
                         </div>
                     </div>
@@ -348,9 +348,11 @@
             }
             
             function updatedata(){
-                var pobefore = $("#posearch").val();
+                var pobefore = $("#pobefore").val();
                 var startboxbefore  = $("#numstart").val();
-              
+             
+                var boxno = $("#boxno").val();
+               
                 var shipto = $("#customer").val();
                 var qtyperbox  = $("#quantity_box").val();
                 var allbox  =   $("#boxall").val();    
@@ -384,6 +386,15 @@
                 var sizeno4  =  $("#customer4_size").val();
                 var qty4  = $("#customer4_number").val();
                 
+                var pallet  =  $("#pallet").val();
+                var prodorder  = $("#prodorder").val();
+        
+                
+                if(po){
+                    po =  $("#po").val();
+                }else{
+                    po =  $("#posearch").val();
+                }
                 $.ajax({
                     type:"post",
                     url:"Detail",
@@ -418,22 +429,35 @@
                         upc_code4:upc_code4,
                         colorno4:colorno4,
                         sizeno4:sizeno4,
-                        qty4:qty4
+                        qty4:qty4,
+                        boxno:boxno,
+                        pallet:pallet,
+                        prodorder:prodorder 
                     },
                     success:function(msg){
-                        var js = JSON.parse(msg);
-                        if(js.status == "true"){
-                            Swal.fire({
-                                title:"เเก้ไข",
-                                icon:"success",
-                                text:"เเก้ไขสำเร็จ"
-                            })
-                        }else if(js.status == "false"){
+                        if(msg){
+                            var js = JSON.parse(msg);
+                            if(js.status == "true"){
+                                Swal.fire({
+                                    title:"เเก้ไข",
+                                    icon:"success",
+                                    text:"เเก้ไขสำเร็จ"
+                                })
+                            }else if(js.status == "false"){
+                                Swal.fire({
+                                    title:"เเก้ไข",
+                                    icon:"error",
+                                    text:"เเก้ไขไม่สำเร็จ"
+                                })
+                            }
+                            clearinput()
+                        }else{
                             Swal.fire({
                                 title:"เเก้ไข",
                                 icon:"error",
                                 text:"เเก้ไขไม่สำเร็จ"
                             })
+                            clearinput()
                         }
                     }
                 })
@@ -441,8 +465,8 @@
             }
             
             function clearinput(){
-                $("#customer_num").empty();
-                $("#customer_num").append("<option value=''></option>");
+                $("#customer").empty();
+                $("#customer").append("<option value=''></option>");
 
                 $("#quantity_box").val("");
                 $("#boxno").val("");
@@ -479,6 +503,11 @@
                 $("#customer4_color").val("");
                 $("#customer4_size").val("");
                 $("#customer4_number").val("");
+                
+                $("#pobefore").val("");
+                $("#prodorder").val("");
+                $("#pallet").val("");
+                $("#myform :input").attr("disabled", true);
             }
             
             function searchpo(){

@@ -136,7 +136,7 @@ public class DetailService {
             String SKU_ITEM2, String UPC_CODE2, String COLORNO2, String SIZENO2, String QTY2,
             String SKU_ITEM3, String UPC_CODE3, String COLORNO3, String SIZENO3, String QTY3,
             String SKU_ITEM4, String UPC_CODE4, String COLORNO4, String SIZENO4, String QTY4,
-            String PO, String BOXNO) throws SQLException {
+            String pobefore, String boxnobefore, String boxno, String PO, String pallet, String prodorder) throws SQLException {
 
         Boolean status = null;
 
@@ -178,7 +178,11 @@ public class DetailService {
                     "COLORNO4  = ?," +
                     "SIZENO4  = ?," +
                     "QTY4  = ?," +
-                    "STATUSSHOOT  = ?" +
+                    "STATUSSHOOT  = ?," +
+                    "PO  = ?," +
+                    "BOXNO = ?," +
+                    "PROD_ORDER = ?," +
+                    "PALLET = ?" +
                     "WHERE PO = ? AND BOXNO = ?";
 
             conn = ConnectDB.getConnection();
@@ -221,7 +225,12 @@ public class DetailService {
             ps.setString(36, QTY4);
             ps.setString(37, "N");
             ps.setString(38, PO);
-            ps.setString(39, BOXNO);
+            ps.setString(39, boxno);
+            ps.setString(40, prodorder);
+            ps.setString(41, pallet);
+            
+            ps.setString(42, pobefore);
+            ps.setString(43, boxnobefore);
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {
