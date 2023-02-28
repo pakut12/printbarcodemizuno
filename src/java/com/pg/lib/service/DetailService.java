@@ -70,6 +70,7 @@ public class DetailService {
                 sql += "'" + num + "')";
             }
         }
+        sql += " order by CAST(substr(boxno,2) as int)";
         return sql;
     }
 

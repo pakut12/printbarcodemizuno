@@ -428,7 +428,7 @@
         
                 var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
       
-                if(sumqty_result == parseInt($("#quantity_box").val())){
+                if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
                         url:"Detail",

@@ -30,7 +30,7 @@
                         <div class="col-sm-12 col-md-2">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                <input type="text" class="form-control text-center" id="firstdigit">
+                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-3">
@@ -99,7 +99,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                            <input type="text" class="form-control text-center" name="initial" id="initial" pattern="">
+                                            <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="1">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
@@ -449,7 +449,7 @@
                 
                 var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
            
-                if(sumqty_result == parseInt($("#quantity_box").val())){
+                if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
                         url:"Detail",
