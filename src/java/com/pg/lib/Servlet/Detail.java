@@ -60,17 +60,19 @@ public class Detail extends HttpServlet {
                 String date = request.getParameter("date").trim();
 
                 DetailService ds = new DetailService();
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination,date);
-                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination,date);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+                Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end);
+
+
                 JSONObject obj = new JSONObject();
-                if (statusdt && statushd) {
+                if (statusdt && statushd && statusresult) {
                     obj.put("status", "true");
                 } else {
                     obj.put("status", "false");
                 }
 
                 out.print(obj);
-
 
             } else if (type.equals("getdetailsall")) {
 
@@ -124,6 +126,8 @@ public class Detail extends HttpServlet {
                 obj.put("pallet", detailbox.get(0).getPallet());
                 obj.put("prodorder", detailbox.get(0).getProdorder());
                 obj.put("destination", detailbox.get(0).getDestination());
+                obj.put("date_create", detailbox.get(0).getDate_create());
+                obj.put("date_modify", detailbox.get(0).getDate_modify());
 
                 out.print(obj);
 
@@ -178,12 +182,17 @@ public class Detail extends HttpServlet {
                 String prodorder = request.getParameter("prodorder").trim();
                 String destination = request.getParameter("destination").trim();
                 String date = request.getParameter("date").trim();
-               
-                DetailService ds = new DetailService();
-                Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination,date);
-                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination,date);
 
+                DetailService ds = new DetailService();
+
+                Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date);
+                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
+                Boolean statusresult = true;
+                
+                if (ds.LastBoxBOXResult(po) < Integer.parseInt(endbox)) {
+                    statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, firstdigit, date, String.valueOf(ds.LastBoxBOXResult(po) + 1), endbox);
+                }
                 JSONObject obj = new JSONObject();
 
                 if (statusupdate && statusDT && statusdt) {
@@ -191,9 +200,7 @@ public class Detail extends HttpServlet {
                 } else {
                     obj.put("status", "false");
                 }
-
                 out.print(obj);
-
 
             } else if (type.equals("deletedetailsall")) {
 
@@ -274,12 +281,12 @@ public class Detail extends HttpServlet {
                 obj.put("prod_order", detailbox.get(0).getProdorder());
                 obj.put("destination", detailbox.get(0).getDestination());
 
-                obj.put("qty_result1", detailbox.get(0).getQty_result1());
-                obj.put("qty_result2", detailbox.get(0).getQty_result2());
-                obj.put("qty_result3", detailbox.get(0).getQty_result3());
-                obj.put("qty_result4", detailbox.get(0).getQty_result4());
+
 
                 obj.put("statusshoot", detailbox.get(0).getStatusshoot());
+
+                obj.put("date_create", detailbox.get(0).getDate_create());
+                obj.put("date_modify", detailbox.get(0).getDate_modify());
 
                 out.print(obj);
             } else if (type.equals("updatedetails")) {
@@ -326,12 +333,12 @@ public class Detail extends HttpServlet {
                     String pallet = request.getParameter("pallet").trim();
                     String prodorder = request.getParameter("prodorder").trim();
                     String destination = request.getParameter("destination").trim();
- 
+
                     String date = request.getParameter("date").trim();
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
-                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination,date);
+                    Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
                     if (status) {
                         obj.put("status", "true");
                     } else {
@@ -502,6 +509,75 @@ public class Detail extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else if (type.equals("getdetailsforbarcode")) {
+                String posearch = request.getParameter("posearch").trim();
+                String numstart = request.getParameter("numstart").trim();
+
+                DetailService ds = new DetailService();
+                List<BCDetailBox> detailbox = ds.GetDetailBoxAllForBarcode(posearch, numstart);
+
+                JSONObject obj = new JSONObject();
+                obj.put("po", detailbox.get(0).getPo());
+                obj.put("shipfrom", detailbox.get(0).getShipfrom());
+                obj.put("shipto", detailbox.get(0).getShipto());
+                obj.put("qtyperbox", detailbox.get(0).getQtyperbox());
+                obj.put("boxno", detailbox.get(0).getBoxno());
+                obj.put("desctxt", detailbox.get(0).getDesctxt());
+
+                obj.put("grossweight", detailbox.get(0).getGrossweight());
+                obj.put("netweight", detailbox.get(0).getNetweight());
+                obj.put("country_origin", detailbox.get(0).getCountry_origin());
+                obj.put("boxall", detailbox.get(0).getAllbox());
+
+                obj.put("sku_item1", detailbox.get(0).getSku_item1());
+                obj.put("upc_code1", detailbox.get(0).getUpc_code1());
+                obj.put("qty1", detailbox.get(0).getQty1());
+                obj.put("sizeno1", detailbox.get(0).getSizen01());
+                obj.put("colorno1", detailbox.get(0).getColorn01());
+
+                obj.put("sku_item2", detailbox.get(0).getSku_item2());
+                obj.put("upc_code2", detailbox.get(0).getUpc_code2());
+                obj.put("qty2", detailbox.get(0).getQty2());
+                obj.put("sizeno2", detailbox.get(0).getSizen02());
+                obj.put("colorno2", detailbox.get(0).getColorn02());
+
+                obj.put("sku_item3", detailbox.get(0).getSku_item3());
+                obj.put("upc_code3", detailbox.get(0).getUpc_code3());
+                obj.put("qty3", detailbox.get(0).getQty3());
+                obj.put("sizeno3", detailbox.get(0).getSizen03());
+                obj.put("colorno3", detailbox.get(0).getColorn03());
+
+                obj.put("sku_item4", detailbox.get(0).getSku_item4());
+                obj.put("upc_code4", detailbox.get(0).getUpc_code4());
+                obj.put("qty4", detailbox.get(0).getQty4());
+                obj.put("sizeno4", detailbox.get(0).getSizen04());
+                obj.put("colorno4", detailbox.get(0).getColorn04());
+
+                obj.put("sfaddress1", detailbox.get(0).getSfaddress1());
+                obj.put("sfaddress2", detailbox.get(0).getSfaddress2());
+                obj.put("sfaddress3", detailbox.get(0).getSfaddress3());
+                obj.put("sfaddress4", detailbox.get(0).getSfaddress4());
+                obj.put("staddress1", detailbox.get(0).getStaddress1());
+                obj.put("staddress2", detailbox.get(0).getStaddress2());
+                obj.put("staddress3", detailbox.get(0).getStaddress3());
+                obj.put("staddress4", detailbox.get(0).getStaddress4());
+
+                obj.put("pallet", detailbox.get(0).getPallet());
+                obj.put("prod_order", detailbox.get(0).getProdorder());
+                obj.put("destination", detailbox.get(0).getDestination());
+
+                obj.put("qty_result1", detailbox.get(0).getQty_result1());
+                obj.put("qty_result2", detailbox.get(0).getQty_result2());
+                obj.put("qty_result3", detailbox.get(0).getQty_result3());
+                obj.put("qty_result4", detailbox.get(0).getQty_result4());
+
+
+                obj.put("statusshoot", detailbox.get(0).getStatusshoot());
+
+                obj.put("date_create", detailbox.get(0).getDate_create());
+                obj.put("date_modify", detailbox.get(0).getDate_modify());
+
+                out.print(obj);
             }
 
 

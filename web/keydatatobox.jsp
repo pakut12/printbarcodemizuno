@@ -394,8 +394,25 @@
                 var prodorder = $("#prodorder").val();
                 var pallet = $("#pallet").val();
                 var destination = $("#destination").val();
-                var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
-           
+                
+           var num1 = $("#customer1_number").val()
+                var num2 = $("#customer2_number").val()
+                var num3 = $("#customer3_number").val()
+                var num4 = $("#customer4_number").val()
+                if(!num1){
+                    num1=0;
+                }
+                if(!num2){
+                    num2=0;
+                }
+                if(!num3){
+                    num3=0;
+                }
+                if(!num4){
+                    num4=0;
+                }
+                var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
+                
                 var date = new Date().format('d-m-Y H:i:s');
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({

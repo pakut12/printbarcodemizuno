@@ -25,11 +25,151 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    public Boolean UpdateQtyResultFromBarcode(String PO, String BOXNO, String QTY_RESULT1, String QTY_RESULT2, String QTY_RESULT3, String QTY_RESULT4, String Date) throws SQLException {
-        Boolean status = false;
+    public int LastBoxBOXResult(String PO) throws SQLException {
+
+        int lastbox = 0;
 
         try {
-            String sql = "UPDATE MIZUNONEWBARBOXDT SET QTY_RESULT1 = ?,QTY_RESULT2 = ?,QTY_RESULT3 = ?,QTY_RESULT4 = ?,DATE_MODIFY =TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO = ? AND BOXNO = ?";
+            String sql = "SELECT MAX(CAST(substr(boxno,2) as int)) as lastbox FROM MIZUNONEWBARBOXRESULT WHERE PO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                lastbox = rs.getInt("lastbox");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return lastbox;
+    }
+
+    public List<BCDetailBox> GetDetailBoxAllForBarcode(String PO, String BOXNO) throws SQLException {
+
+        List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
+
+        try {
+            String sql = "SELECT b.*,qty_result1,qty_result2,qty_result3,qty_result4 FROM MIZUNONEWBARBOXRESULT a  inner join MIZUNONEWBARBOXDT b on a.PO =b. PO and a.BOXNO = b.BOXNO  WHERE  b. PO = ? and b.BOXNO =?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            ps.setString(2, BOXNO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                BCDetailBox box = new BCDetailBox();
+                box.setPo(rs.getString("po"));
+                box.setShipfrom(rs.getString("shipfrom"));
+                box.setShipto(rs.getString("shipto"));
+                box.setQtyperbox(rs.getString("qtyperbox"));
+                box.setGrossweight(rs.getString("grossweight"));
+                box.setNetweight(rs.getString("netweight"));
+                box.setCountry_origin(rs.getString("country_origin"));
+                box.setAllbox(rs.getString("boxall"));
+                box.setBoxno(rs.getString("boxno"));
+                box.setSku_item1(rs.getString("sku_item1"));
+                box.setUpc_code1(rs.getString("upc_code1"));
+                box.setQty1(rs.getString("qty1"));
+                box.setSizen01(rs.getString("sizeno1"));
+                box.setColorn01(rs.getString("colorno1"));
+                box.setDesctxt(rs.getString("desctxt"));
+                box.setSku_item2(rs.getString("sku_item2"));
+                box.setUpc_code2(rs.getString("upc_code2"));
+                box.setQty2(rs.getString("qty2"));
+                box.setSizen02(rs.getString("sizeno2"));
+                box.setColorn02(rs.getString("colorno2"));
+                box.setSku_item3(rs.getString("sku_item3"));
+                box.setUpc_code3(rs.getString("upc_code3"));
+                box.setQty3(rs.getString("qty3"));
+                box.setSizen03(rs.getString("sizeno3"));
+                box.setColorn03(rs.getString("colorno3"));
+                box.setSku_item4(rs.getString("sku_item4"));
+                box.setUpc_code4(rs.getString("upc_code4"));
+                box.setQty4(rs.getString("qty4"));
+                box.setSizen04(rs.getString("sizeno4"));
+                box.setColorn04(rs.getString("colorno4"));
+                box.setSfaddress1(rs.getString("sfaddress1"));
+                box.setSfaddress2(rs.getString("sfaddress2"));
+                box.setSfaddress3(rs.getString("sfaddress3"));
+                box.setSfaddress4(rs.getString("sfaddress4"));
+                box.setStaddress1(rs.getString("staddress1"));
+                box.setStaddress2(rs.getString("staddress2"));
+                box.setStaddress3(rs.getString("staddress3"));
+                box.setStaddress4(rs.getString("staddress4"));
+                box.setStatusshoot(rs.getString("statusshoot"));
+
+                box.setQty_result1(rs.getString("qty_result1"));
+                box.setQty_result2(rs.getString("qty_result2"));
+                box.setQty_result3(rs.getString("qty_result3"));
+                box.setQty_result4(rs.getString("qty_result4"));
+
+                listdetail.add(box);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return listdetail;
+    }
+
+    public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) throws SQLException {
+        Boolean status = false;
+        try {
+            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+
+        return status;
+    }
+
+    private String SqlAddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) {
+        String sql = "INSERT ALL ";
+        try {
+            for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
+                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,DATE_CREATE) VALUES (";
+                sql += "'" + PO + "',";
+                sql += "'" + initial + n + "',";
+                sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'))";
+            }
+            sql += " SELECT * FROM dual";
+            
+          
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return sql;
+    }
+
+    public Boolean UpdateQtyResultFromBarcode(String PO, String BOXNO, String QTY_RESULT1, String QTY_RESULT2, String QTY_RESULT3, String QTY_RESULT4, String Date) throws SQLException {
+
+        Boolean status = false;
+        try {
+            String sql = "UPDATE MIZUNONEWBARBOXRESULT SET QTY_RESULT1 = ?,QTY_RESULT2 = ?,QTY_RESULT3 = ?,QTY_RESULT4 = ?,DATE_MODIFY =TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO = ? AND BOXNO = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, QTY_RESULT1);
@@ -262,7 +402,7 @@ public class DetailService {
             ps.setString(41, pallet);
             ps.setString(42, destination);
             ps.setString(43, date);
-            
+
             ps.setString(44, pobefore);
             ps.setString(45, boxnobefore);
             if (ps.executeUpdate() > 0) {
@@ -346,11 +486,9 @@ public class DetailService {
                 box.setProdorder(rs.getString("prod_order"));
                 box.setDestination(rs.getString("destination"));
 
-                box.setQty_result1(rs.getString("qty_result1"));
-                box.setQty_result2(rs.getString("qty_result2"));
-                box.setQty_result3(rs.getString("qty_result3"));
-                box.setQty_result4(rs.getString("qty_result4"));
 
+                box.setDate_create(rs.getString("date_create"));
+                box.setDate_modify(rs.getString("date_modify"));
                 listdetail.add(box);
             }
 
@@ -383,8 +521,6 @@ public class DetailService {
         Boolean status = false;
         try {
             String sql = SQLDeleteDetailBoxMIZUNONEWBARBOXDTAll(PO, firstdigit, startbox, endbox);
-
-
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -551,6 +687,8 @@ public class DetailService {
                 box.setPallet(rs.getString("pallet"));
                 box.setProdorder(rs.getString("prod_order"));
                 box.setDestination(rs.getString("destination"));
+                box.setDate_create(rs.getString("date_create"));
+                box.setDate_modify(rs.getString("date_modify"));
 
                 listdetail.add(box);
             }

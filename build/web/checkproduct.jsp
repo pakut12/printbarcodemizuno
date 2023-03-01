@@ -331,7 +331,6 @@
                                     })
                                 }
                                 clearinput()
-                                
                             }else{
                                 Swal.fire({
                                     icon:'error',
@@ -339,12 +338,9 @@
                                     text:'บันทึกไม่สำเร็จ'
                                 })  
                             }
-                           
-                        
                         }
                     })
                 }
-                
             }
             function clearinput(){
                 $("#myform :input").val("");
@@ -381,7 +377,7 @@
                     type:"post",
                     url:"Detail",
                     data:{
-                        type:"getdetails",
+                        type:"getdetailsforbarcode",
                         posearch:posearch,
                         numstart:numstart,
                         numend:numend

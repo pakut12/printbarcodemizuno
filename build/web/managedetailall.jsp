@@ -14,7 +14,7 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
-        <div class="container mt-5">
+        <div class="container mt-5" >
             <div class="card">
                 <div class="card-header">
                     ค้นหา
@@ -36,9 +36,9 @@
                         <div class="col-sm-12 col-md-3">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                <input type="text" class="form-control text-center" name="numstart" id="numstart" >
+                                <input type="number" class="form-control text-center" name="numstart" id="numstart" >
                                 <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                <input type="text" class="form-control text-center" name="numend" id="numend" >
+                                <input type="number" class="form-control text-center" name="numend" id="numend" >
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 ">
@@ -62,8 +62,8 @@
                                     <div class="d-flex justify-content-end mb-3">
                                         <div class="col-sm-12 col-md-3">
                                             <div class="input-group input-group-sm mb-3">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
-                                                <input type="date" class="form-control text-center" name="date" id="date"  disabled>
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                                <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
                                             </div>
                                         </div>
                                     </div>
@@ -275,15 +275,7 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
-            function today(){
-                var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
-             
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-                var yyyy = today.getFullYear();
-                today = yyyy + '-' + mm + '-' + dd;
-                $("#date").val(today)
-            }
+           
             function chack_customer1(customer_id){
                 $.ajax({
                     type:'post',
@@ -446,9 +438,25 @@
                 var date = new Date().format('d-m-Y H:i:s');
                 var pallet = $("#pallet").val();
                 var prodorder = $("#prodorder").val();
-                
-                var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
-           
+              
+                var num1 = $("#customer1_number").val()
+                var num2 = $("#customer2_number").val()
+                var num3 = $("#customer3_number").val()
+                var num4 = $("#customer4_number").val()
+                if(!num1){
+                    num1=0;
+                }
+                if(!num2){
+                    num2=0;
+                }
+                if(!num3){
+                    num3=0;
+                }
+                if(!num4){
+                    num4=0;
+                }
+                var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
+              
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
@@ -495,7 +503,7 @@
                             date:date
                         },
                         success:function(msg){
-                            
+                            console.log(msg)
                             if(msg){
                                 var js = JSON.parse(msg);
                                 if(js.status == "true"){
@@ -533,51 +541,8 @@
             }
             
             function clearinput(){
-                $("#customer_text").empty();
-                $("#customer").empty();
-                $("#customer").append("<option value=''></option>");
-                $("#destination").empty();
-                $("#destination").append("<option value=''></option>");
-
-                $("#quantity_box").val("");
-                $("#initial").val("");
-                $("#numberbox_start").val("");
-                $("#numberbox_end").val("");
-                $("#quantitytotal_box").val("");
-                
-                $("#pallet").val("");    
-                $("#pobefore").val("");    
-                $("#prodorder").val("");
-                $("#po").val("");
-                $("#description").val("");
-                $("#gw").val("");
-                $("#nw").val("");
-                $("#country").val("");
-                        
-                $("#customer1_id").val("");
-                $("#customer1_barcode").val("");
-                $("#customer1_color").val("");
-                $("#customer1_size").val("");
-                $("#customer1_number").val("");
-
-                $("#customer2_id").val("");
-                $("#customer2_barcode").val("");
-                $("#customer2_color").val("");
-                $("#customer2_size").val("");
-                $("#customer2_number").val("");
-                        
-                $("#customer3_id").val("");
-                $("#customer3_barcode").val("");
-                $("#customer3_color").val("");
-                $("#customer3_size").val("");
-                $("#customer3_number").val("");
-                        
-                $("#customer4_id").val("");
-                $("#customer4_barcode").val("");
-                $("#customer4_color").val("");
-                $("#customer4_size").val("");
-                $("#customer4_number").val("");
-                
+                $("#customer_text").val("");
+                $("#myform :input").val("");
                 $("#myform :input").attr("disabled", true);
             }
             
@@ -617,7 +582,7 @@
                     },
                     success:function(msg){
                         if(msg){  
-                            today()
+                         
                             var js = JSON.parse(msg);
                             if(js.shipto == "MUS"){
                                 $("#customer").empty();
@@ -680,10 +645,11 @@
             
                             $("#prodorder").val(js.prodorder);
                             $("#pallet").val(js.pallet);
+                            $("#date_create").val(js.date_create);
                             
                             $("#myform :input").attr("disabled", false);
                             $("#pobefore").attr("disabled", true);
-                            $("#date").attr("disabled", true);
+                            $("#date_create").attr("disabled", true);
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

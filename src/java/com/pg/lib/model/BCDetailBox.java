@@ -57,6 +57,24 @@ public class BCDetailBox {
     private String qty_result2;
     private String qty_result3;
     private String qty_result4;
+    private String date_create;
+    private String date_modify;
+
+    public String getDate_create() {
+        return date_create;
+    }
+
+    public void setDate_create(String date_create) {
+        this.date_create = date_create;
+    }
+
+    public String getDate_modify() {
+        return date_modify;
+    }
+
+    public void setDate_modify(String date_modify) {
+        this.date_modify = date_modify;
+    }
 
     public String getQty_result1() {
         return qty_result1;

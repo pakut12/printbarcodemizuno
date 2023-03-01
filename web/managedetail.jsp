@@ -21,19 +21,25 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-3">
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                 <input type="text" class="form-control text-center" id="posearch">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
+                        <div class="col-sm-12 col-md-2">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                <input type="text" class="form-control text-center" name="numstart" id="numstart">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4 ">
+                        <div class="col-sm-12 col-md-3">
+                            <div class="input-group input-group-sm mb-3">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
+                                <input type="number" class="form-control text-center" name="numstart" id="numstart">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-4">
                             <div class="d-flex justify-content-center justify-content-md-start ">
                                 <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
                                 <button class="btn btn-outline-danger btn-sm w-25 mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
@@ -51,9 +57,9 @@
                                 <div class="d-flex justify-content-end mb-3">
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
-                                            <input type="date" class="form-control text-center" name="date" id="date"  disabled>
-                                        </div>
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                                <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                            </div>
                                     </div>
                                 </div>
                             </div>
@@ -376,7 +382,7 @@
             
             function updatedata(){
                 var pobefore = $("#pobefore").val();
-                var startboxbefore  = $("#numstart").val();
+                var startboxbefore  = $("#firstdigit").val()+$("#numstart").val();
              
                 var boxno = $("#boxno").val();
                
@@ -423,11 +429,26 @@
                     po =  $("#posearch").val();
                 }
                 var date = new Date().format('d-m-Y H:i:s');
-                console.log(date)
+         
+                var num1 = $("#customer1_number").val()
+                var num2 = $("#customer2_number").val()
+                var num3 = $("#customer3_number").val()
+                var num4 = $("#customer4_number").val()
+                if(!num1){
+                    num1=0;
+                }
+                if(!num2){
+                    num2=0;
+                }
+                if(!num3){
+                    num3=0;
+                }
+                if(!num4){
+                    num4=0;
+                }
+                
+                var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
         
-        
-                var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
-      
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
@@ -580,7 +601,7 @@
             function searchpo(){
                 var posearch = $("#posearch").val();
                 var numstart = $("#numstart").val();
-                var numend = $("#numend").val();
+                var firstdigit = $("#firstdigit").val();
                 
                 $.ajax({
                     type:"post",
@@ -588,8 +609,7 @@
                     data:{
                         type:"getdetails",
                         posearch:posearch,
-                        numstart:numstart,
-                        numend:numend
+                        numstart:firstdigit+numstart
                     },
                     success:function(msg){
                         $("#po").val("");
@@ -659,7 +679,8 @@
                             
                             $("#prodorder").val(js.prod_order);
                             $("#pallet").val(js.pallet);
-                            $("#date").attr("disabled", true);
+                            $("#date_create").val(js.date_create);
+                            $("#date_create").attr("disabled", true);
                             
                         }else{
                             Swal.fire({

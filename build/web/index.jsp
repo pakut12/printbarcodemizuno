@@ -13,6 +13,7 @@
         <%@ include file="share/header.jsp" %>
     </head>
     <body>
+       
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-5">
             <div class="card shadow-lg">
