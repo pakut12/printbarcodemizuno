@@ -189,7 +189,7 @@ public class Detail extends HttpServlet {
                 Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
                 Boolean statusresult = true;
-                
+
                 if (ds.LastBoxBOXResult(po) < Integer.parseInt(endbox)) {
                     statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, firstdigit, date, String.valueOf(ds.LastBoxBOXResult(po) + 1), endbox);
                 }
@@ -213,8 +213,10 @@ public class Detail extends HttpServlet {
                     DetailService ds = new DetailService();
                     Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
                     Boolean statusHD = ds.DeleteDetailBoxMIZUNONEWBARBOXHDAll(pobefore, firstdigit, startbox, endbox);
+                    Boolean statusRESULT = ds.DeleteDetailBoxMIZUNONEWBARBOXRESULTAll(pobefore, firstdigit, startbox, endbox);
+
                     JSONObject obj = new JSONObject();
-                    if (statusDT && statusHD) {
+                    if (statusDT && statusHD && statusRESULT) {
                         obj.put("status", "true");
                     } else {
                         obj.put("status", "false");
@@ -351,19 +353,24 @@ public class Detail extends HttpServlet {
                 }
 
             } else if (type.equals("deletedetails")) {
-                String po = request.getParameter("posearch").trim();
-                String boxno = request.getParameter("boxno").trim();
+                try {
+                    String po = request.getParameter("posearch").trim();
+                    String boxno = request.getParameter("boxno").trim();
 
-                DetailService ds = new DetailService();
-                Boolean status = ds.DeleteDetailBox(po, boxno);
+                    DetailService ds = new DetailService();
+                    Boolean status = ds.DeleteDetailBox(po, boxno);
+                    Boolean statusresult = ds.DeleteBoxResult(po, boxno);
 
-                JSONObject obj = new JSONObject();
-                if (status) {
-                    obj.put("status", "true");
-                } else {
-                    obj.put("status", "false");
+                    JSONObject obj = new JSONObject();
+                    if (status && statusresult) {
+                        obj.put("status", "true");
+                    } else {
+                        obj.put("status", "false");
+                    }
+                    out.print(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                out.print(obj);
             } else if (type.equals("getdetailbarcode")) {
                 String po = request.getParameter("po").trim();
                 String boxstart = request.getParameter("boxstart");

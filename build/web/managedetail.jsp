@@ -57,9 +57,9 @@
                                 <div class="d-flex justify-content-end mb-3">
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
-                                                <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
-                                            </div>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                            <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -714,7 +714,7 @@
                             data:{
                                 type:"deletedetails",
                                 posearch:posearch,
-                                boxno:boxno
+                                boxno:$("#firstdigit").val()+boxno
                             },
                             success:function(msg){
                                 var js = JSON.parse(msg);

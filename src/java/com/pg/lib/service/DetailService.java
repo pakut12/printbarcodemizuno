@@ -156,8 +156,8 @@ public class DetailService {
                 sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'))";
             }
             sql += " SELECT * FROM dual";
-            
-          
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -273,6 +273,29 @@ public class DetailService {
             ps.close();
         }
         return listbox;
+    }
+
+    public Boolean DeleteBoxResult(String PO, String BOXNO) throws SQLException {
+        Boolean status = false;
+        try {
+            String sql = "DELETE FROM MIZUNONEWBARBOXRESULT WHERE PO = ? AND BOXNO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            ps.setString(2, BOXNO);
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return status;
     }
 
     public Boolean DeleteDetailBox(String PO, String BOXNO) throws SQLException {
@@ -501,6 +524,42 @@ public class DetailService {
         }
 
         return listdetail;
+    }
+
+    private String SQLDeleteDetailBoxMIZUNONEWBARBOXRESULTAll(String PO, String firstdigit, String startbox, String endbox) throws SQLException {
+        String sql = "DELETE FROM MIZUNONEWBARBOXRESULT WHERE PO = '" + PO + "' and BOXNO in (";
+
+        for (int s = Integer.parseInt(startbox); s < Integer.parseInt(endbox) + 1; s++) {
+            if (s < Integer.parseInt(endbox)) {
+                sql += "'" + firstdigit + String.valueOf(s) + "',";
+            } else {
+                sql += "'" + firstdigit + String.valueOf(s) + "')";
+            }
+        }
+
+        return sql;
+    }
+
+    public Boolean DeleteDetailBoxMIZUNONEWBARBOXRESULTAll(String PO, String firstdigit, String startbox, String endbox) throws SQLException {
+        Boolean status = false;
+        try {
+            String sql = SQLDeleteDetailBoxMIZUNONEWBARBOXRESULTAll(PO, firstdigit, startbox, endbox);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return status;
     }
 
     private String SQLDeleteDetailBoxMIZUNONEWBARBOXDTAll(String PO, String firstdigit, String startbox, String endbox) throws SQLException {
