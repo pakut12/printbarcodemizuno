@@ -395,7 +395,7 @@
                 var pallet = $("#pallet").val();
                 var destination = $("#destination").val();
                 
-           var num1 = $("#customer1_number").val()
+                var num1 = $("#customer1_number").val()
                 var num2 = $("#customer2_number").val()
                 var num3 = $("#customer3_number").val()
                 var num4 = $("#customer4_number").val()
@@ -441,6 +441,8 @@
                             date:date
                         },
                         success:function(msg){
+                            
+                            console.log(msg)
                             var js = JSON.parse(msg)
                             if(js.status == 'true'){
                                 Swal.fire({

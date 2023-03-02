@@ -22,19 +22,19 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-3">
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                 <input type="text" class="form-control text-center" id="posearch">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-2">
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
                                 <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-3">
-                            <div class="input-group input-group-sm mb-3">
+                            <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
                                 <input type="number" class="form-control text-center" name="numstart" id="numstart">
                             </div>

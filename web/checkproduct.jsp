@@ -22,14 +22,20 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col-sm-12 col-md-4">
-                            <div class="input-group input-group-sm mb-3">
+                        <div class="col-sm-12 col-md-3">
+                            <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                 <input type="text" class="form-control text-center" id="posearch">
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="input-group input-group-sm mb-3">
+                        <div class="col-sm-12 col-md-3">
+                            <div class="input-group input-group-sm ">
+                                <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
+                            </div>
+                        </div>
+                        <div class="col-sm-12 col-md-2">
+                            <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่กล่อง</span>
                                 <input type="text" class="form-control text-center" name="numstart" id="numstart">
                             </div>
@@ -37,7 +43,6 @@
                         <div class="col-sm-12 col-md-4 ">
                             <div class="d-flex justify-content-center justify-content-md-start">
                                 <button type="button" class="btn btn-outline-primary btn-sm  w-25" id="bt_search">ค้นหา</button>
-                                
                             </div>
                         </div>
                     </div>
@@ -262,7 +267,6 @@
                 $("#date").val(today)
             }
             
-            
             function updatedata(){
                 var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
                 
@@ -291,8 +295,9 @@
                         text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
                     })
                 }else{
+                    var firstdigit = $("#firstdigit").val();
                     var posearch = $("#posearch").val();
-                    var numstart = $("#numstart").val();
+                    var numstart = firstdigit+$("#numstart").val();
                     
                     var qty_result1 = $("#customer1_number").val();
                     var qty_result2 = $("#customer2_number").val();
@@ -369,23 +374,22 @@
             }
             
             function searchpo(){
-                var posearch = $("#posearch").val();
-                var numstart = $("#numstart").val();
-                var numend = $("#numend").val();
                 
+                var firstdigit = $("#firstdigit").val();
+                var posearch = $("#posearch").val();
+                var numstart = firstdigit+$("#numstart").val();
+    
                 $.ajax({
                     type:"post",
                     url:"Detail",
                     data:{
                         type:"getdetailsforbarcode",
                         posearch:posearch,
-                        numstart:numstart,
-                        numend:numend
+                        numstart:numstart
                     },
                     success:function(msg){
                         if(msg){  
                             var js = JSON.parse(msg);
-                            
                             today()
                             var qty_result1 = js.qty_result1  
                             var qty_result2 = js.qty_result2  

@@ -62,7 +62,7 @@ public class Detail extends HttpServlet {
                 DetailService ds = new DetailService();
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                 Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
-                Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end);
+                Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end, customer1_id, customer2_id, customer3_id, customer4_id);
 
 
                 JSONObject obj = new JSONObject();
@@ -190,9 +190,12 @@ public class Detail extends HttpServlet {
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
                 Boolean statusresult = true;
 
-                if (ds.LastBoxBOXResult(po) < Integer.parseInt(endbox)) {
-                    statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, firstdigit, date, String.valueOf(ds.LastBoxBOXResult(po) + 1), endbox);
+                if (ds.LastBoxBOXResult(pobefore) < Integer.parseInt(endbox)) {
+                    statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, firstdigit, date, String.valueOf(ds.LastBoxBOXResult(po) + 1), endbox, listinput1, listinput2, listinput3, listinput4);
+                } else {
+                    statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(po, firstdigit + startbox, firstdigit + endbox,date, pobefore);
                 }
+
                 JSONObject obj = new JSONObject();
 
                 if (statusupdate && statusDT && statusdt) {
@@ -372,125 +375,130 @@ public class Detail extends HttpServlet {
                     e.printStackTrace();
                 }
             } else if (type.equals("getdetailbarcode")) {
-                String po = request.getParameter("po").trim();
-                String boxstart = request.getParameter("boxstart");
-                String boxend = request.getParameter("boxend");
+                try {
 
-                DetailService ds = new DetailService();
-                List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend);
-                int n = 1;
-                String html = "";
-                html += "<table class='table table-striped table-sm text-center text-nowrap' id='table_boxdetail'>";
-                html += "<thead>";
-                html += "<tr>";
-                html += "<th>NO</th>";
-                html += "<th>PO</th>";
-                html += "<th>BOXNO</th>";
-                html += "<th>BOXALL</th>";
-                html += "<th>SKU_ITEM1</th>";
-                html += "<th>UPC_CODE1</th>";
-                html += "<th>QTY1</th>";
-                html += "<th>SIZENO1</th>";
-                html += "<th>COLORNO1</th>";
+                    String po = request.getParameter("po").trim();
+                    String boxstart = request.getParameter("boxstart");
+                    String boxend = request.getParameter("boxend");
 
-                html += "<th>SKU_ITEM2</th>";
-                html += "<th>UPC_CODE2</th>";
-                html += "<th>QTY2</th>";
-                html += "<th>SIZENO2</th>";
-                html += "<th>COLORNO2</th>";
-
-                html += "<th>SKU_ITEM3</th>";
-                html += "<th>UPC_CODE3</th>";
-                html += "<th>QTY3</th>";
-                html += "<th>SIZENO3</th>";
-                html += "<th>COLORNO3</th>";
-
-                html += "<th>SKU_ITEM4</th>";
-                html += "<th>UPC_CODE4</th>";
-                html += "<th>QTY4</th>";
-                html += "<th>SIZENO4</th>";
-                html += "<th>COLORNO4</th>";
-
-                html += "<th>SHIPFROM</th>";
-                html += "<th>SFADDRESS1</th>";
-                html += "<th>SFADDRESS2</th>";
-                html += "<th>SFADDRESS3</th>";
-                html += "<th>SFADDRESS4</th>";
-                html += "<th>SHIPTO</th>";
-                html += "<th>STADDRESS1</th>";
-                html += "<th>STADDRESS2</th>";
-                html += "<th>STADDRESS3</th>";
-                html += "<th>STADDRESS4</th>";
-                html += "<th>QTYPERBOX</th>";
-                html += "<th>DESCTXT</th>";
-                html += "<th>GROSSWEIGHT</th>";
-                html += "<th>NETWEIGHT</th>";
-                html += "<th>COUNTRY_ORIGIN</th>";
-
-
-                html += "<th>STATUSSHOOT</th>";
-
-                html += "</tr>";
-                html += "</thead>";
-                html += "<tbody>";
-                for (int i = 0; i < listbox.size(); i++) {
+                    DetailService ds = new DetailService();
+                    List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend);
+                    int n = 1;
+                    String html = "";
+                    html += "<table class='table table-striped table-sm text-center text-nowrap' id='table_boxdetail'>";
+                    html += "<thead>";
                     html += "<tr>";
-                    html += "<td>" + n + "</td>";
-                    html += "<td>" + listbox.get(i).getPo() + "</td>";
-                    html += "<td>" + listbox.get(i).getBoxno() + "</td>";
-                    html += "<td>" + listbox.get(i).getAllbox() + "</td>";
+                    html += "<th>NO</th>";
+                    html += "<th>PO</th>";
+                    html += "<th>BOXNO</th>";
+                    html += "<th>BOXALL</th>";
+                    html += "<th>SKU_ITEM1</th>";
+                    html += "<th>UPC_CODE1</th>";
+                    html += "<th>QTY1</th>";
+                    html += "<th>SIZENO1</th>";
+                    html += "<th>COLORNO1</th>";
 
-                    html += "<td>" + listbox.get(i).getSku_item1() + "</td>";
-                    html += "<td>" + listbox.get(i).getUpc_code1() + "</td>";
-                    html += "<td>" + listbox.get(i).getQty1() + "</td>";
-                    html += "<td>" + listbox.get(i).getSizen01() + "</td>";
-                    html += "<td>" + listbox.get(i).getColorn01() + "</td>";
+                    html += "<th>SKU_ITEM2</th>";
+                    html += "<th>UPC_CODE2</th>";
+                    html += "<th>QTY2</th>";
+                    html += "<th>SIZENO2</th>";
+                    html += "<th>COLORNO2</th>";
 
-                    html += "<td>" + listbox.get(i).getSku_item2() + "</td>";
-                    html += "<td>" + listbox.get(i).getUpc_code2() + "</td>";
-                    html += "<td>" + listbox.get(i).getQty2() + "</td>";
-                    html += "<td>" + listbox.get(i).getSizen02() + "</td>";
-                    html += "<td>" + listbox.get(i).getColorn02() + "</td>";
+                    html += "<th>SKU_ITEM3</th>";
+                    html += "<th>UPC_CODE3</th>";
+                    html += "<th>QTY3</th>";
+                    html += "<th>SIZENO3</th>";
+                    html += "<th>COLORNO3</th>";
 
-                    html += "<td>" + listbox.get(i).getSku_item3() + "</td>";
-                    html += "<td>" + listbox.get(i).getUpc_code3() + "</td>";
-                    html += "<td>" + listbox.get(i).getQty3() + "</td>";
-                    html += "<td>" + listbox.get(i).getSizen03() + "</td>";
-                    html += "<td>" + listbox.get(i).getColorn03() + "</td>";
+                    html += "<th>SKU_ITEM4</th>";
+                    html += "<th>UPC_CODE4</th>";
+                    html += "<th>QTY4</th>";
+                    html += "<th>SIZENO4</th>";
+                    html += "<th>COLORNO4</th>";
 
-                    html += "<td>" + listbox.get(i).getSku_item4() + "</td>";
-                    html += "<td>" + listbox.get(i).getUpc_code4() + "</td>";
-                    html += "<td>" + listbox.get(i).getQty4() + "</td>";
-                    html += "<td>" + listbox.get(i).getSizen04() + "</td>";
-                    html += "<td>" + listbox.get(i).getColorn04() + "</td>";
-
-                    html += "<td>" + listbox.get(i).getShipfrom() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress1() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress2() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress3() + "</td>";
-                    html += "<td>" + listbox.get(i).getSfaddress4() + "</td>";
-                    html += "<td>" + listbox.get(i).getShipto() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress1() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress2() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress3() + "</td>";
-                    html += "<td>" + listbox.get(i).getStaddress4() + "</td>";
-                    html += "<td>" + listbox.get(i).getQtyperbox() + "</td>";
-                    html += "<td>" + listbox.get(i).getDesctxt() + "</td>";
-                    html += "<td>" + listbox.get(i).getGrossweight() + "</td>";
-                    html += "<td>" + listbox.get(i).getNetweight() + "</td>";
-                    html += "<td>" + listbox.get(i).getCountry_origin() + "</td>";
-
+                    html += "<th>SHIPFROM</th>";
+                    html += "<th>SFADDRESS1</th>";
+                    html += "<th>SFADDRESS2</th>";
+                    html += "<th>SFADDRESS3</th>";
+                    html += "<th>SFADDRESS4</th>";
+                    html += "<th>SHIPTO</th>";
+                    html += "<th>STADDRESS1</th>";
+                    html += "<th>STADDRESS2</th>";
+                    html += "<th>STADDRESS3</th>";
+                    html += "<th>STADDRESS4</th>";
+                    html += "<th>QTYPERBOX</th>";
+                    html += "<th>DESCTXT</th>";
+                    html += "<th>GROSSWEIGHT</th>";
+                    html += "<th>NETWEIGHT</th>";
+                    html += "<th>COUNTRY_ORIGIN</th>";
 
 
-                    html += "<td>" + listbox.get(i).getStatusshoot() + "</td>";
+                    html += "<th>STATUSSHOOT</th>";
 
                     html += "</tr>";
-                    n++;
-                }
-                html += "</tbody>";
-                html += "</table>";
+                    html += "</thead>";
+                    html += "<tbody>";
+                    for (int i = 0; i < listbox.size(); i++) {
+                        html += "<tr>";
+                        html += "<td>" + n + "</td>";
+                        html += "<td>" + listbox.get(i).getPo() + "</td>";
+                        html += "<td>" + listbox.get(i).getBoxno() + "</td>";
+                        html += "<td>" + listbox.get(i).getAllbox() + "</td>";
 
-                out.print(html);
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item1()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code1()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty1()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen01()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn01()) + "</td>";
+
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item2()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code2()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty2()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen02()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn02()) + "</td>";
+
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item3()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code3()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty3()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen03()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn03()) + "</td>";
+
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item4()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code4()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty4()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen04()) + "</td>";
+                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn04()) + "</td>";
+
+                        html += "<td>" + listbox.get(i).getShipfrom() + "</td>";
+                        html += "<td>" + listbox.get(i).getSfaddress1() + "</td>";
+                        html += "<td>" + listbox.get(i).getSfaddress2() + "</td>";
+                        html += "<td>" + listbox.get(i).getSfaddress3() + "</td>";
+                        html += "<td>" + listbox.get(i).getSfaddress4() + "</td>";
+                        html += "<td>" + listbox.get(i).getShipto() + "</td>";
+                        html += "<td>" + listbox.get(i).getStaddress1() + "</td>";
+                        html += "<td>" + listbox.get(i).getStaddress2() + "</td>";
+                        html += "<td>" + listbox.get(i).getStaddress3() + "</td>";
+                        html += "<td>" + listbox.get(i).getStaddress4() + "</td>";
+                        html += "<td>" + listbox.get(i).getQtyperbox() + "</td>";
+                        html += "<td>" + listbox.get(i).getDesctxt() + "</td>";
+                        html += "<td>" + listbox.get(i).getGrossweight() + "</td>";
+                        html += "<td>" + listbox.get(i).getNetweight() + "</td>";
+                        html += "<td>" + listbox.get(i).getCountry_origin() + "</td>";
+
+
+
+                        html += "<td>" + listbox.get(i).getStatusshoot() + "</td>";
+
+                        html += "</tr>";
+                        n++;
+                    }
+                    html += "</tbody>";
+                    html += "</table>";
+
+                    out.print(html);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else if (type.equals("updateqtyfrombarcode")) {
                 try {
                     String po = request.getParameter("posearch").trim();

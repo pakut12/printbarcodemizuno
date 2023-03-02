@@ -16,28 +16,34 @@
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-5">
             <div class="row">
-                <div class="col">
+                <div class="col-12 col-md-7">
                     <div class="card">
                         <div class="card-header">
                             ค้นหา
                         </div>
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-sm-12 col-md-4">
-                                    <div class="input-group input-group-sm mb-3">
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                         <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="po">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-5">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                        <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxstart">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                        <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxend">
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm ">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                        <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-3">
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm ">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
+                                        <input type="number" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxstart">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                        <input type="number" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxend">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-2">
                                     <button type="button" class="btn btn-outline-primary btn-sm" onclick="barcode()">ค้นหา</button>
                                 </div>
                             </div>
@@ -45,7 +51,7 @@
                     </div>
                 </div>
                 
-                <div class="col">
+                <div class="col-12 col-md-5">
                     <div class="card">
                         <div class="card-header">
                             เลือก Stkcker
@@ -105,9 +111,10 @@
         </footer>
         <script>
             function barcode(){
+                var firstdigit = $("#firstdigit").val();
                 var po = $("#po").val();
-                var boxstart = $("#boxstart").val();
-                var boxend = $("#boxend").val();
+                var boxstart = firstdigit + $("#boxstart").val();
+                var boxend = firstdigit + $("#boxend").val();
                 
                 $.ajax({
                     type:'post',
@@ -132,9 +139,10 @@
             
             $(document).ready(function () {
                 $("#printbarcode").click(function(){
+                    var firstdigit = $("#firstdigit").val();
                     var po = $("#po").val();
-                    var start = $("#boxstart").val();
-                    var end = $("#boxend").val();
+                    var start = firstdigit + $("#boxstart").val();
+                    var end = firstdigit + $("#boxend").val();
                           
                     var style_box1 = $("#style_box1").is(":checked");
                     var style_box2 = $("#style_box2").is(":checked");

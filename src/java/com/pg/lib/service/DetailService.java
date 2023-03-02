@@ -25,6 +25,50 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
+    private  String SqlUpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date,String pobefore) {
+
+        int boxstart = Integer.parseInt(start.substring(1));
+        int boxend = Integer.parseInt(end.substring(1));
+        String letter = end.substring(0, 1);
+
+        String sql = "UPDATE MIZUNONEWBARBOXRESULT SET PO = '" + po + "',DATE_MODIFY =TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS') WHERE  po = '" + pobefore + "' and boxno in (";
+
+        for (int n = boxstart; n < boxend + 1; n++) {
+            String num = letter + String.valueOf(n);
+            if (n < boxend) {
+                sql += "'" + num + "',";
+            } else {
+                sql += "'" + num + "')";
+            }
+        }
+
+        return sql;
+    }
+
+    public Boolean UpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date,String pobefore) throws SQLException {
+
+        Boolean status = false;
+
+        try {
+            String sql = SqlUpdateMIZUNONEWBARBOXRESULT(po, start, end,date,pobefore);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return status;
+    }
+
     public int LastBoxBOXResult(String PO) throws SQLException {
 
         int lastbox = 0;
@@ -123,10 +167,10 @@ public class DetailService {
         return listdetail;
     }
 
-    public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) throws SQLException {
+    public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id) throws SQLException {
         Boolean status = false;
         try {
-            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end);
+            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end, customer1_id, customer2_id, customer3_id, customer4_id);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -146,14 +190,18 @@ public class DetailService {
         return status;
     }
 
-    private String SqlAddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) {
+    private String SqlAddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id) {
         String sql = "INSERT ALL ";
         try {
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,DATE_CREATE) VALUES (";
+                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,DATE_CREATE,SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4) VALUES (";
                 sql += "'" + PO + "',";
                 sql += "'" + initial + n + "',";
-                sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'))";
+                sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'),";
+                sql += "'" + customer1_id[0] + "',";
+                sql += "'" + customer2_id[0] + "',";
+                sql += "'" + customer3_id[0] + "',";
+                sql += "'" + customer4_id[0] + "')";
             }
             sql += " SELECT * FROM dual";
 
@@ -212,6 +260,13 @@ public class DetailService {
         }
         sql += " order by CAST(substr(boxno,2) as int)";
         return sql;
+    }
+
+    public String ChackNull(String txt) {
+        if (txt == null) {
+            txt = "";
+        }
+        return txt;
     }
 
     public List<BCDetailBox> GetDetailBoxForPrint(String po, String start, String end) throws SQLException {
