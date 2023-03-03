@@ -127,7 +127,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">PO เดิม</span>
-                                            <input type="text" class="form-control text-center" name="pobefore" id="pobefore" disabled >
+                                            <input type="text" class="form-control text-center" name="pobefore" id="pobefore"  >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
@@ -189,6 +189,7 @@
                                             <input type="text" class="form-control form-control-sm text-center" id="customer4_id" >
                                         </div>
                                     </div>
+                                    
                                     <div class="col">
                                         <div class="row">
                                             <div class="text-center fw-bold">รหัสบาร์โค้ด</div>
@@ -258,6 +259,7 @@
                                             <input type="text" class="form-control form-control-sm text-center"  id="customer4_number" >
                                         </div>
                                     </div>
+                                    
                                 </div>
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 text-center">
@@ -275,7 +277,7 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
-           
+       
             function chack_customer1(customer_id){
                 $.ajax({
                     type:'post',
@@ -582,7 +584,6 @@
                     },
                     success:function(msg){
                         if(msg){  
-                         
                             var js = JSON.parse(msg);
                             if(js.shipto == "MUS"){
                                 $("#customer").empty();
@@ -612,7 +613,7 @@
                             $("#numberbox_end").val(js.endbox);
                             $("#quantitytotal_box").val(js.allbox);
                         
-                            $("#pobefore").val(js.po);
+                            $("#pobefore").val(js.po_old);
                             $("#description").val(js.desctxt);
                             $("#gw").val(js.grossweight);
                             $("#nw").val(js.netweight);
@@ -648,7 +649,7 @@
                             $("#date_create").val(js.date_create);
                             
                             $("#myform :input").attr("disabled", false);
-                            $("#pobefore").attr("disabled", true);
+                            // $("#pobefore").attr("disabled", true);
                             $("#date_create").attr("disabled", true);
                         }else{
                             Swal.fire({

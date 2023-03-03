@@ -26,6 +26,10 @@
         <servlet-class>com.sun.ws.rest.impl.container.servlet.ServletAdaptor</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
+    <servlet>
+        <servlet-name>Report</servlet-name>
+        <servlet-class>com.pg.lib.Servlet.Report</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Chklogin</servlet-name>
         <url-pattern>/Chklogin</url-pattern>
@@ -49,6 +53,10 @@
     <servlet-mapping>
         <servlet-name>ServletAdaptor</servlet-name>
         <url-pattern>/resources/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Report</servlet-name>
+        <url-pattern>/Report</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

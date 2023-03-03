@@ -358,18 +358,70 @@
                 var customer3_barcode = $("#customer3_barcode").val();
                 var customer4_barcode = $("#customer4_barcode").val();
                 
-                if(barcode == customer1_barcode){
-                    var num = parseInt($("#customer1_number").val())+1;
-                    $("#customer1_number").val(num);
-                }else if(barcode == customer2_barcode){
-                    var num = parseInt($("#customer2_number").val())+1;
-                    $("#customer2_number").val(num);
-                }else if(barcode == customer3_barcode){
-                    var num = parseInt($("#customer3_number").val())+1;
-                    $("#customer3_number").val(num);
-                }else if(barcode == customer4_barcode){
-                    var num = parseInt($("#customer4_number").val())+1;
-                    $("#customer4_number").val(num);
+                var customer1_number =  $("#customer1_number").val();
+                var customer2_number =  $("#customer2_number").val();
+                var customer3_number =  $("#customer3_number").val();
+                var customer4_number =  $("#customer4_number").val();
+        
+                if(!customer1_number){
+                    customer1_number = 0
+                }
+                if(!customer2_number){
+                    customer2_number = 0
+                }
+                if(!customer3_number){
+                    customer3_number = 0
+                }
+                if(!customer4_number){
+                    customer4_number = 0
+                }
+        
+                if(barcode === customer1_barcode && customer1_barcode){
+                    var num = parseInt(customer1_number)+1;
+                    if(num <= $("#customer1_qty").val()){
+                        $("#customer1_number").val(num);
+                    }else{
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
+                        })
+                    }
+                    
+                }else if(barcode === customer2_barcode && customer2_barcode){
+                    var num = parseInt(customer2_number)+1;
+                    if(num <= $("#customer2_qty").val()){
+                        $("#customer2_number").val(num);
+                    }else{
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
+                        })
+                    }
+                }else if(barcode === customer3_barcode && customer3_barcode){
+                    var num = parseInt(customer3_number)+1;
+                    if(num <= $("#customer3_qty").val()){
+                        $("#customer3_number").val(num);
+                    }else{
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
+                        })
+                    }
+                }else if(barcode === customer4_barcode && customer4_barcode){
+                    var num = parseInt(customer4_number)+1;
+                    if(num <= $("#customer4_qty").val()){
+                        $("#customer4_number").val(num);
+                    }else{
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
+                        })
+                    }
+                    
                 }
             }
             
@@ -396,18 +448,7 @@
                             var qty_result3 = js.qty_result3   
                             var qty_result4 = js.qty_result4   
                             
-                            if(!qty_result1){
-                                qty_result1 = 0
-                            }
-                            if(!qty_result2){
-                                qty_result2 = 0
-                            }
-                            if(!qty_result3){
-                                qty_result3 = 0
-                            }
-                            if(!qty_result4){
-                                qty_result4 = 0
-                            }
+                            
                             
                             $("#customer_num").empty();
                             $("#customer_num").append("<option value='"+js.shipto+"'>"+js.shipto+"</option>");
@@ -430,7 +471,6 @@
                             $("#customer1_size").val(js.sizeno1);
                             $("#customer1_qty").val(js.qty1);
                             $("#customer1_number").val(qty_result1);
-
                             $("#customer2_id").val(js.sku_item2);
                             $("#customer2_barcode").val(js.upc_code2);
                             $("#customer2_color").val(js.colorno2);
@@ -467,6 +507,7 @@
                             })
                             clearinput()
                         }
+                       
                     }
                 })
             }

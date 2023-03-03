@@ -25,7 +25,7 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    private  String SqlUpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date,String pobefore) {
+    private String SqlUpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date, String pobefore) {
 
         int boxstart = Integer.parseInt(start.substring(1));
         int boxend = Integer.parseInt(end.substring(1));
@@ -45,12 +45,12 @@ public class DetailService {
         return sql;
     }
 
-    public Boolean UpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date,String pobefore) throws SQLException {
+    public Boolean UpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date, String pobefore) throws SQLException {
 
         Boolean status = false;
 
         try {
-            String sql = SqlUpdateMIZUNONEWBARBOXRESULT(po, start, end,date,pobefore);
+            String sql = SqlUpdateMIZUNONEWBARBOXRESULT(po, start, end, date, pobefore);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             if (ps.executeUpdate() > 0) {
@@ -167,10 +167,10 @@ public class DetailService {
         return listdetail;
     }
 
-    public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id) throws SQLException {
+    public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) throws SQLException {
         Boolean status = false;
         try {
-            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end, customer1_id, customer2_id, customer3_id, customer4_id);
+            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -190,18 +190,15 @@ public class DetailService {
         return status;
     }
 
-    private String SqlAddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id) {
+    private String SqlAddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) {
         String sql = "INSERT ALL ";
         try {
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,DATE_CREATE,SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4) VALUES (";
+                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,DATE_CREATE) VALUES (";
                 sql += "'" + PO + "',";
                 sql += "'" + initial + n + "',";
-                sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'),";
-                sql += "'" + customer1_id[0] + "',";
-                sql += "'" + customer2_id[0] + "',";
-                sql += "'" + customer3_id[0] + "',";
-                sql += "'" + customer4_id[0] + "')";
+                sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'))";
+
             }
             sql += " SELECT * FROM dual";
 
@@ -432,6 +429,7 @@ public class DetailService {
                     "PROD_ORDER = ?," +
                     "PALLET = ?," +
                     "DESTINATION = ?," +
+                    "PO_OLD = ?," +
                     "DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS')" +
                     "WHERE PO = ? AND BOXNO = ?";
 
@@ -479,10 +477,11 @@ public class DetailService {
             ps.setString(40, prodorder);
             ps.setString(41, pallet);
             ps.setString(42, destination);
-            ps.setString(43, date);
+            ps.setString(43, pobefore);
+            ps.setString(44, date);
 
-            ps.setString(44, pobefore);
-            ps.setString(45, boxnobefore);
+            ps.setString(45, pobefore);
+            ps.setString(46, boxnobefore);
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {
@@ -567,7 +566,11 @@ public class DetailService {
 
                 box.setDate_create(rs.getString("date_create"));
                 box.setDate_modify(rs.getString("date_modify"));
+
+                box.setPo_old(rs.getString("po_old"));
+
                 listdetail.add(box);
+
             }
 
         } catch (Exception e) {
@@ -684,7 +687,7 @@ public class DetailService {
         Boolean status = false;
 
         try {
-            String sql = "update MIZUNONEWBARBOXHD set allbox =  ?,FIRSTDIGIT = ?,SHIPFROM = ?,SHIPTO = ?,QTYPERBOX  = ?,DESCTXT  = ?,GROSSWEIGHT  = ?,NETWEIGHT  = ?,COUNTRY_ORIGIN  = ?,SKU_ITEM1  = ?,UPC_CODE1  = ?,COLORNO1  = ?,SIZENO1  = ?,QTY1  = ?,SKU_ITEM2  = ?,UPC_CODE2  = ?,COLORNO2  = ?,SIZENO2  = ?,QTY2  = ?,SKU_ITEM3  = ?,UPC_CODE3  = ?,COLORNO3  = ?,SIZENO3  = ?,QTY3  = ?,SKU_ITEM4  = ?,UPC_CODE4  = ?,COLORNO4  = ?,SIZENO4  = ?,QTY4  = ?,PO = ? ,STARTBOX = ? ,ENDBOX = ? ,pallet = ? ,prod_order = ?,destination = ?,DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
+            String sql = "update MIZUNONEWBARBOXHD set allbox =  ?,FIRSTDIGIT = ?,SHIPFROM = ?,SHIPTO = ?,QTYPERBOX  = ?,DESCTXT  = ?,GROSSWEIGHT  = ?,NETWEIGHT  = ?,COUNTRY_ORIGIN  = ?,SKU_ITEM1  = ?,UPC_CODE1  = ?,COLORNO1  = ?,SIZENO1  = ?,QTY1  = ?,SKU_ITEM2  = ?,UPC_CODE2  = ?,COLORNO2  = ?,SIZENO2  = ?,QTY2  = ?,SKU_ITEM3  = ?,UPC_CODE3  = ?,COLORNO3  = ?,SIZENO3  = ?,QTY3  = ?,SKU_ITEM4  = ?,UPC_CODE4  = ?,COLORNO4  = ?,SIZENO4  = ?,QTY4  = ?,PO = ? ,STARTBOX = ? ,ENDBOX = ? ,pallet = ? ,prod_order = ?,destination = ?,DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),po_old =? WHERE PO = ? AND STARTBOX = ? AND ENDBOX = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, allbox);
@@ -723,10 +726,12 @@ public class DetailService {
             ps.setString(34, prodorder);
             ps.setString(35, destination);
             ps.setString(36, date);
-
             ps.setString(37, pobefore);
-            ps.setString(38, startboxbefore);
-            ps.setString(39, endboxbefore);
+
+
+            ps.setString(38, pobefore);
+            ps.setString(39, startboxbefore);
+            ps.setString(40, endboxbefore);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -804,6 +809,7 @@ public class DetailService {
                 box.setDate_create(rs.getString("date_create"));
                 box.setDate_modify(rs.getString("date_modify"));
 
+                box.setPo_old(rs.getString("po_old"));
                 listdetail.add(box);
             }
 
@@ -846,11 +852,11 @@ public class DetailService {
         return listaddress;
     }
 
-    private String SqlAddDataToMIZUNONEWBARBOXDT(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date) {
+    private String SqlAddDataToMIZUNONEWBARBOXDT(String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date) {
         String sql = "INSERT ALL ";
         try {
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXDT (PO,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,DATE_CREATE) VALUES (";
+                sql += " INTO MIZUNONEWBARBOXDT (PO,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE) VALUES (";
                 sql += "'" + po + "',";
                 sql += "'" + initial + n + "',";
                 sql += "'" + initial + quantitytotal_box + "',";
@@ -893,6 +899,7 @@ public class DetailService {
                 sql += "'" + prodorder + "',";
                 sql += "'N',";
                 sql += "'" + destination + "',";
+                sql += "'" + pobefore + "',";
                 sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'))";
             }
             sql += " SELECT * FROM dual";
@@ -903,11 +910,11 @@ public class DetailService {
         return sql;
     }
 
-    public Boolean AddDataToMIZUNONEWBARBOXDT(String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date) throws SQLException {
+    public Boolean AddDataToMIZUNONEWBARBOXDT(String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date) throws SQLException {
         Boolean status = false;
 
         try {
-            String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+            String sql = SqlAddDataToMIZUNONEWBARBOXDT(pobefore, customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);

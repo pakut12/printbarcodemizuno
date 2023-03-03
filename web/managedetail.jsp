@@ -381,7 +381,7 @@
             }
             
             function updatedata(){
-                var pobefore = $("#pobefore").val();
+                var pobefore = $("#posearch").val();
                 var startboxbefore  = $("#firstdigit").val()+$("#numstart").val();
              
                 var boxno = $("#boxno").val();
@@ -645,7 +645,7 @@
                           
                             $("#quantitytotal_box").val(js.allbox);
                         
-                            $("#pobefore").val(js.po);
+                           // $("#pobefore").val(js.po_old);
                             $("#description").val(js.desctxt);
                             $("#gw").val(js.grossweight);
                             $("#nw").val(js.netweight);

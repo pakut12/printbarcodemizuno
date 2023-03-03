@@ -59,6 +59,15 @@ public class BCDetailBox {
     private String qty_result4;
     private String date_create;
     private String date_modify;
+    private String po_old;
+
+    public String getPo_old() {
+        return po_old;
+    }
+
+    public void setPo_old(String po_old) {
+        this.po_old = po_old;
+    }
 
     public String getDate_create() {
         return date_create;

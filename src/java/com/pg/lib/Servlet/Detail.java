@@ -60,9 +60,9 @@ public class Detail extends HttpServlet {
                 String date = request.getParameter("date").trim();
 
                 DetailService ds = new DetailService();
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT("", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                 Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
-                Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end, customer1_id, customer2_id, customer3_id, customer4_id);
+                Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end);
 
 
                 JSONObject obj = new JSONObject();
@@ -86,6 +86,7 @@ public class Detail extends HttpServlet {
                 List<BCDetailBox> detailbox = ds.GetDetailBoxAll(posearch, numstart, numend, firstdigit);
 
                 JSONObject obj = new JSONObject();
+                obj.put("po_old", detailbox.get(0).getPo_old());
                 obj.put("po", detailbox.get(0).getPo());
                 obj.put("startbox", detailbox.get(0).getStartbox());
                 obj.put("endbox", detailbox.get(0).getEndbox());
@@ -187,13 +188,13 @@ public class Detail extends HttpServlet {
 
                 Boolean statusupdate = ds.UpdateDetailBoxAll(pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date);
                 Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(pobefore, shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
                 Boolean statusresult = true;
 
                 if (ds.LastBoxBOXResult(pobefore) < Integer.parseInt(endbox)) {
-                    statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, firstdigit, date, String.valueOf(ds.LastBoxBOXResult(po) + 1), endbox, listinput1, listinput2, listinput3, listinput4);
+                    statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, firstdigit, date, String.valueOf(ds.LastBoxBOXResult(po) + 1), endbox);
                 } else {
-                    statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(po, firstdigit + startbox, firstdigit + endbox,date, pobefore);
+                    statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(po, firstdigit + startbox, firstdigit + endbox, date, pobefore);
                 }
 
                 JSONObject obj = new JSONObject();
@@ -238,6 +239,7 @@ public class Detail extends HttpServlet {
 
                 JSONObject obj = new JSONObject();
                 obj.put("po", detailbox.get(0).getPo());
+                obj.put("po_old", detailbox.get(0).getPo_old());
                 obj.put("shipfrom", detailbox.get(0).getShipfrom());
                 obj.put("shipto", detailbox.get(0).getShipto());
                 obj.put("qtyperbox", detailbox.get(0).getQtyperbox());
@@ -343,6 +345,9 @@ public class Detail extends HttpServlet {
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
+
+
+
                     Boolean status = ds.UpdateDetailBox(BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
                     if (status) {
                         obj.put("status", "true");
