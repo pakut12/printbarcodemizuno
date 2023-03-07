@@ -4,6 +4,7 @@
  */
 package com.pg.lib.Servlet;
 
+import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.model.BCReportDetailsProduct;
 import com.pg.lib.service.ReportService;
 import java.io.*;
@@ -41,12 +42,12 @@ public class Report extends HttpServlet {
                 String end = request.getParameter("end");
                 String firstdigit = request.getParameter("firstdigit");
 
-              
                 ReportService rs = new ReportService();
-                List<BCReportDetailsProduct> list = rs.listreportproductdetails(customer_no, customer_product, pallet, start, end, firstdigit);
-                out.print(list.size());
-          
-
+                List<BCDetailBox> list = rs.listreportproductdetails(customer_no, customer_product, pallet, start, end, firstdigit);
+               
+                request.setAttribute("listproduct", list);
+                
+                getServletContext().getRequestDispatcher("/report/reportproduct.jsp").forward(request, response);
 
             }
 

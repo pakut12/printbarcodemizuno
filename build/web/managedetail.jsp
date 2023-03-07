@@ -383,7 +383,7 @@
             function updatedata(){
                 var pobefore = $("#posearch").val();
                 var startboxbefore  = $("#firstdigit").val()+$("#numstart").val();
-             
+                var po_old = $("#pobefore").val();
                 var boxno = $("#boxno").val();
                
                 var shipto = $("#customer").val();
@@ -447,6 +447,10 @@
                     num4=0;
                 }
                 
+                if(po != pobefore ){
+                    po_old = pobefore
+                }
+                
                 var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
         
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
@@ -489,7 +493,8 @@
                             pallet:pallet,
                             prodorder:prodorder,
                             destination:destination,
-                            date:date
+                            date:date,
+                            po_old:po_old
                         },
                         success:function(msg){
                            
@@ -644,8 +649,9 @@
                             $("#boxall").val(js.boxall);
                           
                             $("#quantitytotal_box").val(js.allbox);
-                        
-                           // $("#pobefore").val(js.po_old);
+                            
+                            $("#po").val(js.po);
+                            $("#pobefore").val(js.po_old);
                             $("#description").val(js.desctxt);
                             $("#gw").val(js.grossweight);
                             $("#nw").val(js.netweight);

@@ -22,61 +22,59 @@
                             ค้นหา
                         </div>
                         <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-12 col-md-4 mt-3 mt-md-0">
-                                    <div class="input-group input-group-sm ">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
-                                        <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="customer_product">
+                            <form action="Report" method="post">
+                                <input type="hidden" value="getreportproductdetails" id="type" name="type">
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4 mt-3 mt-md-0">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
+                                            <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4  mt-3 mt-md-0">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
+                                            <input type="text" class="form-control text-center"  name="customer_no" id="customer_no" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4  mt-3 mt-md-0">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
+                                            <input type="text" class="form-control text-center"  name="pallet" id="pallet">
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4  mt-3 mt-md-0">
-                                    <div class="input-group input-group-sm ">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
-                                        <input type="text" class="form-control text-center" id="customer_no">
+                                <div class="row mt-3">
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                            <input type="text" class="form-control text-center" name="firstdigit" id="firstdigit" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์กล่อง</span>
+                                            <input type="number" class="form-control text-center" name="start" id="start" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                            <input type="number" class="form-control text-center" name="end" id="end" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
+                                            <button type="submit" class="btn btn-outline-primary btn-sm ">ค้นหา</button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ยกเลิกข้อมูล</button>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4  mt-3 mt-md-0">
-                                    <div class="input-group input-group-sm ">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
-                                        <input type="text" class="form-control text-center" id="pallet">
-                                    </div>
-                                </div>
-                                
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm  mt-3 mt-md-0">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="firstdigit" >
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm  mt-3 mt-md-0">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์กล่อง</span>
-                                        <input type="number" class="form-control text-center" id="start" >
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm  mt-3 mt-md-0">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                        <input type="number" class="form-control text-center" id="end" >
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
-                                        <button type="button" class="btn btn-outline-primary btn-sm " onclick="getdate()">ค้นหา</button>
-                                        <button type="button" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ยกเลิกข้อมูล</button>
-                                    </div>
-                                </div>
-                            </div>
-                            
+                            </form>
                         </div>
                     </div>
                 </div>
-                
-                
             </div>
-            
             <div class="card shadow-lg mt-3">
                 <div class="card-header">เเสดงข้อมูล</div>
                 <div class="card-body">

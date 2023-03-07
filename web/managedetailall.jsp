@@ -392,7 +392,7 @@
                 var pobefore = $("#posearch").val();
                 var startboxbefore  = $("#numstart").val();
                 var endboxbefore =  $("#numend").val();
-        
+                var po_old = $("#pobefore").val();
         
                 var shipto = $("#customer").val();
                 var qtyperbox  = $("#quantity_box").val();
@@ -432,10 +432,8 @@
                 var qty4  = $("#customer4_number").val();
                 var destination  = $("#destination").val();
                
-                if(po){
-                    po =  $("#po").val();
-                }else{
-                    po =  $("#posearch").val();
+                if(po != pobefore ){
+                    po_old = pobefore
                 }
                 var date = new Date().format('d-m-Y H:i:s');
                 var pallet = $("#pallet").val();
@@ -502,7 +500,8 @@
                             pallet:pallet,
                             prodorder:prodorder,
                             destination:destination,
-                            date:date
+                            date:date,
+                            po_old:po_old
                         },
                         success:function(msg){
                             console.log(msg)
@@ -585,6 +584,7 @@
                     success:function(msg){
                         if(msg){  
                             var js = JSON.parse(msg);
+                      
                             if(js.shipto == "MUS"){
                                 $("#customer").empty();
                                 $("#customer").append("<option value='MUS'>MUS</option><option value='MCA'>MCA</option><option value='MCL'>MCL</option>");
@@ -612,7 +612,8 @@
                             $("#numberbox_start").val(js.startbox);
                             $("#numberbox_end").val(js.endbox);
                             $("#quantitytotal_box").val(js.allbox);
-                        
+                            
+                            $("#po").val(js.po);
                             $("#pobefore").val(js.po_old);
                             $("#description").val(js.desctxt);
                             $("#gw").val(js.grossweight);
@@ -643,13 +644,12 @@
                             $("#customer4_size").val(js.sizeno4);
                             $("#customer4_number").val(js.qty4);
                             
-            
                             $("#prodorder").val(js.prodorder);
                             $("#pallet").val(js.pallet);
                             $("#date_create").val(js.date_create);
-                            
+                           
                             $("#myform :input").attr("disabled", false);
-                            // $("#pobefore").attr("disabled", true);
+                            $("#pobefore").attr("disabled", true);
                             $("#date_create").attr("disabled", true);
                         }else{
                             Swal.fire({
@@ -660,8 +660,7 @@
                             clearinput()
                         }
                     }
-                })
-                
+                }) 
             }
               
             function deletedata(){
@@ -710,13 +709,11 @@
                         })
                     }
                 })
-               
             }
             
             $(document).ready(function () {
                 $("#bt_search").click(function(){
                     searchpo()
-                  
                 });
                 $("#customer1_id").on('input', function() {
                     chack_customer1($(this).val())
@@ -730,8 +727,6 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
-              
-                
                 $("#myform :input").attr("disabled", true);
             });
         </script>
