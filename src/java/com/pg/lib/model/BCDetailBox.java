@@ -60,7 +60,25 @@ public class BCDetailBox {
     private String date_create;
     private String date_modify;
     private String po_old;
+    private String customer_no;
+    private String customer_product;
 
+    public String getCustomer_no() {
+        return customer_no;
+    }
+
+    public void setCustomer_no(String customer_no) {
+        this.customer_no = customer_no;
+    }
+
+    public String getCustomer_product() {
+        return customer_product;
+    }
+
+    public void setCustomer_product(String customer_product) {
+        this.customer_product = customer_product;
+    }
+    
     public String getPo_old() {
         return po_old;
     }

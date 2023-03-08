@@ -24,15 +24,15 @@ public class ReportService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    private String sqllistreportproductdetails(String customer_no, String customer_product, String pallet, String start, String end, String firstdigit) {
+    private String sqllistreportproductdetails(String po, String customer_no, String customer_product, String pallet, String start, String end, String firstdigit) {
         String sql = "";
         try {
             if (firstdigit.equals("") || start.equals("") || end.equals("")) {
-                sql = "select c.DATE_MODIFY,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
-                      "where a.PALLET LIKE '%" + pallet + "' and b.customer_no LIKE '%" + customer_no + "' and b.customer_product LIKE '%" + customer_product + "'";
+                sql = "select b.CUSTOMER_PRODUCT,a.PALLET,c.DATE_MODIFY,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                        "where a.PO = '" + po + "' and a.PALLET LIKE '%" + pallet + "' and b.customer_no LIKE '%" + customer_no + "' and b.customer_product LIKE '%" + customer_product + "'";
             } else {
-                sql = "select c.DATE_MODIFY,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
-                        "where a.PALLET LIKE '%" + pallet + "' and b.customer_no LIKE '%" + customer_no + "' and b.customer_product LIKE '%" + customer_product + "' and a.boxno in (";
+                sql = "select b.CUSTOMER_PRODUCT,a.PALLET,c.DATE_MODIFY,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                        "where a.PO = '" + po + "' and a.PALLET LIKE '%" + pallet + "' and b.customer_no LIKE '%" + customer_no + "' and b.customer_product LIKE '%" + customer_product + "' and a.boxno in (";
                 for (int n = Integer.parseInt(start); n < Integer.parseInt(end) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
                     if (n < Integer.parseInt(end)) {
@@ -42,18 +42,18 @@ public class ReportService {
                     }
                 }
             }
-           sql += " order by CAST(substr(boxno,2) as int)";
+            sql += " order by lpad( a.BOXNO,1),CAST(substr(boxno,2) as int)";
         } catch (Exception e) {
             e.printStackTrace();
         }
         return sql;
     }
 
-    public List<BCDetailBox> listreportproductdetails(String customer_no, String customer_product, String pallet, String start, String end, String firstdigit) throws SQLException {
+    public List<BCDetailBox> listreportproductdetails(String po,String customer_no, String customer_product, String pallet, String start, String end, String firstdigit) throws SQLException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = sqllistreportproductdetails(customer_no, customer_product, pallet, start, end, firstdigit);
+            String sql = sqllistreportproductdetails(po,customer_no, customer_product, pallet, start, end, firstdigit);
             System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -72,8 +72,8 @@ public class ReportService {
                 report.setSku_item2(rs.getString("sku_item2"));
                 report.setSku_item3(rs.getString("sku_item3"));
                 report.setSku_item4(rs.getString("sku_item4"));
+                report.setCustomer_product(rs.getString("customer_product"));
                 list.add(report);
-
             }
 
         } catch (Exception e) {

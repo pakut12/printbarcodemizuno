@@ -392,6 +392,7 @@
                 var pobefore = $("#posearch").val();
                 var startboxbefore  = $("#numstart").val();
                 var endboxbefore =  $("#numend").val();
+                var firstdigitbefore = $("#firstdigit").val();
                 var po_old = $("#pobefore").val();
         
                 var shipto = $("#customer").val();
@@ -501,7 +502,8 @@
                             prodorder:prodorder,
                             destination:destination,
                             date:date,
-                            po_old:po_old
+                            po_old:po_old,
+                            firstdigitbefore:firstdigitbefore
                         },
                         success:function(msg){
                             console.log(msg)
