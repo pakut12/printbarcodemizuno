@@ -76,7 +76,7 @@ public class Report extends HttpServlet {
                 html += " <b>พาเลท :</b> " + pallet;
                 html += " </div>";
                 html += "</div>";
-                html += "<table class='table table-hover' id='tablereport'>";
+                html += "<table class='table table-hover table-bordered' id='tablereport'>";
                 html += "<thead>";
                 html += "<tr>";
                 html += "<th scope='col'>วันที่</th>";
