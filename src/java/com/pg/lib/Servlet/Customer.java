@@ -4,18 +4,21 @@
  */
 package com.pg.lib.Servlet;
 
+import com.google.gson.Gson;
 import com.pg.lib.model.BCCustomer;
 import com.pg.lib.service.CustomerService;
 import java.io.*;
 import java.net.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -148,19 +151,61 @@ public class Customer extends HttpServlet {
                 out.print(obj);
 
             } else if (type.equals("chack_customer")) {
-                String customer_id = request.getParameter("customer_id").trim();
-                CustomerService cs = new CustomerService();
-                List<BCCustomer> list = cs.ChackDetailCustomerAll(customer_id);
-                JSONObject obj = new JSONObject();
-                obj.put("customer_id", list.get(0).getCustomer_id());
-                obj.put("customer_no", list.get(0).getCustomer_no());
-                obj.put("customer_barcode", list.get(0).getCustomer_barcode());
-                obj.put("customer_color", list.get(0).getCustomer_color());
-                obj.put("customer_size", list.get(0).getCustomer_size());
-                obj.put("customer_quantity", list.get(0).getCustomer_quantity());
-                obj.put("customer_product", list.get(0).getCustomer_product());
-                obj.put("customer_description", list.get(0).getCustomer_description());
-                out.print(obj);
+                try {
+                    String customer_id = request.getParameter("customer_id").trim();
+                    CustomerService cs = new CustomerService();
+                    List<BCCustomer> list = cs.ChackDetailCustomerAll(customer_id);
+                    JSONObject obj = new JSONObject();
+                    obj.put("customer_id", list.get(0).getCustomer_id());
+                    obj.put("customer_no", list.get(0).getCustomer_no());
+                    obj.put("customer_barcode", list.get(0).getCustomer_barcode());
+                    obj.put("customer_color", list.get(0).getCustomer_color());
+                    obj.put("customer_size", list.get(0).getCustomer_size());
+                    obj.put("customer_quantity", list.get(0).getCustomer_quantity());
+                    obj.put("customer_product", list.get(0).getCustomer_product());
+                    obj.put("customer_description", list.get(0).getCustomer_description());
+                    out.print(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else if (type.equals("test")) {
+                try {
+                    int draw = Integer.parseInt(request.getParameter("draw"));
+                    int start = Integer.parseInt(request.getParameter("start"));
+                    int length = Integer.parseInt(request.getParameter("length"));
+                    String searchValue = request.getParameter("search[value]");
+                    String orderColumn = request.getParameter("order[0][column]");
+                    String orderDir = request.getParameter("order[0][dir]");
+
+
+                    System.out.println("draw :" + draw);
+                    System.out.println("start :" + start);
+                    System.out.println("length :" + length);
+                    System.out.println("searchValue :" + searchValue);
+                    System.out.println("orderColumn :" + orderColumn);
+                    System.out.println("orderDir :" + orderDir);
+                    System.out.println("-----------------------------------------------------------------------------------");
+
+                    CustomerService cs = new CustomerService();
+                    List<BCCustomer> rows = cs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir);
+
+
+                    Gson gson = new Gson();
+
+                    JSONObject obj = new JSONObject();
+                    obj.put("draw", draw);
+                    obj.put("recordsTotal", cs.getTotalRecords());
+                    obj.put("recordsFiltered", cs.getFilteredRecords(searchValue));
+                    obj.put("data", gson.toJsonTree(rows));
+
+                    response.setContentType("application/json");
+                    response.getWriter().write(obj.toString());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
 
         } finally {

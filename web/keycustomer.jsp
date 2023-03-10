@@ -146,6 +146,25 @@
                         <div class="card-body">
                             <div id="table_customer">
                                 
+                                <table class='table table-striped table-sm w-100' id='mytable'>
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>√À— ≈Ÿ°§È“</th>
+                                            <th>√À— ∫“√Ï‚§È¥</th>
+                                            <th>Color</th>
+                                            <th>Size</th>
+                                            <th>√À—  ‘π§È“</th>
+                                            <th>Description</th>
+                                            <th>Description</th>
+                                            <th>Description</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    
+                                    
+                                </table>
+                                
                             </div>
                         </div>
                     </div>
@@ -157,8 +176,6 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
-            
-           
             
             function edit_customer(id){
                 $.ajax({
@@ -332,20 +349,54 @@
             }
             
             function gettable(){
-                $.ajax({
-                    type:'post',
-                    url:'Customer',
-                    data:{
-                        type:"GetTableCustomer"
+                $("#mytable").DataTable({
+                    serverSide: true,
+                    ajax: {
+                        type:"post",
+                        url:"Customer",
+                        data:{
+                            type:"test" 
+                        },
+                        dataSrc:function(json){
+                            var arr = [];
+                            var data = JSON.parse(json.data);
+                            
+                            $.each(data,function(k,v){
+                                var result = {
+                                    customer_id : v.customer_id,
+                                    customer_no :  v.customer_no,
+                                    customer_barcode :  v.customer_barcode,
+                                    customer_color :  v.customer_color,
+                                    customer_size :  v.customer_size,
+                                    customer_description :  v.customer_description,
+                                    customer_product :  v.customer_product,
+                                    btn_edit : '<button class="btn btn-warning btn-sm" type="button" onclick="edit_customer('+v.customer_id+')" id="bt_edit">‡‡°È‰¢</button>',
+                                    btn_del : '<button class="btn btn-danger btn-sm" type="button" onclick="del_customer('+v.customer_id+')" id="bt_del">≈∫</button>'
+                                }
+                                arr.push(result);
+                             
+                            })
+                            console.log(arr)
+                          
+                            return arr
+                        }
                     },
-                    success:function(msg){
-                        $("#table_customer").html(msg);
-                        $("#mytable").DataTable({
-                            scrollX: true,
-                            scrollCollapse: true
-                        });
-                    }
-                })
+                    columns: [
+                        { data: 'customer_id' },
+                        { data: 'customer_no' },
+                        { data: 'customer_barcode'},
+                        { data: 'customer_color' },
+                        { data: 'customer_size' },
+                        { data: 'customer_description' },
+                        { data: 'customer_product' },
+                        { data: 'btn_edit' },
+                        { data: 'btn_del' }
+                        
+                    ],
+                    bDestroy: true
+                  
+                          
+                });
             }
     
             function senddata(){

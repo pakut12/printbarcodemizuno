@@ -13,13 +13,13 @@
         <%@ include file="share/header.jsp" %>
     </head>
     <body>
-       
+        
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-5">
             <div class="card shadow-lg">
                 <div class="card-header">คู่มือโปรเเกรม</div>
                 <div class="card-body">
-                   
+                    
                 </div>
             </div>
         </div>
@@ -27,9 +27,7 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
-            $(document).ready(function () {
-                //alert('asd');
-            });
+           
         </script>
     </body>
 </html>

@@ -194,9 +194,13 @@ public class DetailService {
         String sql = "INSERT ALL ";
         try {
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,DATE_CREATE) VALUES (";
+                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,qty_result1,qty_result2,qty_result3,qty_result4,DATE_CREATE) VALUES (";
                 sql += "'" + PO + "',";
                 sql += "'" + initial + n + "',";
+                sql += "'0',";
+                sql += "'0',";
+                sql += "'0',";
+                sql += "'0',";
                 sql += "TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS'))";
 
             }

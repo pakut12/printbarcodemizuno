@@ -138,20 +138,26 @@ public class UploadFilesService {
 
                     if (cell.getColumnIndex() == 0) {
                         customer.setCustomer_no(cell.getStringCellValue());
+                        System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 1) {
                         customer.setCustomer_color(cell.getStringCellValue());
+                        System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 2) {
                         customer.setCustomer_size(cell.getStringCellValue());
+                        System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 3) {
                         customer.setCustomer_barcode(cell.getStringCellValue());
+                        System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 4) {
                         customer.setCustomer_product(cell.getStringCellValue());
+                        System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 5) {
                         customer.setCustomer_description(cell.getStringCellValue());
+                        System.out.println(cell.getStringCellValue());
                     }
 
                 }
-
+                System.out.println("----------------------------------------------------------------------------------------------------------");
                 listorder.add(customer);
             }
             fileInputStream.close();

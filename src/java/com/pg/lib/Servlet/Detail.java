@@ -8,7 +8,6 @@ import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.service.DetailService;
 import java.io.*;
 import java.net.*;
-
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
@@ -63,7 +62,6 @@ public class Detail extends HttpServlet {
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT("", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                 Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                 Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end);
-
 
                 JSONObject obj = new JSONObject();
                 if (statusdt && statushd && statusresult) {

@@ -25,15 +25,114 @@ public class CustomerService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
+    public int getTotalRecords() throws ClassNotFoundException, SQLException, NamingException {
+        int totalRecords = 0;
+        try {
+            String sql = "SELECT COUNT(*) FROM MIZUNOCUSTOMER c where c.customer_id > 99";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                totalRecords = rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return totalRecords;
+    }
+
+    public int getFilteredRecords(String searchValue) throws ClassNotFoundException, SQLException, NamingException {
+        int filteredRecords = 0;
+        try {
+
+            String sql = "SELECT COUNT(*) FROM MIZUNOCUSTOMER c where c.customer_id > 99 and c.customer_id LIKE ? or c.customer_no LIKE ? or c.customer_barcode LIKE ? or c.customer_color LIKE ? or c.customer_size  LIKE ? or c.customer_description  LIKE ? or c.customer_product  LIKE ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + searchValue + "%");
+            ps.setString(2, "%" + searchValue + "%");
+            ps.setString(3, "%" + searchValue + "%");
+            ps.setString(4, "%" + searchValue + "%");
+            ps.setString(5, "%" + searchValue + "%");
+            ps.setString(6, "%" + searchValue + "%");
+            ps.setString(7, "%" + searchValue + "%");
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                filteredRecords = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return filteredRecords;
+    }
+
+    public List<BCCustomer> getDataFromDatabase(int start, int length, String searchValue, String orderColumn, String orderDir) throws ClassNotFoundException, SQLException, NamingException {
+        List<BCCustomer> list = new ArrayList<BCCustomer>();
+        try {
+            String sql = "SELECT * FROM";
+            sql += "(select rownum as rnum,c.* from  MIZUNOCUSTOMER  c" +
+                    " where c.customer_id > 99 and (c.customer_id LIKE ? or c.customer_no LIKE ? or c.customer_barcode LIKE ? or c.customer_color LIKE ? or c.customer_size  LIKE ? or c.customer_description  LIKE ? or c.customer_product  LIKE ?) ";
+
+            String[] columns = {"customer_id", "customer_no", "customer_barcode", "customer_color", "customer_size", "customer_description", "customer_product"};
+            if (orderColumn != null && !orderColumn.isEmpty()) {
+                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            }
+            sql += ") WHERE rnum BETWEEN ? AND ?";
+
+            System.out.println(sql);
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + searchValue + "%");
+            ps.setString(2, "%" + searchValue + "%");
+            ps.setString(3, "%" + searchValue + "%");
+            ps.setString(4, "%" + searchValue + "%");
+            ps.setString(5, "%" + searchValue + "%");
+            ps.setString(6, "%" + searchValue + "%");
+            ps.setString(7, "%" + searchValue + "%");
+            ps.setInt(8, start);
+            ps.setInt(9, length + start);
+
+            rs = ps.executeQuery();
+            DetailService ds = new DetailService();
+
+            while (rs.next()) {
+                BCCustomer cs = new BCCustomer();
+                cs.setCustomer_id(ds.ChackNull(rs.getString("customer_id")));
+                cs.setCustomer_no(ds.ChackNull(rs.getString("customer_no")));
+                cs.setCustomer_barcode(ds.ChackNull(rs.getString("customer_barcode")));
+                cs.setCustomer_color(ds.ChackNull(rs.getString("customer_color")));
+                cs.setCustomer_size(ds.ChackNull(rs.getString("customer_size")));
+                cs.setCustomer_description(ds.ChackNull(rs.getString("customer_description")));
+                cs.setCustomer_product(ds.ChackNull(rs.getString("customer_product")));
+                list.add(cs);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return list;
+    }
+
     public List<BCCustomer> ChackDetailCustomerAll(String CUSTOMER_NO) throws ClassNotFoundException, SQLException, NamingException {
 
         List<BCCustomer> list = new ArrayList<BCCustomer>();
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "select * from  MIZUNOCUSTOMER  c  where c.CUSTOMER_NO = ?";
+            String sql = "select * from  MIZUNOCUSTOMER  c where c.CUSTOMER_NO LIKE ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, CUSTOMER_NO);
+            ps.setString(1, "%" + CUSTOMER_NO);
             rs = ps.executeQuery();
             while (rs.next()) {
                 BCCustomer cs = new BCCustomer();
@@ -59,10 +158,10 @@ public class CustomerService {
         String key = "";
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "select * from  MIZUNOCUSTOMER  c  where  c.CUSTOMER_NO = ?";
+            String sql = "select * from  MIZUNOCUSTOMER  c  where c.CUSTOMER_NO LIKE ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, CUSTOMER_NO);
+            ps.setString(1, "%" + CUSTOMER_NO);
             rs = ps.executeQuery();
             while (rs.next()) {
                 key = rs.getString("CUSTOMER_ID");
@@ -101,18 +200,16 @@ public class CustomerService {
         String sql = "INSERT ALL ";
         int primarykey = getprimarykey() + 1;
         for (int n = 0; n < list.size(); n++) {
-            if (!ChackDetailCustomer(list.get(n).getCustomer_no()).equals("")) {
-                UpdateDetailCustomer(ChackDetailCustomer(list.get(n).getCustomer_no()), list.get(n).getCustomer_no(), list.get(n).getCustomer_barcode(), list.get(n).getCustomer_color(), list.get(n).getCustomer_size(), list.get(n).getCustomer_description(), list.get(n).getCustomer_product());
-            } else {
-                sql += " INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (";
-                sql += "'" + primarykey + "',";
-                sql += "'" + list.get(n).getCustomer_no() + "',";
-                sql += "'" + list.get(n).getCustomer_barcode() + "',";
-                sql += "'" + list.get(n).getCustomer_color().toUpperCase() + "',";
-                sql += "'" + list.get(n).getCustomer_size().toUpperCase() + "',";
-                sql += "'" + list.get(n).getCustomer_product().toUpperCase() + "',";
-                sql += "'" + list.get(n).getCustomer_description().toUpperCase() + "')";
-            }
+            DetailService ds = new DetailService();
+            sql += " INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (";
+            sql += "'" + primarykey + "',";
+            sql += "'" + ds.ChackNull(list.get(n).getCustomer_no()) + "',";
+            sql += "'" + ds.ChackNull(list.get(n).getCustomer_barcode()) + "',";
+            sql += "'" + ds.ChackNull(list.get(n).getCustomer_color().toUpperCase()) + "',";
+            sql += "'" + ds.ChackNull(list.get(n).getCustomer_size().toUpperCase()) + "',";
+            sql += "'" + ds.ChackNull(list.get(n).getCustomer_product().toUpperCase()) + "',";
+            sql += "'" + ds.ChackNull(list.get(n).getCustomer_description().toUpperCase().replaceAll("'", "#")) + "')";
+
             primarykey++;
         }
         sql += " SELECT * FROM dual";
@@ -220,6 +317,7 @@ public class CustomerService {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
+
                 BCCustomer customerdetail = new BCCustomer();
                 customerdetail.setCustomer_id(rs.getString("customer_id"));
                 customerdetail.setCustomer_no(rs.getString("customer_no"));
