@@ -27,7 +27,7 @@
             String po = (String) request.getAttribute("po");
 
         %>
-        <script>
+       <script>
            
             
             pdfMake.fonts = {
@@ -50,7 +50,7 @@
                     width: 590,
                     height: 390
                 },
-                pageMargins: [ 35, 74, 40,20],
+                pageMargins: [ 35, 76, 40,20],
                 header: function(currentPage, pageCount, pageSize) {
                     // you can apply any logic and return any valid pdfmake element
                             
@@ -153,38 +153,68 @@
                                                     body: [
                                                         [ 'วันที่', 'PO', 'Production Order','กล่องที่','จำนวน','หมายเหตุ' ],
                         <%
-            for (BCDetailBox li : list) {
+            int marknum = 0;
+            int n = 1;
+            int n1 = 1;
+            int sum = 0;
+            for (int i = 0; i < list.size(); i++) {
                 String mark = "";
                 String qty_result = "";
 
-                if (li.getSku_item1().equals(customer_no)) {
-                    qty_result = li.getQty_result1();
-                    if (Integer.parseInt(li.getQty_result1()) < Integer.parseInt(li.getQty1())) {
+                if (list.get(i).getSku_item1().equals(customer_no)) {
+                    qty_result = list.get(i).getQty_result1();
+                    if (Integer.parseInt(list.get(i).getQty_result1()) < Integer.parseInt(list.get(i).getQty1())) {
                         mark = "*";
                     }
-                } else if (li.getSku_item2().equals(customer_no)) {
-                    qty_result = li.getQty_result2();
-                    if (Integer.parseInt(li.getQty_result2()) < Integer.parseInt(li.getQty1())) {
+                } else if (list.get(i).getSku_item2().equals(customer_no)) {
+                    qty_result = list.get(i).getQty_result2();
+                    if (Integer.parseInt(list.get(i).getQty_result2()) < Integer.parseInt(list.get(i).getQty1())) {
                         mark = "*";
                     }
-                } else if (li.getSku_item3().equals(customer_no)) {
-                    qty_result = li.getQty_result3();
-                    if (Integer.parseInt(li.getQty_result3()) < Integer.parseInt(li.getQty1())) {
+                } else if (list.get(i).getSku_item3().equals(customer_no)) {
+                    qty_result = list.get(i).getQty_result3();
+                    if (Integer.parseInt(list.get(i).getQty_result3()) < Integer.parseInt(list.get(i).getQty1())) {
                         mark = "*";
                     }
-                } else if (li.getSku_item4().equals(customer_no)) {
-                    qty_result = li.getQty_result4();
-                    if (Integer.parseInt(li.getQty_result4()) < Integer.parseInt(li.getQty1())) {
+                } else if (list.get(i).getSku_item4().equals(customer_no)) {
+                    qty_result = list.get(i).getQty_result4();
+                    if (Integer.parseInt(list.get(i).getQty_result4()) < Integer.parseInt(list.get(i).getQty1())) {
                         mark = "*";
                     }
                 }
 
-                String D = (String) li.getDate_modify();
+                String D = (String) list.get(i).getDate_modify();
                 if (D != null) {
-                    D = li.getDate_modify().substring(0, 10);
+                    D = list.get(i).getDate_modify().substring(0, 10);
                 }
+
+                if (mark.equals("*")) {
+                    marknum++;
+                }
+
+
+
                 DetailService ds = new DetailService();
-                out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(li.getPo()) + "','" + ds.ChackNull(li.getProdorder()) + "','" + ds.ChackNull(li.getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+                
+                if (n <= 12) {
+                    sum += Integer.parseInt(ds.ChackNull(qty_result));
+                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+                }
+                if (n == 13) {
+                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + n + "','" + sum + "','" + marknum + "'],");
+                    sum = 0;
+                    n = 1;
+                    i--;
+                    marknum = 0;
+                }
+                if (n1 == list.size() + 1) {
+                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + (n-1) + "','" + sum + "','" + marknum + "'],");
+                    n1 = 1;
+                }
+                n++;
+                n1++;
+
+
             }
                         %>
                                                                     ]
@@ -201,7 +231,7 @@
                                                     }
             
             
-                                                    pdfMake.createPdf(dd).download('<%=po%>.pdf'); 
+                                                     pdfMake.createPdf(dd).download('<%=po%>.pdf'); 
             
         </script>
     </body>

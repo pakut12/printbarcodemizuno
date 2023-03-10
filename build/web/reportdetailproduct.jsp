@@ -84,11 +84,8 @@
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">เเสดงข้อมูล</div>
                     <div class="card-body">
-                        
-                        <div class="table-responsive">
-                            <div id="mytable" class="mt-3">
-                                
-                            </div>
+                        <div id="mytable" class="mt-3">
+                            
                         </div>
                     </div>
                 </div>
