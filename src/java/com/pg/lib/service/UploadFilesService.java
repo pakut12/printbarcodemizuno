@@ -137,22 +137,22 @@ public class UploadFilesService {
                     cell.setCellType(cell.CELL_TYPE_STRING);
 
                     if (cell.getColumnIndex() == 0) {
-                        customer.setCustomer_no(cell.getStringCellValue());
+                        customer.setCustomer_no(cell.getStringCellValue().trim());
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 1) {
-                        customer.setCustomer_color(cell.getStringCellValue());
+                        customer.setCustomer_color(cell.getStringCellValue().trim());
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 2) {
-                        customer.setCustomer_size(cell.getStringCellValue());
+                        customer.setCustomer_size(cell.getStringCellValue().trim());
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 3) {
-                        customer.setCustomer_barcode(cell.getStringCellValue());
+                        customer.setCustomer_barcode(cell.getStringCellValue().trim());
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 4) {
-                        customer.setCustomer_product(cell.getStringCellValue());
+                        customer.setCustomer_product(cell.getStringCellValue().trim());
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 5) {
-                        customer.setCustomer_description(cell.getStringCellValue());
+                        customer.setCustomer_description(cell.getStringCellValue().trim());
                         System.out.println(cell.getStringCellValue());
                     }
 

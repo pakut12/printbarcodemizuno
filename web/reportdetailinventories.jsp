@@ -24,48 +24,71 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                    <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                            <input type="text" class="form-control text-center"  name="po" id="po">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
+                                            <select class="form-select form-select-sm text-center" id="customer">
+                                                <option value="MUS">MUS</option>
+                                                <option value="MCA">MCA</option>
+                                                <option value="MCL">MCL</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                    <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
-                                            <input type="text" class="form-control text-center"  name="customer_no" id="customer_no" >
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
+                                            <select class="form-select form-select-sm text-center" id="destination">
+                                                <option value="ADC">ADC</option>
+                                                <option value="ODC">ODC</option>
+                                                <option value="SCCR">SCCR</option>
+                                            </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
-                                            <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                    <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
                                             <input type="text" class="form-control text-center"  name="pallet" id="pallet">
                                         </div>
                                     </div>
+                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                            <input type="text" class="form-control text-center"  name="firstdigit" id="firstdigit" maxlength="1">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์กล่องจาก</span>
+                                            <input type="number" class="form-control text-center" name="numberbox_start" id="numberbox_start">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                            <input type="number" class="form-control text-center" name="numberbox_end" id="numberbox_end">
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-2">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                            <input type="text" class="form-control text-center" name="firstdigit" id="firstdigit" >
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">PO เดิม</span>
+                                            <input type="text" class="form-control text-center" name="po_old" id="po_old" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-2">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
+                                            <input type="text" class="form-control text-center" name="po" id="po" >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์กล่อง</span>
-                                            <input type="number" class="form-control text-center" name="start" id="start" >
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
+                                            <input type="text" class="form-control text-center" name="customer_no" id="customer_no" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-2">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                            <input type="number" class="form-control text-center" name="end" id="end" >
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
+                                            <input type="text" class="form-control text-center" name="customer_product" id="customer_product" >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
@@ -75,6 +98,9 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="row mt-3">
+                                    
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -82,7 +108,6 @@
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">เเสดงข้อมูล</div>
                     <div class="card-body">
-                        
                         <div class="table-responsive">
                             <div id="mytable" class="mt-3">
                                 

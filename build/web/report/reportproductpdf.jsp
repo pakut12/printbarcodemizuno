@@ -27,7 +27,7 @@
             String po = (String) request.getAttribute("po");
 
         %>
-       <script>
+        <script>
            
             
             pdfMake.fonts = {
@@ -160,7 +160,7 @@
             for (int i = 0; i < list.size(); i++) {
                 String mark = "";
                 String qty_result = "";
-
+                customer_no = list.get(i).getCustomer_no();
                 if (list.get(i).getSku_item1().equals(customer_no)) {
                     qty_result = list.get(i).getQty_result1();
                     if (Integer.parseInt(list.get(i).getQty_result1()) < Integer.parseInt(list.get(i).getQty1())) {
@@ -195,26 +195,25 @@
 
 
                 DetailService ds = new DetailService();
-                
+
                 if (n <= 12) {
                     sum += Integer.parseInt(ds.ChackNull(qty_result));
                     out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
-                }
-                if (n == 13) {
-                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + n + "','" + sum + "','" + marknum + "'],");
+                    n1++;
+                } else if (n == 13) {
+                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum - 1) + "'],");
                     sum = 0;
-                    n = 1;
+                    n = 0;
                     i--;
                     marknum = 0;
                 }
+
                 if (n1 == list.size() + 1) {
-                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + (n-1) + "','" + sum + "','" + marknum + "'],");
+                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + (n) + "','" + sum + "','" + (marknum) + "'],");
                     n1 = 1;
                 }
+
                 n++;
-                n1++;
-
-
             }
                         %>
                                                                     ]
@@ -231,7 +230,11 @@
                                                     }
             
             
-                                                     pdfMake.createPdf(dd).download('<%=po%>.pdf'); 
+                                                    pdfMake.createPdf(dd).download('<%=po%>.pdf'); 
+                                                    
+    
+    
+                                                   
             
         </script>
     </body>

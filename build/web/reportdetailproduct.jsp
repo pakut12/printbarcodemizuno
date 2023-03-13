@@ -170,7 +170,7 @@
                                     if (last !== group) {
                                         $(rows)
                                         .eq(i)
-                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="6"><b>อักษรขึ้นต้น : <b>' + group + '</td></tr>');
+                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="6">' + group + '</td></tr>');
                                         last = group;
                                     }
                                 });
