@@ -27,7 +27,7 @@
                                     <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                            <select class="form-select form-select-sm text-center" id="customer">
+                                            <select class="form-select form-select-sm text-center" id="customer" name="customer">
                                                 <option value="MUS">MUS</option>
                                                 <option value="MCA">MCA</option>
                                                 <option value="MCL">MCL</option>
@@ -37,7 +37,7 @@
                                     <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
-                                            <select class="form-select form-select-sm text-center" id="destination">
+                                            <select class="form-select form-select-sm text-center" id="destination" name="destination">
                                                 <option value="ADC">ADC</option>
                                                 <option value="ODC">ODC</option>
                                                 <option value="SCCR">SCCR</option>
@@ -85,21 +85,25 @@
                                             <input type="text" class="form-control text-center" name="customer_no" id="customer_no" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-2">
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
                                             <input type="text" class="form-control text-center" name="customer_product" id="customer_product" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
-                                        <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
-                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
-                                            <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ยกเลิกข้อมูล</button>
+                                    <div class="col-sm-12 col-md-2">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">PROD.ORDER</span>
+                                            <input type="text" class="form-control text-center" name="prodorder" id="prodorder" >
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row mt-3">
                                     
+                                </div>
+                                <div class="row mt-3 text-center">
+                                    <div class="col-sm-12 col-md-12">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
+                                        <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ยกเลิกข้อมูล</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -133,35 +137,44 @@
             }
             
             function getdate(){
+                var customer = $("#customer").val();
+                var destination = $("#destination").val();
+                var pallet = $("#pallet").val();
+                var firstdigit = $("#firstdigit").val();
+                var start = $("#numberbox_start").val();
+                var end = $("#numberbox_end").val();
+                var po = $("#po").val();
+                var po_old = $("#po_old").val();
                 var customer_no = $("#customer_no").val();
                 var customer_product = $("#customer_product").val();
-                var pallet = $("#pallet").val();
-                var start = $("#start").val();
-                var end = $("#end").val();
-                var firstdigit = $("#firstdigit").val();
-                var po = $("#po").val();
+                var prodorder = $("#prodorder").val();
                 
                 $.ajax({
                     type:'post',
                     url:'Report',
                     data:{
-                        type:"gettablereport",
-                        customer_no:customer_no,
-                        customer_product:customer_product,
+                        type:"gettablereportdetailinventories",
+                        customer:customer,
+                        destination:destination,
                         pallet:pallet,
+                        firstdigit:firstdigit,
                         start:start,
                         end:end,
-                        firstdigit:firstdigit,
-                        po:po
+                        po:po,
+                        po_old:po_old,
+                        customer_no:customer_no,
+                        customer_product:customer_product,
+                        prodorder:prodorder
                     },
                     success:function(msg){
-                       
-                        $("#mytable").html(msg)
-        
+                        var form1 = $("#myformreport").serialize()
+                        console.log(form1)
+                        $("#mytable").html(msg);
                         var groupColumn = 3;
                         var table = $('#tablereport').DataTable({
                             dom: 'Bfrtip',
                             buttons: [
+                                'pageLength',
                                 {
                                     extend: 'excelHtml5',
                                     title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today()
@@ -170,17 +183,18 @@
                                     text: 'PDF',
                                     action: function ( dt ) {
                                         var form = $("#myformreport").serialize()
-                                        window.open('Report?type=getreportproductdetailspdf&'+form, '_blank','height=400,width=800,left=200,top=200');  
+                                        window.open('Report?type=getreportdetailinventoriespdf&'+form, '_blank','height=400,width=800,left=200,top=200');  
                                     }
                                 },
                                 {
                                     text: 'Print',
                                     action: function ( dt ) {
                                         var form = $("#myformreport").serialize()
-                                        window.open('Report?type=getreportproductdetails&'+form, '_blank','height=400,width=800,left=200,top=200');  
+                                        window.open('Report?type=getreportdetailinventories&'+form, '_blank','height=400,width=800,left=200,top=200');  
                                     }
                                 }
                             ],
+                            
                             columnDefs: [{ visible: false, targets: groupColumn }],
                             order: [[groupColumn, 'asc']],
                             displayLength: 10,
@@ -188,7 +202,6 @@
                                 var api = this.api();
                                 var rows = api.rows({ page: 'current' }).nodes();
                                 var last = null;
- 
                                 api
                                 .column(groupColumn, { page: 'current' })
                                 .data()
@@ -196,7 +209,7 @@
                                     if (last !== group) {
                                         $(rows)
                                         .eq(i)
-                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="6"><b>อักษรขึ้นต้น : <b>' + group + '</td></tr>');
+                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="12"><b>รหัสลูกค้า : <b>' + group + '</td></tr>');
                                         last = group;
                                     }
                                 });
@@ -212,8 +225,6 @@
                                 table.order([groupColumn, 'asc']).draw();
                             }
                         });
-                  
-
                     }
                 })
             } 

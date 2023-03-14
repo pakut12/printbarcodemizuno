@@ -139,32 +139,26 @@
                                 </div>
                             </div>
                         </div>
-                        
                     </div>
                     <div class="card shadow-lg mt-3">
                         <div class="card-header">เเสดงข้อมูล</div>
                         <div class="card-body">
                             <div id="table_customer">
-                                
                                 <table class='table table-striped table-sm w-100' id='mytable'>
                                     <thead>
                                         <tr>
                                             <th>ID</th>
                                             <th>รหัสลูกค้า</th>
+                                            <th>รหัสสินค้า</th>
                                             <th>รหัสบาร์โค้ด</th>
                                             <th>Color</th>
                                             <th>Size</th>
-                                            <th>รหัสสินค้า</th>
                                             <th>Description</th>
-                                            <th>Description</th>
-                                            <th>Description</th>
-                                            
+                                            <th>เเก้ไข</th>
+                                            <th>ลบ</th>
                                         </tr>
                                     </thead>
-                                    
-                                    
                                 </table>
-                                
                             </div>
                         </div>
                     </div>
@@ -226,7 +220,6 @@
                         customer_description:$("#edit_customer_description").val()
                     },
                     success:function(msg){
-                    
                         var js = JSON.parse(msg);
                         if(js.status == 'true'){
                             Swal.fire({
@@ -245,7 +238,6 @@
                         setTimeout(function(){
                             $("#modal_edit").modal('hide');
                         },1000);
-                        
                     }
                 })
             }
@@ -384,11 +376,11 @@
                     columns: [
                         { data: 'customer_id' },
                         { data: 'customer_no' },
+                        { data: 'customer_product' },
                         { data: 'customer_barcode'},
                         { data: 'customer_color' },
                         { data: 'customer_size' },
                         { data: 'customer_description' },
-                        { data: 'customer_product' },
                         { data: 'btn_edit' },
                         { data: 'btn_del' }
                         

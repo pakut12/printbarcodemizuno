@@ -178,19 +178,9 @@ public class Customer extends HttpServlet {
                     String orderColumn = request.getParameter("order[0][column]");
                     String orderDir = request.getParameter("order[0][dir]");
 
-
-                    System.out.println("draw :" + draw);
-                    System.out.println("start :" + start);
-                    System.out.println("length :" + length);
-                    System.out.println("searchValue :" + searchValue);
-                    System.out.println("orderColumn :" + orderColumn);
-                    System.out.println("orderDir :" + orderDir);
-                    System.out.println("-----------------------------------------------------------------------------------");
-
                     CustomerService cs = new CustomerService();
                     List<BCCustomer> rows = cs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir);
-
-
+                    
                     Gson gson = new Gson();
 
                     JSONObject obj = new JSONObject();

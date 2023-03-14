@@ -86,7 +86,7 @@ public class CustomerService {
             }
             sql += ") WHERE rnum BETWEEN ? AND ?";
 
-            System.out.println(sql);
+
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -129,10 +129,10 @@ public class CustomerService {
         List<BCCustomer> list = new ArrayList<BCCustomer>();
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "select * from  MIZUNOCUSTOMER  c where c.CUSTOMER_NO LIKE ?";
+            String sql = "select * from  MIZUNOCUSTOMER  c where c.CUSTOMER_NO = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, "%" + CUSTOMER_NO);
+            ps.setString(1,CUSTOMER_NO);
             rs = ps.executeQuery();
             while (rs.next()) {
                 BCCustomer cs = new BCCustomer();
@@ -178,15 +178,24 @@ public class CustomerService {
     public Boolean AddDetailCustomerMultiple(List<BCCustomer> list) throws ClassNotFoundException, SQLException, NamingException {
         Boolean status = false;
         int primarykey = getprimarykey() + 1;
+        String sql = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (?, ?, ?, ?,?,?,?)";
+        conn = ConnectDB.getConnection();
+        ps = conn.prepareStatement(sql);
         try {
-            String sql = SqlAddDetailCustomerMultiple(list);
-            conn = ConnectDB.getConnection();
-            ps = conn.prepareStatement(sql);
-            if (ps.executeUpdate() > 0) {
-                status = true;
-            } else {
-                status = false;
+            for (int i = 0; i < list.size(); i++) {
+                ps.setInt(1, primarykey);
+                ps.setString(2, list.get(i).getCustomer_no());
+                ps.setString(3, list.get(i).getCustomer_barcode());
+                ps.setString(4, list.get(i).getCustomer_color());
+                ps.setString(5, list.get(i).getCustomer_size());
+                ps.setString(6, list.get(i).getCustomer_product());
+                ps.setString(7, list.get(i).getCustomer_description());
+                ps.addBatch();
+                primarykey++;
+                
             }
+            ps.executeBatch();
+            status = true;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -207,7 +216,7 @@ public class CustomerService {
             sql += "'" + ds.ChackNull(list.get(n).getCustomer_barcode()) + "',";
             sql += "'" + ds.ChackNull(list.get(n).getCustomer_color().toUpperCase()) + "',";
             sql += "'" + ds.ChackNull(list.get(n).getCustomer_size().toUpperCase()) + "',";
-            sql += "'" + ds.ChackNull(list.get(n).getCustomer_product().toUpperCase()) + "',";
+            sql += "'" + ds.ChackNull(list.get(n).getCustomer_product()) + "',";
             sql += "'" + ds.ChackNull(list.get(n).getCustomer_description().toUpperCase().replaceAll("'", "#")) + "')";
 
             primarykey++;

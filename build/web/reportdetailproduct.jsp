@@ -136,6 +136,7 @@
                         var table = $('#tablereport').DataTable({
                             dom: 'Bfrtip',
                             buttons: [
+                                'pageLength',
                                 {
                                     extend: 'excelHtml5',
                                     title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today()

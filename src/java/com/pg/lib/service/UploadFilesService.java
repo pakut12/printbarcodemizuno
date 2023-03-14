@@ -137,22 +137,56 @@ public class UploadFilesService {
                     cell.setCellType(cell.CELL_TYPE_STRING);
 
                     if (cell.getColumnIndex() == 0) {
-                        customer.setCustomer_no(cell.getStringCellValue().trim());
+                        if(!cell.getStringCellValue().isEmpty()){
+                            customer.setCustomer_no(cell.getStringCellValue().trim().toUpperCase());
+                        }else{
+                            customer.setCustomer_no("");
+                        }
+                        
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 1) {
-                        customer.setCustomer_color(cell.getStringCellValue().trim());
+                        if(!cell.getStringCellValue().isEmpty()){
+                            customer.setCustomer_color(cell.getStringCellValue().trim().toUpperCase());
+                        }else{
+                            customer.setCustomer_color("");
+                        }
+                        
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 2) {
-                        customer.setCustomer_size(cell.getStringCellValue().trim());
+                        if(!cell.getStringCellValue().isEmpty()){
+                            customer.setCustomer_size(cell.getStringCellValue().trim().toUpperCase());
+                        }else{
+                            customer.setCustomer_size("");
+                        }
+                        
+                       
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 3) {
-                        customer.setCustomer_barcode(cell.getStringCellValue().trim());
+                        if(!cell.getStringCellValue().isEmpty()){
+                            customer.setCustomer_barcode(cell.getStringCellValue().trim().toUpperCase());
+                        }else{
+                            customer.setCustomer_barcode("");
+                        }
+                        
+                       
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 4) {
-                        customer.setCustomer_product(cell.getStringCellValue().trim());
+                        if(!cell.getStringCellValue().isEmpty()){
+                            customer.setCustomer_product(cell.getStringCellValue().trim().toUpperCase());
+                        }else{
+                            customer.setCustomer_product("");
+                        }
+                        
+                        
                         System.out.println(cell.getStringCellValue());
                     } else if (cell.getColumnIndex() == 5) {
-                        customer.setCustomer_description(cell.getStringCellValue().trim());
+                        if(!cell.getStringCellValue().isEmpty()){
+                            customer.setCustomer_description(cell.getStringCellValue().trim().toUpperCase());
+                        }else{
+                            customer.setCustomer_description("");
+                        }
+                        
+                        
                         System.out.println(cell.getStringCellValue());
                     }
 
