@@ -35,19 +35,23 @@
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                         <select class="form-select form-select-sm text-center" id="customer">
-                                            <option value="MUS">MUS</option>
-                                            <option value="MCA">MCA</option>
-                                            <option value="MCL">MCL</option>
+                                            
                                         </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 align-items-md-center">
-                                    <div id="customer_text" class="p-1"></div>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">สถานที่ส่ง</span>
+                                        <select class="form-select form-select-sm text-center" id="customer_address">
+                                            
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
                                         <select class="form-select form-select-sm text-center" id="destination">
+                                            <option value=""></option>
                                             <option value="ADC">ADC</option>
                                             <option value="ODC">ODC</option>
                                             <option value="SCCR">SCCR</option>
@@ -227,8 +231,9 @@
                             </div>
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 text-center">
+                                    
                                     <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="senddata()">บันทึกข้อมูล</button>
-                                    <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_reset" onclick="location.reload()">ยกเลิกข้อมูล</button>
+                                    <button class="btn btn-outline-danger btn-sm mb-3" type="button" id="bt_reset" onclick="location.reload()">ล้างข้อมูล</button>
                                 </div>
                             </div>
                         </div>
@@ -241,15 +246,46 @@
         </footer>
         <script>
           
+            function getcustomer(){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getcustomer"
+                    },
+                    success:function(msg){
+                        $("#customer").empty();
+                        $("#customer").html(msg);
+                        getcustomeraddress($("#customer").val())
+                    }
+                })
+            }
+            
+            function getcustomeraddress(address_customer){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getdelivery",
+                        address_customer:address_customer
+                    },
+                    success:function(msg){
+                  
+                        $("#customer_address").empty();
+                        $("#customer_address").html(msg);
+                    }
+                })
+            }
+            
             function today(){
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
-             
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
                 today = yyyy + '-' + mm + '-' + dd;
                 $("#date").val(today)
             }
+            
             function chack_customer1(customer_id){
                 $.ajax({
                     type:'post',
@@ -356,26 +392,10 @@
                 })
             }
            
-            function customer_text(){
-                var text = $("#customer").val();
-                if(text == 'MUS'){
-                    $("#customer_text").text('MIZUNO USA INC.');
-                }else if(text == 'MCA'){
-                    $("#customer_text").text('MIZUNO CORPORATION');
-                }else if(text == 'MCL'){
-                    $("#customer_text").text('MIZUNO CANADA INC-TDC');
-                }
-            }
             
-            function getcustomer_text(){
-                customer_text();
-                $('#customer').on('change', function() {
-                    customer_text();
-                });
-            }
     
             function senddata(){
-                var customer = $("#customer").val();
+                var customer = $("#customer_address").val();
                 var quantity_box = $("#quantity_box").val();
                 var initial = $("#initial").val();
                 var numberbox_start = $("#numberbox_start").val();
@@ -469,8 +489,13 @@
             }
 
             $(document).ready(function () {
-            
-                getcustomer_text()
+                getcustomer();
+              
+              
+                $("#customer").change(function() {
+                    getcustomeraddress($(this).val())
+                });
+                
                 $("#customer1_id").on('input', function() {
                     chack_customer1($(this).val())
                 });

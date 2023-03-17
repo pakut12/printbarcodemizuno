@@ -132,7 +132,6 @@
                             scrollX: true,
                             scrollCollapse: true
                         });
-                        
                     }
                 })
             } 
@@ -161,7 +160,9 @@
                         num = 4;
                     }
                     
-                    window.open("report/reportbarcode.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num, '_blank','height=400,width=800,left=200,top=200');        
+                    // window.open("report/reportbarcode.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num, '_blank','height=400,width=800,left=200,top=200');        
+                   
+                    window.open("report/test.jsp", '_blank','height=400,width=800,left=200,top=200');        
                 })
             });
         </script>

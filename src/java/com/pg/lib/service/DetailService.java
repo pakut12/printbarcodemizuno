@@ -687,7 +687,7 @@ public class DetailService {
         return status;
     }
 
-    public Boolean UpdateDetailBoxAll(String po_old, String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4, String pallet, String prodorder, String destination, String date,String firstdigitbefore) throws SQLException {
+    public Boolean UpdateDetailBoxAll(String po_old, String pobefore, String startboxbefore, String endboxbefore, String shipto, String qtyperbox, String firstdigit, String startbox, String endbox, String allbox, String po, String desctxt, String grossweight, String netweight, String country_origin, String sku_item1, String upc_code1, String colorno1, String sizeno1, String qty1, String sku_item2, String upc_code2, String colorno2, String sizeno2, String qty2, String sku_item3, String upc_code3, String colorno3, String sizeno3, String qty3, String sku_item4, String upc_code4, String colorno4, String sizeno4, String qty4, String pallet, String prodorder, String destination, String date, String firstdigitbefore) throws SQLException {
 
         Boolean status = false;
 
@@ -830,29 +830,62 @@ public class DetailService {
         return listdetail;
     }
 
-    private HashMap<String, String> GetAddress(String address) {
+    private HashMap<String, String> GetAddress(String address) throws SQLException {
         HashMap<String, String> listaddress = new HashMap<String, String>();
-
+        /*
+        if (address.equals("TSG")) {
+        listaddress.put("address1", "THAI SPORTS GARMENT CO.,LTD.");
+        listaddress.put("address2", "666 RAMA 3 ROAD");
+        listaddress.put("address3", "BANGPONGPANG YANNAWA");
+        listaddress.put("address4", "BANGKOK 10120 THAILAND");
+        } else if (address.equals("MUS")) {
+        listaddress.put("address1", "MIZUNO USA INC.");
+        listaddress.put("address2", "BRASELTON DC");
+        listaddress.put("address3", "920 HIGHWAY 124");
+        listaddress.put("address4", "BRASELTON GA 30517 USA");
+        } else if (address.equals("MCA")) {
+        listaddress.put("address1", "MIZUNO CORPORATION");
+        listaddress.put("address2", "17ANZED COURT");
+        listaddress.put("address3", "MULGRAVE,VIC,3170");
+        listaddress.put("address4", "AUSTRALIA");
+        } else if (address.equals("MCL")) {
+        listaddress.put("address1", "MIZUNO CANADA INC-TDC");
+        listaddress.put("address2", "5206 TIMBERLEA BLVD");
+        listaddress.put("address3", "MISSISSAUGA ON");
+        listaddress.put("address4", "L4W2S5 CANADA");
+        }
+         */
         if (address.equals("TSG")) {
             listaddress.put("address1", "THAI SPORTS GARMENT CO.,LTD.");
             listaddress.put("address2", "666 RAMA 3 ROAD");
             listaddress.put("address3", "BANGPONGPANG YANNAWA");
             listaddress.put("address4", "BANGKOK 10120 THAILAND");
-        } else if (address.equals("MUS")) {
-            listaddress.put("address1", "MIZUNO USA INC.");
-            listaddress.put("address2", "BRASELTON DC");
-            listaddress.put("address3", "920 HIGHWAY 124");
-            listaddress.put("address4", "BRASELTON GA 30517 USA");
-        } else if (address.equals("MCA")) {
-            listaddress.put("address1", "MIZUNO CORPORATION");
-            listaddress.put("address2", "17ANZED COURT");
-            listaddress.put("address3", "MULGRAVE,VIC,3170");
-            listaddress.put("address4", "AUSTRALIA");
-        } else if (address.equals("MCL")) {
-            listaddress.put("address1", "MIZUNO CANADA INC-TDC");
-            listaddress.put("address2", "5206 TIMBERLEA BLVD");
-            listaddress.put("address3", "MISSISSAUGA ON");
-            listaddress.put("address4", "L4W2S5 CANADA");
+        } else {
+            try {
+                String sql = "select * from MIZUNOCUSTOMERADDRESS where ADDRESS_DELIVEREDTO= ? order by address_ID";
+                conn = ConnectDB.getConnection();
+                ps = conn.prepareStatement(sql);
+                ps.setString(1, address);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    DetailService ds = new DetailService();
+                    listaddress.put("address1", ds.ChackNull(rs.getString("ADDRESS_ADDRESS1")));
+                    listaddress.put("address2", ds.ChackNull(rs.getString("ADDRESS_ADDRESS2")));
+                    listaddress.put("address3", ds.ChackNull(rs.getString("ADDRESS_ADDRESS3")));
+                    listaddress.put("address4", ds.ChackNull(rs.getString("ADDRESS_ADDRESS4")));
+
+                    System.out.println(rs.getString("ADDRESS_ADDRESS1"));
+                    System.out.println(rs.getString("ADDRESS_ADDRESS2"));
+                    System.out.println(rs.getString("ADDRESS_ADDRESS3"));
+                    System.out.println(rs.getString("ADDRESS_ADDRESS4"));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                ConnectDB.closeConnection(conn);
+                ps.close();
+                rs.close();
+            }
         }
 
         return listaddress;
@@ -861,21 +894,26 @@ public class DetailService {
     private String SqlAddDataToMIZUNONEWBARBOXDT(String po_old, String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date) {
         String sql = "INSERT ALL ";
         try {
+
+            HashMap<String, String> addresstsg = GetAddress("TSG");
+            HashMap<String, String> addresscustomer = GetAddress(customer_num);
+
+
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
                 sql += " INTO MIZUNONEWBARBOXDT (PO,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE) VALUES (";
                 sql += "'" + po + "',";
                 sql += "'" + initial + n + "',";
                 sql += "'" + initial + quantitytotal_box + "',";
                 sql += "'TSG',";
-                sql += "'" + GetAddress("TSG").get("address1") + "',";
-                sql += "'" + GetAddress("TSG").get("address2") + "',";
-                sql += "'" + GetAddress("TSG").get("address3") + "',";
-                sql += "'" + GetAddress("TSG").get("address4") + "',";
+                sql += "'" + addresstsg.get("address1") + "',";
+                sql += "'" + addresstsg.get("address2") + "',";
+                sql += "'" + addresstsg.get("address3") + "',";
+                sql += "'" + addresstsg.get("address4") + "',";
                 sql += "'" + customer_num + "',";
-                sql += "'" + GetAddress(customer_num).get("address1") + "',";
-                sql += "'" + GetAddress(customer_num).get("address2") + "',";
-                sql += "'" + GetAddress(customer_num).get("address3") + "',";
-                sql += "'" + GetAddress(customer_num).get("address4") + "',";
+                sql += "'" + addresscustomer.get("address1") + "',";
+                sql += "'" + addresscustomer.get("address2") + "',";
+                sql += "'" + addresscustomer.get("address3") + "',";
+                sql += "'" + addresscustomer.get("address4") + "',";
                 sql += "'" + quantity_box + "',";
                 sql += "'" + description + "',";
                 sql += "'" + gw + "',";

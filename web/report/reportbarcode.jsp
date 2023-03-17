@@ -1,6 +1,6 @@
 <%-- 
     Document   : reportbarcode
-    Created on : 24 ¡.¾. 2566, 9:02:23
+    Created on : 24 ?.?. 2566, 9:02:23
     Author     : pakutsing
 --%>
 <%@page import="java.util.List"%>
@@ -505,7 +505,7 @@
             <table class="table table-bordered border-dark w-100 ">
                 <thead>
                     <tr>
-                        <th  class="p-2 h6 fw-bold " colspan="2">
+                        <th  class="" colspan="2">
                             Ship to : <%=listbox.get(i).getShipto()%><br>
                             <%=listbox.get(i).getStaddress1()%><br>
                             <%=listbox.get(i).getStaddress2()%><br>
@@ -514,7 +514,7 @@
                             
                         </th>
                         
-                        <th  class="p-2 h6 fw-bold  "  colspan="2">
+                        <th  class=""  colspan="2">
                             Ship From : <%=listbox.get(i).getShipfrom()%><br>
                             <%=listbox.get(i).getSfaddress1()%><br>
                             <%=listbox.get(i).getSfaddress2()%><br>
@@ -523,7 +523,7 @@
                         </th>
                     </tr>
                     <tr>
-                        <th class="p-1 text-center h6 fw-bold" colspan="1" >
+                        <th class="" colspan="1" >
                             <div class="d-flex justify-content-evenly">
                                 <div class=""> Qty </div>
                                 <div class=""><%=listbox.get(i).getQtyperbox()%> </div>
@@ -536,16 +536,16 @@
                             </div>
                             
                         </th>
-                        <th class="p-1 text-center h6 fw-bold" colspan="1" >
+                        <th class="" colspan="1" >
                             PO : <%=listbox.get(i).getPo()%><br>
                             <svg class='barcode' jsbarcode-height='15' jsbarcode-width='1' jsbarcode-displayValue='false' jsbarcode-value='<%=listbox.get(i).getPo()%>'  jsbarcode-fontoptions='bold'></svg>   
                         </th>
-                        <th class="pb-4 h6 fw-bold" colspan="2">
+                        <th class="" colspan="2">
                             Description : <%=listbox.get(i).getDesctxt()%>
                         </th>
                     </tr>
                     <tr>
-                        <th class="p-1 h6 fw-bold" colspan="2" >
+                        <th class="" colspan="2" >
                             CTN DIMS : 38X57X40 CMS <br>
                             G.W/N.W : <%=listbox.get(0).getGrossweight()%> KGS/<%=listbox.get(0).getNetweight()%> KGS <br>
                             CBM : 0.087 M<sup>3</sup>
@@ -557,11 +557,9 @@
                     </tr>
                     <tr class="">
                         <th class="p-1"  colspan="4" >
-                            
                             <div class="text-center h3 fw-bold">
                                 <%=listbox.get(i).getSku_item1()%>
                                 <div class="d-flex justify-content-center">
-                                    
                                     <div class=""><svg class='barcode' jsbarcode-height='40' jsbarcode-width='3' jsbarcode-fontSize='10'  jsbarcode-displayValue='true' jsbarcode-value='<%=listbox.get(i).getUpc_code1()%>'  jsbarcode-fontoptions='bold'></svg></div>
                                 </div>
                                 

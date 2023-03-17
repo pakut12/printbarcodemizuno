@@ -42,7 +42,7 @@
                         <div class="col-sm-12 col-md-4">
                             <div class="d-flex justify-content-center justify-content-md-start ">
                                 <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
-                                <button class="btn btn-outline-danger btn-sm w-25 mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
+                                <button class="btn btn-outline-danger btn-sm w-25 mx-3 " type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
                             </div>
                         </div>
                     </div>
@@ -286,10 +286,11 @@
                             $("#customer1_barcode").val(js.customer_barcode)
                             $("#customer1_color").val(js.customer_color)
                             $("#customer1_size").val(js.customer_size)
-                            $("#customer1_description").val(js.customer_description)
+                            $("#description").val("");
+                            $("#description").val(js.customer_description)
                             $("#customer1_number").val($("#quantity_box").val())
                         }else{
-                            $("#customer2_description").val("")
+                            $("#description").val("")
                             $("#customer1_barcode").val("")
                             $("#customer1_color").val("")
                             $("#customer1_size").val("")

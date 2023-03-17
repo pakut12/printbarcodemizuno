@@ -152,7 +152,7 @@
                     sumqty += Integer.parseInt(ds.ChackNull(qty));
                     sumqty_result += Integer.parseInt(ds.ChackNull(qty_result));
                     sumdifferent += Integer.parseInt(ds.ChackNull(String.valueOf(different)));
-                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getPo_old()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','905229000001'," +
+                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getPo_old()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "'," +
                             "'" + ds.ChackNull(list.get(i).getPallet()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(String.valueOf(different)) + "','" + ds.ChackNull(mark) + "'],");
                     n1++;
                 } else if (n == 35) {

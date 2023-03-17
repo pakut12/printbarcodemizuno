@@ -139,7 +139,14 @@
                                 'pageLength',
                                 {
                                     extend: 'excelHtml5',
-                                    title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today()
+                                    title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today(),
+                                    customize: function (xlsx) {
+                                        console.log(xlsx);
+                                        //first group
+                                        //setSheetName(xlsx, groupName);
+                                        //then for each group after that
+                                        //addSheet(xlsx, '#example2', 'My Sheet2', groupName, '2');
+                                    }
                                 },
                                 {
                                     text: 'PDF',
