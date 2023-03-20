@@ -151,6 +151,7 @@ public class ReportService {
                 report.setQty3(rs.getString("qty3"));
                 report.setQty4(rs.getString("qty4"));
                 report.setCustomer_no(rs.getString("customer_no"));
+                report.setPallet(rs.getString("pallet"));
                 list.add(report);
             }
 

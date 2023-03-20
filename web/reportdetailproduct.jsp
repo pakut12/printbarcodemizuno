@@ -132,20 +132,22 @@
                        
                         $("#mytable").html(msg)
         
-                        var groupColumn = 3;
+                        var groupColumn = 4;
                         var table = $('#tablereport').DataTable({
                             dom: 'Bfrtip',
                             buttons: [
                                 'pageLength',
                                 {
-                                    extend: 'excelHtml5',
+                                    extend: 'excel',
                                     title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today(),
-                                    customize: function (xlsx) {
-                                        console.log(xlsx);
-                                        //first group
-                                        //setSheetName(xlsx, groupName);
-                                        //then for each group after that
-                                        //addSheet(xlsx, '#example2', 'My Sheet2', groupName, '2');
+                                    exportOptions: {
+                                        format: {
+                                            body: function ( data, row, column, node ) {
+                                               if(column === 5){}
+                                                return data
+                                                   
+                                            }
+                                        }
                                     }
                                 },
                                 {
@@ -178,7 +180,7 @@
                                     if (last !== group) {
                                         $(rows)
                                         .eq(i)
-                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="6">' + group + '</td></tr>');
+                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="8">' + group + '</td></tr>');
                                         last = group;
                                     }
                                 });

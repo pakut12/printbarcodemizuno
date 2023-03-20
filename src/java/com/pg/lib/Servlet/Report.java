@@ -66,16 +66,11 @@ public class Report extends HttpServlet {
 
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
-
+                    int sum = 0;
                     String html = "";
                     html += "<div class='row mb-3 text-center fs-4'>";
-                    html += "<div class='col-12 col-md-4 col-lg-4'>";
-                    html += "<b>รหัสสินค้า : </b> " + customer_product;
-                    html += "</div>";
-                    html += "<div class='col-12 col-md-4 col-lg-4'>";
-                    html += "<b>รหัสลูกค้า :</b> " + customer_no;
-                    html += "</div>";
-                    html += "<div class='col-12 col-md-4 col-lg-4'>";
+
+                    html += "<div class='col-12 col-md-12 text-end col-lg-12'>";
                     html += " <b>พาเลท :</b> " + pallet;
                     html += " </div>";
                     html += "</div>";
@@ -84,8 +79,10 @@ public class Report extends HttpServlet {
                     html += "<tr>";
                     html += "<th scope='col'>วันที่</th>";
                     html += "<th scope='col'>PO</th>";
+                    html += "<th scope='col'>รหัสสินค้า</th>";
                     html += "<th scope='col'>Production Order</th>";
-                    html += "<th scope='col'>Firstdigit</th>";
+                    html += "<th scope='col'>รหัสลูกค้า</th>";
+                    html += "<th scope='col'>พาเลท</th>";
                     html += "<th scope='col'>กล่องที่</th>";
                     html += "<th scope='col'>จำนวน</th>";
                     html += "<th scope='col'>หมายเหตุ</th>";
@@ -95,7 +92,12 @@ public class Report extends HttpServlet {
                     for (BCDetailBox li : list) {
                         String mark = "";
                         String qty_result = "";
-
+                        
+                        if (!customer_no.equals(li.getCustomer_no())) {
+                            
+                        } else {
+                            
+                        }
                         customer_no = li.getCustomer_no();
 
                         if (li.getSku_item1().equals(customer_no)) {
@@ -126,8 +128,10 @@ public class Report extends HttpServlet {
                         html += "<tr>";
                         html += "<td>" + ds.ChackNull(li.getDate_modify()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getPo()) + "</td>";
+                        html += "<td>" + ds.ChackNull(li.getCustomer_product()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getProdorder()) + "</td>";
-                        html += "<td><b>อักษรขึ้นต้น : <b>" + ds.ChackNull(li.getBoxno().substring(0, 1)) + "<br><b>รหัสลูกค้า : <b>" + customer_no + "</td>";
+                        html += "<td><b>รหัสลูกค้า : <b>" + customer_no + "</td>";
+                        html += "<td>" + ds.ChackNull(li.getPallet()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getBoxno()) + "</td>";
                         html += "<td>" + ds.ChackNull(qty_result) + "</td>";
                         html += "<td>" + ds.ChackNull(mark) + "</td>";
