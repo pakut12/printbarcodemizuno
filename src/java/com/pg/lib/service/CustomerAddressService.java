@@ -113,12 +113,41 @@ public class CustomerAddressService {
         return list;
     }
 
+    public List<BCCustomerAddress> GetListCustomer() throws SQLException {
+
+        List<BCCustomerAddress> list = new ArrayList<BCCustomerAddress>();
+
+        try {
+            String sql = "select count(a.ADDRESS_CUSTOMER),a.ADDRESS_CUSTOMER from MIZUNOCUSTOMERADDRESS a  where ADDRESS_ID >99 GROUP BY  a.ADDRESS_CUSTOMER";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                DetailService ds = new DetailService();
+
+                BCCustomerAddress address = new BCCustomerAddress();
+               
+                address.setAddress_customer(ds.ChackNull(rs.getString("ADDRESS_CUSTOMER")));
+               
+                list.add(address);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return list;
+    }
+
     public List<BCCustomerAddress> GetTableMIZUNOCUSTOMERADDRESS() throws SQLException {
 
         List<BCCustomerAddress> list = new ArrayList<BCCustomerAddress>();
 
         try {
-            String sql = "select * from MIZUNOCUSTOMERADDRESS where ADDRESS_ID >99";
+            String sql = "select * from MIZUNOCUSTOMERADDRESS where ADDRESS_ID >99 ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();

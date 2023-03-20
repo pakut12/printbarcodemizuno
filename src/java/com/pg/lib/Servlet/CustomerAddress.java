@@ -177,7 +177,23 @@ public class CustomerAddress extends HttpServlet {
                     for (BCCustomerAddress z : listdata) {
                         opt += "<option value='" + z.getAddress_deliveredto() + "'>" + z.getAddress_deliveredto() + "</option>";
                     }
-                    
+
+                    out.print(opt);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (type.equals("getlistcustomer")) {
+                try {
+
+                    CustomerAddressService cas = new CustomerAddressService();
+                    List<BCCustomerAddress> listdata = cas.GetListCustomer();
+
+                    String opt = "";
+                    for (BCCustomerAddress z : listdata) {
+                        opt += "<option value='" + z.getAddress_customer() + "'>" + z.getAddress_customer() + "</option>";
+                    }
+
                     out.print(opt);
 
                 } catch (Exception e) {

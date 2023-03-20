@@ -69,7 +69,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="1">
+                                        <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="2">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -251,7 +251,7 @@
                     type:"post",
                     url:"CustomerAddress",
                     data:{
-                        type:"getcustomer"
+                        type:"getlistcustomer"
                     },
                     success:function(msg){
                         $("#customer").empty();
@@ -395,7 +395,8 @@
             
     
             function senddata(){
-                var customer = $("#customer_address").val();
+                var customer = $("#customer").val();
+                var customer_address = $("#customer_address").val();
                 var quantity_box = $("#quantity_box").val();
                 var initial = $("#initial").val();
                 var numberbox_start = $("#numberbox_start").val();
@@ -441,6 +442,7 @@
                         data:{
                             type:"adddetails",
                             customer:customer,
+                            customer_address:customer_address,
                             quantity_box:quantity_box,
                             initial:initial,
                             numberbox_start:numberbox_start,

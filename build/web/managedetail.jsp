@@ -30,7 +30,7 @@
                         <div class="col-sm-12 col-md-2">
                             <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
+                                <input type="text" class="form-control text-center" id="firstdigitbefore" maxlength="2">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-3">
@@ -73,7 +73,12 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4 align-items-md-center">
-                                    <div id="customer_text" class="p-1"></div>
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">สถานที่ส่ง</span>
+                                        <select class="form-select form-select-sm text-center" id="customer_address">
+                                            
+                                        </select>
+                                    </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
@@ -86,19 +91,25 @@
                             </div>
                             
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-4">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" >
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
                                         <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                        <input type="text" class="form-control text-center" name="firstdigit" id="firstdigit" maxlength="2" pattern="" >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
+                                        <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
                                         <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" >
@@ -383,13 +394,14 @@
             
             function updatedata(){
                 var pobefore = $("#posearch").val();
-                var startboxbefore  = $("#firstdigit").val()+$("#numstart").val();
+                var startboxbefore  = $("#firstdigitbefore").val()+$("#numstart").val();
                 var po_old = $("#pobefore").val();
-                var boxno = $("#boxno").val();
+                var boxno = $("#firstdigit").val()+$("#boxno").val();
                
                 var shipto = $("#customer").val();
+                var customer_address = $("#customer_address").val();
                 var qtyperbox  = $("#quantity_box").val();
-                var allbox  =   $("#boxall").val();    
+                var allbox  =   $("#firstdigit").val()+$("#boxall").val();    
                 var po =  $("#po").val();
                 var desctxt = $("#description").val();
                 var grossweight = $("#gw").val();
@@ -495,7 +507,8 @@
                             prodorder:prodorder,
                             destination:destination,
                             date:date,
-                            po_old:po_old
+                            po_old:po_old,
+                            customer_address:customer_address
                         },
                         success:function(msg){
                            
@@ -536,29 +549,15 @@
              
             }
             
-            function customer_text(){
-                var text = $("#customer").val();
-                if(text == 'MUS'){
-                    $("#customer_text").text('MIZUNO USA INC.');
-                }else if(text == 'MCA'){
-                    $("#customer_text").text('MIZUNO CORPORATION');
-                }else if(text == 'MCL'){
-                    $("#customer_text").text('MIZUNO CANADA INC-TDC');
-                }
-            }
-            
-            function getcustomer_text(){
-                customer_text();
-                $('#customer').on('change', function() {
-                    customer_text();
-                });
-            }
-            
+          
             function clearinput(){
                 $("#customer_text").empty();
                 $("#customer").empty();
                 $("#customer").append("<option value=''></option>");
-
+                
+                $("#customer_address").empty();
+                $("#customer_address").append("<option value=''></option>");
+                
                 $("#destination").empty();
                 $("#destination").append("<option value=''></option>");
             
@@ -598,16 +597,49 @@
                 $("#customer4_size").val("");
                 $("#customer4_number").val("");
                 
+                $("#firstdigit").val("");
                 $("#pobefore").val("");
                 $("#prodorder").val("");
                 $("#pallet").val("");
                 $("#myform :input").attr("disabled", true);
             }
             
+            function getcustomer(){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getlistcustomer"
+                    },
+                    success:function(msg){
+                      
+                        //$("#customer").empty();
+                        $("#customer").append(msg);
+                        getcustomeraddress($("#customer").val())
+                    }
+                })
+            }
+            
+            function getcustomeraddress(address_customer){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getdelivery",
+                        address_customer:address_customer
+                    },
+                    success:function(msg){
+                  
+                        //$("#customer_address").empty();
+                        $("#customer_address").append(msg);
+                    }
+                })
+            }
+            
             function searchpo(){
                 var posearch = $("#posearch").val();
                 var numstart = $("#numstart").val();
-                var firstdigit = $("#firstdigit").val();
+                var firstdigitbefore = $("#firstdigitbefore").val();
                 
                 $.ajax({
                     type:"post",
@@ -615,23 +647,28 @@
                     data:{
                         type:"getdetails",
                         posearch:posearch,
-                        numstart:firstdigit+numstart
+                        numstart:firstdigitbefore+numstart
                     },
                     success:function(msg){
                         $("#po").val("");
                         if(msg){  
                             today()
                             var js = JSON.parse(msg);
-                            if(js.shipto == "MUS"){
-                                $("#customer").empty();
-                                $("#customer").append("<option value='MUS'>MUS</option><option value='MCA'>MCA</option><option value='MCL'>MCL</option>");
-                            }else if(js.shipto == "MCA"){
-                                $("#customer").empty();
-                                $("#customer").append("<option value='MCA'>MCA</option><option value='MCL'>MCL</option><option value='MUS'>MUS</option>");
-                            }else if(js.shipto == "MCL"){
-                                $("#customer").empty();
-                                $("#customer").append("<option value='MCL'>MCL</option><option value='MUS'>MUS</option><option value='MCA'>MCA</option>");
-                            }
+                            
+                            var startbox = parseInt(js.boxno.match(/\d+/)[0]);
+                            var endbox = parseInt(js.boxall.match(/\d+/)[0]);
+                            var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
+
+                            var shipto = js.shipto;
+                            var customer_address = js.customer_address;           
+            
+                            $("#customer").empty()
+                            $("#customer").append("<option value='"+ shipto+"'>"+ shipto+"</option>");
+                            
+                            $("#customer_address").empty()
+                            $("#customer_address").append("<option value='"+ customer_address+"'>"+ customer_address+"</option>");
+            
+                            getcustomer()
                         
                             if(js.destination == "ADC"){
                                 $("#destination").empty();
@@ -642,13 +679,17 @@
                             }else if(js.destination == "SCCR"){
                                 $("#destination").empty();
                                 $("#destination").append("<option value='SCCR'>SCCR</option><option value='ADC'>ADC</option><option value='ODC'>ODC</option>");
+                            }else{
+                                $("#destination").empty();
+                                $("#destination").append("<option value=''></option><option value=ADC''>ADC</option><option value='ODC'>ODC</option><option value='SCCR'>SCCR</option>");
                             }
-                            getcustomer_text()
+                            
                         
                             $("#quantity_box").val(js.qtyperbox);
-                            $("#boxno").val(js.boxno);
-                            $("#boxall").val(js.boxall);
+                            $("#boxno").val(startbox);
+                            $("#boxall").val(endbox);
                           
+                            $("#firstdigit").val(firstdigit);
                             $("#quantitytotal_box").val(js.allbox);
                             
                             $("#po").val(js.po);
@@ -748,6 +789,10 @@
             }
             
             $(document).ready(function () {
+                $("#customer").change(function() {
+                    $("#customer_address").empty();
+                    getcustomeraddress($(this).val())
+                });
                 $("#bt_search").click(function(){
                     searchpo()
                 });

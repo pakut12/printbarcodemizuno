@@ -62,6 +62,15 @@ public class BCDetailBox {
     private String po_old;
     private String customer_no;
     private String customer_product;
+    private String customer_address;
+
+    public String getCustomer_address() {
+        return customer_address;
+    }
+
+    public void setCustomer_address(String customer_address) {
+        this.customer_address = customer_address;
+    }
 
     public String getCustomer_no() {
         return customer_no;

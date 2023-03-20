@@ -60,7 +60,7 @@
                             <div class="row ">
                                 <div class="col-sm-12 col-md-6">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="radio" name="style_box" id="style_box1" value="1">
+                                        <input class="form-check-input" type="radio" name="style_box" id="style_box1" value="1" checked>
                                         <label class="form-check-label" for="flexRadioDefault1">
                                             รหัสเดียวในกล่อง
                                         </label>

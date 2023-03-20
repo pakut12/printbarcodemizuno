@@ -30,7 +30,7 @@
                         <div class="col-sm-12 col-md-2">
                             <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
+                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="2">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-3">
@@ -78,7 +78,12 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4 align-items-md-center">
-                                        <div id="customer_text" class="p-1"></div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">สถานที่ส่ง</span>
+                                            <select class="form-select form-select-sm text-center" id="customer_address">
+                                                
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
@@ -99,7 +104,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                            <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="1">
+                                            <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="2">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
@@ -399,6 +404,7 @@
                 var po_old = $("#pobefore").val();
         
                 var shipto = $("#customer").val();
+                var customer_address = $("#customer_address").val();
                 var qtyperbox  = $("#quantity_box").val();
                 var firstdigit =  $("#initial").val();
                 var startbox  = $("#numberbox_start").val();
@@ -467,6 +473,7 @@
                         url:"Detail",
                         data:{
                             type:"updatedetailsall",
+                            customer_address:customer_address,
                             pobefore:pobefore,
                             startboxbefore:startboxbefore,
                             endboxbefore:endboxbefore,
@@ -509,7 +516,7 @@
                             firstdigitbefore:firstdigitbefore
                         },
                         success:function(msg){
-                            console.log(msg)
+                            
                             if(msg){
                                 var js = JSON.parse(msg);
                                 if(js.status == "true"){
@@ -518,6 +525,7 @@
                                         icon:"success",
                                         text:"เเก้ไขสำเร็จ"
                                     })
+                                 
                                 }else if(js.status == "false"){
                                     Swal.fire({
                                         title:"เเก้ไข",
@@ -552,22 +560,36 @@
                 $("#myform :input").attr("disabled", true);
             }
             
-            function customer_text(){
-                var text = $("#customer").val();
-                if(text == 'MUS'){
-                    $("#customer_text").text('MIZUNO USA INC.');
-                }else if(text == 'MCA'){
-                    $("#customer_text").text('MIZUNO CORPORATION');
-                }else if(text == 'MCL'){
-                    $("#customer_text").text('MIZUNO CANADA INC-TDC');
-                }
+         
+            function getcustomer(){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getlistcustomer"
+                    },
+                    success:function(msg){
+                        //$("#customer").empty();
+                        $("#customer").append(msg);
+                        getcustomeraddress($("#customer").val())
+                    }
+                })
             }
             
-            function getcustomer_text(){
-                customer_text();
-                $('#customer').on('change', function() {
-                    customer_text();
-                });
+            function getcustomeraddress(address_customer){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getdelivery",
+                        address_customer:address_customer
+                    },
+                    success:function(msg){
+                  
+                        //  $("#customer_address").empty();
+                        $("#customer_address").append(msg);
+                    }
+                })
             }
             
             function searchpo(){
@@ -589,17 +611,16 @@
                     success:function(msg){
                         if(msg){  
                             var js = JSON.parse(msg);
-                      
-                            if(js.shipto == "MUS"){
-                                $("#customer").empty();
-                                $("#customer").append("<option value='MUS'>MUS</option><option value='MCA'>MCA</option><option value='MCL'>MCL</option>");
-                            }else if(js.shipto == "MCA"){
-                                $("#customer").empty();
-                                $("#customer").append("<option value='MCA'>MCA</option><option value='MCL'>MCL</option><option value='MUS'>MUS</option>");
-                            }else if(js.shipto == "MCL"){
-                                $("#customer").empty();
-                                $("#customer").append("<option value='MCL'>MCL</option><option value='MUS'>MUS</option><option value='MCA'>MCA</option>");
-                            }
+                            console.log(js)
+                            
+                            var shipto = js.shipto;
+                            var customer_address = js.customer_address
+                            $("#customer").empty()
+                            $("#customer").append("<option value='"+ shipto+"'>"+ shipto+"</option>");
+                            
+                            $("#customer_address").empty()
+                            $("#customer_address").append("<option value='"+ customer_address+"'>"+ customer_address+"</option>");
+                            getcustomer()
                             
                             if(js.destination == "ADC"){
                                 $("#destination").empty();
@@ -610,8 +631,12 @@
                             }else if(js.destination == "SCCR"){
                                 $("#destination").empty();
                                 $("#destination").append("<option value='SCCR'>SCCR</option><option value='ADC'>ADC</option><option value='ODC'>ODC</option>");
+                            }else{
+                                $("#destination").empty();
+                                $("#destination").append("<option value=''></option><option value='ADC'>ADC</option><option value='ODC'>ODC</option><option value='SCCR'>SCCR</option>");
                             }
-                            getcustomer_text()
+                            
+                            
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
                             $("#numberbox_start").val(js.startbox);
@@ -717,6 +742,10 @@
             }
             
             $(document).ready(function () {
+                $("#customer").change(function() {
+                    $("#customer_address").empty()
+                    getcustomeraddress($(this).val())
+                });
                 $("#bt_search").click(function(){
                     searchpo()
                 });

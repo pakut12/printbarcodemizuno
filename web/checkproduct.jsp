@@ -31,18 +31,19 @@
                         <div class="col-sm-12 col-md-3">
                             <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
+                                <input type="text" class="form-control text-center" id="firstdigitbefore" maxlength="2">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-2">
                             <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่กล่อง</span>
-                                <input type="text" class="form-control text-center" name="numstart" id="numstart">
+                                <input type="number" class="form-control text-center" name="numstart" id="numstart">
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-4 ">
                             <div class="d-flex justify-content-center justify-content-md-start">
                                 <button type="button" class="btn btn-outline-primary btn-sm  w-25" id="bt_search">ค้นหา</button>
+                                <button class="btn btn-outline-danger btn-sm  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
                             </div>
                         </div>
                     </div>
@@ -64,16 +65,22 @@
                                 </div>
                             </div>
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">รหัสบาร์โค้ด</span>
                                         <input type="number" class="form-control text-center" name="barcode_box" id="barcode_box" pattern="" onclick="this.select();">
                                     </div>
                                 </div>
                                 
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                        <input type="text" class="form-control text-center" name="firstdigit" id="firstdigit" pattern="" readonly>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่กล่อง</span>
                                         <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" readonly>
                                     </div>
                                 </div>
@@ -244,7 +251,7 @@
                             <div class="row">
                                 <div class="col-sm-12 col-md-12 text-center">
                                     <button class="btn btn-outline-success btn-sm mx-3  " type="button" id="bt_sava" onclick="updatedata()">บันทึกข้อมูล</button>
-                                    <button class="btn btn-outline-danger btn-sm  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ยกเลิกข้อมูล</button>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -387,6 +394,10 @@
                             text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
                         })
                     }
+                    setTimeout(function (){
+                        $("#barcode_box").val("");
+                    }, 100);
+                  
                     
                 }else if(barcode === customer2_barcode && customer2_barcode){
                     var num = parseInt(customer2_number)+1;
@@ -399,6 +410,9 @@
                             text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
                         })
                     }
+                    setTimeout(function (){
+                        $("#barcode_box").val("");
+                    }, 100);
                 }else if(barcode === customer3_barcode && customer3_barcode){
                     var num = parseInt(customer3_number)+1;
                     if(num <= $("#customer3_qty").val()){
@@ -410,6 +424,9 @@
                             text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
                         })
                     }
+                    setTimeout(function (){
+                        $("#barcode_box").val("");
+                    }, 100);
                 }else if(barcode === customer4_barcode && customer4_barcode){
                     var num = parseInt(customer4_number)+1;
                     if(num <= $("#customer4_qty").val()){
@@ -421,15 +438,26 @@
                             text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
                         })
                     }
-                    
+                    setTimeout(function (){
+                        $("#barcode_box").val("");
+                    }, 100);
+                }else{
+                    Swal.fire({
+                        icon:'error',
+                        title:'ผิดพลาด',
+                        text:'รหัสสินค้าไม่ถูกต้อง'
+                    })
+                    setTimeout(function (){
+                        $("#barcode_box").val("");
+                    }, 100);
                 }
             }
             
             function searchpo(){
                 
-                var firstdigit = $("#firstdigit").val();
+                var firstdigitbefore = $("#firstdigitbefore").val();
                 var posearch = $("#posearch").val();
-                var numstart = firstdigit+$("#numstart").val();
+                var numstart = firstdigitbefore+$("#numstart").val();
     
                 $.ajax({
                     type:"post",
@@ -447,15 +475,19 @@
                             var qty_result2 = js.qty_result2  
                             var qty_result3 = js.qty_result3   
                             var qty_result4 = js.qty_result4   
+                           
+                            var startbox = parseInt(js.boxno.match(/\d+/)[0]);
+                            var endbox = parseInt(js.boxall.match(/\d+/)[0]);
+                            var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
                             
-                            
-                            
+            
+                            $("#firstdigit").val(firstdigit);
                             $("#customer_num").empty();
                             $("#customer_num").append("<option value='"+js.shipto+"'>"+js.shipto+"</option>");
  
                             $("#quantity_box").val(js.qtyperbox);
-                            $("#boxno").val(js.boxno);
-                            $("#boxall").val(js.boxall);
+                            $("#boxno").val(startbox);
+                            $("#boxall").val(endbox);
                           
                             $("#quantitytotal_box").val(js.allbox);
                         
@@ -512,8 +544,6 @@
                 })
             }
               
-           
-            
             $(document).ready(function () {
                 $("#bt_search").click(function(){
                     searchpo()
