@@ -88,70 +88,56 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: [{text:'รหัสลูกค้า : ',bold:true},{text:'<%=customer_no%>'}],
+                                    text: [{text:'พาเลท : ',bold:true},{text:'<%=pallet%>'}],
                                             fontSize: 14,
-                                            alignment: 'center',
-                                            margin: [0,0, 0, 0]
-                                        },
-                                        {
-                                            width: '*',
-                                            text:[{text:'รหัสสินค้า : ',bold:true},{text:'<%=customer_product%>'}],
-                                                    fontSize: 14,
-                                                    alignment: 'center',
-                                                    margin: [0,0, 40, 0]
-                                                },
-                                                {
-                                                    width: '*',
-                                                    text: [{text:'พาเลท : ',bold:true},{text:'<%=pallet%>'}],
-                                                            fontSize: 14,
-                                                            alignment: 'center',
-                                                            margin: [40,0, 0, 0]      
-                                                        }
-                                                    ]
-                                                },
+                                            alignment: 'right',
+                                            margin: [0,0, 45,0]   
+                                        }
+                                    ]
+                                },
                         
-                                            ]
-                                        },
-                                        background: [
+                            ]
+                        },
+                        background: [
                             
-                                            {
-                                                canvas: [
-                                                    {
-                                                        type: 'rect',
-                                                        x: 20,
-                                                        y: 20,
-                                                        w: 550,
-                                                        h: 357,
-                                                        r: 0,
-                                                        lineWidth: 1,
-                                                        lineColor: '#000000'
-                                                    },
-                                                    {
-                                                        type: 'rect',
-                                                        x: 20,
-                                                        y: 20,
-                                                        w: 550,
-                                                        h: 50,
-                                                        r: 0,
-                                                        lineWidth: 1,
-                                                        lineColor: '#000000'
-                                                    }
-                                                ]
-                                            }
+                            {
+                                canvas: [
+                                    {
+                                        type: 'rect',
+                                        x: 20,
+                                        y: 20,
+                                        w: 550,
+                                        h: 357,
+                                        r: 0,
+                                        lineWidth: 1,
+                                        lineColor: '#000000'
+                                    },
+                                    {
+                                        type: 'rect',
+                                        x: 20,
+                                        y: 20,
+                                        w: 550,
+                                        h: 50,
+                                        r: 0,
+                                        lineWidth: 1,
+                                        lineColor: '#000000'
+                                    }
+                                ]
+                            }
                             
-                                        ],
-                                        content: [
-                                            {
-                                                alignment: 'center',
-                                                table: {
+                        ],
+                        content: [
+                            {
+                                alignment: 'center',
+                                table: {
                            
-                                                    // headers are automatically repeated if the table spans over multiple pages
-                                                    // you can declare how many rows should be treated as headers
-                                                    headerRows: 1,
+                                    // headers are automatically repeated if the table spans over multiple pages
+                                    // you can declare how many rows should be treated as headers
+                                    headerRows: 1,
                   
-                                                    widths:  [ '*', '*', '*', '*', '*', '*'],
-                                                    body: [
-                                                        [ 'วันที่', 'PO', 'Production Order','กล่องที่','จำนวน','หมายเหตุ' ],
+                                    widths:  [ '*', '*', '*', '*', '*', 'auto', 'auto', 'auto'],
+                                    body: [
+                                        [ 'วันที่', 'PO','รหัสลูกค้า','รหัสสินค้า','Production Order','กล่องที่','จำนวน','หมายเหตุ' ],
                         <%
             int marknum = 0;
             int n = 1;
@@ -192,16 +178,14 @@
                     marknum++;
                 }
 
-
-
                 DetailService ds = new DetailService();
 
                 if (n <= 12) {
                     sum += Integer.parseInt(ds.ChackNull(qty_result));
-                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
                     n1++;
                 } else if (n == 13) {
-                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum - 1) + "'],");
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum - 1) + "'],");
                     sum = 0;
                     n = 0;
                     i--;
@@ -209,32 +193,27 @@
                 }
 
                 if (n1 == list.size() + 1) {
-                    out.print("[{text: 'รวม',colSpan: 3},'" + sum + "','" + sum + "','" + (n) + "','" + sum + "','" + (marknum) + "'],");
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n) + "','" + sum + "','" + (marknum) + "'],");
                     n1 = 1;
                 }
-
                 n++;
             }
                         %>
-                                                                    ]
-                                                                }   
-                                                            }
+                                                    ]
+                                                }   
+                                            }
                        
-                                                        ],
-                                                        styles: {
+                                        ],
+                                        styles: {
                                    
-                                                        },
-                                                        defaultStyle: {
-                                                            font: 'THSarabunNew'
-                                                        }
-                                                    }
+                                        },
+                                        defaultStyle: {
+                                            font: 'THSarabunNew'
+                                        }
+                                    }
             
             
-                                                    pdfMake.createPdf(dd).download('<%=po%>.pdf'); 
-                                                    
-    
-    
-                                                   
+                                    pdfMake.createPdf(dd).download('<%=po%>.pdf');  
             
         </script>
     </body>

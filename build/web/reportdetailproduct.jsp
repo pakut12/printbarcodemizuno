@@ -72,7 +72,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
                                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
-                                            <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ยกเลิกข้อมูล</button>
+                                            <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
                                         </div>
                                     </div>
                                 </div>
@@ -84,8 +84,11 @@
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">เเสดงข้อมูล</div>
                     <div class="card-body">
-                        <div id="mytable" class="mt-3">
-                            
+                     
+                        <div class="table-responsive">
+                            <div id="mytable" class="mt-3">
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -129,9 +132,7 @@
                         po:po
                     },
                     success:function(msg){
-                       
                         $("#mytable").html(msg)
-        
                         var groupColumn = 4;
                         var table = $('#tablereport').DataTable({
                             dom: 'Bfrtip',
@@ -143,7 +144,7 @@
                                     exportOptions: {
                                         format: {
                                             body: function ( data, row, column, node ) {
-                                               if(column === 5){}
+                                                if(column === 5){}
                                                 return data
                                                    
                                             }
@@ -165,39 +166,23 @@
                                     }
                                 }
                             ],
-                            columnDefs: [{ visible: false, targets: groupColumn }],
-                            order: [[groupColumn, 'asc']],
-                            displayLength: 10,
-                            drawCallback: function (settings) {
-                                var api = this.api();
-                                var rows = api.rows({ page: 'current' }).nodes();
-                                var last = null;
- 
-                                api
-                                .column(groupColumn, { page: 'current' })
-                                .data()
-                                .each(function (group, i) {
-                                    if (last !== group) {
-                                        $(rows)
-                                        .eq(i)
-                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="8">' + group + '</td></tr>');
-                                        last = group;
-                                    }
-                                });
+                            order: [[2, 'asc']],
+                            rowGroup: {
+                                startRender: function ( rows, group ) {
+                                    return "รหัสสินค้า : "+group ;
+                                },
+                                endRender: function ( rows, group ) {
+                                    var listdata = rows.data().pluck(7);
+                                    var sum = 0;
+                                    $.each(listdata,function(k,v){
+                                        sum += parseInt(v)
+                                    })
+                                    return "<div style='padding-left: 83%;'>รวม : " + sum +"</div>"
+                                },
+                                dataSrc: 4
                             }
                         });
  
-                        // Order by the grouping
-                        $('#tablereport tbody').on('click', 'tr.group', function () {
-                            var currentOrder = table.order()[0];
-                            if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-                                table.order([groupColumn, 'desc']).draw();
-                            } else {
-                                table.order([groupColumn, 'asc']).draw();
-                            }
-                        });
-                  
-
                     }
                 })
             } 

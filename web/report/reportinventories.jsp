@@ -63,7 +63,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text: 'รายละเอียดสินค้า',
+                                    text: 'รายงานสินค้าคงเหลือ',
                                     fontSize: 20,
                                     alignment: 'center',
                                     bold:true,

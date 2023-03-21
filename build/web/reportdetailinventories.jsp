@@ -28,9 +28,8 @@
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                             <select class="form-select form-select-sm text-center" id="customer" name="customer">
-                                                <option value="MUS">MUS</option>
-                                                <option value="MCA">MCA</option>
-                                                <option value="MCL">MCL</option>
+                                                
+                                                
                                             </select>
                                         </div>
                                     </div>
@@ -38,6 +37,7 @@
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
                                             <select class="form-select form-select-sm text-center" id="destination" name="destination">
+                                                <option value=''></option>
                                                 <option value="ADC">ADC</option>
                                                 <option value="ODC">ODC</option>
                                                 <option value="SCCR">SCCR</option>
@@ -102,7 +102,7 @@
                                 <div class="row mt-3 text-center">
                                     <div class="col-sm-12 col-md-12">
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
-                                        <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ยกเลิกข้อมูล</button>
+                                        <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
                                     </div>
                                 </div>
                             </div>
@@ -112,11 +112,12 @@
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">เเสดงข้อมูล</div>
                     <div class="card-body">
-                        <div class="table-responsive">
-                            <div id="mytable" class="mt-3">
-                                
-                            </div>
+                        
+                        
+                        <div id="mytable" class="mt-3">
+                            
                         </div>
+                        
                     </div>
                 </div>
             </div>
@@ -125,7 +126,21 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
-            
+            function getcustomer(){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getlistcustomer"
+                    },
+                    success:function(msg){
+                        $("#customer").empty();
+                        $("#customer").append("<option value=''></option>");
+                        $("#customer").append(msg);
+                        //getcustomeraddress($("#customer").val())
+                    }
+                })
+            }
             function today(){
                 const date = new Date();
                 var day = date.getDate();
@@ -168,7 +183,7 @@
                     },
                     success:function(msg){
                         var form1 = $("#myformreport").serialize()
-                        console.log(form1)
+                       
                         $("#mytable").html(msg);
                         var groupColumn = 3;
                         var table = $('#tablereport').DataTable({
@@ -194,40 +209,33 @@
                                     }
                                 }
                             ],
+                            order: [[2, 'asc']],
+                            scrollX: true,
+                            rowGroup: {
+                                startRender: function ( rows, group ) {
+                                    return "รหัสสินค้า : "+group ;
+                                },
+                                endRender: function ( rows, group ) {
+                                    
+                                    var listdata = rows.data().pluck(9);
+                                    var sum = 0;
+                                    $.each(listdata,function(k,v){
+                                        sum += parseInt(v)
+                                    })
+                                    return "<div style='padding-left: 80%;'>รวม : " + sum +"</div>"
+                                },
+                                dataSrc: 3
+                            }
                             
-                            columnDefs: [{ visible: false, targets: groupColumn }],
-                            order: [[groupColumn, 'asc']],
-                            displayLength: 10,
-                            drawCallback: function (settings) {
-                                var api = this.api();
-                                var rows = api.rows({ page: 'current' }).nodes();
-                                var last = null;
-                                api
-                                .column(groupColumn, { page: 'current' })
-                                .data()
-                                .each(function (group, i) {
-                                    if (last !== group) {
-                                        $(rows)
-                                        .eq(i)
-                                        .before('<tr class="group text-start" style="background-color: #d4d4d4"><td colspan="12"><b>รหัสลูกค้า : <b>' + group + '</td></tr>');
-                                        last = group;
-                                    }
-                                });
-                            }
                         });
- 
-                        // Order by the grouping
-                        $('#tablereport tbody').on('click', 'tr.group', function () {
-                            var currentOrder = table.order()[0];
-                            if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-                                table.order([groupColumn, 'desc']).draw();
-                            } else {
-                                table.order([groupColumn, 'asc']).draw();
-                            }
-                        });
+                        
                     }
                 })
             } 
+            
+            $( document ).ready(function() {
+                getcustomer()
+            });
             
           
         </script>

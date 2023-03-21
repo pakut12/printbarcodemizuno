@@ -63,18 +63,18 @@ public class Report extends HttpServlet {
                     String end = request.getParameter("end").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
                     String po = request.getParameter("po").trim();
-
+                
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
                     int sum = 0;
                     String html = "";
                     html += "<div class='row mb-3 text-center fs-4'>";
-
+                    html += "<div class='text-center h3 fw-bold'>รายละเอียดสินค้า</div>";
                     html += "<div class='col-12 col-md-12 text-end col-lg-12'>";
                     html += " <b>พาเลท :</b> " + pallet;
                     html += " </div>";
                     html += "</div>";
-                    html += "<table class='table table-hover table-bordered text-center table-sm' id='tablereport'>";
+                    html += "<table class='table table-hover table-bordered text-nowrap text-center table-sm' id='tablereport'>";
                     html += "<thead>";
                     html += "<tr>";
                     html += "<th scope='col'>วันที่</th>";
@@ -92,11 +92,9 @@ public class Report extends HttpServlet {
                     for (BCDetailBox li : list) {
                         String mark = "";
                         String qty_result = "";
-                        
+
                         if (!customer_no.equals(li.getCustomer_no())) {
-                            
                         } else {
-                            
                         }
                         customer_no = li.getCustomer_no();
 
@@ -121,7 +119,8 @@ public class Report extends HttpServlet {
                                 mark = "*";
                             }
                         }
-
+                        
+                        sum += Integer.parseInt(qty_result);
 
                         DetailService ds = new DetailService();
 
@@ -130,14 +129,21 @@ public class Report extends HttpServlet {
                         html += "<td>" + ds.ChackNull(li.getPo()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getCustomer_product()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getProdorder()) + "</td>";
-                        html += "<td><b>รหัสลูกค้า : <b>" + customer_no + "</td>";
+                        html += "<td>" + ds.ChackNull(customer_no) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getPallet()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getBoxno()) + "</td>";
                         html += "<td>" + ds.ChackNull(qty_result) + "</td>";
                         html += "<td>" + ds.ChackNull(mark) + "</td>";
                         html += "</tr>";
                     }
+
+
                     html += "</tbody>";
+                    html += "<tfooter>";
+                    html += "<tr class='dtrg-group dtrg-end dtrg-level-0'>";
+                    html += "<th colspan='12' scope='row'><div style='padding-left: 80%;'>รวมทั้งหมด : " + sum + "</div></th>";
+                    html += "</tr>";
+                    html += "<tfooter>";
                     html += "</table>";
 
                     out.print(html);
@@ -183,10 +189,11 @@ public class Report extends HttpServlet {
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit);
 
+                    int sum = 0;
 
                     String html = "";
                     html += "<div class='text-center h3'>รายงานสินค้าคงเหลือ</div>";
-                    html += "<table class='table table-hover table-bordered text-center table-sm' id='tablereport'>";
+                    html += "<table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>";
                     html += "<thead>";
                     html += "<tr>";
                     html += "<th scope='col'>วันที่</th>";
@@ -236,6 +243,7 @@ public class Report extends HttpServlet {
                             }
                         }
 
+                        sum += Integer.parseInt(qty_result);
                         DetailService ds = new DetailService();
 
                         int different = Integer.parseInt(qty) - Integer.parseInt(qty_result);
@@ -256,6 +264,11 @@ public class Report extends HttpServlet {
                         html += "</tr>";
                     }
                     html += "</tbody>";
+                    html += "<tfooter>";
+                    html += "<tr class='dtrg-group dtrg-end dtrg-level-0'>";
+                    html += "<th colspan='12' scope='row'><div style='padding-left: 80%;'>รวมทั้งหมด : " + sum + "</div></th>";
+                    html += "</tr>";
+                    html += "<tfooter>";
                     html += "</table>";
 
                     out.print(html);

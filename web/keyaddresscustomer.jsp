@@ -153,30 +153,44 @@
             }
             
             function del_address(id){
-                $.ajax({
-                    type:"post",
-                    url:"CustomerAddress",
-                    data:{
-                        type:"deladdressid",
-                        address_id:id
-                    },
-                    success:function(msg){
-                        if(msg == 'true'){
-                            Swal.fire({
-                                title:"ลบ",
-                                icon:"success",
-                                text:"ลบสำเร็จ"
-                            })
-                        }else if(msg == 'false'){
-                            Swal.fire({
-                                title:"ลบ",
-                                icon:"error",
-                                text:"ลบไม่สำเร็จ"
-                            })
-                        }
-                        gettableaddress()
+                Swal.fire({
+                    title: 'คุณต้องการลบใช่หรือไม่',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'ใช่',
+                    cancelButtonText: 'ไม่ใช่'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $.ajax({
+                            type:"post",
+                            url:"CustomerAddress",
+                            data:{
+                                type:"deladdressid",
+                                address_id:id
+                            },
+                            success:function(msg){
+                                if(msg == 'true'){
+                                    Swal.fire({
+                                        title:"ลบ",
+                                        icon:"success",
+                                        text:"ลบสำเร็จ"
+                                    })
+                                }else if(msg == 'false'){
+                                    Swal.fire({
+                                        title:"ลบ",
+                                        icon:"error",
+                                        text:"ลบไม่สำเร็จ"
+                                    })
+                                }
+                                gettableaddress()
+                            }
+                        })
                     }
                 })
+        
+               
             }
             
             function edit_address(id){

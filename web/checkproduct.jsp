@@ -51,7 +51,7 @@
             </div>
             <div id="myform">
                 <div class="card shadow-lg mt-3">
-                    <div class="card-header">คีย์ข้อมูล</div>
+                    <div class="card-header">ยิงบรรจุกล่อง</div>
                     <div class="card-body">
                         <div class="container">
                             <div class="row">
