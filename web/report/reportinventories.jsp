@@ -92,9 +92,9 @@
                             // you can declare how many rows should be treated as headers
                             headerRows: 1,
                   
-                            widths:  [ '*', 'auto', 'auto', 'auto', 'auto', 'auto','auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            widths:  [ '*', '*', '*', 'auto', 'auto', 'auto','auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
                             body: [
-                                [ 'วันที่', 'PO', 'PO เดิม','รหัสลูกค้า','รหัสสินค้า','Production Order','พาเลท', 'กล่องที่', 'จำนวนเต็ม','จำนวนในกล่อง','ต่าง','หมายเหตุ'],
+                                [ 'วันที่', 'PO', 'PO เดิม','รหัสลูกค้า','รหัสสินค้า','Production\nOrder','พาเลท', 'กล่องที่', 'จำนวนเต็ม','จำนวน\nในกล่อง','ต่าง','หมาย\nเหตุ'],
                         <%
             int marknum = 0;
             int n = 1;
@@ -152,7 +152,7 @@
                     sumqty += Integer.parseInt(ds.ChackNull(qty));
                     sumqty_result += Integer.parseInt(ds.ChackNull(qty_result));
                     sumdifferent += Integer.parseInt(ds.ChackNull(String.valueOf(different)));
-                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getPo_old()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','905229000001'," +
+                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getPo_old()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "'," +
                             "'" + ds.ChackNull(list.get(i).getPallet()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(String.valueOf(different)) + "','" + ds.ChackNull(mark) + "'],");
                     n1++;
                 } else if (n == 35) {
