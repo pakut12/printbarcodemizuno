@@ -27,6 +27,9 @@
 		<band height="22" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="0" width="69" height="20" uuid="ee964f24-a2b7-46ed-a969-6369d9b5bbb9"/>
+				<textElement>
+					<font fontName="Angsana New" pdfFontName="HYSMyeongJo-Medium"/>
+				</textElement>
 				<text><![CDATA[ฟหก]]></text>
 			</staticText>
 			<staticText>
@@ -63,6 +66,9 @@
 		<band height="24" splitType="Stretch">
 			<textField>
 				<reportElement x="0" y="0" width="69" height="20" uuid="acf40b97-527d-4e53-8f43-10627aa29a93"/>
+				<textElement>
+					<font fontName="Angsana New"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{PO}]]></textFieldExpression>
 			</textField>
 			<textField>

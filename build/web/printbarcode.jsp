@@ -16,7 +16,7 @@
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-5">
             <div class="row">
-                <div class="col-12 col-md-7">
+                <div class="col-12 col-md-8">
                     <div class="card">
                         <div class="card-header">
                             ค้นหา
@@ -32,7 +32,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" id="firstdigit" maxlength="1">
+                                        <input type="text" class="form-control text-center" id="firstdigit" maxlength="2">
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
@@ -51,7 +51,7 @@
                     </div>
                 </div>
                 
-                <div class="col-12 col-md-5">
+                <div class="col-12 col-md-4">
                     <div class="card">
                         <div class="card-header">
                             เลือก Stkcker
@@ -113,8 +113,8 @@
             function barcode(){
                 var firstdigit = $("#firstdigit").val();
                 var po = $("#po").val();
-                var boxstart = firstdigit + $("#boxstart").val();
-                var boxend = firstdigit + $("#boxend").val();
+                var boxstart = $("#boxstart").val();
+                var boxend = $("#boxend").val();
                 
                 $.ajax({
                     type:'post',
@@ -123,7 +123,8 @@
                         type:"getdetailbarcode",
                         po:po,
                         boxstart:boxstart,
-                        boxend:boxend
+                        boxend:boxend,
+                        firstdigit:firstdigit
                     },
                     success:function(msg){
                         $("#mytable").empty();
@@ -140,8 +141,8 @@
                 $("#printbarcode").click(function(){
                     var firstdigit = $("#firstdigit").val();
                     var po = $("#po").val();
-                    var start = firstdigit + $("#boxstart").val();
-                    var end = firstdigit + $("#boxend").val();
+                    var start = $("#boxstart").val();
+                    var end = $("#boxend").val();
                           
                     var style_box1 = $("#style_box1").is(":checked");
                     var style_box2 = $("#style_box2").is(":checked");
@@ -160,9 +161,24 @@
                         num = 4;
                     }
                     
-                    // window.open("report/reportbarcode.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num, '_blank','height=400,width=800,left=200,top=200');        
+                    if(po && start && end && num){
+                        if(num == 1){
+                            window.open("report/reportbarcode1.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
+                        
+                        }else if(num == 2){
+                            window.open("report/reportbarcode2.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
+                        
+                        }else if(num == 3){
+                            window.open("report/reportbarcode3.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
+                        
+                        }else if(num == 4){
+                            window.open("report/reportbarcode4.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');       
+                        }
+                        
+                    }
+                  
                    
-                    window.open("report/test.jsp", '_blank','height=400,width=800,left=200,top=200');        
+                    //window.open("report/test.jsp", '_blank','height=400,width=800,left=200,top=200');        
                 })
             });
         </script>

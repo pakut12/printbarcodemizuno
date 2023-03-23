@@ -92,7 +92,7 @@
                             // you can declare how many rows should be treated as headers
                             headerRows: 1,
                   
-                            widths:  [ '*', '*', '*', 'auto', 'auto', 'auto','auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            widths:  [ 50, 40, 40, "auto","auto", 55,23, 23,20,30,"auto", 20],
                             body: [
                                 [ 'วันที่', 'PO', 'PO เดิม','รหัสลูกค้า','รหัสสินค้า','Production\nOrder','พาเลท', 'กล่องที่', 'จำนวนเต็ม','จำนวน\nในกล่อง','ต่าง','หมาย\nเหตุ'],
                         <%

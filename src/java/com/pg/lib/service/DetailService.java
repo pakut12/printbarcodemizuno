@@ -243,23 +243,25 @@ public class DetailService {
         return status;
     }
 
-    private String SqlDetailBoxForPrint(String po, String start, String end) {
+    private String SqlDetailBoxForPrint(String po, String start, String end,String firstdigit) {
 
-        int boxstart = Integer.parseInt(start.substring(1));
-        int boxend = Integer.parseInt(end.substring(1));
-        String letter = end.substring(0, 1);
+        int boxstart = Integer.parseInt(start);
+        int boxend = Integer.parseInt(end);
+        
 
         String sql = "select * from MIZUNONEWBARBOXDT where po = '" + po + "' and boxno in (";
 
         for (int n = boxstart; n < boxend + 1; n++) {
-            String num = letter + String.valueOf(n);
+            String num = firstdigit + String.valueOf(n);
             if (n < boxend) {
                 sql += "'" + num + "',";
             } else {
                 sql += "'" + num + "')";
             }
         }
-        sql += " order by CAST(substr(boxno,2) as int)";
+        sql += "order by CAST(REGEXP_SUBSTR(boxno, '\\d+')  as int)";
+        
+        System.out.println(sql);
         return sql;
     }
 
@@ -270,10 +272,10 @@ public class DetailService {
         return txt;
     }
 
-    public List<BCDetailBox> GetDetailBoxForPrint(String po, String start, String end) throws SQLException {
+    public List<BCDetailBox> GetDetailBoxForPrint(String po, String start, String end,String firstdigit) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList();
         try {
-            String sql = SqlDetailBoxForPrint(po, start, end);
+            String sql = SqlDetailBoxForPrint(po, start, end,firstdigit);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();

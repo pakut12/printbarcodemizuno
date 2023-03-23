@@ -47,7 +47,7 @@ public class Detail extends HttpServlet {
                 String nw = request.getParameter("nw").trim();
                 String country = request.getParameter("country").trim();
                 String quantitytotal_box = request.getParameter("quantitytotal_box").trim();
-                String description = request.getParameter("description").trim().replaceAll("'", "#");
+                String description = request.getParameter("description").trim();
                 String[] customer1_id = request.getParameterValues("customer1_id[]");
                 String[] customer2_id = request.getParameterValues("customer2_id[]");
                 String[] customer3_id = request.getParameterValues("customer3_id[]");
@@ -385,11 +385,13 @@ public class Detail extends HttpServlet {
                 try {
 
                     String po = request.getParameter("po").trim();
-                    String boxstart = request.getParameter("boxstart");
-                    String boxend = request.getParameter("boxend");
-
+                    String boxstart = request.getParameter("boxstart").trim();
+                    String boxend = request.getParameter("boxend").trim();
+                    String firstdigit = request.getParameter("firstdigit").trim();
+                    
+                    
                     DetailService ds = new DetailService();
-                    List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend);
+                    List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend,firstdigit);
                     int n = 1;
                     String html = "";
                     html += "<table class='table table-striped  table-sm text-center text-nowrap' id='table_boxdetail'>";

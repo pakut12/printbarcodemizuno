@@ -22,6 +22,7 @@
         
         
         <script>
+            
             function textToBase64Barcode(text,show){
                 var canvas = document.createElement("canvas");
                 if(show == 1 ){
@@ -29,10 +30,11 @@
                 }else{
                     JsBarcode(canvas, text, {format: "CODE39",displayValue: false});
                 }
-                
-                return canvas.toDataURL("image/png");
+                console.log(canvas.toDataURL("image/jpg"))
+                return canvas.toDataURL("image/jpg");
             }
-            
+          
+        
             pdfMake.fonts = {
                 THSarabunNew: {
                     normal: 'THSarabunNew.ttf',
@@ -50,145 +52,18 @@
             
             var dd = {
                 pageSize: {
-                    width: 460,
+                    width: 453,
                     height: 390
                 },
                 pageMargins: [ 10,10,10,10],
-                content:[
-                    
-                    {
-                        columns: [
-                            {
-                                text:"Ship To : MUS\n MIZUNO USA INC.\n BRASELTON DC\n 920 HIGHWAY 124\nBRASELTON GA 30517 USA"
-                            },
-                            {
-                                text:"Ship From : TSG\n THAI SPORTS GARMENT CO.,LTD.\n 666 RAMA 3 ROAD\n BANGPONGPANG YANNAWA \nBANGKOK 10120 THAILAND	"
-                            },
-                        ],
-                        bold: true
-                        
-                    },
-                    {
-                        width: 'auto',
-                        columns: [
-                            [
-                                {
-                                    columns: [
-                                        {text: "Qty"},
-                                        {text: "30"},
-                                        {text: "UOM"},
-                                    ]
-                                },
-                                {
-                                    width: 'auto',
-                                    columns: [
-                                        {image: textToBase64Barcode("40"),width: 100, height: 20},
-                                        {text: "PR"}
-                                    ]
-                                }
-                            ],
-                            [
-                                {
-                                    width: 'auto',
-                                    columns: [
-                                        {
-                                            text: "171909-OP",
-                                            alignment:'center'
-                                        },
-                                    ]
-                                },
-                                {
-                                    width: 'auto',
-                                    columns: [
-                                        {
-                                            image: textToBase64Barcode("123"),
-                                            width: 130, 
-                                            height: 20,
-                                            margin: [ 5, 2, 10, 0 ]
-                                        }
-                                    ]
-                                }
-                            ],
-                            {
-                                text:"Description \n  PREMIER SHORT PANT DARK CHARCOAL"
-                            }
-                            
-                        ],
-                        bold: true
-                    },
-             
-                    {
-                        
-                       
-                        columns: [
-                            [
-                                {
-                                    text: "3",
-                                    alignment:'left',
-                                    fontSize: 8,
-                                    absolutePosition: {
-                                        x: 87,
-                                        y: 150
-                                    }
-                                },
-                                {
-                                
-                                    text: "CTN DIMES : 38X57X40 CMS\nG.W/N.W: 10.9 KGS/9.6 KGS\nCBM: 0.087 M",
-                                    alignment:'left'
-                                
-                                },
-                            ],
-                            [
-                                {
-                                    text: "Country of Origin\nTHAILAND",
-                                    alignment:'center'
-                                },
-                                {
-                                    text: "Carton A1 of A11",
-                                    alignment:'center'
-                                }
-                            ]
-                            
-                        ],
-                        bold: true
-                        
-                    },
-                    {
-                       
-                        columns: [
-                            {
-                                text:"350007.0000.03.XS",
-                                alignment:'center',
-                                fontSize: 20
-                                
-                            },
-                            
-                            
-                        ],
-                        bold: true
-                        
-                    },
-                    {
-                       
-                        columns: [
-                            {
-                                
-                                image: textToBase64Barcode("889961333248",1),
-                                width: 250, 
-                                height: 70,
-                                margin: [ 90, 0, 0, 0 ]
-                            },
-                            
-                            
-                        ],
-                        bold: true
-                        
-                    },
-                  
+                content: [
+               
+                    {image: textToBase64Barcode('1234567890',1),width: 130,height: 30}
+                   
                 ]
-            };
-            
+            }
             pdfMake.createPdf(dd).open({}, window); 
+            
             
         </script>
     </body>
