@@ -220,7 +220,6 @@
                                           bold: true
                                       },
                                       {
-                                         
                                           columns: [
                                               [
                                                   {

@@ -248,8 +248,7 @@ public class DetailService {
         int boxstart = Integer.parseInt(start);
         int boxend = Integer.parseInt(end);
         
-
-        String sql = "select * from MIZUNONEWBARBOXDT where po = '" + po + "' and boxno in (";
+        String sql = "select * from MIZUNONEWBARBOXDT a inner join MIZUNOCUSTOMERADDRESS b on b.ADDRESS_DELIVEREDTO = a.DELIVERY where a.po = '" + po + "' and a.boxno in (";
 
         for (int n = boxstart; n < boxend + 1; n++) {
             String num = firstdigit + String.valueOf(n);
@@ -259,7 +258,7 @@ public class DetailService {
                 sql += "'" + num + "')";
             }
         }
-        sql += "order by CAST(REGEXP_SUBSTR(boxno, '\\d+')  as int)";
+        sql += "order by CAST(REGEXP_SUBSTR(a.boxno, '\\d+')  as int)";
         
         System.out.println(sql);
         return sql;
@@ -283,7 +282,7 @@ public class DetailService {
                 BCDetailBox box = new BCDetailBox();
                 box.setPo(rs.getString("po"));
                 box.setShipfrom(rs.getString("shipfrom"));
-                box.setShipto(rs.getString("shipto"));
+                box.setShipto(rs.getString("ADDRESS_DELIVEREDTO"));
                 box.setQtyperbox(rs.getString("qtyperbox"));
                 box.setGrossweight(rs.getString("grossweight"));
                 box.setNetweight(rs.getString("netweight"));
@@ -315,10 +314,10 @@ public class DetailService {
                 box.setSfaddress2(rs.getString("sfaddress2"));
                 box.setSfaddress3(rs.getString("sfaddress3"));
                 box.setSfaddress4(rs.getString("sfaddress4"));
-                box.setStaddress1(rs.getString("staddress1"));
-                box.setStaddress2(rs.getString("staddress2"));
-                box.setStaddress3(rs.getString("staddress3"));
-                box.setStaddress4(rs.getString("staddress4"));
+                box.setStaddress1(rs.getString("ADDRESS_ADDRESS1"));
+                box.setStaddress2(rs.getString("ADDRESS_ADDRESS2"));
+                box.setStaddress3(rs.getString("ADDRESS_ADDRESS3"));
+                box.setStaddress4(rs.getString("ADDRESS_ADDRESS4"));
                 box.setStatusshoot(rs.getString("statusshoot"));
                 listbox.add(box);
 
