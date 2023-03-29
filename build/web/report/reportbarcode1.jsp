@@ -35,9 +35,9 @@
             function textToBase64Barcode(text,show){
                 var canvas = document.createElement("canvas");
                 if(show == 1 ){
-                    JsBarcode(canvas, text, {format: "CODE39",displayValue: true,fontSize:25,fontOptions:"bold"});
+                    JsBarcode(canvas, text, {format: "Pharmacode",displayValue: true,fontSize:25,fontOptions:"bold"});
                 }else{
-                    JsBarcode(canvas, text, {format: "CODE39",displayValue: false});
+                    JsBarcode(canvas, text, {format: "Pharmacode",displayValue: false});
                 }
                 return canvas.toDataURL("image/png");
             }

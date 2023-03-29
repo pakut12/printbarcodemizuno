@@ -163,7 +163,7 @@
                     
                     if(po && start && end && num){
                         if(num == 1){
-                            window.open("report/test1.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
+                            window.open("report/reportbarcode1.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
                         
                         }else if(num == 2){
                             window.open("report/reportbarcode2.jsp?po="+po+"&start="+start+"&end="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        

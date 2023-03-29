@@ -248,7 +248,7 @@ public class DetailService {
         int boxstart = Integer.parseInt(start);
         int boxend = Integer.parseInt(end);
         
-        String sql = "select * from MIZUNONEWBARBOXDT a inner join MIZUNOCUSTOMERADDRESS b on b.ADDRESS_DELIVEREDTO = a.DELIVERY where a.po = '" + po + "' and a.boxno in (";
+        String sql = "select * from MIZUNONEWBARBOXDT a inner join MIZUNOCUSTOMERADDRESS b on b.ADDRESS_DELIVEREDTO = a.DELIVERY or b.ADDRESS_DELIVEREDTO = a.SHIPTO  where a.po = '" + po + "' and a.boxno in (";
 
         for (int n = boxstart; n < boxend + 1; n++) {
             String num = firstdigit + String.valueOf(n);

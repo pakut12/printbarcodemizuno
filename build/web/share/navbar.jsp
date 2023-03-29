@@ -7,7 +7,13 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
+<%
+            String name = (String) session.getAttribute("name");
+            if (name == null) {
+                getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+            }
 
+%>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow sticky-top">
     <div class="container-fluid">
@@ -35,6 +41,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="keyproduct.jsp">ข้อมูลสินค้า</a></li>
                         <li><a class="dropdown-item" href="keyaddresscustomer.jsp">ข้อมูลลูกค้า</a></li>
+                        <li><a class="dropdown-item" href="manageuser.jsp">ข้อมูลผู้ใช้</a></li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -101,6 +108,14 @@
                     </ul>
                 </li>
             </ul>
+            <div class="dropdown me-5">
+                <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    คุณ <%=name%>
+                </button>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item text-danger" href="User?type=logout">ออกจากระบบ</a></li>
+                </ul>
+            </div>
             
         </div>
     </div>

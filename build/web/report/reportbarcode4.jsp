@@ -54,7 +54,7 @@
         
         <div class="m-2 pagebreak">
             <div class="row fw-bold  border-bottom border-dark">
-                <div class="col-6 border-end border-dark ">
+                <div class="col-6 border-end border-dark pb-2">
                     Ship To : <%=listbox.get(x).getShipto()%><br> <%=listbox.get(x).getStaddress1()%><br><%=listbox.get(x).getStaddress2()%><br> <%=listbox.get(x).getStaddress3()%><br><%=listbox.get(x).getStaddress4()%>
                 </div>
                 <div class="col-6 text-nowrap">
@@ -75,8 +75,9 @@
             <div class="row border-bottom border-dark">
                 <div class="col-4 border-end border-dark ">
                     <div class="row">
-                        <div class="col-6 pb-2 pt-2"><div class="barcode">*<%=listbox.get(x).getQtyperbox()%>*</div></div>
-                        <div class="col-6 pb-2 pt-2 fw-bold text-center">PR</div>
+                        <div class="col-4 pb-2 pt-2"><div class="barcode">*<%=listbox.get(x).getQtyperbox()%>*</div></div>
+                         <div class="col-4 pb-2 pt-2 fw-bold text-center"></div>
+                        <div class="col-4 pb-2 pt-2 fw-bold text-center">PR</div>
                     </div>
                 </div>
                 <div class="col-4 barcode pb-2 pt-2 text-center border-end border-dark">*<%=listbox.get(x).getPo()%>*</div>
@@ -101,16 +102,16 @@
                 </div>
             </div>
             <div class="row ">
-                <div class="col-3 fw-bold  border-end border-dark pt-2" style="font: 10pt Tahoma;">MIZUNO SKU</div>
+                <div class="col-3 fw-bold  border-end border-dark p-2" style="font: 10pt Tahoma;">MIZUNO SKU</div>
                 <div class="col-3  border-end border-dark"></div>
                 <div class="col-3  border-end border-dark"></div>
                 <div class="col-3 "></div>
             </div>
             <div class="row text-center fw-bold" style="font: 8pt Tahoma;">
-                <div class="col-3  border-end border-dark"><%=listbox.get(x).getSku_item1()%></div>
-                <div class="col-3  border-end border-dark"><%=listbox.get(x).getSku_item2()%></div>
-                <div class="col-3  border-end border-dark"><%=listbox.get(x).getSku_item3()%></div>
-                <div class="col-3"><%=listbox.get(x).getSku_item4()%></div>
+                <div class="col-3 pb-1 border-end border-dark"><%=listbox.get(x).getSku_item1()%></div>
+                <div class="col-3 pb-1  border-end border-dark"><%=listbox.get(x).getSku_item2()%></div>
+                <div class="col-3 pb-1  border-end border-dark"><%=listbox.get(x).getSku_item3()%></div>
+                <div class="col-3 pb-1"><%=listbox.get(x).getSku_item4()%></div>
             </div>
             <div class="row text-center " >
                 <div class="col-3 barcodeupc p-0 border-end border-dark">*<%=listbox.get(x).getUpc_code1()%>*</div>
@@ -125,23 +126,23 @@
                 <div class="col-3 "><%=listbox.get(x).getUpc_code4()%></div>
             </div>
             <div class="row text-center fw-bold" style="font: 5pt Tahoma;" >
-                <div class="col-3  border-end border-dark">
+                <div class="col-3 pb-1 pt-2 border-end border-dark">
                     <div class="row">
                         <div class="col-2">Qty</div>
                         <div class="col-10"><%=listbox.get(x).getQty1()%></div>
                     </div>
                 </div>
-                <div class="col-3  border-end border-dark">
+                <div class="col-3 pb-1 pt-2 border-end border-dark">
                     <div class="row">
                         <div class="col-12"><%=listbox.get(x).getQty2()%></div>
                     </div>
                 </div>
-                <div class="col-3  border-end border-dark">
+                <div class="col-3 pb-1 pt-2 border-end border-dark">
                     <div class="row">
                         <div class="col-12"><%=listbox.get(x).getQty3()%></div>
                     </div>
                 </div>
-                <div class="col-3 ">
+                <div class="col-3 pb-1 pt-2">
                     <div class="row">
                         <div class="col-12"><%=listbox.get(x).getQty4()%></div>
                     </div>

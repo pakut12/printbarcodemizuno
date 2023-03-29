@@ -105,6 +105,7 @@
                 <div class="card-header">จัดการข้อมูลลูกค้า</div>
                 <div class="card-body">
                     <div class="row">
+                        <div class="text-center h2">จัดการข้อมูลลูกค้า</div>
                         <div class="d-flex justify-content-end">
                             <button class="btn btn-sm btn-success" id="adddataaddress">เพิ่มข้อมูลที่อยู่ลูกค้า</button>
                         </div>
