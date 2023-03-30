@@ -33,7 +33,8 @@
         <servlet-name>CustomerAddress</servlet-name>
         <servlet-class>com.pg.lib.Servlet.CustomerAddress</servlet-class>
     </servlet>
-    <servlet><servlet-name>User</servlet-name><servlet-class>com.pg.lib.Servlet.User</servlet-class></servlet><servlet-mapping>
+    <servlet><servlet-name>User</servlet-name><servlet-class>com.pg.lib.Servlet.User</servlet-class></servlet>
+    <servlet-mapping>
         <servlet-name>Chklogin</servlet-name>
         <url-pattern>/Chklogin</url-pattern>
     </servlet-mapping>

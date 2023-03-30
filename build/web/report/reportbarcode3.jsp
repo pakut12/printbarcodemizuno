@@ -42,18 +42,19 @@
                 return canvas.toDataURL("image/png");
             }
             
-            pdfMake.fonts = {
-                THSarabunNew: {
-                    normal: 'THSarabunNew.ttf',
-                    bold: 'THSarabunNew-Bold.ttf',
-                    italics: 'THSarabunNew-Italic.ttf',
-                    bolditalics: 'THSarabunNew-BoldItalic.ttf'
+            var cd =  window.location.href.split("/") ;
+            var host = cd[0]+"//"+cd[2]+"/"+cd[3]+"/";
+            
+            var fonts =  pdfMake.fonts = {
+                Barcode: {
+                    normal: host+"font/LibreBarcode39-Regular.ttf"
+                   
                 },
                 Roboto: {
-                    normal: 'Roboto-Regular.ttf',
-                    bold: 'Roboto-Medium.ttf',
-                    italics: 'Roboto-Italic.ttf',
-                    bolditalics: 'Roboto-MediumItalic.ttf'
+                    normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
+                    bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
+                    italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
+                    bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
                 }
             }
             
@@ -151,21 +152,22 @@
                                 x: 150,
                                 y: 185,
                                 w: 0,
-                                h: 100,
+                                h: 120,
                                 r: 0,
                                 lineWidth: 1,
                                 lineColor: '#000000'
                             },
-                           {
+                            {
                                 type: 'rect',
                                 x: 300,
                                 y: 185,
                                 w: 0,
-                                h: 100,
+                                h: 120,
                                 r: 0,
                                 lineWidth: 1,
                                 lineColor: '#000000'
-                            },
+                            }
+                           
                            
                            
                         ]
@@ -203,7 +205,7 @@
                                               {
                                                   width: '*',
                                                   columns: [
-                                                      {image: textToBase64Barcode("<%=listbox.get(i).getQtyperbox()%>"),width: 100, height: 20},
+                                                      {text:"<%=listbox.get(i).getQtyperbox()%>",font:"Barcode",fontSize: 30,bold: false},
                                                           {text: "PR"}
                                                       ]
                                                   }
@@ -214,197 +216,208 @@
                                                       columns: [
                                                           {
                                                               text: "<%=listbox.get(i).getPo()%>",
-                                                              alignment:'center'
+                                                              alignment:'center',
+                                                              
                                                           },
                                                       ]
                                                   },
                                                   {
                                                       width: '*',
                                                       columns: [
-                                                          {
-                                                              image: textToBase64Barcode("<%=listbox.get(i).getPo()%>"),
-                                                              width: 130, 
-                                                              height: 20,
-                                                              margin: [ 5, 2, 10, 0 ]
-                                                          }
-                                                      ]
-                                                  }
-                                              ],
-                                              {
-                                                  width: '*',
-                                                  text:"Description \n  <%=listbox.get(i).getDesctxt()%>",
-                                                  margin: [ 0, 0,0, 10 ],
-                                                  
-                                              }
-                                          ],
-                                          bold: true
-                                      },
-                                      {
-                                         
-                                          columns: [
-                                              [
-                                                  {
-                                                      text: "3",
-                                                      alignment:'left',
-                                                      fontSize: 8,
-                                                      absolutePosition: {
-                                                          x: 87,
-                                                          y: 162
+                                                          {text:"<%=listbox.get(i).getPo()%>",font:"Barcode",fontSize: 30,bold: false,  alignment:'center'},
+                                                          ]
                                                       }
+                                                  ],
+                                                  {
+                                                      width: '*',
+                                                      text:[{text:"Description \n "},{text: "<%=listbox.get(i).getDesctxt()%>",fontSize: 8}],
+                                                              margin: [ 2, 0,0, 15 ],
+                                                  
+                                                          }
+                                                      ],
+                                                      bold: true
                                                   },
                                                   {
-                                                      text: "CTN DIMES : 38X57X40 CMS\nG.W/N.W: \t<%=listbox.get(i).getGrossweight()%> \tKGS/\t<%=listbox.get(i).getNetweight()%>\t KGS\nCBM: 0.087 M",
-                                                      margin: [ 0, 0,0, 5 ],
-                                                      alignment:'left'
-                                                  },
-                                              ],
-                                              [
-                                                  {
-                                                      text: [{text:"Country of Origin"},{text:"\nTHAILAND"}],
-                                                      alignment:'center',
-                                                      fontSize: 10
+                                         
+                                                      columns: [
+                                                          [
+                                                              {
+                                                                  text: "3",
+                                                                  alignment:'left',
+                                                                  fontSize: 8,
+                                                                  absolutePosition: {
+                                                                      x: 87,
+                                                                      y: 162
+                                                                  }
+                                                              },
+                                                              {
+                                                                  text: "CTN DIMES : 38X57X40 CMS\nG.W/N.W: \t<%=listbox.get(i).getGrossweight()%>\t KGS/\t<%=listbox.get(i).getNetweight()%>\t KGS\nCBM: 0.087 M",
+                                                                  margin: [ 0, 0,0, 5 ],
+                                                                  alignment:'left'
+                                                              },
+                                                          ],
+                                                          [
+                                                              {
+                                                                  text: [{text:"Country of Origin"},{text:"\nTHAILAND"}],
+                                                                  alignment:'center',
+                                                                  fontSize: 10
                                                  
+                                                              },
+                                                              {
+                                                                  text: "Carton <%=listbox.get(i).getBoxno()%>  of <%=listbox.get(i).getAllbox()%>",
+                                                                  alignment:'center',
+                                                                  margin: [ 0, 9,0, 0 ],
+                                                                  fontSize: 10
+                                                              }
+                                                          ]
+                            
+                                                      ],
+                                                      bold: true
+                        
                                                   },
                                                   {
-                                                      text: "Carton <%=listbox.get(i).getBoxno()%>  of <%=listbox.get(i).getAllbox()%>",
-                                                      alignment:'center',
-                                                      margin: [ 0, 9,0, 0 ],
-                                                      fontSize: 10
-                                                  }
-                                              ]
-                            
-                                          ],
-                                          bold: true
-                        
-                                      },
-                                      {
-                                          margin: [ 0, 3,0, 0 ],
-                                          text:"MIZUNO SKU",
-                                          bold: true,
-                                          fontSize: 10
-                                      },
-                                      {
-                                          margin: [ 0, 1,0, 0 ],
-                                          columns: [
-                                              {
-                                                  text:"<%=listbox.get(i).getSku_item1()%>",
-                                                  alignment:'center',
-                                                  fontSize: 8
-                                              },
-                                              {
-                                                  text:"<%=listbox.get(i).getSku_item2()%>",
-                                                  alignment:'center',
-                                                  fontSize: 8
-                                              },
-                                              {
-                                                  text:"<%=listbox.get(i).getSku_item3()%>",
-                                                  alignment:'center',
-                                                  fontSize: 8
-                                              }
-                                             
-                                          ],
-                                          bold: true
-                                      },
-                                      {
-                                          columns: [
-                                              {
-                                                  image: textToBase64Barcode("<%=listbox.get(i).getUpc_code1()%>",1),
-                                                  width: 90, 
-                                                  height: 50,
-                                                  margin: [ 30, 0, 0, 0 ]
-                                              },
-                                              {
-                                                  image: textToBase64Barcode("<%=listbox.get(i).getUpc_code2()%>",1),
-                                                  width: 90, 
-                                                  height: 50,
-                                                  margin: [80, 0, 0, 0 ]
-                                              },
-                                               {
-                                                  image: textToBase64Barcode("<%=listbox.get(i).getUpc_code3()%>",1),
-                                                  width: 90, 
-                                                  height: 50,
-                                                  margin: [130, 0, 0, 0 ]
-                                              }
-                                             
-                                          ],
-                                          bold: true
-                                           
-                                      },
-                                      {
-                                          columns: [
-                                              {
-                                                  columns: [
-                                                      {
-                                                          text:"Qty",
-                                                          alignment:'center',
-                                                          fontSize: 8
+                                                      columns: [
+                                                          {
+                                                              width: '*',
+                                                              text:"MIZUNO SKU",
+                                                              bold: true,
+                                                              margin: [ 0, 3,0, 0 ]
+                                                          }
+                                                          
+                                                      ]
+                                                   
+                                                  },
+                                                  {
+                       
+                                                      columns: [
+                                                          {
+                                                              text:"<%=listbox.get(i).getSku_item1()%>",
+                                                              alignment:'center',
+                                                              fontSize: 10,
+                                                              margin: [ 0, 3,0, 0 ],
+                                                          },
+                                                          {
+                                                              text:"<%=listbox.get(i).getSku_item2()%>",
+                                                              alignment:'center',
+                                                              fontSize: 10,
+                                                              margin: [ 0, 3,0, 0 ],
+                                                          },
+                                                          {
+                                                              text:"<%=listbox.get(i).getSku_item3()%>",
+                                                              alignment:'center',
+                                                              fontSize: 10,
+                                                              margin: [ 0, 3,0, 0 ],
+                                                          },
+                                                      ],
+                                                      bold: true
+                                                  },
+                                                  {
+                                                      text: "<%=listbox.get(i).getUpc_code1()%>",
+                                                      alignment:'left',
+                                                      fontSize: 15,
+                                                      absolutePosition: {
+                                                          x:30,
+                                                          y:230
                                                       },
-                                                      {
-                                                          text:"<%=listbox.get(i).getQty1()%>",
-                                                          alignment:'center',
-                                                          fontSize: 8
-                                                      }                                                      
-                                                  ]
-                                              },
-                                              {
-                                                  text:"<%=listbox.get(i).getQty2()%>",
-                                                  alignment:'center',
-                                                  fontSize: 8
-                                              },
-                                               {
-                                                  text:"<%=listbox.get(i).getQty3()%>",
-                                                  alignment:'center',
-                                                  fontSize: 8
-                                              },
-                                              
-                                          ],
-                                          bold: true
-                                          
-                                      },
-                  
-                                      {
-                                          columns: [
-                                              {
-                                                  columns: [
-                                                      {
-                                                          text:"DESC",
-                                                          alignment:'center',
-                                                          fontSize: 8
+                                                      bold: true
+                                                  },
+                                                    {
+                                                      text: "<%=listbox.get(i).getUpc_code2()%>",
+                                                      alignment:'left',
+                                                      fontSize: 15,
+                                                      absolutePosition: {
+                                                          x:172,
+                                                          y:230
                                                       },
-                                                      {
-                                                          text:"<%=listbox.get(i).getColorn01()%>\t<%=listbox.get(i).getSizen01()%>",
-                                                          alignment:'center',
-                                                          fontSize: 8
-                                                      }                                                      
-                                                  ]
-                                              },
-                                              {
-                                                  text:"<%=listbox.get(i).getColorn02()%>\t<%=listbox.get(i).getSizen02()%>",
-                                                  alignment:'center',
-                                                  fontSize: 8
-                                              },
-                                              {
-                                                  text:"<%=listbox.get(i).getColorn02()%>\t<%=listbox.get(i).getSizen03()%>",
-                                                  alignment:'center',
-                                                  fontSize: 8
-                                              }
-                                              
-                                              
-                                          ],
-                                          bold: true
-                                          <%
-                                         if(i != listbox.size()-1){
-                                         out.print(",pageBreak: 'after'");
+                                                      bold: true
+                                                  },
+                                                  {
+                                                      text: "<%=listbox.get(i).getUpc_code3()%>",
+                                                      alignment:'left',
+                                                      fontSize: 15,
+                                                      absolutePosition: {
+                                                          x:320,
+                                                          y:230
+                                                      },
+                                                      bold: true
+                                                  },
+                                                  {
+                                                      columns: [
+                                                          {text:"<%=listbox.get(i).getUpc_code1()%>",font:"Barcode",fontSize: 20,bold: false,  alignment:'center'},
+                                                              {text:"<%=listbox.get(i).getUpc_code2()%>",font:"Barcode",fontSize: 20,bold: false,  alignment:'center'},
+                                                                  
+                                                                  {text:"<%=listbox.get(i).getUpc_code3()%>",font:"Barcode",fontSize: 20,bold: false,  alignment:'center'},
+                                                                  ]
                                           
-                                         }
+
+                                                              },
+                                                              {
+                       
+                                                                  columns: [
+                                                                      {
+                                                                          text:"Qty  \t\t<%=listbox.get(i).getQty1()%>",
+                                                                          alignment:'center',
+                                                                          fontSize: 10,
+                                                                          margin: [ 0, 9,0, 0 ],
+                                                                          bold: true,
+                                                                      },
+                                                                      {
+                                                                          text:"<%=listbox.get(i).getQty2()%>",
+                                                                          alignment:'center',
+                                                                          fontSize: 10,
+                                                                          margin: [ 0, 9,0, 0 ],
+                                                                          bold: true,
+                                                                      },
+                                                                      {
+                                                                          text:"<%=listbox.get(i).getQty3()%>",
+                                                                          alignment:'center',
+                                                                          fontSize: 10,
+                                                                          margin: [ 0, 9,0, 0 ],
+                                                                          bold: true,
+                                                                      },
+                                                                  ]                                         
+                                                                                                                
+                                                              },
+                                                              {
+                       
+                                                                  columns: [
+                                                                      {
+                                                                          text:"DESC  \t\t<%=listbox.get(i).getColorn01()%> \t\t<%=listbox.get(i).getSizen01()%> ",
+                                                                          alignment:'center',
+                                                                          fontSize: 10,
+                                                                          margin: [ 0, 0,0, 0 ],
+                                                                          bold: true,
+                                                                      },
+                                                                      {
+                                                                          text:"<%=listbox.get(i).getColorn02()%> \t\t<%=listbox.get(i).getSizen02()%> ",
+                                                                          alignment:'center',
+                                                                          fontSize: 10,
+                                                                          margin: [ 0, 0,0, 0 ],
+                                                                          bold: true,
+                                                                      },
+                                                                      {
+                                                                          text:"<%=listbox.get(i).getColorn02()%> \t\t<%=listbox.get(i).getSizen03()%> ",
+                                                                          alignment:'center',
+                                                                          fontSize: 10,
+                                                                          margin: [ 0, 0,0, 0 ],
+                                                                          bold: true,
+                                                                      },
+                                                                  ]                                         
+                                                                                                                             <%
+    if (i != listbox.size() - 1) {
+        out.print(",pageBreak: 'after'");
+
+    }
                                          %>
-                                      },
+                                              
+                                                                                     },
+                  
                   <%}%>
                                       
-                                  ]
-                              };
+                                                          ]
+                                                      };
             
-                              pdfMake.createPdf(dd).open({}, window); 
+                                                      pdfMake.createPdf(dd, null, fonts).open({}, window);  
             
         </script>
     </body>

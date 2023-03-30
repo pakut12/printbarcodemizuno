@@ -19,52 +19,41 @@
         <title>JSP Page</title>
     </head>
     <body>
-        
-        
         <script>
-            
-            function textToBase64Barcode(text,show){
-                var canvas = document.createElement("canvas");
-                if(show == 1 ){
-                    JsBarcode(canvas, text, {format: "CODE39",displayValue: true,fontSize:25});
-                }else{
-                    JsBarcode(canvas, text, {format: "CODE39",displayValue: false});
-                }
-                console.log(canvas.toDataURL("image/jpg"))
-                return canvas.toDataURL("image/jpg");
-            }
+            var cd =  window.location.href.split("/") ;
+            var host = cd[0]+"//"+cd[2]+"/"+cd[3]+"/";
           
-        
-            pdfMake.fonts = {
-                THSarabunNew: {
-                    normal: 'THSarabunNew.ttf',
-                    bold: 'THSarabunNew-Bold.ttf',
-                    italics: 'THSarabunNew-Italic.ttf',
-                    bolditalics: 'THSarabunNew-BoldItalic.ttf'
+            var fonts =  pdfMake.fonts = {
+                Barcode: {
+                    normal: host+"font/LibreBarcode39-Regular.ttf"
+                   
                 },
                 Roboto: {
-                    normal: 'Roboto-Regular.ttf',
-                    bold: 'Roboto-Medium.ttf',
-                    italics: 'Roboto-Italic.ttf',
-                    bolditalics: 'Roboto-MediumItalic.ttf'
+                    normal: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Regular.ttf',
+                    bold: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Medium.ttf',
+                    italics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-Italic.ttf',
+                    bolditalics: 'https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.66/fonts/Roboto/Roboto-MediumItalic.ttf'
                 }
             }
-            
+            var txt = "889961333255";
             var dd = {
                 pageSize: {
-                    width: 453,
-                    height: 390
+                    width: 450,
+                    height: 'auto'
                 },
-                pageMargins: [ 10,10,10,10],
                 content: [
-               
-                    {image: textToBase64Barcode('1234567890',1),width: 130,height: 30}
-                   
+                    {text:txt,font:"Barcode",fontSize: 30},
+                    txt
                 ]
+                
             }
-            pdfMake.createPdf(dd).open({}, window); 
             
+            pdfMake.createPdf(dd, null, fonts).open({}, window); 
             
+           
+           
+    
         </script>
+        
     </body>
 </html>

@@ -11,14 +11,13 @@
 <html>
     <head>
         <%@ include file="share/header.jsp" %>
-        <style>
-            
-        </style>
+        
     </head>
     <body>
         <form action="User" method="post">
             <div class="container mt-5">
                 <div class="row">
+                    <img src="img/mizunoicon.png" style="height: 100px;width: 400px;" class="mx-auto mb-4">
                     <div class="text-center h1">โปรเเกรมพิมพ์บาร์โค้ด TSG</div>
                     <div class="col-12 col-md-6 mx-auto">
                         <div class="card mt-5 shadow">
