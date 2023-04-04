@@ -30,7 +30,7 @@ public class ConnectDB {
         // DB Orcacle
         Class.forName("oracle.jdbc.driver.OracleDriver");
         Connection con = (Connection) DriverManager.getConnection("jdbc:oracle:thin:@10.0.62.18:1521:stock", "tsg", "gst666");
-
+        
         return con;
     }
 

@@ -47,6 +47,7 @@ public class User extends HttpServlet {
                 if (statuslogin) {
                     List<BCUser> listuser = AuthenticationService.chackuser(user);
                     session.setAttribute("name", listuser.get(0).getUser_firstname() + " " + listuser.get(0).getUser_lastname());
+                    session.setAttribute("status", listuser.get(0).getUser_status());
                     getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
                 } else {
                     getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);

@@ -190,7 +190,7 @@
                                                           {text: "PR"}
                                                       ]
                                                   }
-                                              ],
+                                              ], 
                                               [
                                                   {
                                                       width: '*',
@@ -211,8 +211,8 @@
                                                   ],
                                                   {
                                                       width: '*',
-                                                      text:[{text:"Description \n "},{text: "<%=listbox.get(i).getDesctxt()%>",fontSize: 8}],
-                                                              margin: [ 2, 0,0, 15 ],
+                                                      text:[{text:"Description \n "},{text: "<%=listbox.get(i).getDesctxt()%>",fontSize: 10}],
+                                                              margin: [ 2, 0,0, 17 ],
                                                   
                                                           }
                                                       ],
