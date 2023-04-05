@@ -86,10 +86,10 @@ public class UploadFilesService {
         String filename = item.getName();
 
         // Generate Directory
-        String folderName = makeDirectorySaveFile(pathAttachfileLocalhost + "upload_master/");
+        String folderName = makeDirectorySaveFile(pathAttachfileOnServer + "upload_master/");
 
         // Generate path Upload
-        File uploadFile = new File(pathAttachfileLocalhost + "upload_master/" + folderName + "/" + filename);
+        File uploadFile = new File(pathAttachfileOnServer + "upload_master/" + folderName + "/" + filename);
 
         // Upload...
         item.write(uploadFile);
@@ -117,7 +117,7 @@ public class UploadFilesService {
 
         List<BCCustomer> listorder = new ArrayList<BCCustomer>();
         try {
-            FileInputStream fileInputStream = new FileInputStream(pathAttachfileLocalhost + order.get("path"));
+            FileInputStream fileInputStream = new FileInputStream(pathAttachfileOnServer + order.get("path"));
             HSSFWorkbook workbook = new HSSFWorkbook(fileInputStream);
             HSSFSheet worksheet = workbook.getSheetAt(0);
             Iterator<Row> rowIterator = worksheet.iterator();

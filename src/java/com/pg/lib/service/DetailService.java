@@ -243,11 +243,11 @@ public class DetailService {
         return status;
     }
 
-    private String SqlDetailBoxForPrint(String po, String start, String end,String firstdigit) {
+    private String SqlDetailBoxForPrint(String po, String start, String end, String firstdigit) {
 
         int boxstart = Integer.parseInt(start);
         int boxend = Integer.parseInt(end);
-        
+
         String sql = "select * from MIZUNONEWBARBOXDT a inner join MIZUNOCUSTOMERADDRESS b on b.ADDRESS_DELIVEREDTO = a.DELIVERY or b.ADDRESS_DELIVEREDTO = a.SHIPTO  where a.po = '" + po + "' and a.boxno in (";
 
         for (int n = boxstart; n < boxend + 1; n++) {
@@ -259,7 +259,7 @@ public class DetailService {
             }
         }
         sql += "order by CAST(REGEXP_SUBSTR(a.boxno, '\\d+')  as int)";
-        
+
         System.out.println(sql);
         return sql;
     }
@@ -271,10 +271,10 @@ public class DetailService {
         return txt;
     }
 
-    public List<BCDetailBox> GetDetailBoxForPrint(String po, String start, String end,String firstdigit) throws SQLException {
+    public List<BCDetailBox> GetDetailBoxForPrint(String po, String start, String end, String firstdigit) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList();
         try {
-            String sql = SqlDetailBoxForPrint(po, start, end,firstdigit);
+            String sql = SqlDetailBoxForPrint(po, start, end, firstdigit);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -906,8 +906,9 @@ public class DetailService {
 
 
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXDT (PO,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY) VALUES (";
+                sql += " INTO MIZUNONEWBARBOXDT (PO,BOXSEQ,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY) VALUES (";
                 sql += "'" + po + "',";
+                sql += "'" + n + "',";
                 sql += "'" + initial + n + "',";
                 sql += "'" + initial + quantitytotal_box + "',";
                 sql += "'TSG',";

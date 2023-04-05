@@ -20,12 +20,21 @@
     </head>
     <body>
         <%
-        
+
+            String po = (String) request.getParameter("po").trim();
+            String startbox = (String) request.getParameter("startbox").trim();
+            String endbox = (String) request.getParameter("endbox").trim();
+            String firstdigit = (String) request.getParameter("firstdigit").trim();
+
             try {
                 Connection con = ConnectDB.getConnection();
-                File reportFile = new File(application.getRealPath("report/report.jasper"));
+                File reportFile = new File(application.getRealPath("report/report1.jasper"));
 
                 Map pr = new HashMap();
+                pr.put("PO", po);
+                pr.put("STARTBOX", startbox);
+                pr.put("ENDBOX", endbox);
+                pr.put("FIRSTDIGIT", firstdigit);
 
                 byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), pr, con);
                 response.setContentType("application/pdf");

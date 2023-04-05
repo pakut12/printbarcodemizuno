@@ -8,16 +8,18 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <%
-            String name = (String) session.getAttribute("name");
-            String status = (String) session.getAttribute("status");
+            try {
+                String name = (String) session.getAttribute("name");
+                String status = (String) session.getAttribute("status");
+                if (name == null || status == null) {
+                    getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
+                }
 
-            if (name == null) {
-                getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
-            }
+
 
 %>
 <%
-            if (status.equals("1")) {
+    if (status.equals("1")) {
 %>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow sticky-top">
@@ -127,7 +129,7 @@
     </div>
 </nav>
 <%
-}else if(status.equals("2")){
+} else if (status.equals("2")) {
 %>
 <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom shadow sticky-top">
     <div class="container-fluid">
@@ -156,7 +158,7 @@
                         <li><a class="dropdown-item" href="checkproduct.jsp">ยิงบรรจุกล่อง</a></li>
                     </ul>
                 </li>
-              
+                
             </ul>
             <div class="dropdown me-5">
                 <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -173,5 +175,8 @@
 
 
 <%
-}
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 %>
