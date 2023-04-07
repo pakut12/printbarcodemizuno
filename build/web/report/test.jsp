@@ -9,6 +9,9 @@
 <%@page import="java.util.*"%>
 <%@page import="java.io.File"%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -20,36 +23,22 @@
     </head>
     <body>
         <%
-
-            String po = (String) request.getParameter("po").trim();
-            String startbox = (String) request.getParameter("startbox").trim();
-            String endbox = (String) request.getParameter("endbox").trim();
-            String firstdigit = (String) request.getParameter("firstdigit").trim();
-
+            
+            
+            String inputDateString = "2566-04-07 13:13:03.0";
+            SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+            SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            
             try {
-                Connection con = ConnectDB.getConnection();
-                File reportFile = new File(application.getRealPath("report/report1.jasper"));
-
-                Map pr = new HashMap();
-                pr.put("PO", po);
-                pr.put("STARTBOX", startbox);
-                pr.put("ENDBOX", endbox);
-                pr.put("FIRSTDIGIT", firstdigit);
-
-                byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), pr, con);
-                response.setContentType("application/pdf");
-                response.setContentLength(bytes.length);
-
-                ServletOutputStream op = response.getOutputStream();
-                response.getOutputStream();
-                op.write(bytes, 0, bytes.length);
-                op.flush();
+                Date date = inputDateFormat.parse(inputDateString);
+                String outputDateString = outputDateFormat.format(date);
+                out.print(outputDateString);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
-
-
+            
+            
+            
         %>
         
     </body>

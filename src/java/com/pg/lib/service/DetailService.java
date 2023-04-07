@@ -11,7 +11,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,41 +27,160 @@ public class DetailService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    private String SqlUpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date, String pobefore) {
+    public List<BCDetailBox> GetListMIZUNONEWBARBOXRESULTOLD(String PO, String start, String end, String firstdigit) throws SQLException {
 
-        int boxstart = Integer.parseInt(start.substring(1));
-        int boxend = Integer.parseInt(end.substring(1));
-        String letter = end.substring(0, 1);
+        List<BCDetailBox> list = new ArrayList<BCDetailBox>();
 
-        String sql = "UPDATE MIZUNONEWBARBOXRESULT SET PO = '" + po + "',DATE_MODIFY =TO_DATE('" + date + "', 'dd/mm/yyyy HH24:MI:SS') WHERE  po = '" + pobefore + "' and boxno in (";
+        try {
+            String sql = "select * from MIZUNONEWBARBOXRESULT where po = ? and boxno in (";
 
-        for (int n = boxstart; n < boxend + 1; n++) {
-            String num = letter + String.valueOf(n);
-            if (n < boxend) {
-                sql += "'" + num + "',";
-            } else {
-                sql += "'" + num + "')";
+            for (int n = Integer.parseInt(start); n < Integer.parseInt(end) + 1; n++) {
+                String num = firstdigit + String.valueOf(n);
+                if (n < Integer.parseInt(end)) {
+                    sql += "'" + num + "',";
+                } else {
+                    sql += "'" + num + "')";
+                }
             }
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox de = new BCDetailBox();
+                de.setPo(rs.getString("po"));
+                de.setBoxno(rs.getString("boxno"));
+                de.setQty_result1(rs.getString("qty_result1"));
+                de.setQty_result2(rs.getString("qty_result2"));
+                de.setQty_result3(rs.getString("qty_result3"));
+                de.setQty_result4(rs.getString("qty_result4"));
+                de.setDate_create(rs.getString("date_create"));
+                de.setDate_modify(rs.getString("date_modify"));
+                list.add(de);
+
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
         }
 
-        return sql;
+        return list;
     }
 
-    public Boolean UpdateMIZUNONEWBARBOXRESULT(String po, String start, String end, String date, String pobefore) throws SQLException {
+    public Boolean DeleteListMIZUNONEWBARBOXRESULTOLD(String PO, String start, String end, String firstdigit) throws SQLException {
 
         Boolean status = false;
 
         try {
-            String sql = SqlUpdateMIZUNONEWBARBOXRESULT(po, start, end, date, pobefore);
+            String sql = "delete from MIZUNONEWBARBOXRESULT where po = ? and boxno in (";
+
+            for (int n = Integer.parseInt(start); n < Integer.parseInt(end) + 1; n++) {
+                String num = firstdigit + String.valueOf(n);
+                if (n < Integer.parseInt(end)) {
+                    sql += "'" + num + "',";
+                } else {
+                    sql += "'" + num + "')";
+                }
+            }
+            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {
                 status = false;
             }
+
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return status;
+    }
+
+    public Boolean UpdateMIZUNONEWBARBOXRESULT(List<BCDetailBox> listupdate, String endbox, String startbox, String firstdigit, String po) throws SQLException {
+
+        Boolean status = false;
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Date date = new Date();
+
+        int start = Integer.parseInt(startbox);
+        int end = Integer.parseInt(endbox);
+        try {
+
+            String sql = "insert into MIZUNONEWBARBOXRESULT (PO,boxno,qty_result1,qty_result2,qty_result3,qty_result4,DATE_CREATE,DATE_MODIFY) VALUES (?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            System.out.println(listupdate.size());
+            System.out.println(end);
+            for (int n = 0; n < end; n++) {
+                System.out.println("N" + n);
+                if (n < listupdate.size()) {
+                    System.out.println("A" + n);
+                    String inputDateString = listupdate.get(n).getDate_create();
+                    SimpleDateFormat inputDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.S");
+                    SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                    try {
+                        Date date1 = inputDateFormat.parse(inputDateString);
+                        String outputDateString = outputDateFormat.format(date1);
+
+                        ps.setString(1, po);
+                        ps.setString(2, listupdate.get(n).getBoxno());
+                        ps.setString(3, listupdate.get(n).getQty_result1());
+                        ps.setString(4, listupdate.get(n).getQty_result2());
+                        ps.setString(5, listupdate.get(n).getQty_result3());
+                        ps.setString(6, listupdate.get(n).getQty_result4());
+                        ps.setString(7, formatter.format(date1));
+                        ps.setString(8, formatter.format(date));
+                        ps.addBatch();
+
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                if (n >= listupdate.size() || listupdate.size() == 0) {
+                    System.out.println("B" + n);
+                    try {
+                        ps.setString(1, po);
+                        ps.setString(2, firstdigit + (n + 1));
+                        ps.setString(3, "0");
+                        ps.setString(4, "0");
+                        ps.setString(5, "0");
+                        ps.setString(6, "0");
+                        ps.setString(7, formatter.format(date));
+                        ps.setString(8, "");
+                        ps.addBatch();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+
+            ps.executeBatch();
+            status = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            status = false;
         } finally {
             ConnectDB.closeConnection(conn);
             ps.close();
@@ -770,6 +891,8 @@ public class DetailService {
 
         try {
             String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec ,a.* FROM MIZUNONEWBARBOXHD a WHERE a.PO = ? AND a.STARTBOX = ? AND a.ENDBOX = ? AND a.firstdigit = ?";
+
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);

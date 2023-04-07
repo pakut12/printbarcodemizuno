@@ -189,26 +189,24 @@ public class Detail extends HttpServlet {
                 String customer_address = request.getParameter("customer_address").trim();
 
                 DetailService ds = new DetailService();
-
+                
+                List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigit);
+                ds.DeleteListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigit);
+                Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult,endbox,startbox,firstdigit,po);
+                
                 Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
-                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
+                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startboxbefore, endboxbefore);
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
-                Boolean statusresult = true;
-
-                if (ds.LastBoxBOXResult(pobefore) < Integer.parseInt(endbox)) {
-                    statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, firstdigit, date, String.valueOf(ds.LastBoxBOXResult(po) + 1), endbox);
-                } else {
-                    statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(po, firstdigit + startbox, firstdigit + endbox, date, pobefore);
-                }
 
                 JSONObject obj = new JSONObject();
 
-                if (statusupdate && statusDT && statusdt) {
+                if (statusupdate && statusDT && statusdt && statusresult) {
                     obj.put("status", "true");
                 } else {
                     obj.put("status", "false");
                 }
                 out.print(obj);
+
 
             } else if (type.equals("deletedetailsall")) {
 
@@ -388,10 +386,10 @@ public class Detail extends HttpServlet {
                     String boxstart = request.getParameter("boxstart").trim();
                     String boxend = request.getParameter("boxend").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
-                    
-                    
+
+
                     DetailService ds = new DetailService();
-                    List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend,firstdigit);
+                    List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend, firstdigit);
                     int n = 1;
                     String html = "";
                     html += "<table class='table table-striped  table-sm text-center text-nowrap' id='table_boxdetail'>";
