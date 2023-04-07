@@ -19,12 +19,22 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <%
+       <%
 
             String po = (String) request.getParameter("po").trim();
             String startbox = (String) request.getParameter("startbox").trim();
             String endbox = (String) request.getParameter("endbox").trim();
             String firstdigit = (String) request.getParameter("firstdigit").trim();
+
+            String boxno = "";
+
+            for (int n = Integer.parseInt(startbox); n <= Integer.parseInt(endbox); n++) {
+                if (n != Integer.parseInt(endbox)) {
+                    boxno += "'" + firstdigit + n + "',";
+                } else {
+                    boxno += "'" + firstdigit + n + "'";
+                }
+            }
 
             try {
                 Connection con = ConnectDB.getConnection();
@@ -32,9 +42,8 @@
 
                 Map pr = new HashMap();
                 pr.put("PO", po);
-                pr.put("STARTBOX", startbox);
-                pr.put("ENDBOX", endbox);
-                pr.put("FIRSTDIGIT", firstdigit);
+                pr.put("STARTBOX", boxno);
+
 
                 byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), pr, con);
                 response.setContentType("application/pdf");

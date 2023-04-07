@@ -28,13 +28,11 @@
 
 	<parameter name="PO" isForPrompting="true" class="java.lang.String"/>
 	<parameter name="STARTBOX" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="ENDBOX" isForPrompting="true" class="java.lang.String"/>
-	<parameter name="FIRSTDIGIT" isForPrompting="true" class="java.lang.String"/>
 	<queryString><![CDATA[select * from MIZUNONEWBARBOXDT a inner join MIZUNOCUSTOMERADDRESS b on b.ADDRESS_DELIVEREDTO = a.DELIVERY or b.ADDRESS_DELIVEREDTO = a.SHIPTO  
-where a.po = $P{PO}
-and a.boxseq BETWEEN $P{STARTBOX} AND $P{ENDBOX}
-and regexp_substr(a.boxno, '[A-Z]') = $P{FIRSTDIGIT}
-order by CAST(REGEXP_SUBSTR(a.boxno,'\d+')  as int)]]></queryString>
+where a.po = $P{PO} 
+and a.boxno in ($P!{STARTBOX})
+order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)
+]]></queryString>
 
 	<field name="PO" class="java.lang.String"/>
 	<field name="BOXNO" class="java.lang.String"/>
@@ -82,6 +80,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno,'\d+')  as int)]]></queryString>
 	<field name="DATE_MODIFY" class="java.sql.Timestamp"/>
 	<field name="PO_OLD" class="java.lang.String"/>
 	<field name="DELIVERY" class="java.lang.String"/>
+	<field name="BOXSEQ" class="java.math.BigDecimal"/>
 	<field name="ADDRESS_ID" class="java.math.BigDecimal"/>
 	<field name="ADDRESS_CUSTOMER" class="java.lang.String"/>
 	<field name="ADDRESS_DELIVEREDTO" class="java.lang.String"/>
@@ -507,8 +506,8 @@ order by CAST(REGEXP_SUBSTR(a.boxno,'\d+')  as int)]]></queryString>
 				</staticText>
 				<staticText>
 					<reportElement
-						x="87"
-						y="169"
+						x="89"
+						y="167"
 						width="108"
 						height="20"
 						key="staticText-10"/>
