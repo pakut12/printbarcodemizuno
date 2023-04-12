@@ -39,13 +39,14 @@ public class User extends HttpServlet {
             String type = request.getParameter("type").trim();
 
             if (type.equals("login")) {
-                String user = request.getParameter("txt_user").trim();
-                String pass = request.getParameter("txt_pass").trim();
+                String user = request.getParameter("txt_user").trim().toLowerCase();
+                String pass = request.getParameter("txt_pass").trim().toLowerCase();
 
                 Boolean statuslogin = AuthenticationService.chacklogin(user, pass);
                 HttpSession session = request.getSession();
                 if (statuslogin) {
                     List<BCUser> listuser = AuthenticationService.chackuser(user);
+                    session.setAttribute("user", user);
                     session.setAttribute("name", listuser.get(0).getUser_firstname() + " " + listuser.get(0).getUser_lastname());
                     session.setAttribute("status", listuser.get(0).getUser_status());
                     getServletContext().getRequestDispatcher("/index.jsp").forward(request, response);
@@ -99,8 +100,8 @@ public class User extends HttpServlet {
             } else if (type.equals("adduser")) {
                 try {
 
-                    String user = request.getParameter("add_user").trim();
-                    String pass = request.getParameter("add_pass").trim();
+                    String user = request.getParameter("add_user").trim().toLowerCase();
+                    String pass = request.getParameter("add_pass").trim().toLowerCase();
                     String status = request.getParameter("add_status").trim();
                     String firstname = request.getParameter("add_firstname").trim();
                     String lastname = request.getParameter("add_lastname").trim();
@@ -140,8 +141,8 @@ public class User extends HttpServlet {
 
                     JSONObject obj = new JSONObject();
                     obj.put("user_id", listuser.get(0).getUser_id());
-                    obj.put("user_user", listuser.get(0).getUser_user());
-                    obj.put("user_pass", listuser.get(0).getUser_pass());
+                    obj.put("user_user", listuser.get(0).getUser_user().toLowerCase());
+                    obj.put("user_pass", listuser.get(0).getUser_pass().toLowerCase());
                     obj.put("user_firstname", listuser.get(0).getUser_firstname());
                     obj.put("user_lastname", listuser.get(0).getUser_lastname());
                     obj.put("user_status", listuser.get(0).getUser_status());
@@ -157,8 +158,8 @@ public class User extends HttpServlet {
             } else if (type.equals("edituserbyid")) {
                 try {
                     String edit_id = request.getParameter("edit_id").trim();
-                    String edit_user = request.getParameter("edit_user").trim();
-                    String edit_pass = request.getParameter("edit_pass").trim();
+                    String edit_user = request.getParameter("edit_user").trim().toLowerCase();
+                    String edit_pass = request.getParameter("edit_pass").trim().toLowerCase();
                     String edit_status = request.getParameter("edit_status").trim();
                     String edit_firstname = request.getParameter("edit_firstname").trim();
                     String edit_lastname = request.getParameter("edit_lastname").trim();

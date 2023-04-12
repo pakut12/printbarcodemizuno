@@ -63,7 +63,7 @@ public class Report extends HttpServlet {
                     String end = request.getParameter("end").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
                     String po = request.getParameter("po").trim();
-                
+
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
                     int sum = 0;
@@ -119,7 +119,7 @@ public class Report extends HttpServlet {
                                 mark = "*";
                             }
                         }
-                        
+
                         sum += Integer.parseInt(qty_result);
 
                         DetailService ds = new DetailService();
@@ -325,6 +325,64 @@ public class Report extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else if (type.equals("gettablereportviewpo")) {
+                try {
+                    String customer = request.getParameter("customer").trim();
+                    String customer_no = request.getParameter("customer_no").trim();
+                    String customer_product = request.getParameter("customer_product").trim();
+
+                    ReportService rs = new ReportService();
+                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product);
+
+                    int sum = 0;
+
+                    String html = "";
+                    html += "<div class='text-center h3'>แสดงพีโอ</div>";
+                    html += "<table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>";
+                    html += "<thead>";
+                    html += "<tr>";
+                    html += "<th scope='col' class='text-center'>วันที่</th>";
+                    html += "<th scope='col' class='text-center'>PO</th>";
+                    html += "</tr>";
+                    html += "</thead>";
+                    html += "<tbody>";
+                    for (BCDetailBox li : list) {
+                        DetailService ds = new DetailService();
+                        html += "<tr>";
+                        html += "<td>" + ds.ChackNull(li.getDate_create()) + "</td>";
+                        html += "<td>" + ds.ChackNull(li.getPo()) + "</td>";
+                        html += "</tr>";
+                    }
+                    html += "</tbody>";
+                    html += "</table>";
+
+                    out.print(html);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (type.equals("getreporviewpo")) {
+                String customer = request.getParameter("customer").trim();
+                String customer_no = request.getParameter("customer_no").trim();
+                String customer_product = request.getParameter("customer_product").trim();
+
+                ReportService rs = new ReportService();
+                List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product);
+
+                request.setAttribute("listproduct", list);
+
+                getServletContext().getRequestDispatcher("/report/reporviewpo.jsp").forward(request, response);
+            } else if (type.equals("getreporviewpopdf")) {
+                String customer = request.getParameter("customer").trim();
+                String customer_no = request.getParameter("customer_no").trim();
+                String customer_product = request.getParameter("customer_product").trim();
+
+                ReportService rs = new ReportService();
+                List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product);
+
+                request.setAttribute("customer", customer);
+                request.setAttribute("listproduct", list);
+
+                getServletContext().getRequestDispatcher("/report/reporviewpopdf.jsp").forward(request, response);
             }
 
         } finally {

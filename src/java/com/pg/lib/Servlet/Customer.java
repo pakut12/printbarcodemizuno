@@ -196,6 +196,17 @@ public class Customer extends HttpServlet {
                     e.printStackTrace();
                 }
 
+            } else if (type.equals("ChackCustomer")) {
+                try {
+                    String customer_id = request.getParameter("customer_id").trim();
+                    CustomerService cs = new CustomerService();
+                    List<BCCustomer> list = cs.ChackDetailCustomerAll(customer_id);
+                    
+                   
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             }
 
         } finally {

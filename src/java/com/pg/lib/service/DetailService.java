@@ -440,6 +440,7 @@ public class DetailService {
                 box.setStaddress3(rs.getString("ADDRESS_ADDRESS3"));
                 box.setStaddress4(rs.getString("ADDRESS_ADDRESS4"));
                 box.setStatusshoot(rs.getString("statusshoot"));
+                box.setDestination(rs.getString("destination"));
                 listbox.add(box);
 
             }

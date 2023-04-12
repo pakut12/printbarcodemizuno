@@ -43,7 +43,6 @@
             background-color:#f8f9fa;
             font-family: 'Krub', sans-serif;
             zoom:80%;
-            
         }
         
         .modal-backdrop {

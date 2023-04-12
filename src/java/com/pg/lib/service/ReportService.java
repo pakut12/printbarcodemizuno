@@ -164,4 +164,46 @@ public class ReportService {
         }
         return list;
     }
+
+    private String sqlreportviewpo(String customer, String customer_no, String customer_product) {
+        String sql = "";
+        try {
+
+            sql = "select TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                    "where NVL(a.SHIPTO,'NULL')  LIKE '%" + customer + "' and NVL(b.customer_no ,'NULL') LIKE '%" + customer_no + "' and  NVL(b.customer_product ,'NULL')   LIKE '%" + customer_product + "' ";
+            sql += " GROUP BY c.DATE_CREATE,a.PO order by a.PO ";
+
+          
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sql;
+    }
+
+    public List<BCDetailBox> listreportviewpo(String customer, String customer_no, String customer_product) throws SQLException {
+        List<BCDetailBox> list = new ArrayList<BCDetailBox>();
+
+        try {
+            String sql = sqlreportviewpo(customer, customer_no, customer_product);
+            System.out.println(sql);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                BCDetailBox report = new BCDetailBox();
+                report.setDate_create(rs.getString("DATE_CREATE"));
+                report.setPo(rs.getString("po"));
+
+                list.add(report);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+        return list;
+    }
 }

@@ -114,6 +114,11 @@
                                 รายงานสินค้าคงเหลือ
                             </a>
                         </li>
+                        <li>
+                            <a class="dropdown-item" href="reporviewpo.jsp">
+                               รายงานแสดงพีโอ
+                            </a>
+                        </li>
                     </ul>
                 </li>
             </ul>

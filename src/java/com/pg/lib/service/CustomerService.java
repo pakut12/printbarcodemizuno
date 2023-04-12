@@ -129,6 +129,7 @@ public class CustomerService {
         List<BCCustomer> list = new ArrayList<BCCustomer>();
         int primarykey = getprimarykey() + 1;
         try {
+            DetailService ds = new DetailService();
             String sql = "select * from  MIZUNOCUSTOMER  c where c.CUSTOMER_NO = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -138,7 +139,7 @@ public class CustomerService {
                 BCCustomer cs = new BCCustomer();
                 cs.setCustomer_id(rs.getString("customer_id"));
                 cs.setCustomer_no(rs.getString("customer_no"));
-                cs.setCustomer_barcode(rs.getString("customer_barcode").toUpperCase());
+                cs.setCustomer_barcode(rs.getString("customer_barcode"));
                 cs.setCustomer_color(rs.getString("customer_color").toUpperCase());
                 cs.setCustomer_size(rs.getString("customer_size").toUpperCase());
                 cs.setCustomer_description(rs.getString("customer_description").toUpperCase());

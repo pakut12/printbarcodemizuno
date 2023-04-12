@@ -282,7 +282,22 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
-       
+            function getcustomer(){
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getlistcustomer"
+                    },
+                    success:function(msg){
+                        $("#customer").empty();
+                        $("#customer").append("<option value=''></option>");
+                        $("#customer").append(msg);
+                        //getcustomeraddress($("#customer").val())
+                    }
+                })
+            }
+            
             function chack_customer1(customer_id){
                 $.ajax({
                     type:'post',

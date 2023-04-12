@@ -31,8 +31,7 @@
 	<queryString><![CDATA[select * from MIZUNONEWBARBOXDT a inner join MIZUNOCUSTOMERADDRESS b on b.ADDRESS_DELIVEREDTO = a.DELIVERY or b.ADDRESS_DELIVEREDTO = a.SHIPTO  
 where a.po = $P{PO} 
 and a.boxno in ($P!{STARTBOX})
-order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)
-]]></queryString>
+order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 
 	<field name="PO" class="java.lang.String"/>
 	<field name="BOXNO" class="java.lang.String"/>
@@ -367,7 +366,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)
 						key="barcode-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(5,$F{PO},false,false,null,5,100)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(7,$F{PO},false,false,null,0,0)]]></imageExpression>
 				</image>
 				<line direction="TopDown">
 					<reportElement
@@ -526,15 +525,6 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)
 						key="line-6"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
-				<line direction="TopDown">
-					<reportElement
-						x="254"
-						y="163"
-						width="158"
-						height="2"
-						key="line-7"/>
-					<graphicElement stretchType="NoStretch"/>
-				</line>
 				<staticText>
 					<reportElement
 						x="272"
@@ -665,7 +655,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)
 				<image  scaleImage="RetainShape" vAlign="Middle" hAlign="Right" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
-						x="-18"
+						x="-3"
 						y="108"
 						width="68"
 						height="20"
@@ -674,8 +664,17 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)
 						key="barcode-4"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{QTYPERBOX},false,false,null,3,70)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{QTYPERBOX},false,false,null,0,0)]]></imageExpression>
 				</image>
+				<line direction="TopDown">
+					<reportElement
+						x="254"
+						y="163"
+						width="158"
+						height="0"
+						key="line-9"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
 			</band>
 		</detail>
 		<columnFooter>
