@@ -190,8 +190,11 @@ public class CustomerAddress extends HttpServlet {
                     List<BCCustomerAddress> listdata = cas.GetListCustomer();
 
                     String opt = "";
+                    opt += "<option value='MUS'>MUS</option>";
                     for (BCCustomerAddress z : listdata) {
-                        opt += "<option value='" + z.getAddress_customer() + "'>" + z.getAddress_customer() + "</option>";
+                        if (!z.getAddress_customer().equals("MUS")) {
+                            opt += "<option value='" + z.getAddress_customer() + "'>" + z.getAddress_customer() + "</option>";
+                        }
                     }
 
                     out.print(opt);

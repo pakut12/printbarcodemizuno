@@ -93,6 +93,11 @@
                                 พิมพ์กล่องสินค้า USA
                             </a>
                         </li>
+                        <li>
+                            <a class="dropdown-item" href="printbarcodemcj.jsp">
+                                พิมพ์กล่องสินค้า MCJ
+                            </a>
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -116,7 +121,7 @@
                         </li>
                         <li>
                             <a class="dropdown-item" href="reporviewpo.jsp">
-                               รายงานแสดงพีโอ
+                                รายงานแสดงพีโอ
                             </a>
                         </li>
                     </ul>

@@ -23,9 +23,8 @@
                                 ค้นหา
                             </div>
                             <div class="card-body">
-                                
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                <div class="row mt-2 ">
+                                    <div class="col-sm-12 col-md-4  ">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                             <select class="form-select form-select-sm text-center" id="customer" name="customer">
@@ -33,27 +32,40 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                    <div class="col-sm-12 col-md-4 ">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
                                             <input type="text" class="form-control text-center"  name="customer_no" id="customer_no" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                    <div class="col-sm-12 col-md-4 ">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
                                             <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-12 col-md-4  mt-md-0">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                            <input class="form-control form-control-sm text-center" type="date" id="datestart"></input>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4  mt-md-0">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                            <input class="form-control form-control-sm text-center" type="date" id="dateend"></input>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4 ">
                                         <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
                                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
                                             <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
                             </div>
                         </div>
                     </div>
@@ -61,7 +73,6 @@
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">แสดงพีโอ</div>
                     <div class="card-body">
-                        
                         <div class="table-responsive">
                             <div id="mytable" class="mt-3">
                                 
@@ -133,7 +144,9 @@
                 var customer_no = $("#customer_no").val();
                 var customer_product = $("#customer_product").val();
                 var customer = $("#customer").val();
-               
+                var datestart = $("#datestart").val();
+                var dateend = $("#dateend").val();
+        
                 $.ajax({
                     type:'post',
                     url:'Report',
@@ -141,7 +154,9 @@
                         type:"gettablereportviewpo",
                         customer_no:customer_no,
                         customer_product:customer_product,
-                        customer:customer
+                        customer:customer,
+                        datestart:datestart,
+                        dateend:dateend
                     },
                     success:function(msg){
                         $("#mytable").html(msg)

@@ -100,6 +100,9 @@ public class Report extends HttpServlet {
 
                         if (li.getSku_item1().equals(customer_no)) {
                             qty_result = li.getQty_result1();
+
+
+
                             if (Integer.parseInt(li.getQty_result1()) < Integer.parseInt(li.getQty1())) {
                                 mark = "*";
                             }
@@ -330,18 +333,20 @@ public class Report extends HttpServlet {
                     String customer = request.getParameter("customer").trim();
                     String customer_no = request.getParameter("customer_no").trim();
                     String customer_product = request.getParameter("customer_product").trim();
+                    String datestart = request.getParameter("datestart").trim().replaceAll("-", "/");
+                    String dateend = request.getParameter("dateend").trim().replaceAll("-", "/");
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product);
+                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
 
-                    int sum = 0;
+                    int n = 1;
 
                     String html = "";
                     html += "<div class='text-center h3'>แสดงพีโอ</div>";
                     html += "<table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>";
                     html += "<thead>";
                     html += "<tr>";
-                    html += "<th scope='col' class='text-center'>วันที่</th>";
+                    html += "<th scope='col' class='text-center'>NO</th>";
                     html += "<th scope='col' class='text-center'>PO</th>";
                     html += "</tr>";
                     html += "</thead>";
@@ -349,9 +354,11 @@ public class Report extends HttpServlet {
                     for (BCDetailBox li : list) {
                         DetailService ds = new DetailService();
                         html += "<tr>";
-                        html += "<td>" + ds.ChackNull(li.getDate_create()) + "</td>";
+                        html += "<td>" + n + "</td>";
                         html += "<td>" + ds.ChackNull(li.getPo()) + "</td>";
                         html += "</tr>";
+
+                        n++;
                     }
                     html += "</tbody>";
                     html += "</table>";
@@ -361,28 +368,52 @@ public class Report extends HttpServlet {
                     e.printStackTrace();
                 }
             } else if (type.equals("getreporviewpo")) {
-                String customer = request.getParameter("customer").trim();
-                String customer_no = request.getParameter("customer_no").trim();
-                String customer_product = request.getParameter("customer_product").trim();
+                try {
+                    String customer = request.getParameter("customer").trim();
+                    String customer_no = request.getParameter("customer_no").trim();
+                    String customer_product = request.getParameter("customer_product").trim();
+                    String datestart = request.getParameter("datestart").trim().replaceAll("-", "/");
+                    String dateend = request.getParameter("dateend").trim().replaceAll("-", "/");
 
-                ReportService rs = new ReportService();
-                List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product);
+                    ReportService rs = new ReportService();
+                    List<BCDetailBox> list = null;
 
-                request.setAttribute("listproduct", list);
+                    if (datestart.equals("") || dateend.equals("")) {
+                        list = rs.listreportviewpo(customer, customer_no, customer_product, "", "");
+                    } else {
+                        list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
+                    }
 
-                getServletContext().getRequestDispatcher("/report/reporviewpo.jsp").forward(request, response);
+                    request.setAttribute("listproduct", list);
+                    getServletContext().getRequestDispatcher("/report/reporviewpo.jsp").forward(request, response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             } else if (type.equals("getreporviewpopdf")) {
-                String customer = request.getParameter("customer").trim();
-                String customer_no = request.getParameter("customer_no").trim();
-                String customer_product = request.getParameter("customer_product").trim();
+                try {
+                    String customer = request.getParameter("customer").trim();
+                    String customer_no = request.getParameter("customer_no").trim();
+                    String customer_product = request.getParameter("customer_product").trim();
+                    String datestart = request.getParameter("datestart").trim().replaceAll("-", "/");
+                    String dateend = request.getParameter("dateend").trim().replaceAll("-", "/");
 
-                ReportService rs = new ReportService();
-                List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product);
+                    ReportService rs = new ReportService();
+                    
+                    List<BCDetailBox> list = null;
+                    if (datestart.equals("") || dateend.equals("")) {
+                        list = rs.listreportviewpo(customer, customer_no, customer_product, "", "");
+                    } else {
+                        list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
+                    }
 
-                request.setAttribute("customer", customer);
-                request.setAttribute("listproduct", list);
+                    request.setAttribute("customer", customer);
+                    request.setAttribute("listproduct", list);
 
-                getServletContext().getRequestDispatcher("/report/reporviewpopdf.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/report/reporviewpopdf.jsp").forward(request, response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         } finally {

@@ -14,8 +14,9 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
-        <div class="container mt-5">
+        <div class="container mt-4">
             <div class="row">
+                <div class="text-center h1 mb-3">  พิมพ์กล่องสินค้า USA</div>
                 <div class="col-12 col-md-8">
                     <div class="card">
                         <div class="card-header">

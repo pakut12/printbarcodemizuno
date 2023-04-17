@@ -21,8 +21,6 @@
         
         <%
             List<BCDetailBox> list = (List<BCDetailBox>) request.getAttribute("listproduct");
-
-
         %>
         <script>
            

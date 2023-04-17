@@ -16,7 +16,7 @@
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-4">
             <div class="row">
-                <div class="text-center h1 mb-3">  พิมพ์กล่องสินค้า USA</div>
+                <div class="text-center h1 mb-3">  พิมพ์กล่องสินค้า MCJ</div>
                 <div class="col-12 col-md-8">
                     <div class="card">
                         <div class="card-header">
@@ -164,16 +164,16 @@
                     
                     if(po && start && end && num){
                         if(num == 1){
-                            window.open("report/reportbarcode1.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
+                            window.open("report/reportmcj1.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
                         
                         }else if(num == 2){
-                            window.open("report/reportbarcode2.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
+                            window.open("report/reportmcj2.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
                         
                         }else if(num == 3){
-                            window.open("report/reportbarcode3.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
+                            window.open("report/reportmcj3.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');        
                         
                         }else if(num == 4){
-                            window.open("report/reportbarcode4.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');       
+                            window.open("report/reportmcj4.jsp?po="+po+"&startbox="+start+"&endbox="+end+"&num="+num+"&firstdigit="+firstdigit, '_blank','height=400,width=800,left=200,top=200');       
                         }
                         
                     }

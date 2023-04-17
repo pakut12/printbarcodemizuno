@@ -20,22 +20,18 @@
     </head>
     <body>
         <%
-            String po = "Y111-03";//request.getParameter("po").trim();
+            String po = request.getParameter("po").trim();
 
-            String start = "1";//request.getParameter("start").trim();
+            String start = request.getParameter("startbox").trim();
 
-            String end = "10";//request.getParameter("end").trim();
+            String end = request.getParameter("endbox").trim();
 
-            String firstdigit = "Y";//request.getParameter("firstdigit").trim();
+            String firstdigit = request.getParameter("firstdigit").trim();
 
             DetailService ds = new DetailService();
             List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, start, end, firstdigit);
 
-            String Test = "G2JA3A3014";
-            String size = "14";
 
-
-            out.print(Test.substring(0, Test.length() - size.length()));
 
         %>
         
@@ -70,27 +66,26 @@
             <%
             int n = 0;
             for (BCDetailBox l : listbox) {
+
+
                 String id1 = l.getSku_item1();
                 String size1 = l.getSizen01();
                 String col1 = id1.substring(0, id1.length() - size1.length());
                 String qty1 = l.getQty1();
+
+
 
                 String id2 = l.getSku_item2();
                 String size2 = l.getSizen02();
                 String col2 = id1.substring(0, id2.length() - size2.length());
                 String qty2 = l.getQty2();
 
-                String id3 = l.getSku_item3();
-                String size3 = l.getSizen03();
-                String col3 = id3.substring(0, id3.length() - size3.length());
-                String qty3 = l.getQty3();
 
-                String id4 = l.getSku_item4();
-                String size4 = l.getSizen04();
-                String col4 = id4.substring(0, id4.length() - size4.length());
-                String qty4 = l.getQty4();
+                
 
-                int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) + Integer.parseInt(qty3) + Integer.parseInt(qty4);
+              
+
+                int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2)  ;
 
 
             %>
@@ -123,13 +118,13 @@
                                 // you can declare how many rows should be treated as headers
                                 headerRows: 1,
                             
-                                widths:  ["*","auto","auto","auto","auto","auto"],
+                                widths:  ["*","auto","auto",20,20,"auto"],
                                 body: [
-                                    [ 'ART.NO/COL.', '<%=size1%>', '<%=size2%>', '<%=size3%>', '<%=size4%>', 'TOTAL'],
+                                    [ 'ART.NO/COL.', '<%=size1%>', '<%=size2%>', '\t', '\t', 'TOTAL'],
                                         [ '<%=col1%>', '<%=qty1%>', '', '', '', ''],
                                             [ '<%=col2%>', '', '<%=qty2%>', '', '', ''],
-                                                [ '<%=col3%>', '', '', '<%=qty3%>', '', ''],
-                                                    [ '<%=col4%>', '', '', '', '<%=qty4%>', ''],
+                                             [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
+                                                    [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
                                                         [ 'TOTAL', '', '', '', '', '<%=String.valueOf(sum)%>'],
                         
                         
@@ -155,7 +150,7 @@
                                             defaultStyle: {
                                                 font: 'Roboto',
                                                 bold:true,
-                                                fontSize: 22
+                                                fontSize: 18                                           
                                             }
                                         }
             

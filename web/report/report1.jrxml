@@ -366,7 +366,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 						key="barcode-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(7,$F{PO},false,false,null,0,0)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(5,$F{PO},false,false,null,1,3)]]></imageExpression>
 				</image>
 				<line direction="TopDown">
 					<reportElement
@@ -664,7 +664,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 						key="barcode-4"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{QTYPERBOX},false,false,null,0,0)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(5,$F{QTYPERBOX},false,false,null,1,10)]]></imageExpression>
 				</image>
 				<line direction="TopDown">
 					<reportElement

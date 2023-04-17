@@ -20,22 +20,18 @@
     </head>
     <body>
         <%
-            String po = "Y111-03";//request.getParameter("po").trim();
+            String po = request.getParameter("po").trim();
 
-            String start = "1";//request.getParameter("start").trim();
+            String start = request.getParameter("startbox").trim();
 
-            String end = "10";//request.getParameter("end").trim();
+            String end = request.getParameter("endbox").trim();
 
-            String firstdigit = "Y";//request.getParameter("firstdigit").trim();
+            String firstdigit = request.getParameter("firstdigit").trim();
 
             DetailService ds = new DetailService();
             List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, start, end, firstdigit);
 
-            String Test = "G2JA3A3014";
-            String size = "14";
 
-
-            out.print(Test.substring(0, Test.length() - size.length()));
 
         %>
         
@@ -70,15 +66,20 @@
             <%
             int n = 0;
             for (BCDetailBox l : listbox) {
+
+
                 String id1 = l.getSku_item1();
                 String size1 = l.getSizen01();
                 String col1 = id1.substring(0, id1.length() - size1.length());
                 String qty1 = l.getQty1();
 
+
+
                 String id2 = l.getSku_item2();
                 String size2 = l.getSizen02();
                 String col2 = id1.substring(0, id2.length() - size2.length());
                 String qty2 = l.getQty2();
+
 
                 String id3 = l.getSku_item3();
                 String size3 = l.getSizen03();
@@ -155,7 +156,7 @@
                                             defaultStyle: {
                                                 font: 'Roboto',
                                                 bold:true,
-                                                fontSize: 22
+                                                fontSize: 18
                                             }
                                         }
             

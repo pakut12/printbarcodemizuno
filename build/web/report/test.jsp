@@ -39,6 +39,129 @@
 
         %>
         
-        
+        <script>
+           
+            
+            pdfMake.fonts = {
+                THSarabunNew: {
+                    normal: 'THSarabunNew.ttf',
+                    bold: 'THSarabunNew-Bold.ttf',
+                    italics: 'THSarabunNew-Italic.ttf',
+                    bolditalics: 'THSarabunNew-BoldItalic.ttf'
+                },
+                Roboto: {
+                    normal: 'Roboto-Regular.ttf',
+                    bold: 'Roboto-Medium.ttf',
+                    italics: 'Roboto-Italic.ttf',
+                    bolditalics: 'Roboto-MediumItalic.ttf'
+                }
+            }
+            
+            var dd = {
+                pageSize: {
+                    width: 430,
+                    height: 350
+                },
+                pageMargins: [ 10, 10, 10,10],
+               
+               
+                content: [
+                    
+            <%
+            int n = 0;
+            for (BCDetailBox l : listbox) {
+                String id1 = l.getSku_item1();
+                String size1 = l.getSizen01();
+                String col1 = id1.substring(0, id1.length() - size1.length());
+                String qty1 = l.getQty1();
+
+                String id2 = l.getSku_item2();
+                String size2 = l.getSizen02();
+                String col2 = id1.substring(0, id2.length() - size2.length());
+                String qty2 = l.getQty2();
+
+                String id3 = l.getSku_item3();
+                String size3 = l.getSizen03();
+                String col3 = id3.substring(0, id3.length() - size3.length());
+                String qty3 = l.getQty3();
+
+                String id4 = l.getSku_item4();
+                String size4 = l.getSizen04();
+                String col4 = id4.substring(0, id4.length() - size4.length());
+                String qty4 = l.getQty4();
+
+                int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) + Integer.parseInt(qty3) + Integer.parseInt(qty4);
+
+
+            %>
+                        {
+                            alignment: 'right',
+                            text:"CTN : \t<%=l.getBoxno()%>" 
+                        },
+                        {
+                            
+                            columns: [
+                                {
+                                    alignment: 'left',
+                                    width: '80%',
+                                    text: 'ORDER NO \t<%=l.getPo()%>'
+                                },
+                                {
+                                    alignment: 'right',
+                                    width: '20%',
+                                    text: '<%=l.getDestination()%>'
+                                }
+                            
+                            ]
+                      
+                        },
+                        {
+                            alignment: 'center',
+                            table: {
+                           
+                                // headers are automatically repeated if the table spans over multiple pages
+                                // you can declare how many rows should be treated as headers
+                                headerRows: 1,
+                            
+                                widths:  ["*","auto","auto","auto","auto","auto"],
+                                body: [
+                                    [ 'ART.NO/COL.', '<%=size1%>', '<%=size2%>', '<%=size3%>', '<%=size4%>', 'TOTAL'],
+                                        [ '<%=col1%>', '<%=qty1%>', '', '', '', ''],
+                                            [ '<%=col2%>', '', '<%=qty2%>', '', '', ''],
+                                                [ '<%=col3%>', '', '', '<%=qty3%>', '', ''],
+                                                    [ '<%=col4%>', '', '', '', '<%=qty4%>', ''],
+                                                        [ 'TOTAL', '', '', '', '', '<%=String.valueOf(sum)%>'],
+                        
+                        
+                        
+                                                        ]
+                                        
+                                                    } 
+                                                    <%
+                if (n < listbox.size() - 1) {
+                                                    %>
+                                                                                            ,pageBreak: 'after' 
+                                                    <%                }
+                                                    %>
+                                                                           
+                                                                                        },
+                   <%
+                n++;
+            }
+            %>    
+                                            ],
+                                            styles: {
+                                            },
+                                            defaultStyle: {
+                                                font: 'Roboto',
+                                                bold:true,
+                                                fontSize: 22
+                                            }
+                                        }
+            
+            
+                                        pdfMake.createPdf(dd).open({}, window); 
+            
+        </script>
     </body>
 </html>

@@ -400,6 +400,7 @@ public class DetailService {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
+                
                 BCDetailBox box = new BCDetailBox();
                 box.setPo(rs.getString("po"));
                 box.setShipfrom(rs.getString("shipfrom"));
