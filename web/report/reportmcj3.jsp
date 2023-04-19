@@ -131,7 +131,7 @@
                                                     [{ text: '<%=col2%>',fontSize: 22}, '', { text: <%=qty2%>,fontSize: 25}, '', '',{ text: <%=qty2%>,fontSize: 25}],
                                                             [{ text: '<%=col3%>',fontSize: 22}, '', '', { text: <%=qty3%>,fontSize: 25}, '',{ text: <%=qty2%>,fontSize: 25}],
                                                                     [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
-                                                                    [ 'TOTAL', '', '', '', '', '<%=String.valueOf(sum)%>'],
+                                                                    [ 'TOTAL', '', '', '', '', { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
                         
                         
                         
