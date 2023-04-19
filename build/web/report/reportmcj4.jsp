@@ -27,7 +27,8 @@
             String end = request.getParameter("endbox").trim();
 
             String firstdigit = request.getParameter("firstdigit").trim();
-
+            String budget_month = request.getParameter("budget_month").trim();
+            
             DetailService ds = new DetailService();
             List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, start, end, firstdigit);
 
@@ -57,7 +58,25 @@
                     height: 350
                 },
                 pageMargins: [ 10, 10, 10,10],
-               
+                background: [
+                            
+                    {
+                        canvas: [
+                            {
+                                type: 'rect',
+                                x: 140,
+                                y: 7,
+                                w: 50,
+                                h: 25,
+                                r: 0,
+                                lineWidth: 1,
+                                lineColor: '#000000'
+                            }
+                            
+                        ]
+                    }
+                            
+                ],
                
                 content: [
                     
@@ -90,7 +109,7 @@
                 String qty4 = l.getQty4();
 
                 int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) + Integer.parseInt(qty3) + Integer.parseInt(qty4);
-                
+
                 String Destination = "";
                 if (l.getDestination() != null) {
                     Destination = l.getDestination();
@@ -98,8 +117,21 @@
 
             %>
                         {
-                            alignment: 'right',
-                            text:"CTN : \t<%=l.getBoxno()%>" 
+                            columns: [
+                                
+                                {
+                                    margin: [ 148, 0, 0, 0 ], 
+                                    fontSize: 16,
+                                    text: '<%=budget_month%>'
+                                    
+                                },
+                                {
+                                    alignment: 'right',
+                                    text: "CTN : \t<%=l.getBoxno()%>"
+                                }
+
+                            ]
+                           
                         },
                         {
                             
@@ -107,7 +139,7 @@
                                 {
                                     alignment: 'left',
                                     width: '80%',
-                                    text: 'ORDER NO \t<%=l.getPo()%>'
+                                    text: 'ORDER NO.<%=l.getPo()%>'
                                 },
                                 {
                                     alignment: 'right',

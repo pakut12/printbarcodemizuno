@@ -17,7 +17,7 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="text-center h1 mb-3">  พิมพ์กล่องสินค้า USA</div>
-                <div class="col-12 col-md-8">
+                <div class="col-12 col-md-12 mb-3">
                     <div class="card">
                         <div class="card-header">
                             ค้นหา
@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 
-                <div class="col-12 col-md-4">
+                <div class="col-12 col-md-12">
                     <div class="card">
                         <div class="card-header">
                             เลือก Stkcker

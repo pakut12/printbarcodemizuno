@@ -177,21 +177,8 @@
                                             }
                                         }
                                     }
-                                },
-                                {
-                                    text: 'PDF',
-                                    action: function ( dt ) {
-                                        var form = $("#myformreport").serialize()
-                                        window.open('Report?type=getreporviewpopdf&'+form, '_blank','height=400,width=800,left=200,top=200');  
-                                    }
-                                },
-                                {
-                                    text: 'Print',
-                                    action: function ( dt ) {
-                                        var form = $("#myformreport").serialize()
-                                        window.open('Report?type=getreporviewpo&'+form, '_blank','height=400,width=800,left=200,top=200');  
-                                    }
                                 }
+                                
                             ],
                             order: [[1, 'asc']]
                            
