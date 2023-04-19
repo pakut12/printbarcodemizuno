@@ -92,7 +92,11 @@
                 String qty4 = l.getQty4();
 
                 int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) + Integer.parseInt(qty3) + Integer.parseInt(qty4);
-
+                
+                String Destination = "";
+                if (l.getDestination() != null) {
+                    Destination = l.getDestination();
+                }
 
             %>
                         {
@@ -110,7 +114,7 @@
                                 {
                                     alignment: 'right',
                                     width: '20%',
-                                    text: '<%=l.getDestination()%>'
+                                    text: '<%=Destination%>'
                                 }
                             
                             ]
@@ -123,45 +127,45 @@
                                 // headers are automatically repeated if the table spans over multiple pages
                                 // you can declare how many rows should be treated as headers
                                 headerRows: 1,
-                            
+                                heights: 30, 
                                 widths:  ["*","auto","auto","auto","auto","auto"],
                                 body: [
-                                    [ 'ART.NO/COL.', '<%=size1%>', '<%=size2%>', '<%=size3%>', '<%=size4%>', 'TOTAL'],
-                                        [ '<%=col1%>', '<%=qty1%>', '', '', '', ''],
-                                            [ '<%=col2%>', '', '<%=qty2%>', '', '', ''],
-                                                [ '<%=col3%>', '', '', '<%=qty3%>', '', ''],
-                                                    [ '<%=col4%>', '', '', '', '<%=qty4%>', ''],
-                                                        [ 'TOTAL', '', '', '', '', '<%=String.valueOf(sum)%>'],
+                                    [ { text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 18}, { text: '<%=size2%>',fontSize: 18}, { text: '<%=size3%>',fontSize: 18},{ text: '<%=size4%>',fontSize: 18}, 'TOTAL'],
+                                            [{ text: '<%=col1%>',fontSize: 22}, { text: <%=qty1%>,fontSize: 25}, '', '', '',{ text: <%=qty1%>,fontSize: 25}],
+                                                    [{ text: '<%=col2%>',fontSize: 22}, '', { text: <%=qty2%>,fontSize: 25}, '', '',{ text: <%=qty2%>,fontSize: 25}],
+                                                            [{ text: '<%=col3%>',fontSize: 22},'', '', { text: <%=qty3%>,fontSize: 25}, '',{ text: <%=qty3%>,fontSize: 25}],
+                                                                    [{ text: '<%=col4%>',fontSize: 22},'','', '', { text: <%=qty4%>,fontSize: 25},{ text: <%=qty4%>,fontSize: 25}],
+                                                                            [ 'TOTAL', '', '', '', '',  { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
                         
                         
                         
-                                                        ]
+                                                                                ]
                                         
-                                                    } 
+                                                                            } 
                                                     <%
                 if (n < listbox.size() - 1) {
                                                     %>
-                                                                                            ,pageBreak: 'after' 
+                                                                                                                    ,pageBreak: 'after' 
                                                     <%                }
                                                     %>
                                                                            
-                                                                                        },
+                                                                                                                },
                    <%
                 n++;
             }
             %>    
-                                            ],
-                                            styles: {
-                                            },
-                                            defaultStyle: {
-                                                font: 'Roboto',
-                                                bold:true,
-                                                fontSize: 18
-                                            }
-                                        }
+                                                                    ],
+                                                                    styles: {
+                                                                    },
+                                                                    defaultStyle: {
+                                                                        font: 'Roboto',
+                                                                        bold:true,
+                                                                        fontSize: 22
+                                                                    }
+                                                                }
             
             
-                                        pdfMake.createPdf(dd).open({}, window); 
+                                                                pdfMake.createPdf(dd).open({}, window); 
             
         </script>
     </body>

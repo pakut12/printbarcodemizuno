@@ -332,19 +332,19 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 					</textElement>
 				<text><![CDATA[PR]]></text>
 				</staticText>
-				<image  scaleImage="RetainShape" vAlign="Middle" hAlign="Right" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<image  scaleImage="FillFrame" vAlign="Middle" hAlign="Right" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
-						x="-18"
+						x="2"
 						y="108"
-						width="68"
+						width="57"
 						height="20"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
 						key="barcode-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{QTYPERBOX},false,false,null,3,70)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(9,$F{QTYPERBOX},false,false,null,3,70)]]></imageExpression>
 				</image>
 				<line direction="TopDown">
 					<reportElement
@@ -368,7 +368,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{PO}]]></textFieldExpression>
 				</textField>
-				<image  scaleImage="RetainShape" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<image  scaleImage="FillFrame" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
 						x="129"
@@ -380,7 +380,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 						key="barcode-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(5,$F{PO},false,false,null,5,100)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(9,$F{PO},false,false,null,5,100)]]></imageExpression>
 				</image>
 				<line direction="TopDown">
 					<reportElement
@@ -626,19 +626,19 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 						key="line-8"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
-				<image  scaleImage="RetainShape" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<image  scaleImage="FillFrame" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
 						x="0"
 						y="214"
 						width="120"
-						height="30"
+						height="24"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
 						key="barcode-3"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{UPC_CODE1},false,false,null,3,70)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(9,$F{UPC_CODE1},false,false,null,3,70)]]></imageExpression>
 				</image>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -763,19 +763,19 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 						key="line-10"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
-				<image  scaleImage="RetainShape" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<image  scaleImage="FillFrame" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
 						x="139"
 						y="214"
 						width="120"
-						height="30"
+						height="24"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
 						key="barcode-4"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{UPC_CODE2},false,false,null,3,70)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(9,$F{UPC_CODE2},false,false,null,3,70)]]></imageExpression>
 				</image>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -842,19 +842,19 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{SIZENO2}]]></textFieldExpression>
 				</textField>
-				<image  scaleImage="RetainShape" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<image  scaleImage="FillFrame" vAlign="Top" hAlign="Center" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						mode="Opaque"
 						x="278"
 						y="214"
 						width="120"
-						height="30"
+						height="24"
 						forecolor="#000000"
 						backcolor="#FFFFFF"
 						key="barcode-5"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{UPC_CODE3},false,false,null,3,70)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(9,$F{UPC_CODE3},false,false,null,3,70)]]></imageExpression>
 				</image>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
