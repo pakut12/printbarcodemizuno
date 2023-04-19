@@ -31,8 +31,6 @@
             DetailService ds = new DetailService();
             List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, start, end, firstdigit);
 
-
-
         %>
         
         <script>
@@ -130,7 +128,7 @@
                                 heights: 30, 
                                 widths:  ["*","auto","auto","auto","auto","auto"],
                                 body: [
-                                    [ { text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 18}, { text: '<%=size2%>',fontSize: 18}, { text: '<%=size3%>',fontSize: 18},{ text: '<%=size4%>',fontSize: 18}, 'TOTAL'],
+                                    [ { text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 15}, { text: '<%=size2%>',fontSize: 15}, { text: '<%=size3%>',fontSize: 15},{ text: '<%=size4%>',fontSize: 15}, 'TOTAL'],
                                             [{ text: '<%=col1%>',fontSize: 22}, { text: <%=qty1%>,fontSize: 25}, '', '', '',{ text: <%=qty1%>,fontSize: 25}],
                                                     [{ text: '<%=col2%>',fontSize: 22}, '', { text: <%=qty2%>,fontSize: 25}, '', '',{ text: <%=qty2%>,fontSize: 25}],
                                                             [{ text: '<%=col3%>',fontSize: 22},'', '', { text: <%=qty3%>,fontSize: 25}, '',{ text: <%=qty3%>,fontSize: 25}],
