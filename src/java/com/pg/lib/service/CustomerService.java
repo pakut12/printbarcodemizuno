@@ -51,7 +51,6 @@ public class CustomerService {
             String sql = "SELECT COUNT(*) FROM MIZUNOCUSTOMER c where c.customer_id > 99 and c.customer_id LIKE ? or c.customer_no LIKE ? or c.customer_barcode LIKE ? or c.customer_color LIKE ? or c.customer_size  LIKE ? or c.customer_description  LIKE ? or c.customer_product  LIKE ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + searchValue + "%");
             ps.setString(2, "%" + searchValue + "%");
             ps.setString(3, "%" + searchValue + "%");

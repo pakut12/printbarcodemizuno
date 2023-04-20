@@ -23,49 +23,51 @@
                                 ค้นหา
                             </div>
                             <div class="card-body">
-                                <div class="row mt-2 ">
-                                    <div class="col-sm-12 col-md-4  ">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                            <select class="form-select form-select-sm text-center" id="customer" name="customer">
-                                                
-                                            </select>
+                                <form id="myform" >
+                                    <div class="row mt-2 ">
+                                        <div class="col-sm-12 col-md-4  ">
+                                            <div class="input-group input-group-sm ">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
+                                                <select class="form-select form-select-sm text-center" id="customer" name="customer">
+                                                    
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 ">
+                                            <div class="input-group input-group-sm ">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
+                                                <input type="text" class="form-control text-center"  name="customer_no" id="customer_no" >
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 ">
+                                            <div class="input-group input-group-sm ">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
+                                                <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
+                                            </div>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-sm-12 col-md-4  mt-md-0">
+                                            <div class="input-group input-group-sm ">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                                <input class="form-control form-control-sm text-center" type="date" id="datestart"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4  mt-md-0">
+                                            <div class="input-group input-group-sm ">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                                <input class="form-control form-control-sm text-center" type="date" id="dateend"></input>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-4 ">
+                                            <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
+                                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="gettable()">ค้นหา</button>
+                                                <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4 ">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
-                                            <input type="text" class="form-control text-center"  name="customer_no" id="customer_no" >
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 ">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
-                                            <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
-                                        </div>
-                                    </div>
-                                    
-                                </div>
-                                <div class="row mt-3">
-                                    <div class="col-sm-12 col-md-4  mt-md-0">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
-                                            <input class="form-control form-control-sm text-center" type="date" id="datestart"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4  mt-md-0">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                            <input class="form-control form-control-sm text-center" type="date" id="dateend"></input>
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-4 ">
-                                        <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
-                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
-                                            <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
-                                        </div>
-                                    </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -75,6 +77,21 @@
                     <div class="card-body">
                         <div class="table-responsive">
                             <div id="mytable" class="mt-3">
+                                <table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>
+                                    <thead>
+                                        <tr>
+                                            <th class='text-center'>NO</th>
+                                            <th  class='text-center'>Po</th>
+                                            <th  class='text-center'>Firstdigit</th>
+                                            <th  class='text-center'>Startbox</th>
+                                            <th  class='text-center'>Endbox</th>
+                                            <th  class='text-center'>Date</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        
+                                    </tbody>
+                                </table>
                                 
                             </div>
                         </div>
@@ -140,53 +157,67 @@
                 })
             }
             
-            function getdate(){
+            function gettable(){
                 var customer_no = $("#customer_no").val();
                 var customer_product = $("#customer_product").val();
                 var customer = $("#customer").val();
                 var datestart = $("#datestart").val();
                 var dateend = $("#dateend").val();
         
-                $.ajax({
-                    type:'post',
-                    url:'Report',
-                    data:{
-                        type:"gettablereportviewpo",
-                        customer_no:customer_no,
-                        customer_product:customer_product,
-                        customer:customer,
-                        datestart:datestart,
-                        dateend:dateend
-                    },
-                    success:function(msg){
-                        $("#mytable").html(msg)
-                        var groupColumn = 1;
-                        var table = $('#tablereport').DataTable({
-                            dom: 'Bfrtip',
-                            buttons: [
-                                'pageLength',
-                                {
-                                    extend: 'excel',
-                                    title: 'รายงานเเสดง PO ลูกค้า : '+ customer + ' วันที่ : ' + today(),
-                                    exportOptions: {
-                                        format: {
-                                            body: function ( data, row, column, node ) {
-                                                if(column === 5){}
-                                                return data
-                                                   
-                                            }
-                                        }
-                                    }
+                $("#tablereport").DataTable({
+                    serverSide: true,
+                    ajax: {
+                        type:"post",
+                        url:"Report",
+                        data:{
+                            type:"gettablereportviewpo",
+                            customer_no:customer_no,
+                            customer_product:customer_product,
+                            customer:customer,
+                            datestart:datestart,
+                            dateend:dateend
+                        },
+                        dataSrc:function(json){
+                            var arr = [];
+                            var data = JSON.parse(json.data);
+                            
+                            $.each(data,function(k,v){
+                                var date = "";
+                                if(v.date_create){
+                                    date = v.date_create
                                 }
-                                
-                            ],
-                            order: [[1, 'asc']]
-                           
-                        });
- 
-                    }
-                })
-            } 
+                                var result = {
+                                    no : k+1,
+                                    po :  v.po,
+                                    firstdigit :  v.firstdigit,
+                                    startbox :  v.startbox,
+                                    endbox :  v.endbox,
+                                    date_create : date
+                                }
+                                arr.push(result);
+                            })
+                            console.log(data)
+                          
+                            return arr
+                        }
+                    },
+                    columns: [
+                        { data: 'no' },
+                        { data: 'po' },
+                        { data: 'firstdigit' },
+                        { data: 'startbox' },
+                        { data: 'endbox' },
+                        { data: 'date_create' }
+                        
+                    ],
+                   
+                    bDestroy: true
+                  
+                          
+                });
+            }
+            
+            
             
             $(document).ready(function () {
                 getcustomer()
@@ -194,6 +225,8 @@
                     chack_customer1($(this).val())
                 });
                 
+    
+    
             });
           
         </script>

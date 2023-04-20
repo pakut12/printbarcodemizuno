@@ -17,7 +17,7 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="text-center h1 mb-3">  พิมพ์กล่องสินค้า USA</div>
-                <div class="col-12 col-md-12 mb-3">
+                <div class="col-12 col-md-8 mb-3">
                     <div class="card">
                         <div class="card-header">
                             ค้นหา
@@ -52,14 +52,14 @@
                     </div>
                 </div>
                 
-                <div class="col-12 col-md-12">
+                <div class="col-12 col-md-4 ">
                     <div class="card">
                         <div class="card-header">
                             เลือก Stkcker
                         </div>
                         <div class="card-body">
-                            <div class="row ">
-                                <div class="col-sm-12 col-md-6">
+                            <div class="row mx-auto" >
+                                <div class="col-sm-12 col-md-6 ">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="style_box" id="style_box1" value="1" checked>
                                         <label class="form-check-label" for="flexRadioDefault1">

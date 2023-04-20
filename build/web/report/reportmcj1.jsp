@@ -22,7 +22,7 @@ PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loos
             String end = request.getParameter("endbox").trim();
             String firstdigit = request.getParameter("firstdigit").trim();
             String budget_month = request.getParameter("budget_month").trim();
-            
+
             DetailService ds = new DetailService();
             List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, start, end, firstdigit);
 
@@ -54,27 +54,32 @@ PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loos
                     height: 350
                 },
                 pageMargins: [10, 10, 10, 10],
-                background: [
+                <%
+            if (!budget_month.isEmpty()) {
+                    %>
+                    
+                            background: [
                             
-                    {
-                        canvas: [
-                            {
-                                type: 'rect',
-                                x: 140,
-                                y: 7,
-                                w: 50,
-                                h: 25,
-                                r: 0,
-                                lineWidth: 1,
-                                lineColor: '#000000'
-                            }
+                                {
+                                    canvas: [
+                                        {
+                                            type: 'rect',
+                                            x: 140,
+                                            y: 7,
+                                            w: 50,
+                                            h: 25,
+                                            r: 0,
+                                            lineWidth: 1,
+                                            lineColor: '#000000'
+                                        }
                             
-                        ]
-                    }
+                                    ]
+                                }
                             
-                ],
-
-                content: [
+                            ],
+        <%            }
+                %>
+                        content: [
                     
             <%
             int n = 0;

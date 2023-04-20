@@ -58,25 +58,31 @@
                     height: 350
                 },
                 pageMargins: [ 10, 10, 10,10],
-                background: [
+                <%
+            if (!budget_month.isEmpty()) {
+                    %>
+                    
+                            background: [
                             
-                    {
-                        canvas: [
-                            {
-                                type: 'rect',
-                                x: 140,
-                                y: 7,
-                                w: 50,
-                                h: 25,
-                                r: 0,
-                                lineWidth: 1,
-                                lineColor: '#000000'
-                            }
+                                {
+                                    canvas: [
+                                        {
+                                            type: 'rect',
+                                            x: 140,
+                                            y: 7,
+                                            w: 50,
+                                            h: 25,
+                                            r: 0,
+                                            lineWidth: 1,
+                                            lineColor: '#000000'
+                                        }
                             
-                        ]
-                    }
+                                    ]
+                                }
                             
-                ],
+                            ],
+        <%            }
+                %>
                
                 content: [
                     

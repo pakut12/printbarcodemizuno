@@ -189,11 +189,11 @@ public class Detail extends HttpServlet {
                 String customer_address = request.getParameter("customer_address").trim();
 
                 DetailService ds = new DetailService();
-                
+
                 List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigit);
                 ds.DeleteListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigit);
-                Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult,endbox,startbox,firstdigit,po);
-                
+                Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endbox, startbox, firstdigit, po);
+
                 Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
                 Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startboxbefore, endboxbefore);
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
@@ -342,13 +342,14 @@ public class Detail extends HttpServlet {
                     String pallet = request.getParameter("pallet").trim();
                     String prodorder = request.getParameter("prodorder").trim();
                     String destination = request.getParameter("destination").trim();
+                    String customer_address = request.getParameter("customer_address").trim();
 
                     String date = request.getParameter("date").trim();
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
 
-                    Boolean status = ds.UpdateDetailBox(po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
+                    Boolean status = ds.UpdateDetailBox(customer_address,po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
                     if (status) {
                         obj.put("status", "true");
                     } else {

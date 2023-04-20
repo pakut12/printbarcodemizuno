@@ -466,6 +466,8 @@
                 
                 var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
         
+               
+                
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",

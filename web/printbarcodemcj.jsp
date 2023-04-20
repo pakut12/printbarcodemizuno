@@ -17,20 +17,20 @@
         <div class="container mt-4">
             <div class="row">
                 <div class="text-center h1 mb-3">  พิมพ์กล่องสินค้า MCJ</div>
-                <div class="col-12 col-md-12">
+                <div class="col-12 col-md-8">
                     <div class="card">
                         <div class="card-header">
                             ค้นหา
                         </div>
                         <div class="card-body">
                             <div class="row mb-3">
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-7">
                                     <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                         <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="po">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-6">
+                                <div class="col-sm-12 col-md-5">
                                     <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">BUDGET MONTH</span>
                                         <input type="text" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="budget_month">
@@ -38,13 +38,13 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-sm-12 col-md-5">
                                     <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
                                         <input type="text" class="form-control text-center" id="firstdigit" maxlength="2">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-sm-12 col-md-5">
                                     <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
                                         <input type="number" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxstart">
@@ -52,21 +52,21 @@
                                         <input type="number" class="form-control text-center" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" id="boxend">
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <button type="button" class="btn btn-outline-primary btn-sm w-25" onclick="barcode()">ค้นหา</button>
+                                <div class="col-sm-12 col-md-2">
+                                    <button type="button" class="btn btn-outline-primary btn-sm text-nowrap w-100" onclick="barcode()">ค้นหา</button>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 
-                <div class="col-12 col-md-12 mt-3">
+                <div class="col-12 col-md-4 ">
                     <div class="card">
                         <div class="card-header">
                             เลือก Stkcker
                         </div>
                         <div class="card-body">
-                            <div class="row  " style="padding-right: 150px;">
+                            <div class="row mx-auto" >
                                 <div class="col-sm-12 col-md-6 ">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="style_box" id="style_box1" value="1" checked>

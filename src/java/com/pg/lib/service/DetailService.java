@@ -502,6 +502,7 @@ public class DetailService {
     }
 
     public Boolean UpdateDetailBox(
+            String customer_address,
             String po_old,
             String BOXALL, String SHIPFROM, String SFADDRESS1, String SFADDRESS2, String SFADDRESS3, String SFADDRESS4,
             String SHIPTO, String STADDRESS1, String STADDRESS2, String STADDRESS3, String STADDRESS4, String QTYPERBOX, String DESCTXT,
@@ -562,6 +563,7 @@ public class DetailService {
                     "PALLET = ?," +
                     "DESTINATION = ?," +
                     "PO_OLD = ?," +
+                    "DELIVERY = ?," +
                     "DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS')" +
                     "WHERE PO = ? AND BOXNO = ?";
 
@@ -610,10 +612,11 @@ public class DetailService {
             ps.setString(41, pallet);
             ps.setString(42, destination);
             ps.setString(43, po_old);
-            ps.setString(44, date);
+            ps.setString(44, customer_address);
+            ps.setString(45, date);
 
-            ps.setString(45, pobefore);
-            ps.setString(46, boxnobefore);
+            ps.setString(46, pobefore);
+            ps.setString(47, boxnobefore);
 
 
 

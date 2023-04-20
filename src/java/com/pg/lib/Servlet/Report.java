@@ -4,6 +4,7 @@
  */
 package com.pg.lib.Servlet;
 
+import com.google.gson.Gson;
 import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.model.BCReportDetailsProduct;
 import com.pg.lib.service.DetailService;
@@ -17,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import org.json.JSONObject;
 
 /**
  *
@@ -336,34 +338,29 @@ public class Report extends HttpServlet {
                     String datestart = request.getParameter("datestart").trim().replaceAll("-", "/");
                     String dateend = request.getParameter("dateend").trim().replaceAll("-", "/");
 
+                    int draw = Integer.parseInt(request.getParameter("draw"));
+                    int start = Integer.parseInt(request.getParameter("start"));
+                    int length = Integer.parseInt(request.getParameter("length"));
+                    String searchValue = request.getParameter("search[value]");
+                    String orderColumn = request.getParameter("order[0][column]");
+                    String orderDir = request.getParameter("order[0][dir]");
+
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
+                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend, start, length, searchValue, orderColumn, orderDir);
+                   
+                    Gson gson = new Gson();
 
-                    int n = 1;
+                    JSONObject obj = new JSONObject();
+                    obj.put("draw", draw);
+                    obj.put("recordsTotal", rs.getTotalRecords(customer, customer_no, customer_product, datestart, dateend));
+                    obj.put("recordsFiltered", rs.getFilteredRecords(customer, customer_no, customer_product, datestart, dateend, searchValue));
+                    obj.put("data", gson.toJsonTree(list));
 
-                    String html = "";
-                    html += "<div class='text-center h3'>· ¥ßæ’‚Õ</div>";
-                    html += "<table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>";
-                    html += "<thead>";
-                    html += "<tr>";
-                    html += "<th scope='col' class='text-center'>NO</th>";
-                    html += "<th scope='col' class='text-center'>PO</th>";
-                    html += "</tr>";
-                    html += "</thead>";
-                    html += "<tbody>";
-                    for (BCDetailBox li : list) {
-                        DetailService ds = new DetailService();
-                        html += "<tr>";
-                        html += "<td>" + n + "</td>";
-                        html += "<td>" + ds.ChackNull(li.getPo()) + "</td>";
-                        html += "</tr>";
+                    response.setContentType("application/json");
+                    response.getWriter().write(obj.toString());
 
-                        n++;
-                    }
-                    html += "</tbody>";
-                    html += "</table>";
 
-                    out.print(html);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -379,9 +376,9 @@ public class Report extends HttpServlet {
                     List<BCDetailBox> list = null;
 
                     if (datestart.equals("") || dateend.equals("")) {
-                        list = rs.listreportviewpo(customer, customer_no, customer_product, "", "");
+                        //list = rs.listreportviewpo(customer, customer_no, customer_product, "", "");
                     } else {
-                        list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
+                        //list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
                     }
 
                     request.setAttribute("listproduct", list);
@@ -399,12 +396,12 @@ public class Report extends HttpServlet {
                     String dateend = request.getParameter("dateend").trim().replaceAll("-", "/");
 
                     ReportService rs = new ReportService();
-                    
+
                     List<BCDetailBox> list = null;
                     if (datestart.equals("") || dateend.equals("")) {
-                        list = rs.listreportviewpo(customer, customer_no, customer_product, "", "");
+                        // list = rs.listreportviewpo(customer, customer_no, customer_product, "", "");
                     } else {
-                        list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
+                        //list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend);
                     }
 
                     request.setAttribute("customer", customer);
