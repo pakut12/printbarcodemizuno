@@ -85,6 +85,7 @@
                                             <th  class='text-center'>Firstdigit</th>
                                             <th  class='text-center'>Startbox</th>
                                             <th  class='text-center'>Endbox</th>
+                                            
                                             <th  class='text-center'>Date</th>
                                         </tr>
                                     </thead>
@@ -157,12 +158,24 @@
                 })
             }
             
+
+            function chacknull(txt){
+                if(!txt){
+                    txt = "";
+                }
+                return txt;
+            }
+            
             function gettable(){
                 var customer_no = $("#customer_no").val();
                 var customer_product = $("#customer_product").val();
                 var customer = $("#customer").val();
                 var datestart = $("#datestart").val();
                 var dateend = $("#dateend").val();
+        
+                console.log(datestart)
+                console.log(dateend)
+        
         
                 $("#tablereport").DataTable({
                     serverSide: true,
@@ -187,17 +200,17 @@
                                     date = v.date_create
                                 }
                                 var result = {
-                                    no : k+1,
-                                    po :  v.po,
-                                    firstdigit :  v.firstdigit,
-                                    startbox :  v.startbox,
-                                    endbox :  v.endbox,
-                                    date_create : date
+                                    no : chacknull(v.boxno),
+                                    po : chacknull(v.po),
+                                    firstdigit : chacknull( v.firstdigit),
+                                    startbox :  chacknull(v.startbox),
+                                    endbox :  chacknull(v.endbox),
+                                  
+                                    date_create : chacknull(date)
                                 }
                                 arr.push(result);
                             })
                             console.log(data)
-                          
                             return arr
                         }
                     },
@@ -207,9 +220,11 @@
                         { data: 'firstdigit' },
                         { data: 'startbox' },
                         { data: 'endbox' },
+                        
                         { data: 'date_create' }
                         
                     ],
+                    
                    
                     bDestroy: true
                   

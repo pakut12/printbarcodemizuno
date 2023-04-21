@@ -338,12 +338,12 @@ public class Report extends HttpServlet {
                     String datestart = request.getParameter("datestart").trim().replaceAll("-", "/");
                     String dateend = request.getParameter("dateend").trim().replaceAll("-", "/");
 
-                    int draw = Integer.parseInt(request.getParameter("draw"));
-                    int start = Integer.parseInt(request.getParameter("start"));
-                    int length = Integer.parseInt(request.getParameter("length"));
-                    String searchValue = request.getParameter("search[value]");
-                    String orderColumn = request.getParameter("order[0][column]");
-                    String orderDir = request.getParameter("order[0][dir]");
+                    int draw = Integer.parseInt(request.getParameter("draw").trim());
+                    int start = Integer.parseInt(request.getParameter("start").trim());
+                    int length = Integer.parseInt(request.getParameter("length").trim());
+                    String searchValue = request.getParameter("search[value]").trim();
+                    String orderColumn = request.getParameter("order[0][column]").trim();
+                    String orderDir = request.getParameter("order[0][dir]").trim();
 
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend, start, length, searchValue, orderColumn, orderDir);

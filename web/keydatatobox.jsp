@@ -395,31 +395,31 @@
             
     
             function senddata(){
-                var customer = $("#customer").val();
-                var customer_address = $("#customer_address").val();
-                var quantity_box = $("#quantity_box").val();
-                var initial = $("#initial").val();
-                var numberbox_start = $("#numberbox_start").val();
-                var numberbox_end = $("#numberbox_end").val();
-                var quantitytotal_box = $("#quantitytotal_box").val();
-                var po = $("#po").val();
-                var description = $("#description").val();
-                var gw = $("#gw").val();
-                var nw = $("#nw").val();
-                var country = $("#country").val();
-                var customer1_id = [$("#customer1_id").val(),$("#customer1_barcode").val(),$("#customer1_color").val(),$("#customer1_size").val(),$("#customer1_number").val()];
-                var customer2_id = [$("#customer2_id").val(),$("#customer2_barcode").val(),$("#customer2_color").val(),$("#customer2_size").val(),$("#customer2_number").val()];
-                var customer3_id = [$("#customer3_id").val(),$("#customer3_barcode").val(),$("#customer3_color").val(),$("#customer3_size").val(),$("#customer3_number").val()];
-                var customer4_id = [$("#customer4_id").val(),$("#customer4_barcode").val(),$("#customer4_color").val(),$("#customer4_size").val(),$("#customer4_number").val()];
-                var quantitytotal_box = $("#quantitytotal_box").val();
-                var prodorder = $("#prodorder").val();
-                var pallet = $("#pallet").val();
-                var destination = $("#destination").val();
+                var customer = $("#customer").val().toUpperCase();
+                var customer_address = $("#customer_address").val().toUpperCase();
+                var quantity_box = $("#quantity_box").val().toUpperCase();
+                var initial = $("#initial").val().toUpperCase();
+                var numberbox_start = $("#numberbox_start").val().toUpperCase();
+                var numberbox_end = $("#numberbox_end").val().toUpperCase();
+                var quantitytotal_box = $("#quantitytotal_box").val().toUpperCase();
+                var po = $("#po").val().toUpperCase();
+                var description = $("#description").val().toUpperCase();
+                var gw = $("#gw").val().toUpperCase();
+                var nw = $("#nw").val().toUpperCase();
+                var country = $("#country").val().toUpperCase();
+                var customer1_id = [$("#customer1_id").val().toUpperCase(),$("#customer1_barcode").val().toUpperCase(),$("#customer1_color").val().toUpperCase(),$("#customer1_size").val().toUpperCase(),$("#customer1_number").val().toUpperCase()];
+                var customer2_id = [$("#customer2_id").val().toUpperCase(),$("#customer2_barcode").val().toUpperCase(),$("#customer2_color").val().toUpperCase(),$("#customer2_size").val().toUpperCase(),$("#customer2_number").val().toUpperCase()];
+                var customer3_id = [$("#customer3_id").val().toUpperCase(),$("#customer3_barcode").val().toUpperCase(),$("#customer3_color").val().toUpperCase(),$("#customer3_size").val().toUpperCase(),$("#customer3_number").val().toUpperCase()];
+                var customer4_id = [$("#customer4_id").val().toUpperCase(),$("#customer4_barcode").val().toUpperCase(),$("#customer4_color").val().toUpperCase(),$("#customer4_size").val().toUpperCase(),$("#customer4_number").val().toUpperCase()];
+                var quantitytotal_box = $("#quantitytotal_box").val().toUpperCase();
+                var prodorder = $("#prodorder").val().toUpperCase();
+                var pallet = $("#pallet").val().toUpperCase();
+                var destination = $("#destination").val().toUpperCase();
                 
-                var num1 = $("#customer1_number").val()
-                var num2 = $("#customer2_number").val()
-                var num3 = $("#customer3_number").val()
-                var num4 = $("#customer4_number").val()
+                var num1 = $("#customer1_number").val().toUpperCase()
+                var num2 = $("#customer2_number").val().toUpperCase()
+                var num3 = $("#customer3_number").val().toUpperCase()
+                var num4 = $("#customer4_number").val().toUpperCase()
                 if(!num1){
                     num1=0;
                 }

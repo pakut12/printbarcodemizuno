@@ -169,16 +169,23 @@ public class ReportService {
     public int getTotalRecords(String customer, String customer_no, String customer_product, String datestart, String dateend) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
-            String sql = "select count(*)  from ( " +
-                    " SELECT  rownum as rnum,a.PO,a.DATE_CREATE,a.STARTBOX,a.ENDBOX " +
-                    " FROM MIZUNONEWBARBOXHD a " +
-                    " INNER JOIN MIZUNOCUSTOMER b " +
-                    " ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 " +
-                    " WHERE NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ? " +
-                    " GROUP BY rownum,a.PO,a.DATE_CREATE,a.STARTBOX,a.ENDBOX " +
-                    " ORDER BY a.PO ) where PO like '%%' or  startbox like '%%' or endbox like '%%' ";
-           
-           
+            String sql = "select count(*) from (";
+            sql += "select rownum as rnum,x.* from (";
+            sql += "SELECT a.PO,a.FIRSTDIGIT,a.DATE_CREATE,a.STARTBOX,a.ENDBOX ";
+            sql += "FROM MIZUNONEWBARBOXHD a ";
+            sql += "INNER JOIN MIZUNOCUSTOMER b ";
+            sql += "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  ";
+            sql += "WHERE NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ?  ";
+            if (!datestart.equals("") || !dateend.equals("")) {
+                sql += " and a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') ";
+            }
+         
+            sql += " GROUP BY  a.PO,a.FIRSTDIGIT,a.DATE_CREATE,a.STARTBOX,a.ENDBOX   ";
+
+
+            sql += ")x) ";
+
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + customer + "%");
@@ -202,17 +209,24 @@ public class ReportService {
     public int getFilteredRecords(String customer, String customer_no, String customer_product, String datestart, String dateend, String searchValue) throws ClassNotFoundException, SQLException, NamingException {
         int filteredRecords = 0;
         try {
-            String sql = "select count(*)  from ( " +
-                    " SELECT  rownum as rnum,a.PO,a.DATE_CREATE,a.STARTBOX,a.ENDBOX " +
-                    " FROM MIZUNONEWBARBOXHD a " +
-                    " INNER JOIN MIZUNOCUSTOMER b " +
-                    " ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 " +
-                    " WHERE NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ? " +
-                    " GROUP BY rownum,a.PO,a.DATE_CREATE,a.STARTBOX,a.ENDBOX ";
+            String sql = "select count(*) from (";
+            sql += "select rownum as rnum,x.* from (";
+            sql += "SELECT a.PO,a.FIRSTDIGIT,a.DATE_CREATE,a.STARTBOX,a.ENDBOX ";
+            sql += "FROM MIZUNONEWBARBOXHD a ";
+            sql += "INNER JOIN MIZUNOCUSTOMER b ";
+            sql += "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  ";
+            sql += "WHERE NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ?  ";
             if (!datestart.equals("") || !dateend.equals("")) {
                 sql += " and a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') ";
             }
-            sql += " ORDER BY a.PO ) where PO like ? or  startbox like ? or endbox like ? ";
+            sql += " and (PO like ? or  startbox like ? or endbox like ? or FIRSTDIGIT like ? ) ";
+            sql += " GROUP BY  a.PO,a.FIRSTDIGIT,a.DATE_CREATE,a.STARTBOX,a.ENDBOX   ";
+
+
+            sql += ")x) ";
+
+
+            System.out.println(sql);
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -220,11 +234,12 @@ public class ReportService {
                 ps.setString(1, "%" + customer + "%");
                 ps.setString(2, "%" + customer_no + "%");
                 ps.setString(3, "%" + customer_product + "%");
-                ps.setString(4, "%" + datestart + "%");
-                ps.setString(5, "%" + dateend + "%");
+                ps.setString(4, datestart);
+                ps.setString(5, dateend);
                 ps.setString(6, "%" + searchValue + "%");
                 ps.setString(7, "%" + searchValue + "%");
                 ps.setString(8, "%" + searchValue + "%");
+                ps.setString(9, "%" + searchValue + "%");
 
             } else {
                 ps.setString(1, "%" + customer + "%");
@@ -233,6 +248,7 @@ public class ReportService {
                 ps.setString(4, "%" + searchValue + "%");
                 ps.setString(5, "%" + searchValue + "%");
                 ps.setString(6, "%" + searchValue + "%");
+                ps.setString(7, "%" + searchValue + "%");
 
             }
 
@@ -259,25 +275,26 @@ public class ReportService {
         String sql = "";
         try {
             sql += "select * from (";
-            sql += "select * from (";
-            sql += "SELECT  rownum as rnum,a.PO,a.FIRSTDIGIT,a.DATE_CREATE,a.STARTBOX,a.ENDBOX ";
+            sql += "select rownum as rnum,x.* from (";
+            sql += "SELECT a.PO,a.FIRSTDIGIT,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.STARTBOX,a.ENDBOX ";
             sql += "FROM MIZUNONEWBARBOXHD a ";
             sql += "INNER JOIN MIZUNOCUSTOMER b ";
             sql += "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  ";
-            sql += "WHERE NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ?   ";
+            sql += "WHERE NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ?  ";
             if (!datestart.equals("") || !dateend.equals("")) {
                 sql += " and a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') ";
             }
-            sql += "GROUP BY  rownum,a.PO,a.FIRSTDIGIT,a.DATE_CREATE,a.STARTBOX,a.ENDBOX  ";
+            sql += " and (PO like ? or  startbox like ? or endbox like ? or FIRSTDIGIT like ? ) ";
+            sql += " GROUP BY  a.PO,a.FIRSTDIGIT,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS'),a.STARTBOX,a.ENDBOX   ";
 
-            String[] columns = {"PO", "FIRSTDIGIT", "DATE_CREATE", "STARTBOX", "ENDBOX"};
+            String[] columns = {"PO", "FIRSTDIGIT", "STARTBOX", "ENDBOX", "DATE_CREATE"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }
-            sql += " ) where PO like ? or  startbox like ? or endbox like ? ";
-            sql += ") where  rnum BETWEEN ? AND ?";
+            sql += ")x) where rnum BETWEEN ? AND ?";
 
-            
+            System.out.println(sql);
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -285,13 +302,15 @@ public class ReportService {
                 ps.setString(1, "%" + customer + "%");
                 ps.setString(2, "%" + customer_no + "%");
                 ps.setString(3, "%" + customer_product + "%");
-                ps.setString(4, "%" + datestart + "%");
-                ps.setString(5, "%" + dateend + "%");
+                ps.setString(4, datestart);
+                ps.setString(5, dateend);
                 ps.setString(6, "%" + searchValue + "%");
                 ps.setString(7, "%" + searchValue + "%");
                 ps.setString(8, "%" + searchValue + "%");
-                ps.setInt(9, start);
-                ps.setInt(10, length + start);
+                ps.setString(9, "%" + searchValue + "%");
+
+                ps.setInt(10, start);
+                ps.setInt(11, length + start);
             } else {
                 ps.setString(1, "%" + customer + "%");
                 ps.setString(2, "%" + customer_no + "%");
@@ -299,20 +318,22 @@ public class ReportService {
                 ps.setString(4, "%" + searchValue + "%");
                 ps.setString(5, "%" + searchValue + "%");
                 ps.setString(6, "%" + searchValue + "%");
-                ps.setInt(7, start);
-                ps.setInt(8, length + start);
+                ps.setString(7, "%" + searchValue + "%");
+
+                ps.setInt(8, start);
+                ps.setInt(9, length + start);
             }
 
             rs = ps.executeQuery();
-            
-            
             while (rs.next()) {
                 BCDetailBox report = new BCDetailBox();
+                report.setBoxno(rs.getString("rnum"));
                 report.setPo(rs.getString("po"));
                 report.setStartbox(rs.getString("STARTBOX"));
                 report.setEndbox(rs.getString("ENDBOX"));
                 report.setDate_create(rs.getString("DATE_CREATE"));
                 report.setFirstdigit(rs.getString("firstdigit"));
+
                 list.add(report);
             }
 

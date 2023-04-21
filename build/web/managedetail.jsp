@@ -393,60 +393,60 @@
             }
             
             function updatedata(){
-                var pobefore = $("#posearch").val();
-                var startboxbefore  = $("#firstdigitbefore").val()+$("#numstart").val();
-                var po_old = $("#pobefore").val();
-                var boxno = $("#firstdigit").val()+$("#boxno").val();
+                var pobefore = $("#posearch").val().toUpperCase();
+                var startboxbefore  = $("#firstdigitbefore").val()+$("#numstart").val().toUpperCase();
+                var po_old = $("#pobefore").val().toUpperCase();
+                var boxno = $("#firstdigit").val()+$("#boxno").val().toUpperCase();
                
-                var shipto = $("#customer").val();
-                var customer_address = $("#customer_address").val();
-                var qtyperbox  = $("#quantity_box").val();
-                var allbox  =   $("#firstdigit").val()+$("#boxall").val();    
-                var po =  $("#po").val();
-                var desctxt = $("#description").val();
-                var grossweight = $("#gw").val();
-                var netweight  = $("#nw").val();
-                var country_origin  = $("#country").val();
+                var shipto = $("#customer").val().toUpperCase();
+                var customer_address = $("#customer_address").val().toUpperCase();
+                var qtyperbox  = $("#quantity_box").val().toUpperCase();
+                var allbox  =   $("#firstdigit").val()+$("#boxall").val().toUpperCase();    
+                var po =  $("#po").val().toUpperCase();
+                var desctxt = $("#description").val().toUpperCase();
+                var grossweight = $("#gw").val().toUpperCase();
+                var netweight  = $("#nw").val().toUpperCase();
+                var country_origin  = $("#country").val().toUpperCase();
                         
-                var sku_item1  = $("#customer1_id").val();
-                var upc_code1  =  $("#customer1_barcode").val();
-                var colorno1  =  $("#customer1_color").val();
-                var sizeno1  =  $("#customer1_size").val();
-                var qty1  =  $("#customer1_number").val();
+                var sku_item1  = $("#customer1_id").val().toUpperCase();
+                var upc_code1  =  $("#customer1_barcode").val().toUpperCase();
+                var colorno1  =  $("#customer1_color").val().toUpperCase();
+                var sizeno1  =  $("#customer1_size").val().toUpperCase();
+                var qty1  =  $("#customer1_number").val().toUpperCase();
 
-                var sku_item2 =  $("#customer2_id").val();
-                var upc_code2  = $("#customer2_barcode").val();
-                var colorno2  =  $("#customer2_color").val();
-                var sizeno2   =  $("#customer2_size").val();
-                var qty2  =  $("#customer2_number").val();
+                var sku_item2 =  $("#customer2_id").val().toUpperCase();
+                var upc_code2  = $("#customer2_barcode").val().toUpperCase();
+                var colorno2  =  $("#customer2_color").val().toUpperCase();
+                var sizeno2   =  $("#customer2_size").val().toUpperCase();
+                var qty2  =  $("#customer2_number").val().toUpperCase();
                         
-                var sku_item3  =  $("#customer3_id").val();
-                var upc_code3 =  $("#customer3_barcode").val();
-                var colorno3 =  $("#customer3_color").val();
-                var sizeno3  =  $("#customer3_size").val();
-                var qty3   =  $("#customer3_number").val();
+                var sku_item3  =  $("#customer3_id").val().toUpperCase();
+                var upc_code3 =  $("#customer3_barcode").val().toUpperCase();
+                var colorno3 =  $("#customer3_color").val().toUpperCase();
+                var sizeno3  =  $("#customer3_size").val().toUpperCase();
+                var qty3   =  $("#customer3_number").val().toUpperCase();
                         
-                var sku_item4  = $("#customer4_id").val();
-                var upc_code4  = $("#customer4_barcode").val();
-                var colorno4 =  $("#customer4_color").val();
-                var sizeno4  =  $("#customer4_size").val();
-                var qty4  = $("#customer4_number").val();
+                var sku_item4  = $("#customer4_id").val().toUpperCase();
+                var upc_code4  = $("#customer4_barcode").val().toUpperCase();
+                var colorno4 =  $("#customer4_color").val().toUpperCase();
+                var sizeno4  =  $("#customer4_size").val().toUpperCase();
+                var qty4  = $("#customer4_number").val().toUpperCase();
                 
-                var pallet  =  $("#pallet").val();
-                var prodorder  = $("#prodorder").val();
-                var destination  = $("#destination").val();
+                var pallet  =  $("#pallet").val().toUpperCase();
+                var prodorder  = $("#prodorder").val().toUpperCase();
+                var destination  = $("#destination").val().toUpperCase();
                 
                 if(po){
-                    po =  $("#po").val();
+                    po =  $("#po").val().toUpperCase();
                 }else{
-                    po =  $("#posearch").val();
+                    po =  $("#posearch").val().toUpperCase();
                 }
                 var date = new Date().format('d-m-Y H:i:s');
          
-                var num1 = $("#customer1_number").val()
-                var num2 = $("#customer2_number").val()
-                var num3 = $("#customer3_number").val()
-                var num4 = $("#customer4_number").val()
+                var num1 = $("#customer1_number").val().toUpperCase()
+                var num2 = $("#customer2_number").val().toUpperCase()
+                var num3 = $("#customer3_number").val().toUpperCase()
+                var num4 = $("#customer4_number").val().toUpperCase()
                 if(!num1){
                     num1=0;
                 }

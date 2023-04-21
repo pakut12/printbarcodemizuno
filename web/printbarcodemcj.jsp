@@ -120,10 +120,10 @@
         </footer>
         <script>
             function barcode(){
-                var firstdigit = $("#firstdigit").val();
-                var po = $("#po").val();
-                var boxstart = $("#boxstart").val();
-                var boxend = $("#boxend").val();
+                var firstdigit = $("#firstdigit").val().toUpperCase();
+                var po = $("#po").val().toUpperCase();
+                var boxstart = $("#boxstart").val().toUpperCase();
+                var boxend = $("#boxend").val().toUpperCase();
                 
                 $.ajax({
                     type:'post',
@@ -148,11 +148,11 @@
             
             $(document).ready(function () {
                 $("#printbarcode").click(function(){
-                    var firstdigit = $("#firstdigit").val();
-                    var po = $("#po").val();
-                    var start = $("#boxstart").val();
-                    var end = $("#boxend").val();
-                    var budget_month = $("#budget_month").val();                  
+                    var firstdigit = $("#firstdigit").val().toUpperCase();
+                    var po = $("#po").val().toUpperCase();
+                    var start = $("#boxstart").val().toUpperCase();
+                    var end = $("#boxend").val().toUpperCase();
+                    var budget_month = $("#budget_month").val().toUpperCase();                  
         
         
                     var style_box1 = $("#style_box1").is(":checked");
