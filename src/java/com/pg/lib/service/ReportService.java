@@ -44,6 +44,7 @@ public class ReportService {
                     }
                 }
             }
+
             sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
 
             System.out.println(sql);
@@ -179,7 +180,7 @@ public class ReportService {
             if (!datestart.equals("") || !dateend.equals("")) {
                 sql += " and a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') ";
             }
-         
+
             sql += " GROUP BY  a.PO,a.FIRSTDIGIT,a.DATE_CREATE,a.STARTBOX,a.ENDBOX   ";
 
 
@@ -289,7 +290,10 @@ public class ReportService {
 
             String[] columns = {"PO", "FIRSTDIGIT", "STARTBOX", "ENDBOX", "DATE_CREATE"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
-                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+               // sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+                 sql += " ORDER BY a.PO,a.FIRSTDIGIT,LPAD(a.startbox, 10) ";
+            } else {
+                sql += " ORDER BY a.PO,a.FIRSTDIGIT,LPAD(a.startbox, 10) ";
             }
             sql += ")x) where rnum BETWEEN ? AND ?";
 

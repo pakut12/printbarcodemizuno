@@ -128,7 +128,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 						key="staticText"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement lineSpacing="Single">
-						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="true"/>
+						<font fontName="Tahoma" pdfFontName="Helvetica-Bold" size="12" isBold="true" isItalic="false"/>
 					</textElement>
 				<text><![CDATA[Ship to : ]]></text>
 				</staticText>
@@ -380,7 +380,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 						key="barcode-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<graphicElement stretchType="NoStretch" pen="None" fill="Solid" />
-					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(8,$F{PO},false,false,null,0,0)]]></imageExpression>
+					<imageExpression class="java.awt.Image"><![CDATA[it.businesslogic.ireport.barcode.BcImage.getBarcodeImage(7,$F{PO},false,false,null,0,0)]]></imageExpression>
 				</image>
 				<line direction="TopDown">
 					<reportElement

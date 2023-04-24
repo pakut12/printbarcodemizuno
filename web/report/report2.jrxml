@@ -105,7 +105,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="268"  isSplitAllowed="true" >
+			<band height="267"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
 						x="200"
@@ -642,7 +642,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="11"
-						y="238"
+						y="237"
 						width="169"
 						height="19"
 						key="textField-9"/>
@@ -678,7 +678,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="44"
-						y="247"
+						y="246"
 						width="71"
 						height="14"
 						key="textField-12"/>
@@ -691,7 +691,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<staticText>
 					<reportElement
 						x="7"
-						y="247"
+						y="246"
 						width="46"
 						height="14"
 						key="staticText-16"/>
@@ -704,7 +704,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<staticText>
 					<reportElement
 						x="7"
-						y="256"
+						y="255"
 						width="46"
 						height="12"
 						key="staticText-17"/>
@@ -717,7 +717,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="44"
-						y="256"
+						y="255"
 						width="71"
 						height="12"
 						key="textField-13"/>
@@ -730,7 +730,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="106"
-						y="256"
+						y="255"
 						width="71"
 						height="12"
 						key="textField-14"/>
@@ -770,7 +770,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="226"
-						y="240"
+						y="239"
 						width="169"
 						height="19"
 						key="textField-16"/>
@@ -783,7 +783,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="255"
-						y="249"
+						y="248"
 						width="71"
 						height="14"
 						key="textField-17"/>
@@ -796,7 +796,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="255"
-						y="256"
+						y="255"
 						width="71"
 						height="12"
 						key="textField-18"/>
@@ -809,7 +809,7 @@ order by CAST(REGEXP_SUBSTR(a.boxno, '\d+')  as int)]]></queryString>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="318"
-						y="256"
+						y="255"
 						width="71"
 						height="12"
 						key="textField-19"/>
