@@ -627,6 +627,9 @@
                         if(msg){  
                             var js = JSON.parse(msg);
                             console.log(js)
+                            var startbox = parseInt(js.boxno.match(/\d+/)[0]);
+                            var endbox = parseInt(js.boxall.match(/\d+/)[0]);
+                            var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
                             
                             var shipto = js.shipto;
                             var customer_address = js.customer_address
@@ -654,8 +657,8 @@
                             
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
-                            $("#numberbox_start").val(js.startbox);
-                            $("#numberbox_end").val(js.endbox);
+                            $("#numberbox_start").val(startbox);
+                            $("#numberbox_end").val(endbox);
                             $("#quantitytotal_box").val(js.allbox);
                             
                             $("#po").val(js.po);

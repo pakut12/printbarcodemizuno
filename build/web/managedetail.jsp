@@ -105,7 +105,7 @@
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
                                         <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" >
                                     </div>
                                 </div>

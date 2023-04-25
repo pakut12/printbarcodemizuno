@@ -88,15 +88,17 @@ public class DetailService {
                     sql += "'" + num + "')";
                 }
             }
-            System.out.println(sql);
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
+                System.out.println(true);
             } else {
                 status = false;
+                System.out.println(false);
             }
 
         } catch (Exception e) {
@@ -127,7 +129,7 @@ public class DetailService {
             System.out.println(listupdate.size());
             System.out.println(end);
             for (int n = 0; n < end; n++) {
-                System.out.println("N" + n);
+                // System.out.println("N" + n);
                 if (n < listupdate.size()) {
                     System.out.println("A" + n);
                     String inputDateString = listupdate.get(n).getDate_create();
@@ -154,8 +156,7 @@ public class DetailService {
                         e.printStackTrace();
                     }
 
-                }
-                if (n >= listupdate.size() || listupdate.size() == 0) {
+                } else if (n >= listupdate.size() || listupdate.size() == 0) {
                     System.out.println("B" + n);
                     try {
                         ps.setString(1, po);
@@ -400,7 +401,7 @@ public class DetailService {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-                
+
                 BCDetailBox box = new BCDetailBox();
                 box.setPo(rs.getString("po"));
                 box.setShipfrom(rs.getString("shipfrom"));
@@ -895,38 +896,42 @@ public class DetailService {
         List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec ,a.* FROM MIZUNONEWBARBOXHD a WHERE a.PO = ? AND a.STARTBOX = ? AND a.ENDBOX = ? AND a.firstdigit = ?";
+            String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec ,a.* FROM MIZUNONEWBARBOXDT a WHERE a.PO = ? AND a.BOXNO in (";
 
-
+            for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
+                if (s < Integer.parseInt(ENDBOX)) {
+                    sql += "'" + firstdigit + String.valueOf(s) + "',";
+                } else {
+                    sql += "'" + firstdigit + String.valueOf(s) + "') AND a.BOXALL = ? ";
+                }
+            }
+            
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
-            ps.setString(2, STARTBOX);
-            ps.setString(3, ENDBOX);
-            ps.setString(4, firstdigit);
+            ps.setString(2, firstdigit + ENDBOX);
             rs = ps.executeQuery();
 
             while (rs.next()) {
 
                 BCDetailBox box = new BCDetailBox();
                 box.setPo(rs.getString("po"));
-                box.setStartbox(rs.getString("startbox"));
-                box.setEndbox(rs.getString("endbox"));
-                box.setFirstdigit(rs.getString("firstdigit"));
+
                 box.setShipfrom(rs.getString("shipfrom"));
                 box.setShipto(rs.getString("shipto"));
                 box.setQtyperbox(rs.getString("qtyperbox"));
-                box.setDesctxt(rs.getString("desctxt"));
+
                 box.setGrossweight(rs.getString("grossweight"));
                 box.setNetweight(rs.getString("netweight"));
                 box.setCountry_origin(rs.getString("country_origin"));
-                box.setAllbox(rs.getString("allbox"));
+                box.setAllbox(rs.getString("boxall"));
+                box.setBoxno(rs.getString("boxno"));
                 box.setSku_item1(rs.getString("sku_item1"));
                 box.setUpc_code1(rs.getString("upc_code1"));
                 box.setQty1(rs.getString("qty1"));
                 box.setSizen01(rs.getString("sizeno1"));
                 box.setColorn01(rs.getString("colorno1"));
-
+                box.setDesctxt(rs.getString("desctxt"));
                 box.setSku_item2(rs.getString("sku_item2"));
                 box.setUpc_code2(rs.getString("upc_code2"));
                 box.setQty2(rs.getString("qty2"));
@@ -945,9 +950,21 @@ public class DetailService {
                 box.setSizen04(rs.getString("sizeno4"));
                 box.setColorn04(rs.getString("colorno4"));
 
+                box.setSfaddress1(rs.getString("sfaddress1"));
+                box.setSfaddress2(rs.getString("sfaddress2"));
+                box.setSfaddress3(rs.getString("sfaddress3"));
+                box.setSfaddress4(rs.getString("sfaddress4"));
+                box.setStaddress1(rs.getString("staddress1"));
+                box.setStaddress2(rs.getString("staddress2"));
+                box.setStaddress3(rs.getString("staddress3"));
+                box.setStaddress4(rs.getString("staddress4"));
+                box.setStatusshoot(rs.getString("statusshoot"));
+
                 box.setPallet(rs.getString("pallet"));
                 box.setProdorder(rs.getString("prod_order"));
                 box.setDestination(rs.getString("destination"));
+
+
                 box.setDate_create(rs.getString("datec"));
                 box.setDate_modify(rs.getString("date_modify"));
 
