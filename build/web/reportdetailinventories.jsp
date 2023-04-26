@@ -115,7 +115,33 @@
                         
                         
                         <div id="mytable" class="mt-3">
-                            
+                            <div class='text-center h3'>รายงานสินค้าคงเหลือ</div>
+                            <table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>
+                                <thead>
+                                    <tr>
+                                        <th scope='col'>วันที่</th>
+                                        <th scope='col'>PO</th>
+                                        <th scope='col'>PO เดิม</th>
+                                        <th scope='col'>รหัสลูกค้า</th>
+                                        <th scope='col'>รหัสสินค้า</th>
+                                        <th scope='col'>Production Order</th>
+                                        <th scope='col'>พาเลท</th>
+                                        <th scope='col'>กล่องที่</th>
+                                        <th scope='col'>จำนวนเต็ม</th>
+                                        <th scope='col'>จำนวนในกล่อง</th>
+                                        <th scope='col'>ต่าง</th>
+                                        <th scope='col'>หมายเหตุ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="10" style="text-align:right">Total:</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                         
                     </div>
@@ -151,6 +177,14 @@
                 return today;
             }
             
+    
+            function chacknull(txt){
+                if(!txt){
+                    txt = ""
+                }
+                return txt
+            }
+    
             function getdate(){
                 var customer = $("#customer").val();
                 var destination = $("#destination").val();
@@ -164,27 +198,181 @@
                 var customer_product = $("#customer_product").val();
                 var prodorder = $("#prodorder").val();
                 
-                $.ajax({
-                    type:'post',
-                    url:'Report',
-                    data:{
-                        type:"gettablereportdetailinventories",
-                        customer:customer,
-                        destination:destination,
-                        pallet:pallet,
-                        firstdigit:firstdigit,
-                        start:start,
-                        end:end,
-                        po:po,
-                        po_old:po_old,
-                        customer_no:customer_no,
-                        customer_product:customer_product,
-                        prodorder:prodorder
+        
+                var table =   $("#tablereport").DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        type:"post",
+                        url:"Report",
+                        data:{
+                            type:"gettablereportdetailinventories",
+                            customer:customer,
+                            destination:destination,
+                            pallet:pallet,
+                            firstdigit:firstdigit,
+                            startbox:start,
+                            endbox:end,
+                            po:po,
+                            po_old:po_old,
+                            customer_no:customer_no,
+                            customer_product:customer_product,
+                            prodorder:prodorder
+                        },
+                        dataSrc:function(json){
+                            var arr = [];
+                            var data = JSON.parse(json.data);
+                            
+                            $.each(data,function(k,v){
+                                var date = "";
+                                if(v.date_create){
+                                    date = v.date_create
+                                }
+                                var qty = "";
+                                var qty_result = "";
+                                
+                                var mark = "";
+                                var diff = "";
+                                if(v.customer_no == v.sku_item1){
+                                    qty = v.qty1
+                                    qty_result=v.qty_result1 
+                                    if(v.qty_result1 < qty){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result1;
+                                }else if(v.customer_no == v.sku_item2){
+                                    qty = v.qty2
+                                    qty_result=v.qty_result2
+                                    if(v.qty_result2 < qty){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result2;
+                                }else if(v.customer_no == v.sku_item3){
+                                    qty = v.qty3
+                                    qty_result=v.qty_result3
+                                    if(v.qty_result3 < qty){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result3;
+                                }else if(v.customer_no == v.sku_item4){
+                                    qty = v.qty3
+                                    qty_result=v.qty_result4
+                                    if(v.qty_result3 < qty){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result3;
+                                }
+                                
+                                var result = {
+                                    date_create : chacknull(v.date_create),
+                                    po : chacknull(v.po),
+                                    po_old : chacknull(v.po_old),
+                                    customer_no : chacknull( v.customer_no),
+                                    customer_product :  chacknull(v.customer_product),
+                                    prodorder :  chacknull(v.prodorder),
+                                    pallet :  chacknull(v.pallet),
+                                    qty :  chacknull(qty),
+                                    qty_result :  chacknull(qty_result),
+                                    diff :  chacknull(diff),
+                                    mark :  chacknull(mark),
+                                    boxno :  chacknull(v.boxno),
+                                    test:"test"
+                                }
+                                
+                                arr.push(result);
+                            })
+                            //console.log(data)
+                            return arr
+                        }
                     },
-                    success:function(msg){
-                        var form1 = $("#myformreport").serialize()
-                       
-                        $("#mytable").html(msg);
+                    columns: [
+                        { data: 'date_create' },
+                        { data: 'po' },
+                        { data: 'po_old' },
+                        { data: 'customer_no' },
+                        { data: 'customer_product' },
+                        { data: 'prodorder' },
+                        { data: 'pallet' },
+                        { data: 'boxno' },
+                        { data: 'qty' },
+                        { data: 'qty_result' },
+                        { data: 'diff' },
+                        { data: 'mark' },
+                    ],
+                    bDestroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'pageLength',
+                        {
+                            extend: 'excelHtml5',
+                            title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today()
+                        },
+                        {
+                            text: 'PDF',
+                            action: function ( dt ) {
+                                var form = $("#myformreport").serialize()
+                                window.open('Report?type=getreportdetailinventoriespdf&'+form, '_blank','height=400,width=800,left=200,top=200');  
+                            }
+                        },
+                        {
+                            text: 'Print',
+                            action: function ( dt ) {
+                                var form = $("#myformreport").serialize()
+                                window.open('Report?type=getreportdetailinventories&'+form, '_blank','height=400,width=800,left=200,top=200');  
+                            }
+                        }
+                    ],
+                    order: [[2, 'asc']],
+                    scrollX: true,
+                    rowGroup: {
+                        startRender: function ( rows, group ) {
+                            return "รหัสสินค้า : "+group ;
+                        },
+                        endRender: function ( rows, group ) {
+                            var listdata = rows.data().pluck("qty_result");
+                           
+                            var sum = 0;
+                            $.each(listdata,function(k,v){
+                                sum += parseInt(v)
+                            })
+                            return "<div style='padding-left: 80%;'>รวม : " + sum +"</div>"
+                        },
+                        dataSrc: function(row) {
+                            return row.customer_no;
+                        }
+                    
+                    },
+                    drawCallback: function( settings ) {
+                        table.ajax: {
+                            type:"post",
+                            url:"Report",
+                            data:{
+                                type:"gettablereportdetailinventories",
+                                customer:customer,
+                                destination:destination,
+                                pallet:pallet,
+                                firstdigit:firstdigit,
+                                startbox:start,
+                                endbox:end,
+                                po:po,
+                                po_old:po_old,
+                                customer_no:customer_no,
+                                customer_product:customer_product,
+                                prodorder:prodorder
+                            }
+ 
+                        },
+                        footerCallback: function (row, data, start, end, display) {
+                        
+                        
+ 
+                            // Update footer
+                            // $(api.column(4).footer()).html('รวมทั้งหมด : ' + total);
+                        }
+                    });      
+                
+                                       
+                    /*/
                         var groupColumn = 3;
                         var table = $('#tablereport').DataTable({
                             dom: 'Bfrtip',
@@ -231,11 +419,12 @@
                         
                     }
                 })
-            } 
+                     */
+                } 
             
-            $( document ).ready(function() {
-                getcustomer()
-            });
+                $( document ).ready(function() {
+                    getcustomer()
+                });
             
           
         </script>

@@ -58,6 +58,7 @@ public class DetailService {
                 de.setQty_result4(rs.getString("qty_result4"));
                 de.setDate_create(rs.getString("date_create"));
                 de.setDate_modify(rs.getString("date_modify"));
+                de.setAllbox(rs.getString("boxall"));
                 list.add(de);
 
             }
@@ -73,25 +74,24 @@ public class DetailService {
         return list;
     }
 
-    public Boolean DeleteListMIZUNONEWBARBOXRESULTOLD(String PO, String start, String end, String firstdigit) throws SQLException {
+    public Boolean DeleteListMIZUNONEWBARBOXRESULTOLD(String PO, String STARTBOX, String ENDBOX, String firstdigit, String allbox) throws SQLException {
 
         Boolean status = false;
 
         try {
-            String sql = "delete from MIZUNONEWBARBOXRESULT where po = ? and boxno in (";
+            String sql = "delete from MIZUNONEWBARBOXRESULT where po = ? and boxall = ? and boxno in (";
 
-            for (int n = Integer.parseInt(start); n < Integer.parseInt(end) + 1; n++) {
-                String num = firstdigit + String.valueOf(n);
-                if (n < Integer.parseInt(end)) {
-                    sql += "'" + num + "',";
+            for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
+                if (s < Integer.parseInt(ENDBOX)) {
+                    sql += "'" + firstdigit + String.valueOf(s) + "',";
                 } else {
-                    sql += "'" + num + "')";
+                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
                 }
             }
-
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
+            ps.setString(2, firstdigit + allbox);
 
             if (ps.executeUpdate() > 0) {
                 status = true;
@@ -112,7 +112,7 @@ public class DetailService {
         return status;
     }
 
-    public Boolean UpdateMIZUNONEWBARBOXRESULT(List<BCDetailBox> listupdate, String endbox, String startbox, String firstdigit, String po) throws SQLException {
+    public Boolean UpdateMIZUNONEWBARBOXRESULT(List<BCDetailBox> listupdate, String endbox, String startbox, String firstdigit, String po, String allbox) throws SQLException {
 
         Boolean status = false;
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
@@ -122,7 +122,7 @@ public class DetailService {
         int end = Integer.parseInt(endbox);
         try {
 
-            String sql = "insert into MIZUNONEWBARBOXRESULT (PO,boxno,qty_result1,qty_result2,qty_result3,qty_result4,DATE_CREATE,DATE_MODIFY) VALUES (?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
+            String sql = "insert into MIZUNONEWBARBOXRESULT (PO,boxno,qty_result1,qty_result2,qty_result3,qty_result4,DATE_CREATE,DATE_MODIFY,boxall) VALUES (?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -148,6 +148,7 @@ public class DetailService {
                         ps.setString(6, listupdate.get(n).getQty_result4());
                         ps.setString(7, formatter.format(date1));
                         ps.setString(8, formatter.format(date));
+                        ps.setString(9, listupdate.get(n).getAllbox());
                         ps.addBatch();
 
 
@@ -167,6 +168,7 @@ public class DetailService {
                         ps.setString(6, "0");
                         ps.setString(7, formatter.format(date));
                         ps.setString(8, "");
+                        ps.setString(9, firstdigit + allbox);
                         ps.addBatch();
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -289,10 +291,10 @@ public class DetailService {
         return listdetail;
     }
 
-    public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) throws SQLException {
+    public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end, String boxall) throws SQLException {
         Boolean status = false;
         try {
-            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end);
+            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end, boxall);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -312,13 +314,14 @@ public class DetailService {
         return status;
     }
 
-    private String SqlAddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end) {
+    private String SqlAddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end, String boxall) {
         String sql = "INSERT ALL ";
         try {
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,qty_result1,qty_result2,qty_result3,qty_result4,DATE_CREATE) VALUES (";
+                sql += " INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,BOXALL,qty_result1,qty_result2,qty_result3,qty_result4,DATE_CREATE) VALUES (";
                 sql += "'" + PO + "',";
                 sql += "'" + initial + n + "',";
+                sql += "'" + initial + boxall + "',";
                 sql += "'0',";
                 sql += "'0',";
                 sql += "'0',";
@@ -778,6 +781,7 @@ public class DetailService {
         Boolean status = false;
         try {
             String sql = SQLDeleteDetailBoxMIZUNONEWBARBOXDTAll(PO, firstdigit, startbox, endbox);
+            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -896,21 +900,23 @@ public class DetailService {
         List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec ,a.* FROM MIZUNONEWBARBOXDT a WHERE a.PO = ? AND a.BOXNO in (";
+            String sql = "SELECT REGEXP_SUBSTR(a.boxno, '[A-Za-z]+') AS firstdigit,REGEXP_SUBSTR(a.boxno, '\\d+')  AS boxno1,REGEXP_SUBSTR(a.boxall, '\\d+')  AS boxall1,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec ,a.* FROM MIZUNONEWBARBOXDT a WHERE a.PO = ? AND a.BOXNO in (";
 
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
                 if (s < Integer.parseInt(ENDBOX)) {
                     sql += "'" + firstdigit + String.valueOf(s) + "',";
                 } else {
-                    sql += "'" + firstdigit + String.valueOf(s) + "') AND a.BOXALL = ? ";
+                    sql += "'" + firstdigit + String.valueOf(s) + "')  order by CAST(REGEXP_SUBSTR(a.boxno, '\\d+')  as int)";
                 }
             }
-            
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
-            ps.setString(2, firstdigit + ENDBOX);
+
             rs = ps.executeQuery();
+
+            System.out.println(sql);
 
             while (rs.next()) {
 
@@ -920,12 +926,12 @@ public class DetailService {
                 box.setShipfrom(rs.getString("shipfrom"));
                 box.setShipto(rs.getString("shipto"));
                 box.setQtyperbox(rs.getString("qtyperbox"));
-
+                box.setFirstdigit(rs.getString("firstdigit"));
                 box.setGrossweight(rs.getString("grossweight"));
                 box.setNetweight(rs.getString("netweight"));
                 box.setCountry_origin(rs.getString("country_origin"));
-                box.setAllbox(rs.getString("boxall"));
-                box.setBoxno(rs.getString("boxno"));
+                box.setAllbox(rs.getString("boxall1"));
+                box.setBoxno(rs.getString("boxno1"));
                 box.setSku_item1(rs.getString("sku_item1"));
                 box.setUpc_code1(rs.getString("upc_code1"));
                 box.setQty1(rs.getString("qty1"));
@@ -1049,7 +1055,6 @@ public class DetailService {
             HashMap<String, String> addresstsg = GetAddress("TSG");
             HashMap<String, String> addresscustomer = GetAddress(customer_num);
 
-
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
                 sql += " INTO MIZUNONEWBARBOXDT (PO,BOXSEQ,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY) VALUES (";
                 sql += "'" + po + "',";
@@ -1067,7 +1072,7 @@ public class DetailService {
                 sql += "'" + addresscustomer.get("address3") + "',";
                 sql += "'" + addresscustomer.get("address4") + "',";
                 sql += "'" + quantity_box + "',";
-                sql += "'" + description + "',";
+                sql += "'" + description.replaceAll("'", " ") + "',";
                 sql += "'" + gw + "',";
                 sql += "'" + nw + "',";
                 sql += "'" + country + "',";
@@ -1111,6 +1116,8 @@ public class DetailService {
 
         try {
             String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+
+            System.out.println(sql);
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);

@@ -95,27 +95,20 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
                                             <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
                                             <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="2">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่กล่องจาก</span>
-                                            <input type="number" class="form-control text-center" name="numberbox_start" id="numberbox_start" >
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                            <input type="number" class="form-control text-center" name="numberbox_end" id="numberbox_end" >
-                                        </div>
-                                    </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    
+                                    <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนกล่องทั้งหมด</span>
                                             <input type="number" class="form-control text-center" name="quantitytotal_box" id="quantitytotal_box" >
@@ -422,8 +415,8 @@
                 var customer_address = $("#customer_address").val().toUpperCase();
                 var qtyperbox  = $("#quantity_box").val().toUpperCase();
                 var firstdigit =  $("#initial").val().toUpperCase();
-                var startbox  = $("#numberbox_start").val().toUpperCase();
-                var endbox  =  $("#numberbox_end").val().toUpperCase();
+               // var startbox  = $("#numberbox_start").val().toUpperCase();
+                //var endbox  =  $("#numberbox_end").val().toUpperCase();
                 var allbox  =   $("#quantitytotal_box").val().toUpperCase();    
                 var po =  $("#po").val().toUpperCase();
                 
@@ -495,8 +488,8 @@
                             shipto:shipto,
                             qtyperbox:qtyperbox,
                             firstdigit:firstdigit,
-                            startbox:startbox,
-                            endbox:endbox,
+                           // startbox:startbox,
+                           // endbox:endbox,
                             allbox:allbox,
                             po:po,
                             desctxt:desctxt,
@@ -627,9 +620,9 @@
                         if(msg){  
                             var js = JSON.parse(msg);
                             console.log(js)
-                            var startbox = parseInt(js.boxno.match(/\d+/)[0]);
-                            var endbox = parseInt(js.boxall.match(/\d+/)[0]);
-                            var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
+                           // var startbox = parseInt(js.boxno.match(/\d+/)[0]);
+                          //  var endbox = parseInt(js.boxall.match(/\d+/)[0]);
+                            //var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
                             
                             var shipto = js.shipto;
                             var customer_address = js.customer_address
@@ -657,8 +650,8 @@
                             
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
-                            $("#numberbox_start").val(startbox);
-                            $("#numberbox_end").val(endbox);
+                                //$("#numberbox_start").val(startbox);
+                            //$("#numberbox_end").val(endbox);
                             $("#quantitytotal_box").val(js.allbox);
                             
                             $("#po").val(js.po);

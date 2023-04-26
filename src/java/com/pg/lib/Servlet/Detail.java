@@ -62,7 +62,7 @@ public class Detail extends HttpServlet {
                 DetailService ds = new DetailService();
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                 Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_address, customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
-                Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end);
+                Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end, quantitytotal_box);
 
                 JSONObject obj = new JSONObject();
                 if (statusdt && statushd && statusresult) {
@@ -133,81 +133,83 @@ public class Detail extends HttpServlet {
                 out.print(obj);
 
             } else if (type.equals("updatedetailsall")) {
+                try {
 
-                String pobefore = request.getParameter("pobefore").trim();
-                String startboxbefore = request.getParameter("startboxbefore").trim();
-                String endboxbefore = request.getParameter("endboxbefore").trim();
-                String po_old = request.getParameter("po_old").trim();
+                    String pobefore = request.getParameter("pobefore").trim();
+                    String startboxbefore = request.getParameter("startboxbefore").trim();
+                    String endboxbefore = request.getParameter("endboxbefore").trim();
+                    String po_old = request.getParameter("po_old").trim();
 
 
-                String shipto = request.getParameter("shipto").trim();
-                String qtyperbox = request.getParameter("qtyperbox").trim();
-                String firstdigit = request.getParameter("firstdigit").trim();
-                String startbox = request.getParameter("startbox").trim();
-                String endbox = request.getParameter("endbox").trim();
-                String allbox = request.getParameter("allbox").trim();
-                String po = request.getParameter("po").trim();
-                String desctxt = request.getParameter("desctxt").trim();
-                String grossweight = request.getParameter("grossweight").trim();
-                String netweight = request.getParameter("netweight").trim();
-                String country_origin = request.getParameter("country_origin").trim();
+                    String shipto = request.getParameter("shipto").trim();
+                    String qtyperbox = request.getParameter("qtyperbox").trim();
+                    String firstdigit = request.getParameter("firstdigit").trim();
 
-                String sku_item1 = request.getParameter("sku_item1").trim();
-                String upc_code1 = request.getParameter("upc_code1").trim();
-                String colorno1 = request.getParameter("colorno1").trim();
-                String sizeno1 = request.getParameter("sizeno1").trim();
-                String qty1 = request.getParameter("qty1").trim();
+                    String allbox = request.getParameter("allbox").trim();
+                    String po = request.getParameter("po").trim();
+                    String desctxt = request.getParameter("desctxt").trim();
+                    String grossweight = request.getParameter("grossweight").trim();
+                    String netweight = request.getParameter("netweight").trim();
+                    String country_origin = request.getParameter("country_origin").trim();
 
-                String sku_item2 = request.getParameter("sku_item2").trim();
-                String upc_code2 = request.getParameter("upc_code2").trim();
-                String colorno2 = request.getParameter("colorno2").trim();
-                String sizeno2 = request.getParameter("sizeno2").trim();
-                String qty2 = request.getParameter("qty2").trim();
+                    String sku_item1 = request.getParameter("sku_item1").trim();
+                    String upc_code1 = request.getParameter("upc_code1").trim();
+                    String colorno1 = request.getParameter("colorno1").trim();
+                    String sizeno1 = request.getParameter("sizeno1").trim();
+                    String qty1 = request.getParameter("qty1").trim();
 
-                String sku_item3 = request.getParameter("sku_item3").trim();
-                String upc_code3 = request.getParameter("upc_code3").trim();
-                String colorno3 = request.getParameter("colorno3").trim();
-                String sizeno3 = request.getParameter("sizeno3").trim();
-                String qty3 = request.getParameter("qty3").trim();
+                    String sku_item2 = request.getParameter("sku_item2").trim();
+                    String upc_code2 = request.getParameter("upc_code2").trim();
+                    String colorno2 = request.getParameter("colorno2").trim();
+                    String sizeno2 = request.getParameter("sizeno2").trim();
+                    String qty2 = request.getParameter("qty2").trim();
 
-                String sku_item4 = request.getParameter("sku_item4").trim();
-                String upc_code4 = request.getParameter("upc_code4").trim();
-                String colorno4 = request.getParameter("colorno4").trim();
-                String sizeno4 = request.getParameter("sizeno4").trim();
-                String qty4 = request.getParameter("qty4").trim();
+                    String sku_item3 = request.getParameter("sku_item3").trim();
+                    String upc_code3 = request.getParameter("upc_code3").trim();
+                    String colorno3 = request.getParameter("colorno3").trim();
+                    String sizeno3 = request.getParameter("sizeno3").trim();
+                    String qty3 = request.getParameter("qty3").trim();
 
-                String[] listinput1 = {sku_item1, upc_code1, colorno1, sizeno1, qty1};
-                String[] listinput2 = {sku_item2, upc_code2, colorno2, sizeno2, qty2};
-                String[] listinput3 = {sku_item3, upc_code3, colorno3, sizeno3, qty3};
-                String[] listinput4 = {sku_item4, upc_code4, colorno4, sizeno4, qty4};
+                    String sku_item4 = request.getParameter("sku_item4").trim();
+                    String upc_code4 = request.getParameter("upc_code4").trim();
+                    String colorno4 = request.getParameter("colorno4").trim();
+                    String sizeno4 = request.getParameter("sizeno4").trim();
+                    String qty4 = request.getParameter("qty4").trim();
 
-                String pallet = request.getParameter("pallet").trim();
-                String prodorder = request.getParameter("prodorder").trim();
-                String destination = request.getParameter("destination").trim();
-                String date = request.getParameter("date").trim();
-                String firstdigitbefore = request.getParameter("firstdigitbefore").trim();
-                String customer_address = request.getParameter("customer_address").trim();
+                    String[] listinput1 = {sku_item1, upc_code1, colorno1, sizeno1, qty1};
+                    String[] listinput2 = {sku_item2, upc_code2, colorno2, sizeno2, qty2};
+                    String[] listinput3 = {sku_item3, upc_code3, colorno3, sizeno3, qty3};
+                    String[] listinput4 = {sku_item4, upc_code4, colorno4, sizeno4, qty4};
 
-                DetailService ds = new DetailService();
+                    String pallet = request.getParameter("pallet").trim();
+                    String prodorder = request.getParameter("prodorder").trim();
+                    String destination = request.getParameter("destination").trim();
+                    String date = request.getParameter("date").trim();
+                    String firstdigitbefore = request.getParameter("firstdigitbefore").trim();
+                    String customer_address = request.getParameter("customer_address").trim();
 
-                List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigit);
-                ds.DeleteListMIZUNONEWBARBOXRESULTOLD(pobefore, startboxbefore, endboxbefore, firstdigit);
-                
-                Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endbox, startbox, firstdigit, po);
-                
-                Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
-                Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startbox, endbox, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
+                    DetailService ds = new DetailService();
 
-                JSONObject obj = new JSONObject();
+                    List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigitbefore);
+                    ds.DeleteListMIZUNONEWBARBOXRESULTOLD(pobefore, startboxbefore, endboxbefore, firstdigitbefore, allbox);
 
-                if (statusupdate && statusDT && statusdt) {
-                    obj.put("status", "true");
-                } else {
-                    obj.put("status", "false");
+                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endboxbefore, startboxbefore, firstdigit, po,allbox);
+
+                    // Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
+                    Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
+                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
+
+                    JSONObject obj = new JSONObject();
+
+                    if (statusdt) {
+                        obj.put("status", "true");
+                    } else {
+                        obj.put("status", "false");
+                    }
+                    out.print(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                out.print(obj);
-
 
             } else if (type.equals("deletedetailsall")) {
 

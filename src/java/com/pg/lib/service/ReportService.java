@@ -25,19 +25,64 @@ public class ReportService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    private String sqllistreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String start, String end, String firstdigit) {
-        String sql = "";
+    public int getFilteredRecordsdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, int start, int end,String searchValue) throws ClassNotFoundException, SQLException, NamingException {
+        int totalRecords = 0;
         try {
-            if (firstdigit.equals("") || start.equals("") || end.equals("")) {
-                sql = "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_MODIFY,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+            String sql = "";
+            sql += "select count(*) from ( select rownum as rnum,x.* from (";
+            if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
                         "where  NVL(a.PROD_ORDER ,'NULL')  LIKE '%" + prodorder + "' and NVL(a.PO  ,'NULL') LIKE '%" + po + "' and NVL(a.SHIPTO  ,'NULL') LIKE '%" + SHIPTO + "'  and  NVL(a.DESTINATION  ,'NULL') LIKE '%" + DESTINATION + "' and NVL(a.PO_OLD ,'NULL') LIKE '%" + po_old + "'  and NVL(a.PALLET  ,'NULL') LIKE '%" + pallet + "' and NVL(b.customer_no  ,'NULL')  LIKE '%" + customer_no + "'  and  NVL(b.customer_product  ,'NULL')  LIKE  '%" + customer_product + "'  ";
             } else {
-                sql = "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_MODIFY,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
                         "where  NVL(a.PROD_ORDER ,'NULL')  LIKE '%" + prodorder + "' and NVL(a.PO  ,'NULL') LIKE '%" + po + "' and NVL(a.SHIPTO  ,'NULL') LIKE '%" + SHIPTO + "'  and  NVL(a.DESTINATION  ,'NULL') LIKE '%" + DESTINATION + "' and NVL(a.PO_OLD ,'NULL') LIKE '%" + po_old + "'  and NVL(a.PALLET  ,'NULL') LIKE '%" + pallet + "' and NVL(b.customer_no  ,'NULL')  LIKE '%" + customer_no + "'  and  NVL(b.customer_product  ,'NULL')  LIKE  '%" + customer_product + "' and a.boxno in (";
 
-                for (int n = Integer.parseInt(start); n < Integer.parseInt(end) + 1; n++) {
+                for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
-                    if (n < Integer.parseInt(end)) {
+                    if (n < Integer.parseInt(endbox)) {
+                        sql += "'" + num + "',";
+                    } else {
+                        sql += "'" + num + "')";
+                    }
+                }
+            }
+            sql += "and (a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%')";
+            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
+            sql += ")x)";
+
+            System.out.println(sql);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                totalRecords = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return totalRecords;
+    }
+
+    public int getTotalRecordsdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit) throws ClassNotFoundException, SQLException, NamingException {
+        int totalRecords = 0;
+        try {
+            String sql = "";
+            sql += "select count(*) from ( select rownum as rnum,x.* from (";
+            if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                        "where  NVL(a.PROD_ORDER ,'NULL')  LIKE '%" + prodorder + "' and NVL(a.PO  ,'NULL') LIKE '%" + po + "' and NVL(a.SHIPTO  ,'NULL') LIKE '%" + SHIPTO + "'  and  NVL(a.DESTINATION  ,'NULL') LIKE '%" + DESTINATION + "' and NVL(a.PO_OLD ,'NULL') LIKE '%" + po_old + "'  and NVL(a.PALLET  ,'NULL') LIKE '%" + pallet + "' and NVL(b.customer_no  ,'NULL')  LIKE '%" + customer_no + "'  and  NVL(b.customer_product  ,'NULL')  LIKE  '%" + customer_product + "'  ";
+            } else {
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                        "where  NVL(a.PROD_ORDER ,'NULL')  LIKE '%" + prodorder + "' and NVL(a.PO  ,'NULL') LIKE '%" + po + "' and NVL(a.SHIPTO  ,'NULL') LIKE '%" + SHIPTO + "'  and  NVL(a.DESTINATION  ,'NULL') LIKE '%" + DESTINATION + "' and NVL(a.PO_OLD ,'NULL') LIKE '%" + po_old + "'  and NVL(a.PALLET  ,'NULL') LIKE '%" + pallet + "' and NVL(b.customer_no  ,'NULL')  LIKE '%" + customer_no + "'  and  NVL(b.customer_product  ,'NULL')  LIKE  '%" + customer_product + "' and a.boxno in (";
+
+                for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
+                    String num = firstdigit + String.valueOf(n);
+                    if (n < Integer.parseInt(endbox)) {
                         sql += "'" + num + "',";
                     } else {
                         sql += "'" + num + "')";
@@ -46,7 +91,49 @@ public class ReportService {
             }
 
             sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
+            sql += ")x)";
 
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            if (rs.next()) {
+                totalRecords = rs.getInt(1);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return totalRecords;
+    }
+
+    private String sqllistreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, int start, int end,String searchValue) {
+        String sql = "";
+        try {
+            sql += "select * from ( select rownum as rnum,x.* from (";
+            if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                        "where  NVL(a.PROD_ORDER ,'NULL')  LIKE '%" + prodorder + "' and NVL(a.PO  ,'NULL') LIKE '%" + po + "' and NVL(a.SHIPTO  ,'NULL') LIKE '%" + SHIPTO + "'  and  NVL(a.DESTINATION  ,'NULL') LIKE '%" + DESTINATION + "' and NVL(a.PO_OLD ,'NULL') LIKE '%" + po_old + "'  and NVL(a.PALLET  ,'NULL') LIKE '%" + pallet + "' and NVL(b.customer_no  ,'NULL')  LIKE '%" + customer_no + "'  and  NVL(b.customer_product  ,'NULL')  LIKE  '%" + customer_product + "'  ";
+            } else {
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                        "where  NVL(a.PROD_ORDER ,'NULL')  LIKE '%" + prodorder + "' and NVL(a.PO  ,'NULL') LIKE '%" + po + "' and NVL(a.SHIPTO  ,'NULL') LIKE '%" + SHIPTO + "'  and  NVL(a.DESTINATION  ,'NULL') LIKE '%" + DESTINATION + "' and NVL(a.PO_OLD ,'NULL') LIKE '%" + po_old + "'  and NVL(a.PALLET  ,'NULL') LIKE '%" + pallet + "' and NVL(b.customer_no  ,'NULL')  LIKE '%" + customer_no + "'  and  NVL(b.customer_product  ,'NULL')  LIKE  '%" + customer_product + "' and a.boxno in (";
+
+                for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
+                    String num = firstdigit + String.valueOf(n);
+                    if (n < Integer.parseInt(endbox)) {
+                        sql += "'" + num + "',";
+                    } else {
+                        sql += "'" + num + "')";
+                    }
+                }
+            }
+            sql += "and (a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%')";
+            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
+            sql += ")x)where rnum BETWEEN " + start + " AND " + (start + end);
             System.out.println(sql);
         } catch (Exception e) {
             e.printStackTrace();
@@ -54,18 +141,21 @@ public class ReportService {
         return sql;
     }
 
-    public List<BCDetailBox> listreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String start, String end, String firstdigit) throws SQLException {
+    public List<BCDetailBox> listreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, int start, int end, String searchValue) throws SQLException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = sqllistreportdetailinventories(prodorder, SHIPTO, DESTINATION, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit);
+            String sql = sqllistreportdetailinventories(prodorder, SHIPTO, DESTINATION, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, start, end,searchValue);
             System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
+
+
+
                 BCDetailBox report = new BCDetailBox();
-                report.setDate_modify(rs.getString("DATE_MODIFY"));
+                report.setDate_create(rs.getString("DATE_CREATE"));
                 report.setPo(rs.getString("po"));
                 report.setPo_old(rs.getString("po_old"));
                 report.setPallet(rs.getString("pallet"));
@@ -290,8 +380,8 @@ public class ReportService {
 
             String[] columns = {"PO", "FIRSTDIGIT", "STARTBOX", "ENDBOX", "DATE_CREATE"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
-               // sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
-                 sql += " ORDER BY a.PO,a.FIRSTDIGIT,LPAD(a.startbox, 10) ";
+                // sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+                sql += " ORDER BY a.PO,a.FIRSTDIGIT,LPAD(a.startbox, 10) ";
             } else {
                 sql += " ORDER BY a.PO,a.FIRSTDIGIT,LPAD(a.startbox, 10) ";
             }
