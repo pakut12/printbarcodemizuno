@@ -220,6 +220,7 @@
                             prodorder:prodorder
                         },
                         dataSrc:function(json){
+                            
                             var arr = [];
                             var data = JSON.parse(json.data);
                             
@@ -284,6 +285,7 @@
                             //console.log(data)
                             return arr
                         }
+                        
                     },
                     columns: [
                         { data: 'date_create' },
@@ -305,7 +307,12 @@
                         'pageLength',
                         {
                             extend: 'excelHtml5',
-                            title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today()
+                            title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today(),
+                            exportOptions: {
+                                modifier: {
+                                    page: "all"
+                                } 
+                            }
                         },
                         {
                             text: 'PDF',
@@ -341,38 +348,12 @@
                             return row.customer_no;
                         }
                     
-                    },
-                    drawCallback: function( settings ) {
-                        table.ajax: {
-                            type:"post",
-                            url:"Report",
-                            data:{
-                                type:"gettablereportdetailinventories",
-                                customer:customer,
-                                destination:destination,
-                                pallet:pallet,
-                                firstdigit:firstdigit,
-                                startbox:start,
-                                endbox:end,
-                                po:po,
-                                po_old:po_old,
-                                customer_no:customer_no,
-                                customer_product:customer_product,
-                                prodorder:prodorder
-                            }
- 
-                        },
-                        footerCallback: function (row, data, start, end, display) {
-                        
-                        
- 
-                            // Update footer
-                            // $(api.column(4).footer()).html('รวมทั้งหมด : ' + total);
-                        }
-                    });      
+                    }
+                    
+                });      
                 
                                        
-                    /*/
+                /*/
                         var groupColumn = 3;
                         var table = $('#tablereport').DataTable({
                             dom: 'Bfrtip',
@@ -419,12 +400,12 @@
                         
                     }
                 })
-                     */
-                } 
+                 */
+            } 
             
-                $( document ).ready(function() {
-                    getcustomer()
-                });
+            $( document ).ready(function() {
+                getcustomer()
+            });
             
           
         </script>
