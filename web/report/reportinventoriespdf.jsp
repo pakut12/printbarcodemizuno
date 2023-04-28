@@ -24,7 +24,7 @@
             String customer_no = (String) request.getAttribute("customer_no");
             String customer_product = (String) request.getAttribute("customer_product");
             String pallet = (String) request.getAttribute("pallet");
-            String po = (String) request.getAttribute("po");
+
         %>
         <script>
            
@@ -63,7 +63,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text: 'รายละเอียดสินค้า',
+                                    text: 'รายงานสินค้าคงเหลือ',
                                     fontSize: 20,
                                     alignment: 'center',
                                     bold:true,
@@ -92,9 +92,9 @@
                             // you can declare how many rows should be treated as headers
                             headerRows: 1,
                   
-                            widths:  [ 'auto', 'auto', 'auto', 'auto', 'auto', 'auto','auto', 'auto', 'auto', 'auto', 'auto', 'auto'],
+                            widths:  [ 50, 40, 40, "auto","auto", 60,23, 23,20,30,"auto", 20],
                             body: [
-                                [ 'วันที่', 'PO', 'PO เดิม','รหัสลูกค้า','รหัสสินค้า','Production Order','พาเลท', 'กล่องที่', 'จำนวนเต็ม','จำนวนในกล่อง','ต่าง','หมายเหตุ'],
+                                [ 'วันที่', 'PO', 'PO เดิม','รหัสลูกค้า','รหัสสินค้า','Production\nOrder','พาเลท', 'กล่องที่', 'จำนวนเต็ม','จำนวน\nในกล่อง','ต่าง','หมาย\nเหตุ'],
                         <%
             int marknum = 0;
             int n = 1;
@@ -139,20 +139,23 @@
 
                 int different = Integer.parseInt(qty) - Integer.parseInt(qty_result);
 
-                String D = (String) list.get(i).getDate_modify();
+                String D = (String) list.get(i).getDate_create();
                 if (D != null) {
-                    D = list.get(i).getDate_modify().substring(0, 10);
+                    D = list.get(i).getDate_create().substring(0, 10);
                 }
 
                 if (mark.equals("*")) {
                     marknum++;
                 }
-
+                String po = list.get(i).getPo();
+                if (po.length() > 9) {
+                    po = po.substring(0, 9);
+                }
                 if (n <= 34) {
                     sumqty += Integer.parseInt(ds.ChackNull(qty));
                     sumqty_result += Integer.parseInt(ds.ChackNull(qty_result));
                     sumdifferent += Integer.parseInt(ds.ChackNull(String.valueOf(different)));
-                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getPo_old()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "'," +
+                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(po) + "','" + ds.ChackNull(list.get(i).getPo_old()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "'," +
                             "'" + ds.ChackNull(list.get(i).getPallet()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(String.valueOf(different)) + "','" + ds.ChackNull(mark) + "'],");
                     n1++;
                 } else if (n == 35) {
@@ -184,9 +187,15 @@
                                 }
                             }
             
-            
-                            pdfMake.createPdf(dd).download('<%=po%>.pdf');  
+                            const date = new Date();
+                            const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+                            const formattedDate = date.toLocaleDateString('th-TH', options);
+
+                            pdfMake.createPdf(dd).download('รายงานสินค้าคงเหลือ '+formattedDate+'.pdf'); 
+ 
             
         </script>
     </body>
 </html>
+
+

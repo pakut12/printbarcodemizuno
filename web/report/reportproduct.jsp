@@ -168,9 +168,9 @@
                     }
                 }
 
-                String D = (String) list.get(i).getDate_modify();
+                String D = (String) list.get(i).getDate_create();
                 if (D != null) {
-                    D = list.get(i).getDate_modify().substring(0, 10);
+                    D = list.get(i).getDate_create().substring(0, 10);
                 }
 
                 if (mark.equals("*")) {
@@ -181,7 +181,7 @@
 
                 if (n <= 12) {
                     sum += Integer.parseInt(ds.ChackNull(qty_result));
-                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
                     n1++;
                 } else if (n == 13) {
                     out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum - 1) + "'],");

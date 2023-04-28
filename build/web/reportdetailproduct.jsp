@@ -59,7 +59,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์กล่อง</span>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์กล่องจาก</span>
                                             <input type="number" class="form-control text-center" name="start" id="start" >
                                         </div>
                                     </div>

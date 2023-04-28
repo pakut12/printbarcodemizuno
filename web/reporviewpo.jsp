@@ -179,6 +179,7 @@
         
                 $("#tablereport").DataTable({
                     serverSide: true,
+                    processing: true,
                     ajax: {
                         type:"post",
                         url:"Report",

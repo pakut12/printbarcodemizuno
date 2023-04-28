@@ -25,6 +25,106 @@ public class ReportService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
+    public List<BCDetailBox> getsumdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue) throws ClassNotFoundException, SQLException, NamingException {
+        List<BCDetailBox> list = new ArrayList<BCDetailBox>();
+        try {
+
+            String sql = "";
+
+            if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
+                sql += "where ";
+            } else {
+                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
+                sql += "where a.boxno in (";
+                for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
+                    String num = firstdigit + String.valueOf(n);
+                    if (n < Integer.parseInt(endbox)) {
+                        sql += "'" + num + "',";
+                    } else {
+                        sql += "'" + num + "') and ";
+                    }
+                }
+            }
+
+
+            if (!prodorder.equals("")) {
+                sql += " a.PROD_ORDER = '" + prodorder + "' and ";
+            }
+
+            if (!po.equals("")) {
+                sql += " a.PO = '" + po + "' and ";
+            }
+
+            if (!SHIPTO.equals("")) {
+                sql += " a.SHIPTO = '" + SHIPTO + "' and  ";
+            }
+
+            if (!DESTINATION.equals("")) {
+                sql += " a.DESTINATION = '" + DESTINATION + "' and ";
+            }
+
+            if (!po_old.equals("")) {
+                sql += " a.PO_OLD = '" + po_old + "' and '";
+            }
+
+            if (!pallet.equals("")) {
+                sql += " a.PALLET = '" + pallet + "' and  ";
+            }
+
+            if (!customer_no.equals("")) {
+                sql += " b.customer_no  = '" + customer_no + "' and ";
+            }
+
+            if (!customer_product.equals("")) {
+                sql += " b.customer_product  = '" + customer_product + "' and";
+            }
+
+            sql += " (a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%')";
+
+            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
+
+            System.out.println(sql);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox report = new BCDetailBox();
+                report.setDate_create(rs.getString("DATE_CREATE"));
+                report.setPo(rs.getString("po"));
+                report.setPo_old(rs.getString("po_old"));
+                report.setPallet(rs.getString("pallet"));
+                report.setProdorder(rs.getString("prod_order"));
+                report.setBoxno(rs.getString("boxno"));
+                report.setQty_result1(rs.getString("qty_result1"));
+                report.setQty_result2(rs.getString("qty_result2"));
+                report.setQty_result3(rs.getString("qty_result3"));
+                report.setQty_result4(rs.getString("qty_result4"));
+                report.setSku_item1(rs.getString("sku_item1"));
+                report.setSku_item2(rs.getString("sku_item2"));
+                report.setSku_item3(rs.getString("sku_item3"));
+                report.setSku_item4(rs.getString("sku_item4"));
+                report.setCustomer_product(rs.getString("customer_product"));
+                report.setQty1(rs.getString("qty1"));
+                report.setQty2(rs.getString("qty2"));
+                report.setQty3(rs.getString("qty3"));
+                report.setQty4(rs.getString("qty4"));
+                report.setCustomer_no(rs.getString("customer_no"));
+                report.setCustomer_product(rs.getString("customer_product"));
+                list.add(report);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+        return list;
+    }
+
     public int getFilteredRecordsdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, int start, int end, String searchValue) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
@@ -32,20 +132,20 @@ public class ReportService {
             sql += "select count(*) from ( select rownum as rnum,x.* from (";
             if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
                 sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-
+                sql += "where ";
             } else {
                 sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-
+                sql += "where a.boxno in (";
                 for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
                     if (n < Integer.parseInt(endbox)) {
                         sql += "'" + num + "',";
                     } else {
-                        sql += "'" + num + "')";
+                        sql += "'" + num + "') and ";
                     }
                 }
             }
-            sql += "where ";
+
 
             if (!prodorder.equals("")) {
                 sql += " a.PROD_ORDER = '" + prodorder + "' and ";
@@ -90,7 +190,7 @@ public class ReportService {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 totalRecords = rs.getInt(1);
             }
 
@@ -99,6 +199,7 @@ public class ReportService {
         } finally {
             ConnectDB.closeConnection(conn);
             ps.close();
+            rs.close();
         }
         return totalRecords;
     }
@@ -110,30 +211,66 @@ public class ReportService {
             sql += "select count(*) from ( select rownum as rnum,x.* from (";
             if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
                 sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-
+                sql += "where ";
             } else {
                 sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-
+                sql += "where a.boxno in (";
                 for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
                     if (n < Integer.parseInt(endbox)) {
                         sql += "'" + num + "',";
                     } else {
-                        sql += "'" + num + "')";
+                        sql += "'" + num + "') and ";
                     }
                 }
             }
 
 
+            if (!prodorder.equals("")) {
+                sql += " a.PROD_ORDER = '" + prodorder + "' and ";
+            }
+
+            if (!po.equals("")) {
+                sql += " a.PO = '" + po + "' and ";
+            }
+
+            if (!SHIPTO.equals("")) {
+                sql += " a.SHIPTO = '" + SHIPTO + "' and  ";
+            }
+
+            if (!DESTINATION.equals("")) {
+                sql += " a.DESTINATION = '" + DESTINATION + "' and ";
+            }
+
+            if (!po_old.equals("")) {
+                sql += " a.PO_OLD = '" + po_old + "' and '";
+            }
+
+            if (!pallet.equals("")) {
+                sql += " a.PALLET = '" + pallet + "' and  ";
+            }
+
+            if (!customer_no.equals("")) {
+                sql += " b.customer_no  = '" + customer_no + "' and ";
+            }
+
+            if (!customer_product.equals("")) {
+                sql += " b.customer_product  = '" + customer_product + "' and";
+            }
+
+            sql += " (a.PROD_ORDER  LIKE '%%' or a.PO LIKE '%%' or a.SHIPTO LIKE '%%'  or  a.DESTINATION  LIKE '%%' or a.PO_OLD LIKE '%%'  or a.PALLET LIKE '%%' or b.customer_no  LIKE '%%'  or b.customer_product  LIKE  '%%')";
+
+
+
             sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
             sql += ")x)";
 
-
+            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
-            if (rs.next()) {
+            while (rs.next()) {
                 totalRecords = rs.getInt(1);
             }
 
@@ -142,30 +279,31 @@ public class ReportService {
         } finally {
             ConnectDB.closeConnection(conn);
             ps.close();
+            rs.close();
         }
         return totalRecords;
     }
 
-    private String sqllistreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, int start, int end, String searchValue) {
+    private String sqllistreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue) {
         String sql = "";
         try {
             sql += "select * from ( select rownum as rnum,x.* from (";
             if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
                 sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-
+                sql += "where ";
             } else {
                 sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-
+                sql += "where  a.boxno in (";
                 for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
                     if (n < Integer.parseInt(endbox)) {
                         sql += "'" + num + "',";
                     } else {
-                        sql += "'" + num + "')";
+                        sql += "'" + num + "') and";
                     }
                 }
             }
-            sql += "where ";
+
 
             if (!prodorder.equals("")) {
                 sql += " a.PROD_ORDER = '" + prodorder + "' and ";
@@ -203,8 +341,12 @@ public class ReportService {
 
 
 
-            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
-            sql += ")x)where rnum BETWEEN " + start + " AND " + (start + end);
+            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int))x)";
+
+            if (!start.isEmpty() && !end.isEmpty()) {
+                sql += "where rnum BETWEEN " + Integer.parseInt(start) + " AND " + (Integer.parseInt(start) + Integer.parseInt(end));
+            }
+
             System.out.println(sql);
         } catch (Exception e) {
             e.printStackTrace();
@@ -212,7 +354,7 @@ public class ReportService {
         return sql;
     }
 
-    public List<BCDetailBox> listreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, int start, int end, String searchValue) throws SQLException {
+    public List<BCDetailBox> listreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue) throws SQLException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
 
         try {
@@ -222,8 +364,6 @@ public class ReportService {
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
             while (rs.next()) {
-
-
 
                 BCDetailBox report = new BCDetailBox();
                 report.setDate_create(rs.getString("DATE_CREATE"));
@@ -264,10 +404,10 @@ public class ReportService {
         String sql = "";
         try {
             if (firstdigit.equals("") || start.equals("") || end.equals("")) {
-                sql = "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_MODIFY,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                sql = "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
                         "where  NVL(a.PO  ,'NULL') LIKE '%" + po + "'  and  NVL(a.PALLET ,'NULL')  LIKE '%" + pallet + "' and NVL(b.customer_no ,'NULL') LIKE '%" + customer_no + "' and  NVL(b.customer_product ,'NULL')   LIKE '%" + customer_product + "' ";
             } else {
-                sql = "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_MODIFY,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
+                sql = "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 " +
                         "where  NVL(a.PO  ,'NULL') LIKE '%" + po + "'  and  NVL(a.PALLET ,'NULL')  LIKE '%" + pallet + "' and NVL(b.customer_no ,'NULL') LIKE '%" + customer_no + "' and  NVL(b.customer_product ,'NULL')   LIKE '%" + customer_product + "' and a.boxno in (";
                 for (int n = Integer.parseInt(start); n < Integer.parseInt(end) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
@@ -296,7 +436,7 @@ public class ReportService {
             rs = ps.executeQuery();
             while (rs.next()) {
                 BCDetailBox report = new BCDetailBox();
-                report.setDate_modify(rs.getString("DATE_MODIFY"));
+                report.setDate_create(rs.getString("DATE_CREATE"));
                 report.setPo(rs.getString("po"));
                 report.setProdorder(rs.getString("prod_order"));
                 report.setBoxno(rs.getString("boxno"));
@@ -334,22 +474,37 @@ public class ReportService {
             String sql = "";
             sql += "select count(*) from (" +
                     "select rownum as rnum,x.* from (" +
-                    "SELECT a.PO,REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') as firstdigit,min(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxstart,max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxend,a.DATE_CREATE " +
+                    "SELECT a.PO,REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') as firstdigit,min(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxstart,max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxend,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE " +
                     "FROM MIZUNONEWBARBOXDT a " +
                     "INNER JOIN MIZUNOCUSTOMER b " +
                     "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  " +
-                    "where  NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ? ";
+                    "where  ";
 
-            sql += " GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), a.DATE_CREATE " +
+            if (!customer.equals("")) {
+                sql += " a.SHIPTO  =  '" + customer + "' and ";
+            }
+            if (!customer_no.equals("")) {
+                sql += " b.customer_no   =  '" + customer_no + "'  and ";
+            }
+            if (!customer_product.equals("")) {
+                sql += " b.customer_product  =  '" + customer_product + "' and  ";
+            }
+            if (!datestart.equals("") || !dateend.equals("")) {
+                sql += "  a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') and ";
+            }
+            sql += "(PO like '%%'  or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like '%%'  ) ";
+            sql += " GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') " +
                     "ORDER BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'), max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) " +
                     ")x )  ";
 
             System.out.println(sql);
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, "%" + customer + "%");
-            ps.setString(2, "%" + customer_no + "%");
-            ps.setString(3, "%" + customer_product + "%");
+            if (!datestart.equals("") || !dateend.equals("")) {
+                ps.setString(1, datestart);
+                ps.setString(2, dateend);
+            }
             rs = ps.executeQuery();
 
             if (rs.next()) {
@@ -371,42 +526,40 @@ public class ReportService {
             String sql = "";
             sql += "select count(*) from (" +
                     "select rownum as rnum,x.* from (" +
-                    "SELECT a.PO,REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') as firstdigit,min(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxstart,max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxend,a.DATE_CREATE " +
+                    "SELECT a.PO,REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') as firstdigit,min(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxstart,max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxend,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE " +
                     "FROM MIZUNONEWBARBOXDT a " +
                     "INNER JOIN MIZUNOCUSTOMER b " +
                     "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  " +
-                    "where  NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ? ";
-            if (!datestart.equals("") || !dateend.equals("")) {
-                sql += " and a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') ";
+                    "where ";
+
+            if (!customer.equals("")) {
+                sql += " a.SHIPTO  =  '" + customer + "' and ";
             }
-            sql += "and (PO like  ?  or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like ? ) " +
-                    "GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), a.DATE_CREATE " +
+            if (!customer_no.equals("")) {
+                sql += " b.customer_no   =  '" + customer_no + "'  and ";
+            }
+            if (!customer_product.equals("")) {
+                sql += " b.customer_product  =  '" + customer_product + "' and  ";
+            }
+
+            if (!datestart.equals("") || !dateend.equals("")) {
+                sql += "  a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') and";
+            }
+            sql += "(PO like ?  or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like  ?  ) " +
+                    "GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') " +
                     "ORDER BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'), max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) " +
                     ")x )  ";
-
-
-
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             if (!datestart.equals("") || !dateend.equals("")) {
-                ps.setString(1, "%" + customer + "%");
-                ps.setString(2, "%" + customer_no + "%");
-                ps.setString(3, "%" + customer_product + "%");
-                ps.setString(4, datestart);
-                ps.setString(5, dateend);
-                ps.setString(6, "%" + searchValue + "%");
-                ps.setString(7, "%" + searchValue + "%");
-
-
-            } else {
-                ps.setString(1, "%" + customer + "%");
-                ps.setString(2, "%" + customer_no + "%");
-                ps.setString(3, "%" + customer_product + "%");
+                ps.setString(1, datestart);
+                ps.setString(2, dateend);
+                ps.setString(3, "%" + searchValue + "%");
                 ps.setString(4, "%" + searchValue + "%");
-                ps.setString(5, "%" + searchValue + "%");
-
-
+            } else {
+                ps.setString(1, "%" + searchValue + "%");
+                ps.setString(2, "%" + searchValue + "%");
             }
 
             rs = ps.executeQuery();
@@ -438,60 +591,40 @@ public class ReportService {
                     "FROM MIZUNONEWBARBOXDT a " +
                     "INNER JOIN MIZUNOCUSTOMER b " +
                     "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  " +
-                    "where  NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ? ";
-            
-            if (!datestart.equals("") || !dateend.equals("")) {
-                sql += " and a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') ";
-            }
-            sql += "and (PO like  ?  or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like ? ) " +
-                    "GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), a.DATE_CREATE " +
-                    "ORDER BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'), max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) " +
-                    ")x ) where rnum BETWEEN ? AND ? ";
+                    "where ";
 
-            /*
-            sql += "select * from (";
-            sql += "select rownum as rnum,x.* from (";
-            sql += "SELECT a.PO,REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') as firstdigit,min(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxstart,max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) as boxend,a.DATE_CREATE ";
-            sql += "FROM MIZUNONEWBARBOXHD a ";
-            sql += "INNER JOIN MIZUNOCUSTOMER b ";
-            sql += "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  ";
-            sql += "WHERE NVL(a.SHIPTO,'NULL') LIKE ? AND NVL(b.customer_no ,'NULL') LIKE ? AND NVL(b.customer_product ,'NULL') LIKE ?  ";
-            if (!datestart.equals("") || !dateend.equals("")) {
-            sql += " and a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') ";
+            if (!customer.equals("")) {
+                sql += " a.SHIPTO  =  '" + customer + "' and ";
             }
-            sql += " and (PO like ? or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like ? ) ";
-            sql += " GROUP BY  a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), a.DATE_CREATE   ";
-            
-            sql += "ORDER BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'), max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) ";
-            sql += ")x) where rnum BETWEEN ? AND ?";
-             */
-            System.out.println(sql);
+            if (!customer_no.equals("")) {
+                sql += " b.customer_no   =  '" + customer_no + "'  and ";
+            }
+            if (!customer_product.equals("")) {
+                sql += " b.customer_product  =  '" + customer_product + "' and  ";
+            }
+            if (!datestart.equals("") || !dateend.equals("")) {
+                sql += " a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') and ";
+            }
+            sql += " (PO like  ?  or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like ? ) " +
+                    "GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') " +
+                    "ORDER BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'), max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) " +
+                    ")x )where rnum BETWEEN ? AND ? ";
+
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-
             if (!datestart.equals("") || !dateend.equals("")) {
-                ps.setString(1, "%" + customer + "%");
-                ps.setString(2, "%" + customer_no + "%");
-                ps.setString(3, "%" + customer_product + "%");
-                ps.setString(4, datestart);
-                ps.setString(5, dateend);
-                ps.setString(6, "%" + searchValue + "%");
-                ps.setString(7, "%" + searchValue + "%");
-
-
-                ps.setInt(8, start);
-                ps.setInt(9, length + start);
-            } else {
-                ps.setString(1, "%" + customer + "%");
-                ps.setString(2, "%" + customer_no + "%");
-                ps.setString(3, "%" + customer_product + "%");
+                ps.setString(1, datestart);
+                ps.setString(2, dateend);
+                ps.setString(3, "%" + searchValue + "%");
                 ps.setString(4, "%" + searchValue + "%");
-                ps.setString(5, "%" + searchValue + "%");
-
-
-                ps.setInt(6, start);
-                ps.setInt(7, length + start);
+                ps.setInt(5, start);
+                ps.setInt(6, start + length);
+            } else {
+                ps.setString(1, "%" + searchValue + "%");
+                ps.setString(2, "%" + searchValue + "%");
+                ps.setInt(3, start);
+                ps.setInt(4, start + length);
             }
 
             rs = ps.executeQuery();

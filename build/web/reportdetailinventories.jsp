@@ -137,8 +137,11 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="10" style="text-align:right">Total:</th>
-                                        <th></th>
+                                        <th colspan="8" class="text-center">รวมทั้งหมด</th>
+                                        <th class="text-center" id="sumqty"></th>
+                                        <th class="text-center" id="sumqty_result"></th>
+                                        <th class="text-center" id="sumdiff"></th>
+                                        <th class="text-center" id="summark"></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -220,10 +223,17 @@
                             prodorder:prodorder
                         },
                         dataSrc:function(json){
-                            
+                          
                             var arr = [];
                             var data = JSON.parse(json.data);
+                           
+                       
+                            $("#sumqty").text(json.sumqty)
+                            $("#sumqty_result").text(json.sumqty_result)
+                            $("#sumdiff").text(json.sumdiff)
+                            $("#summark").text(json.summark)
                             
+                         
                             $.each(data,function(k,v){
                                 var date = "";
                                 if(v.date_create){
@@ -233,7 +243,7 @@
                                 var qty_result = "";
                                 
                                 var mark = "";
-                                var diff = "";
+                                var diff = 0;
                                 if(v.customer_no == v.sku_item1){
                                     qty = v.qty1
                                     qty_result=v.qty_result1 
@@ -274,7 +284,7 @@
                                     pallet :  chacknull(v.pallet),
                                     qty :  chacknull(qty),
                                     qty_result :  chacknull(qty_result),
-                                    diff :  chacknull(diff),
+                                    diff :  diff,
                                     mark :  chacknull(mark),
                                     boxno :  chacknull(v.boxno),
                                     test:"test"
@@ -336,19 +346,49 @@
                             return "รหัสสินค้า : "+group ;
                         },
                         endRender: function ( rows, group ) {
-                            var listdata = rows.data().pluck("qty_result");
+                            var listdataqty_result = rows.data().pluck("qty_result");
+                            var listdataqty = rows.data().pluck("qty");
+                            var listdatadiff = rows.data().pluck("diff");
+                            var listdatamark = rows.data().pluck("mark");
                            
-                            var sum = 0;
-                            $.each(listdata,function(k,v){
-                                sum += parseInt(v)
+                            var sumqty_result = 0;
+                            $.each(listdataqty_result,function(k,v){
+                                sumqty_result += parseInt(v)
                             })
-                            return "<div style='padding-left: 80%;'>รวม : " + sum +"</div>"
+                           
+                            var sumqty = 0;
+                            $.each(listdataqty,function(k,v){
+                                sumqty += parseInt(v)
+                            })
+                            
+                            var sumdiff = 0;
+                            $.each(listdatadiff,function(k,v){
+                                sumdiff += parseInt(v)
+                            })
+                            
+                            var summark = 0;
+                            $.each(listdatamark,function(k,v){
+                                if(v == "*"){
+                                    summark += 1
+                                }
+                                
+                            })
+                            
+                            return $('<tr/>')
+                            .append( '<th colspan="8" class="text-end ">รวม : </th>' )
+                            .append( '<th class="text-center">'+sumqty+'</td>' )
+                            .append( '<th class="text-center">'+sumqty_result+'</th>' )
+                            .append( '<th class="text-center">'+sumdiff+'</th>' )
+                            .append( '<th class="text-center">'+summark+'</th>' )
+                            .append( '<th/>' )
                         },
                         dataSrc: function(row) {
                             return row.customer_no;
                         }
                     
                     }
+                    
+                    
                     
                 });      
                 

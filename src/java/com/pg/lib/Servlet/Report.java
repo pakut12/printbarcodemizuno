@@ -38,24 +38,29 @@ public class Report extends HttpServlet {
         try {
             String type = request.getParameter("type").trim();
             if (type.equals("getreportproductdetails")) {
-                String customer_no = request.getParameter("customer_no").trim();
-                String customer_product = request.getParameter("customer_product").trim();
-                String pallet = request.getParameter("pallet").trim();
-                String start = request.getParameter("start").trim();
-                String end = request.getParameter("end").trim();
-                String firstdigit = request.getParameter("firstdigit").trim();
-                String po = request.getParameter("po").trim();
+                try {
 
-                ReportService rs = new ReportService();
-                List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
+                    String customer_no = request.getParameter("customer_no").trim();
+                    String customer_product = request.getParameter("customer_product").trim();
+                    String pallet = request.getParameter("pallet").trim();
+                    String start = request.getParameter("start").trim();
+                    String end = request.getParameter("end").trim();
+                    String firstdigit = request.getParameter("firstdigit").trim();
+                    String po = request.getParameter("po").trim();
 
-                request.setAttribute("pallet", pallet);
-                request.setAttribute("listproduct", list);
-                request.setAttribute("customer_product", customer_product);
-                request.setAttribute("customer_no", customer_no);
+                    ReportService rs = new ReportService();
+                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
 
+                    request.setAttribute("pallet", pallet);
+                    request.setAttribute("listproduct", list);
+                    request.setAttribute("customer_product", customer_product);
+                    request.setAttribute("customer_no", customer_no);
 
-                getServletContext().getRequestDispatcher("/report/reportproduct.jsp").forward(request, response);
+                    getServletContext().getRequestDispatcher("/report/reportproduct.jsp").forward(request, response);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
             } else if (type.equals("gettablereport")) {
                 try {
                     String customer_no = request.getParameter("customer_no").trim();
@@ -131,7 +136,7 @@ public class Report extends HttpServlet {
                         DetailService ds = new DetailService();
 
                         html += "<tr>";
-                        html += "<td>" + ds.ChackNull(li.getDate_modify()) + "</td>";
+                        html += "<td>" + ds.ChackNull(li.getDate_create()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getPo()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getCustomer_product()) + "</td>";
                         html += "<td>" + ds.ChackNull(li.getProdorder()) + "</td>";
@@ -198,28 +203,88 @@ public class Report extends HttpServlet {
                     String searchValue = request.getParameter("search[value]").trim();
                     String orderColumn = request.getParameter("order[0][column]").trim();
                     String orderDir = request.getParameter("order[0][dir]").trim();
-                    
+
+
+
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit,start,length,searchValue);
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue);
+                    List<BCDetailBox> listsum = rs.getsumdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue);
+
+                    int sumqty = 0;
+                    int sumqty_result = 0;
+                    int sumdiff = 0;
+                    int diff = 0;
+                    int summark = 0;
+                    String qty_result = "";
+                    String qty = "";
+
+                    for (BCDetailBox li : listsum) {
+                        int mark = 0;
+
+
+
+                        if (li.getSku_item1().equals(li.getCustomer_no())) {
+
+                            qty_result = li.getQty_result1();
+                            qty = li.getQty1();
+                            if (Integer.parseInt(li.getQty_result1()) < Integer.parseInt(li.getQty1())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty1()) - Integer.parseInt(li.getQty_result1());
+                            }
+                        } else if (li.getSku_item2().equals(li.getCustomer_no())) {
+                            qty_result = li.getQty_result2();
+                            qty = li.getQty2();
+                            if (Integer.parseInt(li.getQty_result2()) < Integer.parseInt(li.getQty1())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty2()) - Integer.parseInt(li.getQty_result2());
+                            }
+                        } else if (li.getSku_item3().equals(li.getCustomer_no())) {
+                            qty_result = li.getQty_result3();
+                            qty = li.getQty3();
+                            if (Integer.parseInt(li.getQty_result3()) < Integer.parseInt(li.getQty1())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty3()) - Integer.parseInt(li.getQty_result3());
+                            }
+                        } else if (li.getSku_item4().equals(li.getCustomer_no())) {
+                            qty_result = li.getQty_result4();
+                            qty = li.getQty4();
+                            if (Integer.parseInt(li.getQty_result4()) < Integer.parseInt(li.getQty1())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty4()) - Integer.parseInt(li.getQty_result4());
+                            }
+                        }
+
+                        sumqty_result += Integer.parseInt(qty_result);
+                        sumqty += Integer.parseInt(qty);
+                        sumdiff += diff;
+                        summark += mark;
+
+                    }
+
+
 
                     Gson gson = new Gson();
 
                     JSONObject obj = new JSONObject();
                     obj.put("draw", draw);
                     obj.put("recordsTotal", rs.getTotalRecordsdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit));
-                    obj.put("recordsFiltered", rs.getFilteredRecordsdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit,start,length,searchValue));
+                    obj.put("recordsFiltered", rs.getFilteredRecordsdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, start, length, searchValue));
                     obj.put("data", gson.toJsonTree(list));
+
+                    obj.put("sumqty_result", sumqty_result);
+                    obj.put("sumqty", sumqty);
+                    obj.put("sumdiff", sumdiff);
+                    obj.put("summark", summark);
 
                     response.setContentType("application/json");
                     response.getWriter().write(obj.toString());
 
-                   
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (type.equals("getreportdetailinventories")) {
                 try {
-                    /*
+
                     String customer = request.getParameter("customer").trim();
                     String destination = request.getParameter("destination").trim();
                     String pallet = request.getParameter("pallet").trim();
@@ -231,23 +296,23 @@ public class Report extends HttpServlet {
                     String customer_no = request.getParameter("customer_no").trim();
                     String customer_product = request.getParameter("customer_product").trim();
                     String prodorder = request.getParameter("prodorder").trim();
-                    
+
                     ReportService rs = new ReportService();
-                    
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit);
+
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "");
                     request.setAttribute("listproduct", list);
-                    
+
                     request.setAttribute("po", po);
-                    
-                    
+
+
                     getServletContext().getRequestDispatcher("/report/reportinventories.jsp").forward(request, response);
-                     */
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (type.equals("getreportdetailinventoriespdf")) {
                 try {
-                    /*
+
                     String customer = request.getParameter("customer").trim();
                     String destination = request.getParameter("destination").trim();
                     String pallet = request.getParameter("pallet").trim();
@@ -259,15 +324,15 @@ public class Report extends HttpServlet {
                     String customer_no = request.getParameter("customer_no").trim();
                     String customer_product = request.getParameter("customer_product").trim();
                     String prodorder = request.getParameter("prodorder").trim();
-                    
+
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit);
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "");
                     request.setAttribute("listproduct", list);
-                    request.setAttribute("po", po);
-                    
-                    
+
+
+
                     getServletContext().getRequestDispatcher("/report/reportinventoriespdf.jsp").forward(request, response);
-                     */
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
