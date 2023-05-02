@@ -47,7 +47,9 @@
                                     <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
-                                            <input type="text" class="form-control text-center"  name="pallet" id="pallet">
+                                            <select class="form-select" name="pallet" id="pallet">
+                                                
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
@@ -443,8 +445,36 @@
                  */
             } 
             
+                                        
+                                        
+            function getpallet(){
+                var po = $("#po").val();
+                console.log(po)
+                $.ajax({
+                    type:'post',
+                    url:'Detail',
+                    data:{
+                        type:"getpalletbyid",
+                        po:po
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg);
+                        var html = "";
+                        $.each(js.listpallet,function(k,v){
+                            html += "<option value='"+v+"'>"+v+"</option>";
+                        })
+                        $("#pallet").empty();
+                        $("#pallet").html(html);
+                    }
+                });
+            }
+                                        
             $( document ).ready(function() {
                 getcustomer()
+                
+                $("#po").on('input', function() {
+                    getpallet()
+                });
             });
             
           

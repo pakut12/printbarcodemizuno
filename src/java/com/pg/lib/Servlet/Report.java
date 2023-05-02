@@ -13,6 +13,7 @@ import java.io.*;
 import java.net.*;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -62,7 +63,6 @@ public class Report extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             } else if (type.equals("gettablereport")) {
                 try {
                     String customer_no = request.getParameter("customer_no").trim();

@@ -605,6 +605,17 @@ public class Detail extends HttpServlet {
                 obj.put("date_modify", detailbox.get(0).getDate_modify());
 
                 out.print(obj);
+            } else if (type.equals("getpalletbyid")) {
+                String po = request.getParameter("po").trim();
+                DetailService ds = new DetailService();
+                
+                List<String> listpallet = ds.getpalletbyid(po);
+                
+                JSONObject obj = new JSONObject();
+                obj.put("listpallet", listpallet);
+                
+                out.print(obj);
+
             }
 
 

@@ -1199,4 +1199,33 @@ public class DetailService {
 
         return status;
     }
+
+    public List<String> getpalletbyid(String PO) throws SQLException {
+
+        List<String> listdetail = new ArrayList<String>();
+
+        try {
+            String sql = "select a.PALLET from MIZUNONEWBARBOXDT a where a.PO = ? group by  a.PALLET";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                String pallet = rs.getString("pallet");
+                if (pallet == null) {
+                    pallet = "";
+                }
+                listdetail.add(pallet);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return listdetail;
+    }
 }
