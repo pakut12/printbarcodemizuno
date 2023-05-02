@@ -61,11 +61,11 @@ public class Detail extends HttpServlet {
 
                 DetailService ds = new DetailService();
                 Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
-                Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_address, customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+                //Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_address, customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                 Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end, quantitytotal_box);
 
                 JSONObject obj = new JSONObject();
-                if (statusdt && statushd && statusresult) {
+                if (statusdt) {
                     obj.put("status", "true");
                 } else {
                     obj.put("status", "false");
@@ -193,10 +193,11 @@ public class Detail extends HttpServlet {
                     List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigitbefore);
                     ds.DeleteListMIZUNONEWBARBOXRESULTOLD(pobefore, startboxbefore, endboxbefore, firstdigitbefore, allbox);
 
-                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endboxbefore, startboxbefore, firstdigit, po,allbox);
+                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endboxbefore, startboxbefore, firstdigit, po, allbox);
 
                     // Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
                     Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
+
                     Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
 
                     JSONObject obj = new JSONObject();
@@ -221,11 +222,11 @@ public class Detail extends HttpServlet {
 
                     DetailService ds = new DetailService();
                     Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigit, startbox, endbox);
-                    Boolean statusHD = ds.DeleteDetailBoxMIZUNONEWBARBOXHDAll(pobefore, firstdigit, startbox, endbox);
+                    // Boolean statusHD = ds.DeleteDetailBoxMIZUNONEWBARBOXHDAll(pobefore, firstdigit, startbox, endbox);
                     Boolean statusRESULT = ds.DeleteDetailBoxMIZUNONEWBARBOXRESULTAll(pobefore, firstdigit, startbox, endbox);
 
                     JSONObject obj = new JSONObject();
-                    if (statusDT && statusHD && statusRESULT) {
+                    if (statusDT && statusRESULT) {
                         obj.put("status", "true");
                     } else {
                         obj.put("status", "false");

@@ -435,57 +435,67 @@
                 var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
                 
                 var date = new Date().format('d-m-Y H:i:s');
-                if(sumqty_result <= parseInt($("#quantity_box").val())){
-                    $.ajax({
-                        type:"post",
-                        url:"Detail",
-                        data:{
-                            type:"adddetails",
-                            customer:customer,
-                            customer_address:customer_address,
-                            quantity_box:quantity_box,
-                            initial:initial,
-                            numberbox_start:numberbox_start,
-                            numberbox_end:numberbox_end,
-                            po:po,
-                            description:description,
-                            gw:gw,
-                            nw:nw,
-                            country:country,
-                            quantitytotal_box:quantitytotal_box,
-                            customer1_id:customer1_id,
-                            customer2_id:customer2_id,
-                            customer3_id:customer3_id,
-                            customer4_id:customer4_id,
-                            pallet:pallet,
-                            prodorder:prodorder,
-                            destination:destination,
-                            date:date
-                        },
-                        success:function(msg){
+                
+        
+                if(initial && numberbox_start && numberbox_end){
+                    if(sumqty_result <= parseInt($("#quantity_box").val()) ){
+                        $.ajax({
+                            type:"post",
+                            url:"Detail",
+                            data:{
+                                type:"adddetails",
+                                customer:customer,
+                                customer_address:customer_address,
+                                quantity_box:quantity_box,
+                                initial:initial,
+                                numberbox_start:numberbox_start,
+                                numberbox_end:numberbox_end,
+                                po:po,
+                                description:description,
+                                gw:gw,
+                                nw:nw,
+                                country:country,
+                                quantitytotal_box:quantitytotal_box,
+                                customer1_id:customer1_id,
+                                customer2_id:customer2_id,
+                                customer3_id:customer3_id,
+                                customer4_id:customer4_id,
+                                pallet:pallet,
+                                prodorder:prodorder,
+                                destination:destination,
+                                date:date
+                            },
+                            success:function(msg){
                             
-                            console.log(msg)
-                            var js = JSON.parse(msg)
-                            if(js.status == 'true'){
-                                Swal.fire({
-                                    icon: 'success',
-                                    title: 'บันทึก',
-                                    text: 'บันทึกสำเร็จ'
-                                })
-                            }else if(js.status == 'false'){
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'บันทึก',
-                                    text: 'บันทึกไม่สำเร็จ'
-                                })
+                                console.log(msg)
+                                var js = JSON.parse(msg)
+                                if(js.status == 'true'){
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'บันทึก',
+                                        text: 'บันทึกสำเร็จ'
+                                    })
+                                }else if(js.status == 'false'){
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'บันทึก',
+                                        text: 'บันทึกไม่สำเร็จ'
+                                    })
+                                }
                             }
-                        }
-                    })
+                        })
+                    }else{
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'ผิดพลาด',
+                            text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
+                        })
+                    }
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'ผิดพลาด',
-                        text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
+                        text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
                     })
                 }
             }

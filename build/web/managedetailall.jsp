@@ -453,7 +453,7 @@
                 if(po != pobefore ){
                     po_old = pobefore
                 }
-                var date = new Date().format('d-m-Y H:i:s');
+                var date = $("#date_create").val();
                 var pallet = $("#pallet").val().toUpperCase();
                 var prodorder = $("#prodorder").val().toUpperCase();
               

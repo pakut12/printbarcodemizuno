@@ -38,18 +38,19 @@ public class Report extends HttpServlet {
         try {
             String type = request.getParameter("type").trim();
             if (type.equals("getreportproductdetails")) {
+
                 try {
 
                     String customer_no = request.getParameter("customer_no").trim();
                     String customer_product = request.getParameter("customer_product").trim();
                     String pallet = request.getParameter("pallet").trim();
-                    String start = request.getParameter("start").trim();
-                    String end = request.getParameter("end").trim();
+                    String boxstart = request.getParameter("start").trim();
+                    String boxend = request.getParameter("end").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
                     String po = request.getParameter("po").trim();
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
+                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, 0, 0, "", "", "");
 
                     request.setAttribute("pallet", pallet);
                     request.setAttribute("listproduct", list);
@@ -57,6 +58,7 @@ public class Report extends HttpServlet {
                     request.setAttribute("customer_no", customer_no);
 
                     getServletContext().getRequestDispatcher("/report/reportproduct.jsp").forward(request, response);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -66,124 +68,115 @@ public class Report extends HttpServlet {
                     String customer_no = request.getParameter("customer_no").trim();
                     String customer_product = request.getParameter("customer_product").trim();
                     String pallet = request.getParameter("pallet").trim();
-                    String start = request.getParameter("start").trim();
-                    String end = request.getParameter("end").trim();
+                    String boxstart = request.getParameter("boxstart").trim();
+                    String boxend = request.getParameter("boxend").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
                     String po = request.getParameter("po").trim();
 
+                    int draw = Integer.parseInt(request.getParameter("draw").trim());
+                    int start = Integer.parseInt(request.getParameter("start").trim());
+                    int length = Integer.parseInt(request.getParameter("length").trim());
+                    String searchValue = request.getParameter("search[value]").trim();
+                    String orderColumn = request.getParameter("order[0][column]").trim();
+                    String orderDir = request.getParameter("order[0][dir]").trim();
+
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
+                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir);
+                    List<BCDetailBox> listsum = rs.getsumproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir);
 
-                    int sum = 0;
-                    String html = "";
-                    html += "<div class='row mb-3 text-center fs-4'>";
-                    html += "<div class='text-center h3 fw-bold'>รายละเอียดสินค้า</div>";
-                    html += "<div class='col-12 col-md-12 text-end col-lg-12'>";
-                    html += " <b>พาเลท :</b> " + pallet;
-                    html += " </div>";
-                    html += "</div>";
-                    html += "<table class='table table-hover table-bordered text-nowrap text-center table-sm' id='tablereport'>";
-                    html += "<thead>";
-                    html += "<tr>";
-                    html += "<th scope='col'>วันที่</th>";
-                    html += "<th scope='col'>PO</th>";
-                    html += "<th scope='col'>รหัสสินค้า</th>";
-                    html += "<th scope='col'>Production Order</th>";
-                    html += "<th scope='col'>รหัสลูกค้า</th>";
-                    html += "<th scope='col'>พาเลท</th>";
-                    html += "<th scope='col'>กล่องที่</th>";
-                    html += "<th scope='col'>จำนวน</th>";
-                    html += "<th scope='col'>หมายเหตุ</th>";
-                    html += "</tr>";
-                    html += "</thead>";
-                    html += "<tbody>";
-                    for (BCDetailBox li : list) {
-                        String mark = "";
-                        String qty_result = "";
+                    int sumqty = 0;
+                    int sumqty_result = 0;
+                    int sumdiff = 0;
+                    int diff = 0;
+                    int summark = 0;
+                    String qty_result = "";
+                    String qty = "";
 
-                        if (!customer_no.equals(li.getCustomer_no())) {
-                        } else {
-                        }
-                        customer_no = li.getCustomer_no();
+                    for (BCDetailBox li : listsum) {
+                        int mark = 0;
 
-                        if (li.getSku_item1().equals(customer_no)) {
+                        if (li.getSku_item1().equals(li.getCustomer_no())) {
+
                             qty_result = li.getQty_result1();
-
-
-
+                            qty = li.getQty1();
                             if (Integer.parseInt(li.getQty_result1()) < Integer.parseInt(li.getQty1())) {
-                                mark = "*";
+                                mark++;
+                                diff = Integer.parseInt(li.getQty1()) - Integer.parseInt(li.getQty_result1());
                             }
-                        } else if (li.getSku_item2().equals(customer_no)) {
+                        } else if (li.getSku_item2().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result2();
+                            qty = li.getQty2();
                             if (Integer.parseInt(li.getQty_result2()) < Integer.parseInt(li.getQty1())) {
-                                mark = "*";
+                                mark++;
+                                diff = Integer.parseInt(li.getQty2()) - Integer.parseInt(li.getQty_result2());
                             }
-                        } else if (li.getSku_item3().equals(customer_no)) {
+                        } else if (li.getSku_item3().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result3();
+                            qty = li.getQty3();
                             if (Integer.parseInt(li.getQty_result3()) < Integer.parseInt(li.getQty1())) {
-                                mark = "*";
+                                mark++;
+                                diff = Integer.parseInt(li.getQty3()) - Integer.parseInt(li.getQty_result3());
                             }
-                        } else if (li.getSku_item4().equals(customer_no)) {
+                        } else if (li.getSku_item4().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result4();
+                            qty = li.getQty4();
                             if (Integer.parseInt(li.getQty_result4()) < Integer.parseInt(li.getQty1())) {
-                                mark = "*";
+                                mark++;
+                                diff = Integer.parseInt(li.getQty4()) - Integer.parseInt(li.getQty_result4());
                             }
                         }
 
-                        sum += Integer.parseInt(qty_result);
+                        sumqty_result += Integer.parseInt(qty_result);
+                        sumqty += Integer.parseInt(qty);
+                        sumdiff += diff;
+                        summark += mark;
 
-                        DetailService ds = new DetailService();
-
-                        html += "<tr>";
-                        html += "<td>" + ds.ChackNull(li.getDate_create()) + "</td>";
-                        html += "<td>" + ds.ChackNull(li.getPo()) + "</td>";
-                        html += "<td>" + ds.ChackNull(li.getCustomer_product()) + "</td>";
-                        html += "<td>" + ds.ChackNull(li.getProdorder()) + "</td>";
-                        html += "<td>" + ds.ChackNull(customer_no) + "</td>";
-                        html += "<td>" + ds.ChackNull(li.getPallet()) + "</td>";
-                        html += "<td>" + ds.ChackNull(li.getBoxno()) + "</td>";
-                        html += "<td>" + ds.ChackNull(qty_result) + "</td>";
-                        html += "<td>" + ds.ChackNull(mark) + "</td>";
-                        html += "</tr>";
                     }
 
+                    Gson gson = new Gson();
 
-                    html += "</tbody>";
-                    html += "<tfooter>";
-                    html += "<tr class='dtrg-group dtrg-end dtrg-level-0'>";
-                    html += "<th colspan='12' scope='row'><div style='padding-left: 80%;'>รวมทั้งหมด : " + sum + "</div></th>";
-                    html += "</tr>";
-                    html += "<tfooter>";
-                    html += "</table>";
+                    JSONObject obj = new JSONObject();
+                    obj.put("draw", draw);
+                    obj.put("recordsTotal", rs.getTotalRecordsproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit));
+                    obj.put("recordsFiltered", rs.getFilteredRecordsproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir));
+                    obj.put("data", gson.toJsonTree(list));
 
-                    out.print(html);
+                    obj.put("sumqty_result", sumqty_result);
+                    obj.put("sumqty", sumqty);
+                    obj.put("sumdiff", sumdiff);
+                    obj.put("summark", summark);
+
+                    response.setContentType("application/json");
+                    response.getWriter().write(obj.toString());
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             } else if (type.equals("getreportproductdetailspdf")) {
+                try {
+                    String customer_no = request.getParameter("customer_no").trim();
+                    String customer_product = request.getParameter("customer_product").trim();
+                    String pallet = request.getParameter("pallet").trim();
+                    String boxstart = request.getParameter("start").trim();
+                    String boxend = request.getParameter("end").trim();
+                    String firstdigit = request.getParameter("firstdigit").trim();
+                    String po = request.getParameter("po").trim();
 
-                String customer_no = request.getParameter("customer_no").trim();
-                String customer_product = request.getParameter("customer_product").trim();
-                String pallet = request.getParameter("pallet").trim();
-                String start = request.getParameter("start").trim();
-                String end = request.getParameter("end").trim();
-                String firstdigit = request.getParameter("firstdigit").trim();
-                String po = request.getParameter("po").trim();
+                    ReportService rs = new ReportService();
+                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, 0, 0, "", "", "");
 
-                ReportService rs = new ReportService();
-                List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, start, end, firstdigit);
+                    request.setAttribute("pallet", pallet);
+                    request.setAttribute("listproduct", list);
+                    request.setAttribute("customer_product", customer_product);
+                    request.setAttribute("customer_no", customer_no);
 
-                request.setAttribute("pallet", pallet);
-                request.setAttribute("listproduct", list);
-                request.setAttribute("customer_product", customer_product);
-                request.setAttribute("customer_no", customer_no);
-                request.setAttribute("po", po);
+                    getServletContext().getRequestDispatcher("/report/reportproductpdf.jsp").forward(request, response);
 
-                getServletContext().getRequestDispatcher("/report/reportproductpdf.jsp").forward(request, response);
-
-
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else if (type.equals("gettablereportdetailinventories")) {
+
                 try {
                     String customer = request.getParameter("customer").trim();
                     String destination = request.getParameter("destination").trim();
@@ -204,8 +197,6 @@ public class Report extends HttpServlet {
                     String orderColumn = request.getParameter("order[0][column]").trim();
                     String orderDir = request.getParameter("order[0][dir]").trim();
 
-
-
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue);
                     List<BCDetailBox> listsum = rs.getsumdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue);
@@ -220,8 +211,6 @@ public class Report extends HttpServlet {
 
                     for (BCDetailBox li : listsum) {
                         int mark = 0;
-
-
 
                         if (li.getSku_item1().equals(li.getCustomer_no())) {
 

@@ -118,7 +118,7 @@
                         {
                             alignment: 'center',
                             table: {
-                           
+                                dontBreakRows: true, 
                                 // headers are automatically repeated if the table spans over multiple pages
                                 // you can declare how many rows should be treated as headers
                                 headerRows: 1,

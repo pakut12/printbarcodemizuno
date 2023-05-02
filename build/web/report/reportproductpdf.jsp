@@ -212,8 +212,11 @@
                                         }
                                     }
             
-            
-                                    pdfMake.createPdf(dd).download('<%=po%>.pdf');  
+                                    const date = new Date();
+                                    const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
+                                    const formattedDate = date.toLocaleDateString('th-TH', options);
+                                    
+                                    pdfMake.createPdf(dd).download('รายละเอียดสินค้า'+formattedDate+'.pdf');  
             
         </script>
     </body>

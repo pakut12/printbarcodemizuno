@@ -79,10 +79,13 @@ public class CustomerService {
             sql += "(select rownum as rnum,c.* from  MIZUNOCUSTOMER  c" +
                     " where c.customer_id > 99 and (c.customer_id LIKE ? or c.customer_no LIKE ? or c.customer_barcode LIKE ? or c.customer_color LIKE ? or c.customer_size  LIKE ? or c.customer_description  LIKE ? or c.customer_product  LIKE ?) ";
 
+            sql += " ORDER BY customer_no,customer_product";
+            /*
             String[] columns = {"customer_id", "customer_no", "customer_barcode", "customer_color", "customer_size", "customer_description", "customer_product"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }
+             */
             sql += ") WHERE rnum BETWEEN ? AND ?";
 
 
