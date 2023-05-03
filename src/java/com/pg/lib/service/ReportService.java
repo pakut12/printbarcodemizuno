@@ -698,7 +698,7 @@ public class ReportService {
         return list;
     }
 
-    public int getTotalRecords(String customer, String customer_no, String customer_product, String datestart, String dateend) throws ClassNotFoundException, SQLException, NamingException {
+    public int getTotalRecords(String customer, String customer_no, String customer_product, String datestart, String dateend, String po) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
             String sql = "";
@@ -709,7 +709,9 @@ public class ReportService {
                     "INNER JOIN MIZUNOCUSTOMER b " +
                     "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  " +
                     "where  ";
-
+            if (!po.equals("")) {
+                sql += " a.po  =  '" + po + "' and ";
+            }
             if (!customer.equals("")) {
                 sql += " a.SHIPTO  =  '" + customer + "' and ";
             }
@@ -750,7 +752,7 @@ public class ReportService {
         return totalRecords;
     }
 
-    public int getFilteredRecords(String customer, String customer_no, String customer_product, String datestart, String dateend, String searchValue) throws ClassNotFoundException, SQLException, NamingException {
+    public int getFilteredRecords(String customer, String customer_no, String customer_product, String datestart, String dateend, String searchValue, String po) throws ClassNotFoundException, SQLException, NamingException {
         int filteredRecords = 0;
         try {
             String sql = "";
@@ -761,7 +763,9 @@ public class ReportService {
                     "INNER JOIN MIZUNOCUSTOMER b " +
                     "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  " +
                     "where ";
-
+            if (!po.equals("")) {
+                sql += " a.po  =  '" + po + "' and ";
+            }
             if (!customer.equals("")) {
                 sql += " a.SHIPTO  =  '" + customer + "' and ";
             }
@@ -809,7 +813,7 @@ public class ReportService {
 
     public List<BCDetailBox> listreportviewpo(
             String customer, String customer_no, String customer_product, String datestart, String dateend,
-            int start, int length, String searchValue, String orderColumn, String orderDir)
+            int start, int length, String searchValue, String orderColumn, String orderDir, String po)
             throws SQLException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
         String sql = "";
@@ -822,7 +826,9 @@ public class ReportService {
                     "INNER JOIN MIZUNOCUSTOMER b " +
                     "ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  " +
                     "where ";
-
+            if (!po.equals("")) {
+                sql += " a.po  =  '" + po + "' and ";
+            }
             if (!customer.equals("")) {
                 sql += " a.SHIPTO  =  '" + customer + "' and ";
             }

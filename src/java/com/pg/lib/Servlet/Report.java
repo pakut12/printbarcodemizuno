@@ -327,6 +327,7 @@ public class Report extends HttpServlet {
                 }
             } else if (type.equals("gettablereportviewpo")) {
                 try {
+                    String po = request.getParameter("po").trim();
                     String customer = request.getParameter("customer").trim();
                     String customer_no = request.getParameter("customer_no").trim();
                     String customer_product = request.getParameter("customer_product").trim();
@@ -341,14 +342,14 @@ public class Report extends HttpServlet {
                     String orderDir = request.getParameter("order[0][dir]").trim();
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend, start, length, searchValue, orderColumn, orderDir);
+                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend, start, length, searchValue, orderColumn, orderDir,po);
 
                     Gson gson = new Gson();
 
                     JSONObject obj = new JSONObject();
                     obj.put("draw", draw);
-                    obj.put("recordsTotal", rs.getTotalRecords(customer, customer_no, customer_product, datestart, dateend));
-                    obj.put("recordsFiltered", rs.getFilteredRecords(customer, customer_no, customer_product, datestart, dateend, searchValue));
+                    obj.put("recordsTotal", rs.getTotalRecords(customer, customer_no, customer_product, datestart, dateend,po));
+                    obj.put("recordsFiltered", rs.getFilteredRecords(customer, customer_no, customer_product, datestart, dateend, searchValue,po));
                     obj.put("data", gson.toJsonTree(list));
 
                     response.setContentType("application/json");

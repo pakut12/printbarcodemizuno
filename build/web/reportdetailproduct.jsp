@@ -43,13 +43,19 @@
                                             <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
-                                            
-                                            <select class="form-select" name="pallet" id="pallet">
-                                                
-                                            </select>
+                                   
+                                    
+                                    <div class="col-sm-12 col-md-2 mt-3 mt-md-0" id="inputpallat">
+                                        
+                                        
+                                    </div>
+                                    
+                                    <div class="col-sm-12 col-md-1 mt-3 mt-md-0">
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="chkpallat" onclick="ckpallat()">
+                                            <label class="form-check-label " for="chkpallat">
+                                                KeyPallat
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
@@ -92,9 +98,7 @@
                             <div id="mytable" class="mt-3">
                                 <div class='row mb-3 text-center fs-4'>
                                     <div class='text-center h3 fw-bold'>รายละเอียดสินค้า</div>
-                                    <div class='col-12 col-md-12 text-end col-lg-12'>
-                                        <b>พาเลท :</b> 
-                                    </div>
+                                    
                                 </div>
                                 <table class='table table-hover table-bordered text-nowrap text-center table-sm' id='tablereport'>
                                     <thead>
@@ -257,19 +261,13 @@
                     ],
                     bDestroy: true,
                     dom: 'Bfrtip',
+                    lengthMenu: [[10, 25, 50,100,9999999], [10, 25, 50,100 ,"All"]],
                     buttons: [
                         'pageLength',
                         {
                             extend: 'excel',
-                            title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today(),
-                            exportOptions: {
-                                format: {
-                                    body: function ( data, row, column, node ) {
-                                        if(column === 5){}
-                                        return data      
-                                    }
-                                }
-                            }
+                            title: 'รายละเอียดสินค้า '+ today()
+                            
                         },
                         {
                             text: 'PDF',
@@ -338,8 +336,12 @@
                     success:function(msg){
                         var js = JSON.parse(msg);
                         var html = "";
+                        html += "<option value=''></option>";
                         $.each(js.listpallet,function(k,v){
-                            html += "<option value='"+v+"'>"+v+"</option>";
+                            if(v){
+                                html += "<option value='"+v+"'>"+v+"</option>";
+                            }
+                            
                         })
                         $("#pallet").empty();
                         $("#pallet").html(html);
@@ -347,14 +349,31 @@
                 });
             }
             
-
+            function ckpallat(){
+                if(!$("#chkpallat").is(':checked'))
+                {
+                    
+                    $("#inputpallat").empty();
+                    $("#inputpallat").html('<div class="input-group input-group-sm "><span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span><select class="form-select" name="pallet" id="pallet"><option value=""></option></select></div>');
+               
+                } else {
+                    
+                    $("#inputpallat").empty();
+                    $("#inputpallat").html('<div class="input-group input-group-sm "><span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span><input class="form-control" name="pallet" id="pallet"></input></div>');
+                    
+                }   
+                
+                getpallet()
+        
+            }
+            
             $(document).ready(function () {
             
                 $("#po").on('input', function() {
                     getpallet()
                 });
                
-             
+               ckpallat()
             });
             
           

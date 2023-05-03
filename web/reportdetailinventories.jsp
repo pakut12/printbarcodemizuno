@@ -44,15 +44,21 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
-                                        <div class="input-group input-group-sm ">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
-                                            <select class="form-select" name="pallet" id="pallet">
-                                                
-                                            </select>
+                                    <div class="col-sm-12 col-md-2 mt-3 mt-md-0" id="inputpallat">
+                                        
+                                        
+                                    </div>
+                                    
+                                    <div class="col-sm-12 col-md-1 mt-3 mt-md-0">
+                                        <div class="form-check mt-1">
+                                            <input class="form-check-input" type="checkbox" value="" id="chkpallat" onclick="ckpallat()">
+                                            <label class="form-check-label " for="chkpallat">
+                                                KeyPallat
+                                            </label>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
+                                    
+                                    <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
                                             <input type="text" class="form-control text-center"  name="firstdigit" id="firstdigit" maxlength="1">
@@ -117,7 +123,7 @@
                         
                         
                         <div id="mytable" class="mt-3">
-                            <div class='text-center h3'>รายงานสินค้าคงเหลือ</div>
+                            <div class='text-center h3 fw-bold'>รายงานสินค้าคงเหลือ</div>
                             <table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>
                                 <thead>
                                     <tr>
@@ -172,12 +178,13 @@
                     }
                 })
             }
+            
             function today(){
                 const date = new Date();
                 var day = date.getDate();
                 var month = date.getMonth() + 1;
                 var year = date.getFullYear(); 
-                var today = day + "/" + month + "/" + year; 
+                var today = day + "_" + month + "_" + year; 
                 console.log(today)
                 return today;
             }
@@ -205,6 +212,7 @@
                 
         
                 var table =   $("#tablereport").DataTable({
+                    lengthMenu: [[10, 25, 50,100,9999999], [10, 25, 50,100 ,"All"]],
                     processing: true,
                     serverSide: true,
                     ajax: {
@@ -319,7 +327,7 @@
                         'pageLength',
                         {
                             extend: 'excelHtml5',
-                            title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today(),
+                            title: 'รายงานสินค้าคงเหลือ ' + today(),
                             exportOptions: {
                                 modifier: {
                                     page: "all"
@@ -444,9 +452,7 @@
                 })
                  */
             } 
-            
-                                        
-                                        
+                              
             function getpallet(){
                 var po = $("#po").val();
                 console.log(po)
@@ -460,21 +466,53 @@
                     success:function(msg){
                         var js = JSON.parse(msg);
                         var html = "";
+                        html += "<option value=''></option>";
                         $.each(js.listpallet,function(k,v){
-                            html += "<option value='"+v+"'>"+v+"</option>";
+                            if(v){
+                                html += "<option value='"+v+"'>"+v+"</option>";
+                            }
+                            
                         })
                         $("#pallet").empty();
                         $("#pallet").html(html);
                     }
                 });
             }
-                                        
+                  
+
+            function ckpallat(){
+                if(!$("#chkpallat").is(':checked'))
+                {
+                    
+                    $("#inputpallat").empty();
+                    $("#inputpallat").html('<div class="input-group input-group-sm "><span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span><select class="form-select" name="pallet" id="pallet"><option value=""></option></select></div>');
+               
+                } else {
+                    
+                    $("#inputpallat").empty();
+                    $("#inputpallat").html('<div class="input-group input-group-sm "><span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span><input class="form-control" name="pallet" id="pallet"></input></div>');
+                    
+                }   
+                
+               getpallet()
+        
+            }
+            
+
+
             $( document ).ready(function() {
                 getcustomer()
                 
                 $("#po").on('input', function() {
                     getpallet()
                 });
+                
+                ckpallat()
+    
+                
+                
+    
+    
             });
             
           

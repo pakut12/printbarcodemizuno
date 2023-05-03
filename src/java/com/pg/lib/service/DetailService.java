@@ -294,17 +294,29 @@ public class DetailService {
     public Boolean AddDataToMIZUNONEWBARBOXRESULT(String PO, String initial, String date, String numberbox_start, String numberbox_end, String boxall) throws SQLException {
         Boolean status = false;
         try {
-            String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end, boxall);
+            //  String sql = SqlAddDataToMIZUNONEWBARBOXRESULT(PO, initial, date, numberbox_start, numberbox_end, boxall);
+
+            String sql = "INSERT INTO MIZUNONEWBARBOXRESULT (PO,BOXNO,BOXALL,qty_result1,qty_result2,qty_result3,qty_result4,DATE_CREATE) VALUES (?,?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
-            if (ps.executeUpdate() > 0) {
-                status = true;
-            } else {
-                status = false;
+            for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
+                ps.setString(1, PO);
+                ps.setString(2, initial + n);
+                ps.setString(3, initial + boxall);
+                ps.setString(4, "0");
+                ps.setString(5, "0");
+                ps.setString(6, "0");
+                ps.setString(7, "0");
+                ps.setString(8, date);
+                ps.addBatch();
             }
 
+            ps.executeBatch();
+            status = true;
+
         } catch (Exception e) {
+            status = false;
             e.printStackTrace();
         } finally {
             ConnectDB.closeConnection(conn);
@@ -1056,7 +1068,7 @@ public class DetailService {
             HashMap<String, String> addresscustomer = GetAddress(customer_num);
 
             for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
-                sql += " INTO MIZUNONEWBARBOXDT (PO,BOXSEQ,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY) VALUES (";
+                sql += "INSERT INTO MIZUNONEWBARBOXDT (PO,BOXSEQ,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY) VALUES (";
                 sql += "'" + po + "',";
                 sql += "'" + n + "',";
                 sql += "'" + initial + n + "',";
@@ -1115,20 +1127,70 @@ public class DetailService {
         Boolean status = false;
 
         try {
-            String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
-
-            System.out.println(sql);
+            HashMap<String, String> addresstsg = GetAddress("TSG");
+            HashMap<String, String> addresscustomer = GetAddress(customer_num);
+            //String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+            String sql = "INSERT INTO MIZUNONEWBARBOXDT (PO,BOXSEQ,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY) VALUES " +
+                    "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?)";
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
-            if (ps.executeUpdate() > 0) {
-                status = true;
-            } else {
-                status = false;
+            for (int n = Integer.parseInt(numberbox_start); n < Integer.parseInt(numberbox_end) + 1; n++) {
+                ps.setString(1, po);
+                ps.setInt(2, n);
+                ps.setString(3, initial + n);
+                ps.setString(4, initial + quantitytotal_box);
+                ps.setString(5, "TSG");
+                ps.setString(6, addresstsg.get("address1"));
+                ps.setString(7, addresstsg.get("address2"));
+                ps.setString(8, addresstsg.get("address3"));
+                ps.setString(9, addresstsg.get("address4"));
+                ps.setString(10, customer_num);
+                ps.setString(11, addresscustomer.get("address1"));
+                ps.setString(12, addresscustomer.get("address2"));
+                ps.setString(13, addresscustomer.get("address3"));
+                ps.setString(14, addresscustomer.get("address4"));
+                ps.setString(15, quantity_box);
+                ps.setString(16, description);
+                ps.setString(17, gw);
+                ps.setString(18, nw);
+                ps.setString(19, country);
+                ps.setString(20, customer1_id[0]);
+                ps.setString(21, customer1_id[1]);
+                ps.setString(22, customer1_id[2]);
+                ps.setString(23, customer1_id[3]);
+                ps.setString(24, customer1_id[4]);
+                ps.setString(25, customer2_id[0]);
+                ps.setString(26, customer2_id[1]);
+                ps.setString(27, customer2_id[2]);
+                ps.setString(28, customer2_id[3]);
+                ps.setString(29, customer2_id[4]);
+                ps.setString(30, customer3_id[0]);
+                ps.setString(31, customer3_id[1]);
+                ps.setString(32, customer3_id[2]);
+                ps.setString(33, customer3_id[3]);
+                ps.setString(34, customer3_id[4]);
+                ps.setString(35, customer4_id[0]);
+                ps.setString(36, customer4_id[1]);
+                ps.setString(37, customer4_id[2]);
+                ps.setString(38, customer4_id[3]);
+                ps.setString(39, customer4_id[4]);
+                ps.setString(40, pallet);
+                ps.setString(41, prodorder);
+                ps.setString(42, "N");
+                ps.setString(43, destination);
+                ps.setString(44, po_old);
+                ps.setString(45, date);
+                ps.setString(46, customer_address);
+                ps.addBatch();
             }
 
+            ps.executeBatch();
+
+            status = true;
         } catch (Exception e) {
+            status = false;
             e.printStackTrace();
         } finally {
             ConnectDB.closeConnection(conn);

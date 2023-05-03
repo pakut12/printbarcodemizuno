@@ -25,7 +25,7 @@
                             <div class="card-body">
                                 <form id="myform" >
                                     <div class="row mt-2 ">
-                                        <div class="col-sm-12 col-md-4  ">
+                                        <div class="col-sm-12 col-md-3  ">
                                             <div class="input-group input-group-sm ">
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                                 <select class="form-select form-select-sm text-center" id="customer" name="customer">
@@ -33,13 +33,19 @@
                                                 </select>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-md-4 ">
+                                        <div class="col-sm-12 col-md-3  ">
+                                            <div class="input-group input-group-sm ">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
+                                                <input type="text" class="form-control text-center"  name="po" id="po">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12 col-md-3 ">
                                             <div class="input-group input-group-sm ">
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">รหัสลูกค้า</span>
                                                 <input type="text" class="form-control text-center"  name="customer_no" id="customer_no" >
                                             </div>
                                         </div>
-                                        <div class="col-sm-12 col-md-4 ">
+                                        <div class="col-sm-12 col-md-3 ">
                                             <div class="input-group input-group-sm ">
                                                 <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
                                                 <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
@@ -167,6 +173,7 @@
             }
             
             function gettable(){
+                var po = $("#po").val();
                 var customer_no = $("#customer_no").val();
                 var customer_product = $("#customer_product").val();
                 var customer = $("#customer").val();
@@ -175,7 +182,6 @@
         
                 console.log(datestart)
                 console.log(dateend)
-        
         
                 $("#tablereport").DataTable({
                     serverSide: true,
@@ -189,7 +195,8 @@
                             customer_product:customer_product,
                             customer:customer,
                             datestart:datestart,
-                            dateend:dateend
+                            dateend:dateend,
+                            po:po
                         },
                         dataSrc:function(json){
                             var arr = [];
@@ -215,13 +222,13 @@
                             return arr
                         }
                     },
+                    lengthMenu: [[10, 25, 50,100,9999999], [10, 25, 50,100 ,"All"]],
                     columns: [
                         { data: 'no' },
                         { data: 'po' },
                         { data: 'firstdigit' },
                         { data: 'startbox' },
                         { data: 'endbox' },
-                        
                         { data: 'date_create' }
                         
                     ],
@@ -241,8 +248,7 @@
                     chack_customer1($(this).val())
                 });
                 
-    
-    
+
             });
           
         </script>
