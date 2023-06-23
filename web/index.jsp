@@ -19,7 +19,9 @@
             <div class="card shadow-lg">
                 <div class="card-header">คู่มือโปรเเกรม</div>
                 <div class="card-body">
-                   
+                    <div class="overflow-hidden" style="height:80vh">
+                        <iframe src="manual.pdf" style="width:100%; height:100%;" frameborder="1"></iframe>
+                    </div>
                 </div>
             </div>
         </div>
