@@ -359,6 +359,7 @@
             }
             
             function checkbarcode(){
+                
                 var barcode = $("#barcode_box").val();
                 var customer1_barcode = $("#customer1_barcode").val();
                 var customer2_barcode = $("#customer2_barcode").val();
@@ -382,31 +383,36 @@
                 if(!customer4_number){
                     customer4_number = 0
                 }
+                
                 if(barcode.length == 12){
                     if(barcode === customer1_barcode && customer1_barcode){
                         var num = parseInt(customer1_number)+1;
                         if(num <= $("#customer1_qty").val()){
                             $("#customer1_number").val(num);
                         }else{
-                            Swal.fire({
-                                icon:'error',
-                                title:'ผิดพลาด',
-                                text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
-                            })
+                            setTimeout(function (){
+                                Swal.fire({
+                                    icon:'error',
+                                    title:'ผิดพลาด',
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
+                                })
+                            }, 100);
+                            
+                            
                         }
-                  
-                  
-                    
                     }else if(barcode === customer2_barcode && customer2_barcode){
                         var num = parseInt(customer2_number)+1;
                         if(num <= $("#customer2_qty").val()){
                             $("#customer2_number").val(num);
                         }else{
-                            Swal.fire({
-                                icon:'error',
-                                title:'ผิดพลาด',
-                                text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
-                            })
+                            setTimeout(function (){
+                                Swal.fire({
+                                    icon:'error',
+                                    title:'ผิดพลาด',
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
+                                })
+                            }, 100);
+                            
                         }
                     
                     }else if(barcode === customer3_barcode && customer3_barcode){
@@ -414,11 +420,14 @@
                         if(num <= $("#customer3_qty").val()){
                             $("#customer3_number").val(num);
                         }else{
-                            Swal.fire({
-                                icon:'error',
-                                title:'ผิดพลาด',
-                                text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
-                            })
+                            setTimeout(function (){
+                                Swal.fire({
+                                    icon:'error',
+                                    title:'ผิดพลาด',
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
+                                })
+                            }, 100);
+                            
                         }
                     
                     }else if(barcode === customer4_barcode && customer4_barcode){
@@ -426,19 +435,25 @@
                         if(num <= $("#customer4_qty").val()){
                             $("#customer4_number").val(num);
                         }else{
-                            Swal.fire({
-                                icon:'error',
-                                title:'ผิดพลาด',
-                                text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
-                            })
+                            setTimeout(function (){
+                                Swal.fire({
+                                    icon:'error',
+                                    title:'ผิดพลาด',
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
+                                })
+                            }, 100);
+                            
                         }
                     
                     }else{
-                        Swal.fire({
-                            icon:'error',
-                            title:'ผิดพลาด',
-                            text:'รหัส barcode ไม่ถูกต้อง'
-                        })
+                        setTimeout(function (){
+                            Swal.fire({
+                                icon:'error',
+                                title:'ผิดพลาด',
+                                text:'รหัส barcode ไม่ถูกต้อง'
+                            })
+                        }, 100);
+                        
                      
                     }
                     
@@ -547,7 +562,7 @@
                     searchpo()
                 });
                 
-                $("#barcode_box").on('input', function() {
+                $("#barcode_box").on("input",function() {
                     checkbarcode()
                 });
                

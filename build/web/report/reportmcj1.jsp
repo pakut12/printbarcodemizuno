@@ -143,15 +143,15 @@ PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loos
                                 // headers are automatically repeated if the table spans over multiple pages
                                 // you can declare how many rows should be treated as headers
                                 headerRows: 1,
-                                heights: 30,
-                                widths: ["*", "auto", 20, 20, 20, "auto"],
+                                heights: 40,
+                                widths: ["*", "auto", 20, 20, 20,20, "auto"],
                                 body: [
-                                    [ { text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 15}, { text: '\t',fontSize: 15}, { text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],
-                                            [{ text: '<%=col1%>',fontSize: 22}, { text: <%=qty1%>,fontSize: 25}, '', '', '',{ text: <%=qty1%>,fontSize: 25}],
-                                                    [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
-                                                    [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
-                                                    [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
-                                                    ['TOTAL', '', '', '', '', { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
+                                    [ { text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 15}, { text: '\t',fontSize: 15}, { text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},'TOTAL'],
+                                            [{ text: '<%=col1%>',fontSize: 22}, { text: <%=qty1%>,fontSize: 25}, '', '', '','',{ text: <%=qty1%>,fontSize: 25}],
+                                                    [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '',''],
+                                                    [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '',''],
+                                                    
+                                                    ['TOTAL', '', '','', '', '', { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
 
 
 

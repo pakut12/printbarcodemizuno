@@ -157,15 +157,15 @@
                                 // headers are automatically repeated if the table spans over multiple pages
                                 // you can declare how many rows should be treated as headers
                                 headerRows: 1,
-                                heights: 30, 
-                                widths:  ["*","auto","auto",20,20,"auto"],
+                                heights: 40, 
+                                widths: ["*", "auto", "auto", 20, 20,20, "auto"],
                                 body: [
-                                    [ { text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 15}, { text: '<%=size2%>',fontSize: 15}, { text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],
-                                            [{ text: '<%=col1%>',fontSize: 22}, { text: <%=qty1%>,fontSize: 25}, '', '', '',{ text: <%=qty1%>,fontSize: 25}],
-                                                    [{ text: '<%=col2%>',fontSize: 22}, '', { text: <%=qty2%>,fontSize: 25}, '', '',{ text: <%=qty2%>,fontSize: 25}],
-                                                            [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
-                                                            [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', ''],
-                                                            [ 'TOTAL', '', '', '', '',  { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
+                                    [ { text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 15}, { text: '<%=size2%>',fontSize: 15}, { text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],
+                                            [{ text: '<%=col1%>',fontSize: 22}, { text: <%=qty1%>,fontSize: 25}, '', '', '','',{ text: <%=qty1%>,fontSize: 25}],
+                                                    [{ text: '<%=col2%>',fontSize: 22}, '', { text: <%=qty2%>,fontSize: 25}, '', '','',{ text: <%=qty2%>,fontSize: 25}],
+                                                            [ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],
+                                                            
+                                                            [ 'TOTAL', '', '', '', '', '', { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
                         
                         
                         
@@ -190,7 +190,7 @@
                                                     defaultStyle: {
                                                         font: 'Roboto',
                                                         bold:true,
-                                                        fontSize: 22                                          
+                                                        fontSize: 23                                          
                                                     }
                                                 }
             

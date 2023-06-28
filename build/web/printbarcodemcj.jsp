@@ -88,12 +88,14 @@
                                             สามรหัสในกล่อง
                                         </label>
                                     </div>
+                                    <!--
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="style_box" id="style_box4" value="4">
                                         <label class="form-check-label" for="flexRadioDefault2">
                                             สี่รหัสในกล่อง
                                         </label>
                                     </div>
+                                    -->
                                 </div>
                             </div>
                         </div>
