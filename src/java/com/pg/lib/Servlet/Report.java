@@ -94,6 +94,7 @@ public class Report extends HttpServlet {
 
                     for (BCDetailBox li : listsum) {
                         int mark = 0;
+                      
 
                         if (li.getSku_item1().equals(li.getCustomer_no())) {
 
@@ -132,6 +133,7 @@ public class Report extends HttpServlet {
                         summark += mark;
 
                     }
+
 
                     Gson gson = new Gson();
 
@@ -342,14 +344,14 @@ public class Report extends HttpServlet {
                     String orderDir = request.getParameter("order[0][dir]").trim();
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend, start, length, searchValue, orderColumn, orderDir,po);
+                    List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend, start, length, searchValue, orderColumn, orderDir, po);
 
                     Gson gson = new Gson();
 
                     JSONObject obj = new JSONObject();
                     obj.put("draw", draw);
-                    obj.put("recordsTotal", rs.getTotalRecords(customer, customer_no, customer_product, datestart, dateend,po));
-                    obj.put("recordsFiltered", rs.getFilteredRecords(customer, customer_no, customer_product, datestart, dateend, searchValue,po));
+                    obj.put("recordsTotal", rs.getTotalRecords(customer, customer_no, customer_product, datestart, dateend, po));
+                    obj.put("recordsFiltered", rs.getFilteredRecords(customer, customer_no, customer_product, datestart, dateend, searchValue, po));
                     obj.put("data", gson.toJsonTree(list));
 
                     response.setContentType("application/json");

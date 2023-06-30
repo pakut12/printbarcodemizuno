@@ -4,7 +4,9 @@
  */
 package com.pg.lib.Servlet;
 
+import com.pg.lib.model.BCCustomer;
 import com.pg.lib.model.BCDetailBox;
+import com.pg.lib.service.CustomerService;
 import com.pg.lib.service.DetailService;
 import java.io.*;
 import java.net.*;
@@ -13,6 +15,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.json.JSONException;
@@ -30,7 +33,7 @@ public class Detail extends HttpServlet {
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException, JSONException {
+            throws ServletException, IOException, SQLException, JSONException, ClassNotFoundException, NamingException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -74,63 +77,76 @@ public class Detail extends HttpServlet {
                 out.print(obj);
 
             } else if (type.equals("getdetailsall")) {
+                try {
+                    String posearch = request.getParameter("posearch");
+                    String numstart = request.getParameter("numstart");
+                    String numend = request.getParameter("numend");
+                    String firstdigit = request.getParameter("firstdigit");
 
-                String posearch = request.getParameter("posearch");
-                String numstart = request.getParameter("numstart");
-                String numend = request.getParameter("numend");
-                String firstdigit = request.getParameter("firstdigit");
+                    String status = "";
+                    DetailService ds = new DetailService();
+                    List<BCDetailBox> detailbox = ds.GetDetailBoxAll(posearch, numstart, numend, firstdigit);
 
-                String status = "";
-                DetailService ds = new DetailService();
-                List<BCDetailBox> detailbox = ds.GetDetailBoxAll(posearch, numstart, numend, firstdigit);
+                    List<BCCustomer> listcm1 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item1());
+                    List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
+                    List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
+                    List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
 
-                JSONObject obj = new JSONObject();
-                obj.put("po_old", detailbox.get(0).getPo_old());
-                obj.put("po", detailbox.get(0).getPo());
-                obj.put("boxno", detailbox.get(0).getBoxno());
-                obj.put("boxall", detailbox.get(0).getAllbox());
-                obj.put("firstdigit", detailbox.get(0).getFirstdigit());
-                obj.put("shipfrom", detailbox.get(0).getShipfrom());
-                obj.put("shipto", detailbox.get(0).getShipto());
-                obj.put("qtyperbox", detailbox.get(0).getQtyperbox());
-                obj.put("desctxt", detailbox.get(0).getDesctxt());
-                obj.put("grossweight", detailbox.get(0).getGrossweight());
-                obj.put("netweight", detailbox.get(0).getNetweight());
-                obj.put("country_origin", detailbox.get(0).getCountry_origin());
-                obj.put("allbox", detailbox.get(0).getAllbox());
+                    JSONObject obj = new JSONObject();
+                    obj.put("po_old", detailbox.get(0).getPo_old());
+                    obj.put("po", detailbox.get(0).getPo());
+                    obj.put("boxno", detailbox.get(0).getBoxno());
+                    obj.put("boxall", detailbox.get(0).getAllbox());
+                    obj.put("firstdigit", detailbox.get(0).getFirstdigit());
+                    obj.put("shipfrom", detailbox.get(0).getShipfrom());
+                    obj.put("shipto", detailbox.get(0).getShipto());
+                    obj.put("qtyperbox", detailbox.get(0).getQtyperbox());
+                    obj.put("desctxt", detailbox.get(0).getDesctxt());
+                    obj.put("grossweight", detailbox.get(0).getGrossweight());
+                    obj.put("netweight", detailbox.get(0).getNetweight());
+                    obj.put("country_origin", detailbox.get(0).getCountry_origin());
+                    obj.put("allbox", detailbox.get(0).getAllbox());
+                    
+                    if (listcm1.size() > 0) {
+                        obj.put("sku_item1", listcm1.get(0).getCustomer_no());
+                        obj.put("upc_code1", listcm1.get(0).getCustomer_barcode());
+                        obj.put("qty1", detailbox.get(0).getQty1());
+                        obj.put("sizeno1", listcm1.get(0).getCustomer_size());
+                        obj.put("colorno1", listcm1.get(0).getCustomer_color());
+                    }
+                    if (listcm2.size() > 0) {
+                        obj.put("sku_item2", listcm2.get(0).getCustomer_no());
+                        obj.put("upc_code2", listcm2.get(0).getCustomer_barcode());
+                        obj.put("qty2", detailbox.get(0).getQty2());
+                        obj.put("sizeno2", listcm2.get(0).getCustomer_size());
+                        obj.put("colorno2", listcm2.get(0).getCustomer_color());
+                    }
+                    if (listcm3.size() > 0) {
+                        obj.put("sku_item3", listcm3.get(0).getCustomer_no());
+                        obj.put("upc_code3", listcm3.get(0).getCustomer_barcode());
+                        obj.put("qty3", detailbox.get(0).getQty3());
+                        obj.put("sizeno3", listcm3.get(0).getCustomer_size());
+                        obj.put("colorno3", listcm3.get(0).getCustomer_color());
+                    }
+                    if (listcm4.size() > 0) {
+                        obj.put("sku_item4", listcm4.get(0).getCustomer_no());
+                        obj.put("upc_code4", listcm4.get(0).getCustomer_barcode());
+                        obj.put("qty4", detailbox.get(0).getQty4());
+                        obj.put("sizeno4", listcm4.get(0).getCustomer_size());
+                        obj.put("colorno4", listcm4.get(0).getCustomer_color());
+                    }
+                    
+                    obj.put("pallet", detailbox.get(0).getPallet());
+                    obj.put("prodorder", detailbox.get(0).getProdorder());
+                    obj.put("destination", detailbox.get(0).getDestination());
+                    obj.put("date_create", detailbox.get(0).getDate_create());
+                    obj.put("date_modify", detailbox.get(0).getDate_modify());
+                    obj.put("customer_address", detailbox.get(0).getCustomer_address());
 
-                obj.put("sku_item1", detailbox.get(0).getSku_item1());
-                obj.put("upc_code1", detailbox.get(0).getUpc_code1());
-                obj.put("qty1", detailbox.get(0).getQty1());
-                obj.put("sizeno1", detailbox.get(0).getSizen01());
-                obj.put("colorno1", detailbox.get(0).getColorn01());
-
-                obj.put("sku_item2", detailbox.get(0).getSku_item2());
-                obj.put("upc_code2", detailbox.get(0).getUpc_code2());
-                obj.put("qty2", detailbox.get(0).getQty2());
-                obj.put("sizeno2", detailbox.get(0).getSizen02());
-                obj.put("colorno2", detailbox.get(0).getColorn02());
-
-                obj.put("sku_item3", detailbox.get(0).getSku_item3());
-                obj.put("upc_code3", detailbox.get(0).getUpc_code3());
-                obj.put("qty3", detailbox.get(0).getQty3());
-                obj.put("sizeno3", detailbox.get(0).getSizen03());
-                obj.put("colorno3", detailbox.get(0).getColorn03());
-
-                obj.put("sku_item4", detailbox.get(0).getSku_item4());
-                obj.put("upc_code4", detailbox.get(0).getUpc_code4());
-                obj.put("qty4", detailbox.get(0).getQty4());
-                obj.put("sizeno4", detailbox.get(0).getSizen04());
-                obj.put("colorno4", detailbox.get(0).getColorn04());
-
-                obj.put("pallet", detailbox.get(0).getPallet());
-                obj.put("prodorder", detailbox.get(0).getProdorder());
-                obj.put("destination", detailbox.get(0).getDestination());
-                obj.put("date_create", detailbox.get(0).getDate_create());
-                obj.put("date_modify", detailbox.get(0).getDate_modify());
-                obj.put("customer_address", detailbox.get(0).getCustomer_address());
-
-                out.print(obj);
+                    out.print(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             } else if (type.equals("updatedetailsall")) {
                 try {
@@ -195,7 +211,7 @@ public class Detail extends HttpServlet {
 
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endboxbefore, startboxbefore, firstdigit, po, allbox);
 
-                    // Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
+                    //Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
                     Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
 
                     Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
@@ -608,12 +624,12 @@ public class Detail extends HttpServlet {
             } else if (type.equals("getpalletbyid")) {
                 String po = request.getParameter("po").trim();
                 DetailService ds = new DetailService();
-                
+
                 List<String> listpallet = ds.getpalletbyid(po);
-                
+
                 JSONObject obj = new JSONObject();
                 obj.put("listpallet", listpallet);
-                
+
                 out.print(obj);
 
             }
@@ -633,7 +649,13 @@ public class Detail extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            processRequest(request, response);
+            try {
+                processRequest(request, response);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NamingException ex) {
+                Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {
@@ -649,7 +671,13 @@ public class Detail extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            processRequest(request, response);
+            try {
+                processRequest(request, response);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NamingException ex) {
+                Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } catch (SQLException ex) {
             Logger.getLogger(Detail.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JSONException ex) {

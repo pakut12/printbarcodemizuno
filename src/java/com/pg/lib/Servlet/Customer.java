@@ -202,6 +202,7 @@ public class Customer extends HttpServlet {
                     CustomerService cs = new CustomerService();
                     List<BCCustomer> list = cs.ChackDetailCustomerAll(customer_id);
                     
+                    
                    
                 } catch (Exception e) {
                     e.printStackTrace();

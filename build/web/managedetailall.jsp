@@ -300,7 +300,7 @@
                         customer_id:customer_id
                     },
                     success:function(msg){
-                        console.log('asd');
+                        
                         if(msg){
                             var js = JSON.parse(msg)
                             console.log(js)

@@ -43,7 +43,7 @@
                                             <input type="text" class="form-control text-center"  name="customer_product" id="customer_product">
                                         </div>
                                     </div>
-                                   
+                                    
                                     
                                     <div class="col-sm-12 col-md-2 mt-3 mt-md-0" id="inputpallat">
                                         
@@ -60,32 +60,46 @@
                                     </div>
                                 </div>
                                 <div class="row mt-3">
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
                                             <input type="text" class="form-control text-center" name="firstdigit" id="firstdigit" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">เบอร์กล่องจาก</span>
                                             <input type="number" class="form-control text-center" name="start" id="start" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
                                             <input type="number" class="form-control text-center" name="end" id="end" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                            <input class="form-control text-center" type="date" value="" id="datestart" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                            <input class="form-control text-center" type="date" value="" id="datestop" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-2">
                                         <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
                                             <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
                                             <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
                                         </div>
                                     </div>
                                 </div>
-                                
                             </div>
                         </div>
                     </div>
@@ -341,7 +355,6 @@
                             if(v){
                                 html += "<option value='"+v+"'>"+v+"</option>";
                             }
-                            
                         })
                         $("#pallet").empty();
                         $("#pallet").html(html);
@@ -373,7 +386,7 @@
                     getpallet()
                 });
                
-               ckpallat()
+                ckpallat()
             });
             
           

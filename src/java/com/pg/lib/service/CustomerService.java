@@ -126,10 +126,10 @@ public class CustomerService {
         return list;
     }
 
-    public List<BCCustomer> ChackDetailCustomerAll(String CUSTOMER_NO) throws ClassNotFoundException, SQLException, NamingException {
+    public static  List<BCCustomer> ChackDetailCustomerAll(String CUSTOMER_NO) throws ClassNotFoundException, SQLException, NamingException {
 
         List<BCCustomer> list = new ArrayList<BCCustomer>();
-        int primarykey = getprimarykey() + 1;
+        
         try {
             DetailService ds = new DetailService();
             String sql = "select * from  MIZUNOCUSTOMER  c where c.CUSTOMER_NO = ?";
