@@ -406,7 +406,7 @@ public class ReportService {
     }
 
     public int getFilteredRecordsproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit,
-            int start, int length, String searchValue, String orderColumn, String orderDir) throws ClassNotFoundException, SQLException, NamingException {
+            int start, int length, String searchValue, String orderColumn, String orderDir,String datestart,String datestop) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
             String sql = "";
@@ -418,6 +418,10 @@ public class ReportService {
                 sql += "a.po = '" + po + "' and";
             }
 
+            if (!datestart.isEmpty() && !datestop.isEmpty()) {
+                sql += " c.DATE_CREATE BETWEEN TO_DATE('" + datestart + "', 'yyyy/mm/dd') AND TO_DATE('" + datestop + "', 'yyyy/mm/dd') and ";
+            }
+            
             if (!customer_no.isEmpty()) {
                 sql += " b.customer_no = '" + customer_no + "' and ";
             }
@@ -467,7 +471,7 @@ public class ReportService {
         return totalRecords;
     }
 
-    public int getTotalRecordsproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit) throws ClassNotFoundException, SQLException, NamingException {
+    public int getTotalRecordsproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit,String datestart,String datestop) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
             String sql = "";
@@ -478,7 +482,11 @@ public class ReportService {
             if (!po.isEmpty()) {
                 sql += "a.po = '" + po + "' and";
             }
-
+            
+            if (!datestart.isEmpty() && !datestop.isEmpty()) {
+                sql += " c.DATE_CREATE BETWEEN TO_DATE('" + datestart + "', 'yyyy/mm/dd') AND TO_DATE('" + datestop + "', 'yyyy/mm/dd') and ";
+            }
+            
             if (!customer_no.isEmpty()) {
                 sql += " b.customer_no = '" + customer_no + "' and ";
             }
@@ -533,7 +541,7 @@ public class ReportService {
     }
 
     public List<BCDetailBox> getsumproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit,
-            int start, int length, String searchValue, String orderColumn, String orderDir) throws ClassNotFoundException, SQLException, NamingException {
+            int start, int length, String searchValue, String orderColumn, String orderDir, String datestart, String datestop) throws ClassNotFoundException, SQLException, NamingException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
 
         try {
@@ -544,6 +552,10 @@ public class ReportService {
 
             if (!po.isEmpty()) {
                 sql += "a.po = '" + po + "' and";
+            }
+
+            if (!datestart.isEmpty() && !datestop.isEmpty()) {
+                sql += "c.DATE_CREATE BETWEEN TO_DATE('" + datestart + "', 'yyyy/mm/dd') AND TO_DATE('" + datestop + "', 'yyyy/mm/dd') and";
             }
 
             if (!customer_no.isEmpty()) {
@@ -615,15 +627,20 @@ public class ReportService {
     }
 
     private String sqllistreportproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit,
-            int start, int length, String searchValue, String orderColumn, String orderDir) {
+            int start, int length, String searchValue, String orderColumn, String orderDir, String datestart, String datestop) {
         String sql = "";
         try {
             sql += "select * from (select rownum as rnum,x.* from (";
             sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
             sql += "where ";
 
+
             if (!po.isEmpty()) {
                 sql += "a.po = '" + po + "' and";
+            }
+
+            if (!datestart.isEmpty() && !datestop.isEmpty()) {
+                sql += " c.DATE_CREATE BETWEEN TO_DATE('" + datestart + "', 'yyyy/mm/dd') AND TO_DATE('" + datestop + "', 'yyyy/mm/dd') and ";
             }
 
             if (!customer_no.isEmpty()) {
@@ -668,11 +685,11 @@ public class ReportService {
     }
 
     public List<BCDetailBox> listreportproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit,
-            int start, int length, String searchValue, String orderColumn, String orderDir) throws SQLException {
+            int start, int length, String searchValue, String orderColumn, String orderDir, String datestart, String datestop) throws SQLException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = sqllistreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir);
+            String sql = sqllistreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir, datestart, datestop);
             System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -725,6 +742,7 @@ public class ReportService {
             if (!po.equals("")) {
                 sql += " a.po  =  '" + po + "' and ";
             }
+
             if (!customer.equals("")) {
                 sql += " a.SHIPTO  =  '" + customer + "' and ";
             }

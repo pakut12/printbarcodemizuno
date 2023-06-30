@@ -84,13 +84,13 @@
                                     <div class="col-sm-12 col-md-5">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
-                                            <input class="form-control text-center" type="date" value="" id="datestart" >
+                                            <input class="form-control text-center" type="date" value="" id="datestart" name="datestart">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-5">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                            <input class="form-control text-center" type="date" value="" id="datestop" >
+                                            <input class="form-control text-center" type="date" value="" id="datestop" name="datestop">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-2">
@@ -175,6 +175,8 @@
                 var boxend = $("#end").val();
                 var firstdigit = $("#firstdigit").val();
                 var po = $("#po").val();
+                var datestart = $("#datestart").val();
+                var datestop = $("#datestop").val();
                 
                 var table =  $("#tablereport").DataTable({
                     processing: true,
@@ -190,7 +192,10 @@
                             boxstart:boxstart,
                             boxend:boxend,
                             firstdigit:firstdigit,
-                            po:po
+                            po:po,
+                            datestart:datestart,
+                            datestop:datestop
+                            
                         },
                         dataSrc:function(json){
                             
@@ -294,6 +299,7 @@
                             text: 'Print',
                             action: function ( dt ) {
                                 var form = $("#myformreport").serialize()
+                                console.log(form)
                                 window.open('Report?type=getreportproductdetails&'+form, '_blank','height=400,width=800,left=200,top=200');  
                             }
                         }
@@ -316,7 +322,10 @@
                             })
                             
                             $.each(listdatamark,function(k,v){
-                                mark++;
+                                if(v == "*"){
+                                    mark++;
+                                }
+                                
                             })
                             
                         

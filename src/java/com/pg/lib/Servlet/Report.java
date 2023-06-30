@@ -49,9 +49,11 @@ public class Report extends HttpServlet {
                     String boxend = request.getParameter("end").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
                     String po = request.getParameter("po").trim();
+                    String datestart = request.getParameter("datestart").replaceAll("-", "/");
+                    String datestop = request.getParameter("datestop").replaceAll("-", "/");
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, 0, 0, "", "", "");
+                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, 0, 0, "", "", "", datestart, datestop);
 
                     request.setAttribute("pallet", pallet);
                     request.setAttribute("listproduct", list);
@@ -72,6 +74,8 @@ public class Report extends HttpServlet {
                     String boxend = request.getParameter("boxend").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
                     String po = request.getParameter("po").trim();
+                    String datestart = request.getParameter("datestart").replaceAll("-", "/");
+                    String datestop = request.getParameter("datestop").replaceAll("-", "/");
 
                     int draw = Integer.parseInt(request.getParameter("draw").trim());
                     int start = Integer.parseInt(request.getParameter("start").trim());
@@ -81,8 +85,8 @@ public class Report extends HttpServlet {
                     String orderDir = request.getParameter("order[0][dir]").trim();
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir);
-                    List<BCDetailBox> listsum = rs.getsumproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir);
+                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir, datestart, datestop);
+                    List<BCDetailBox> listsum = rs.getsumproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir, datestart, datestop);
 
                     int sumqty = 0;
                     int sumqty_result = 0;
@@ -94,7 +98,7 @@ public class Report extends HttpServlet {
 
                     for (BCDetailBox li : listsum) {
                         int mark = 0;
-                      
+
 
                         if (li.getSku_item1().equals(li.getCustomer_no())) {
 
@@ -139,8 +143,8 @@ public class Report extends HttpServlet {
 
                     JSONObject obj = new JSONObject();
                     obj.put("draw", draw);
-                    obj.put("recordsTotal", rs.getTotalRecordsproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit));
-                    obj.put("recordsFiltered", rs.getFilteredRecordsproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir));
+                    obj.put("recordsTotal", rs.getTotalRecordsproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, datestart, datestop));
+                    obj.put("recordsFiltered", rs.getFilteredRecordsproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir, datestart, datestop));
                     obj.put("data", gson.toJsonTree(list));
 
                     obj.put("sumqty_result", sumqty_result);
@@ -163,9 +167,13 @@ public class Report extends HttpServlet {
                     String boxend = request.getParameter("end").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
                     String po = request.getParameter("po").trim();
+                    String datestart = request.getParameter("datestart").replaceAll("-", "/");
+                    String datestop = request.getParameter("datestop").replaceAll("-", "/");
+
+
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, 0, 0, "", "", "");
+                    List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, 0, 0, "", "", "", datestart, datestop);
 
                     request.setAttribute("pallet", pallet);
                     request.setAttribute("listproduct", list);
