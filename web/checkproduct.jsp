@@ -235,16 +235,16 @@
                                         <div class="text-center fw-bold">จำนวนตัวนับได้</div>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_number" >
+                                        <input type="number" class="form-control form-control-sm text-center" id="customer1_number" >
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_number" >
+                                        <input type="number" class="form-control form-control-sm text-center"  id="customer2_number" >
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_number" >
+                                        <input type="number" class="form-control form-control-sm text-center"  id="customer3_number" >
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_number" >
+                                        <input type="number" class="form-control form-control-sm text-center"  id="customer4_number" >
                                     </div>
                                 </div>
                             </div>
@@ -302,6 +302,7 @@
                         text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
                     })
                 }else{
+                   
                     var firstdigit = $("#firstdigit").val();
                     var posearch = $("#posearch").val();
                     var numstart = firstdigit+$("#numstart").val();
@@ -352,6 +353,8 @@
                             }
                         }
                     })
+                        
+
                 }
             }
             function clearinput(){
@@ -371,6 +374,7 @@
                 var customer3_number =  $("#customer3_number").val();
                 var customer4_number =  $("#customer4_number").val();
         
+        
                 if(!customer1_number){
                     customer1_number = 0
                 }
@@ -384,6 +388,7 @@
                     customer4_number = 0
                 }
                 
+               
                 if(barcode.length == 12){
                     if(barcode === customer1_barcode && customer1_barcode){
                         var num = parseInt(customer1_number)+1;

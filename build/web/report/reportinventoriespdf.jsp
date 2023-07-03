@@ -159,7 +159,12 @@
                             "'" + ds.ChackNull(list.get(i).getPallet()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(String.valueOf(different)) + "','" + ds.ChackNull(mark) + "'],");
                     n1++;
                 } else if (n == 35) {
-                    out.print("[{ text: 'รวม', colSpan: 8 }, '', '', '', '', '', '', '', '" + sumqty + "','" + sumqty_result + "','" + sumdifferent + "','" + (marknum - 1) + "'],");
+                    if(marknum == 0){
+                        marknum = 0;
+                    }else{
+                        marknum = marknum - 1;
+                    }
+                    out.print("[{ text: 'รวม', colSpan: 8 }, '', '', '', '', '', '', '', '" + sumqty + "','" + sumqty_result + "','" + sumdifferent + "','" + (marknum) + "'],");
                     sumqty = 0;
                     sumdifferent = 0;
                     sumqty_result = 0;

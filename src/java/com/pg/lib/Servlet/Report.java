@@ -55,6 +55,8 @@ public class Report extends HttpServlet {
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, 0, 0, "", "", "", datestart, datestop);
 
+
+                    System.out.println(pallet);
                     request.setAttribute("pallet", pallet);
                     request.setAttribute("listproduct", list);
                     request.setAttribute("customer_product", customer_product);
@@ -99,8 +101,9 @@ public class Report extends HttpServlet {
                     for (BCDetailBox li : listsum) {
                         int mark = 0;
 
-
+                        System.out.println(li.getPo());
                         if (li.getSku_item1().equals(li.getCustomer_no())) {
+
 
                             qty_result = li.getQty_result1();
                             qty = li.getQty1();

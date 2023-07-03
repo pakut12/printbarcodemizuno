@@ -184,7 +184,13 @@
                     out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
                     n1++;
                 } else if (n == 13) {
-                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum - 1) + "'],");
+                    if(marknum == 0){
+                        marknum = 0;
+                    }else{
+                        marknum = marknum - 1;
+                    }
+                    
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum) + "'],");
                     sum = 0;
                     n = 0;
                     i--;

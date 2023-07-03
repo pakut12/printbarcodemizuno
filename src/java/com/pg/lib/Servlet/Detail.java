@@ -106,7 +106,7 @@ public class Detail extends HttpServlet {
                     obj.put("netweight", detailbox.get(0).getNetweight());
                     obj.put("country_origin", detailbox.get(0).getCountry_origin());
                     obj.put("allbox", detailbox.get(0).getAllbox());
-                    
+
                     if (listcm1.size() > 0) {
                         obj.put("sku_item1", listcm1.get(0).getCustomer_no());
                         obj.put("upc_code1", listcm1.get(0).getCustomer_barcode());
@@ -135,7 +135,7 @@ public class Detail extends HttpServlet {
                         obj.put("sizeno4", listcm4.get(0).getCustomer_size());
                         obj.put("colorno4", listcm4.get(0).getCustomer_color());
                     }
-                    
+
                     obj.put("pallet", detailbox.get(0).getPallet());
                     obj.put("prodorder", detailbox.get(0).getProdorder());
                     obj.put("destination", detailbox.get(0).getDestination());
@@ -206,19 +206,21 @@ public class Detail extends HttpServlet {
 
                     DetailService ds = new DetailService();
 
-                    List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigitbefore);
-                    ds.DeleteListMIZUNONEWBARBOXRESULTOLD(pobefore, startboxbefore, endboxbefore, firstdigitbefore, allbox);
+                    // List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigitbefore);
+                    //ds.DeleteListMIZUNONEWBARBOXRESULTOLD(pobefore, startboxbefore, endboxbefore, firstdigitbefore, allbox);
 
-                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endboxbefore, startboxbefore, firstdigit, po, allbox);
+                    // Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endboxbefore, startboxbefore, firstdigit, po, allbox);
 
                     //Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
                     Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
-
+                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore);
                     Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
+
+
 
                     JSONObject obj = new JSONObject();
 
-                    if (statusdt) {
+                    if (statusresult && statusDT && statusdt) {
                         obj.put("status", "true");
                     } else {
                         obj.put("status", "false");

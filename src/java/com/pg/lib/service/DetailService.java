@@ -112,6 +112,49 @@ public class DetailService {
         return status;
     }
 
+    public Boolean UpdateMIZUNONEWBARBOXRESULTTEST(String pobefore, String po, String firstdigit, String startbox, String endbox, String firstdigitbefore) throws SQLException {
+        Boolean status = false;
+        try {
+
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+
+            int start = Integer.parseInt(startbox);
+            int end = Integer.parseInt(endbox);
+
+            String sql = "update MIZUNONEWBARBOXRESULT set PO=? ,boxno=?,DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') where po = ? and  boxno=? ";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            for (int n = start; n <= end; n++) {
+                try {
+                    
+                    ps.setString(1, po);
+                    ps.setString(2, firstdigit + n);
+                    ps.setString(3, formatter.format(date));
+                    ps.setString(4, pobefore);
+                    ps.setString(5, firstdigitbefore + n);
+                    ps.addBatch();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            ps.executeBatch();
+            status = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            status = false;
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return status;
+    }
+
     public Boolean UpdateMIZUNONEWBARBOXRESULT(List<BCDetailBox> listupdate, String endbox, String startbox, String firstdigit, String po, String allbox) throws SQLException {
 
         Boolean status = false;
