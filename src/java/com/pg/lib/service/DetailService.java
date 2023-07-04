@@ -112,6 +112,40 @@ public class DetailService {
         return status;
     }
 
+    public Boolean UpdateMIZUNONEWBARBOXRESULTBYID(String pobefore, String po, String boxno, String boxnobefore) throws SQLException {
+        Boolean status = false;
+        try {
+            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+            Date date = new Date();
+
+            String sql = "update MIZUNONEWBARBOXRESULT set PO=? ,boxno=?,DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') where po = ? and  boxno=? ";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, po);
+            ps.setString(2, boxno);
+            ps.setString(3, formatter.format(date));
+            ps.setString(4, pobefore);
+            ps.setString(5, boxnobefore);
+
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+            status = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            status = false;
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return status;
+    }
+
     public Boolean UpdateMIZUNONEWBARBOXRESULTTEST(String pobefore, String po, String firstdigit, String startbox, String endbox, String firstdigitbefore) throws SQLException {
         Boolean status = false;
         try {
@@ -128,7 +162,7 @@ public class DetailService {
 
             for (int n = start; n <= end; n++) {
                 try {
-                    
+
                     ps.setString(1, po);
                     ps.setString(2, firstdigit + n);
                     ps.setString(3, formatter.format(date));

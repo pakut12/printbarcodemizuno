@@ -216,16 +216,16 @@
                                         <div class="text-center fw-bold">จำนวนตัว</div>
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_number" >
+                                        <input type="text" class="form-control form-control-sm text-center" id="customer1_number" onkeypress="return isNumberKey(event)">
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_number" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer2_number" onkeypress="return isNumberKey(event)">
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_number" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer3_number" onkeypress="return isNumberKey(event)">
                                     </div>
                                     <div class="row mb-2">
-                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_number" >
+                                        <input type="text" class="form-control form-control-sm text-center"  id="customer4_number" onkeypress="return isNumberKey(event)">
                                     </div>
                                 </div>
                             </div>
@@ -246,6 +246,13 @@
         </footer>
         <script>
           
+            function isNumberKey(evt){
+                var charCode = (evt.which) ? evt.which : evt.keyCode
+                if (charCode > 31 && (charCode < 48 || charCode > 57))
+                    return false;
+                return true;
+            }
+    
             function getcustomer(){
                 $.ajax({
                     type:"post",

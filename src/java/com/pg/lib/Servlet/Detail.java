@@ -323,7 +323,8 @@ public class Detail extends HttpServlet {
                 try {
                     String pobefore = request.getParameter("pobefore").trim();
                     String boxnobefore = request.getParameter("startboxbefore").trim();
-
+                   
+                  
                     String po_old = request.getParameter("po_old").trim();
                     String SHIPTO = request.getParameter("shipto").trim();
                     String QTYPERBOX = request.getParameter("qtyperbox").trim();
@@ -372,7 +373,10 @@ public class Detail extends HttpServlet {
                     JSONObject obj = new JSONObject();
 
                     Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
-                    if (status) {
+                    
+                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTBYID(pobefore, PO, boxno, boxnobefore);
+                    
+                    if (status && statusresult) {
                         obj.put("status", "true");
                     } else {
                         obj.put("status", "false");
