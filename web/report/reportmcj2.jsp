@@ -94,10 +94,12 @@
 
                 private String col;
                 private String qty;
-
-                public ColSizePair(String col, String qty) {
+                private String size;
+                
+                public ColSizePair(String col, String qty,String size) {
                     this.col = col;
                     this.qty = qty;
+                    this.size = size;
                 }
 
                 public String getCol() {
@@ -106,6 +108,10 @@
 
                 public String getQty() {
                     return qty;
+                }
+                
+                public String getSize() {
+                    return size;
                 }
             }
 
@@ -124,7 +130,6 @@
                 String col2 = id2.substring(0, id2.length() - size2.length());
                 String qty2 = l.getQty2();
 
-
                 
 
                 String Destination = "";
@@ -133,8 +138,8 @@
                 }
 
                 ColSizePair[] liststy = {
-                    new ColSizePair(col1, qty1),
-                    new ColSizePair(col2, qty2)
+                    new ColSizePair(col1, qty1,size1),
+                    new ColSizePair(col2, qty2,size2)
                 };
 
                 String text = "";
@@ -142,18 +147,24 @@
                 for (ColSizePair pair : liststy) {
                     String col = pair.getCol();
                     String qty = pair.getQty();
+                    String size = pair.getSize();
+                    
+             
 
                     if (col.equals(col1)) {
-                         w += 1;
                         if (!text.contains("{ text: '" + col1 + "',fontSize: 22}")) {
+                            w += 1;
                             text += "[{ text: '" + col1 + "',fontSize: 22},";
                             int sum1 = 0;
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
+                                String sizex = pair1.getSize();
+                                
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty1 + "',fontSize: 22},";
-                                    sum1 += Integer.parseInt(qty1);
+                                    
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum1 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -164,16 +175,16 @@
                         }
 
                     } else if (col.equals(col2)) {
-                         w += 1;
                         if (!text.contains("{ text: '" + col2 + "',fontSize: 22}")) {
+                            w += 1;
                             int sum2 = 0;
                             text += "[{ text: '" + col2 + "',fontSize: 22},";
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty2 + "',fontSize: 22},";
-                                    sum2 += Integer.parseInt(qty2);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum2 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -187,19 +198,18 @@
 
                 }
 
-
+                    
                     if (w == 2) {
-                        text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                         text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                     } else if (w == 1) {
                         text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                         text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                     }
 
-                System.out.println(w);
+               
                 int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) ;
-
-
+             
+ 
             %>
                         {
                             columns: [

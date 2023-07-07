@@ -94,8 +94,9 @@
 
                 private String col;
                 private String qty;
-
-                public ColSizePair(String col, String qty) {
+                private String size;
+                
+                public ColSizePair(String col, String qty,String size) {
                     this.col = col;
                     this.qty = qty;
                 }
@@ -106,6 +107,10 @@
 
                 public String getQty() {
                     return qty;
+                }
+                
+                public String getSize() {
+                    return size;
                 }
             }
 
@@ -134,6 +139,8 @@
                 String size4 = l.getSizen04();
                 String col4 = id4.substring(0, id4.length() - size4.length());
                 String qty4 = l.getQty4();
+                
+                
 
                 String Destination = "";
                 if (l.getDestination() != null) {
@@ -141,10 +148,10 @@
                 }
 
                 ColSizePair[] liststy = {
-                    new ColSizePair(col1, qty1),
-                    new ColSizePair(col2, qty2),
-                    new ColSizePair(col3, qty3),
-                    new ColSizePair(col4, qty4)
+                    new ColSizePair(col1, qty1,size1),
+                    new ColSizePair(col2, qty2,size2),
+                    new ColSizePair(col3, qty3,size3),
+                    new ColSizePair(col4, qty4,size4)
                 };
 
                 String text = "";
@@ -161,9 +168,11 @@
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
+                                String sizex = pair1.getSize();
+                                
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty1 + "',fontSize: 22},";
-                                    sum1 += Integer.parseInt(qty1);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum1 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -174,6 +183,7 @@
                         }
 
                     } else if (col.equals(col2)) {
+                        
                         if (!text.contains("{ text: '" + col2 + "',fontSize: 22}")) {
                             w += 1;
                             int sum2 = 0;
@@ -181,9 +191,11 @@
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
+                                
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty2 + "',fontSize: 22},";
-                                    sum2 += Integer.parseInt(qty2);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum2 += Integer.parseInt(qtyx);
+                                    
                                 } else {
                                     text += "'',";
                                 }
@@ -195,13 +207,13 @@
                         if (!text.contains("{ text: '" + col3 + "',fontSize: 22}")) {
                             w += 1;
                             int sum3 = 0;
-                            text += "[{ text: '" + col3 + "',fontSize: 22},";
+                            text += "[{ text: '" + col + "',fontSize: 22},";
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
-                                if (colx.equals(col)) {
-                                    text += "{ text: '" + qty3 + "',fontSize: 22},";
-                                    sum3 += Integer.parseInt(qty3);
+                                if (colx.equals(col3)) {
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum3 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -210,16 +222,17 @@
                             text += "'',{ text: '" + sum3 + "',fontSize: 25}],";
                         }
                     } else if (col.equals(col4)) {
-                        w += 1;
+                       
                         if (!text.contains("{ text: '" + col4 + "',fontSize: 22}")) {
+                             w += 1;
                             int sum4 = 0;
                             text += "[{ text: '" + col4 + "',fontSize: 22},";
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty4 + "',fontSize: 22},";
-                                    sum4 += Integer.parseInt(qty4);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum4 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -240,8 +253,8 @@
                         text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                     }
 
-                System.out.println(w);
-                int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) + Integer.parseInt(qty3) + Integer.parseInt(qty3);
+                
+                int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) + Integer.parseInt(qty3) + Integer.parseInt(qty4);
 
 
             %>

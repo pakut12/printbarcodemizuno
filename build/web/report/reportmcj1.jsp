@@ -146,8 +146,8 @@
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty1 + "',fontSize: 22},";
-                                    sum1 += Integer.parseInt(qty1);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum1 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -164,17 +164,14 @@
                 }
 
 
-                    if (w == 2) {
+                     if (w == 2) {
                         text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                     } else if (w == 1) {
                         text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                         text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
-                    }else{
-                        text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
-                        text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
                     }
 
-                System.out.println(w);
+               
                 int sum = Integer.parseInt(qty1) ;
 
 

@@ -157,8 +157,8 @@
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty1 + "',fontSize: 22},";
-                                    sum1 += Integer.parseInt(qty1);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum1 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -177,8 +177,8 @@
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty2 + "',fontSize: 22},";
-                                    sum2 += Integer.parseInt(qty2);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum2 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
@@ -195,8 +195,8 @@
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
                                 if (colx.equals(col)) {
-                                    text += "{ text: '" + qty3 + "',fontSize: 22},";
-                                    sum3 += Integer.parseInt(qty3);
+                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                    sum3 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
