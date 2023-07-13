@@ -4,7 +4,7 @@
     Author     : Gus
 --%>
 <%@page import="com.pg.lib.model.BCDetailBox"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@page import="com.pg.lib.service.DetailService"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -31,6 +31,7 @@
             String budget_month = request.getParameter("budget_month").trim();
             DetailService ds = new DetailService();
             List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, start, end, firstdigit);
+
 
 
 
@@ -95,8 +96,8 @@
                 private String col;
                 private String qty;
                 private String size;
-                
-                public ColSizePair(String col, String qty,String size) {
+
+                public ColSizePair(String col, String qty, String size) {
                     this.col = col;
                     this.qty = qty;
                     this.size = size;
@@ -109,11 +110,12 @@
                 public String getQty() {
                     return qty;
                 }
-                
+
                 public String getSize() {
                     return size;
                 }
             }
+
 
 
             for (BCDetailBox l : listbox) {
@@ -130,7 +132,41 @@
                 String col2 = id2.substring(0, id2.length() - size2.length());
                 String qty2 = l.getQty2();
 
-                
+
+                String widths = "['*',";
+                String header = " [{ text: 'ART.NO/COL.',fontSize: 18},";
+                String[] listsize = {size1, size2};
+                List<String> listsizeup = new ArrayList<String>();
+
+                for (String arr : listsize) {
+                    if (!listsizeup.contains(arr)) {
+                        listsizeup.add(arr);
+                    }
+
+                }
+
+                for (String arr : listsizeup) {
+                    if (!header.contains("{ text: '" + arr + "',fontSize: 15}")) {
+                        header += "{ text: '" + arr + "',fontSize: 15},";
+                        widths += "'auto',";
+                    } else {
+                        header += "{ text: '\t',fontSize: 15},";
+                        widths += "15,";
+                    }
+                }
+
+                if (listsizeup.size() == 2) {
+                    header += "{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],";
+                    widths += "15,15,15,'auto'],";
+                } else if (listsizeup.size() == 3) {
+                    header += "{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],";
+                    widths += "15,15,'auto'],";
+                } else if (listsizeup.size() == 1) {
+                    header += "{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],";
+                    widths += "15,15,15,15,'auto'],";
+                }
+
+                System.out.println("Size : " + listsizeup.size());
 
                 String Destination = "";
                 if (l.getDestination() != null) {
@@ -138,8 +174,8 @@
                 }
 
                 ColSizePair[] liststy = {
-                    new ColSizePair(col1, qty1,size1),
-                    new ColSizePair(col2, qty2,size2)
+                    new ColSizePair(col1, qty1, size1),
+                    new ColSizePair(col2, qty2, size2)
                 };
 
                 String text = "";
@@ -148,8 +184,6 @@
                     String col = pair.getCol();
                     String qty = pair.getQty();
                     String size = pair.getSize();
-                    
-             
 
                     if (col.equals(col1)) {
                         if (!text.contains("{ text: '" + col1 + "',fontSize: 22}")) {
@@ -160,37 +194,62 @@
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
                                 String sizex = pair1.getSize();
-                                
+
                                 if (colx.equals(col)) {
-                                    
+
                                     text += "{ text: '" + qtyx + "',fontSize: 22},";
                                     sum1 += Integer.parseInt(qtyx);
                                 } else {
                                     text += "'',";
                                 }
-                                
+
                             }
 
-                            text += "'','','',{ text: '"+sum1+"',fontSize: 25}],";
+                            text += "'','','',{ text: '" + sum1 + "',fontSize: 25}],";
                         }
 
                     } else if (col.equals(col2)) {
                         if (!text.contains("{ text: '" + col2 + "',fontSize: 22}")) {
                             w += 1;
                             int sum2 = 0;
+
                             text += "[{ text: '" + col2 + "',fontSize: 22},";
+
+                            String sty = "";
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
                                 String qtyx = pair1.getQty();
-                                if (colx.equals(col)) {
-                                    text += "{ text: '" + qtyx + "',fontSize: 22},";
-                                    sum2 += Integer.parseInt(qtyx);
+                                String sizex = pair1.getSize();
+
+
+                                if (sizex.equals(size2)) {
+                                    //System.out.println(1);
+                                    if (colx.equals(col)) {
+                                        text += "{ text: '" + qtyx + "',fontSize: 22},";
+                                        sum2 += Integer.parseInt(qtyx);
+                                    } else {
+                                        //System.out.println(1);
+                                        continue;
+                                    //text += "'',";
+                                    }
+
                                 } else {
+                                    //System.out.println(1);
                                     text += "'',";
                                 }
-                                
+
+
+
+
+
                             }
-                            text += "'','','',{ text: '"+sum2+"',fontSize: 25}],";
+
+                            if (listsizeup.size() == 2) {
+                                text += "'','','',{ text: '" + sum2 + "',fontSize: 25}],";
+                            } else if (listsizeup.size() == 3) {
+                            } else if (listsizeup.size() == 1) {
+                                text += "'','','','',{ text: '" + sum2 + "',fontSize: 25}],";
+                            }
                         }
                     }
 
@@ -198,18 +257,18 @@
 
                 }
 
-                    
-                    if (w == 2) {
-                        text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
-                    } else if (w == 1) {
-                        text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
-                        text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
-                    }
 
-               
-                int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2) ;
-             
- 
+                if (w == 2) {
+                    text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
+                } else if (w == 1) {
+                    text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
+                    text += "[ { text: '\t', preserveLeadingSpaces: true}, '', '', '', '', '', ''],";
+                }
+
+
+                int sum = Integer.parseInt(qty1) + Integer.parseInt(qty2);
+
+
             %>
                         {
                             columns: [
@@ -253,47 +312,50 @@
                                 // you can declare how many rows should be treated as headers
                                 headerRows: 1,
                                 heights: 40, 
-                                widths:  ["*","auto","auto",15,15,15,"auto"],
+                                widths:  <%=widths%>
                                 body: [
-                                    [{ text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 15}, { text: '<%=size2%>',fontSize: 15}, { text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],
                                             
-                                            <%
-                                            
-                                            out.print(text);
-                                            
+ <%
+
+                System.out.println(header);
+                out.print(header);
+                System.out.println(text);
+                out.print(text);
+
+
                                             %>
                                             
                                             
-                                            [ 'TOTAL', '', '', '', '','', { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
+                                                                    [ 'TOTAL', '', '', '', '','', { text: '<%=String.valueOf(sum)%>',fontSize: 25}],
                         
                         
-                                                ]
+                                                                        ]
                                         
-                                            } 
+                                                                    } 
                                                     <%
                 if (n < listbox.size() - 1) {
                                                     %>
-                                                                                    ,pageBreak: 'after' 
+                                                                            ,pageBreak: 'after' 
                                                     <%                }
                                                     %>
                                                                            
-                                                                                },
+                                                                        },
                    <%
                 n++;
             }
             %>    
-                                    ],
-                                    styles: {
-                                    },
-                                    defaultStyle: {
-                                        font: 'Roboto',
-                                        bold:true,
-                                        fontSize: 22                                           
-                                    }
-                                }
+                            ],
+                            styles: {
+                            },
+                            defaultStyle: {
+                                font: 'Roboto',
+                                bold:true,
+                                fontSize: 22                                           
+                            }
+                        }
             
             
-                                pdfMake.createPdf(dd).open({}, window); 
+                        pdfMake.createPdf(dd).open({}, window); 
             
         </script>
     </body>
