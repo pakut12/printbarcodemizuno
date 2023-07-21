@@ -397,7 +397,7 @@
                 }
                 
                
-                if(barcode.length == 12){
+                if(barcode.length == 12 || barcode.length == 13){
                     if(barcode === customer1_barcode && customer1_barcode){
                         var num = parseInt(customer1_number)+1;
                         if(num <= $("#customer1_qty").val()){
