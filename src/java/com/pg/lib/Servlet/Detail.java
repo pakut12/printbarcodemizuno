@@ -260,7 +260,11 @@ public class Detail extends HttpServlet {
 
                 DetailService ds = new DetailService();
                 List<BCDetailBox> detailbox = ds.GetDetailBox(posearch, numstart);
-
+                List<BCCustomer> listcm1 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item1());
+                List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
+                List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
+                List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
+                
                 JSONObject obj = new JSONObject();
                 obj.put("po", detailbox.get(0).getPo());
                 obj.put("po_old", detailbox.get(0).getPo_old());
@@ -275,29 +279,34 @@ public class Detail extends HttpServlet {
                 obj.put("country_origin", detailbox.get(0).getCountry_origin());
                 obj.put("boxall", detailbox.get(0).getAllbox());
 
-                obj.put("sku_item1", detailbox.get(0).getSku_item1());
-                obj.put("upc_code1", detailbox.get(0).getUpc_code1());
-                obj.put("qty1", detailbox.get(0).getQty1());
-                obj.put("sizeno1", detailbox.get(0).getSizen01());
-                obj.put("colorno1", detailbox.get(0).getColorn01());
-
-                obj.put("sku_item2", detailbox.get(0).getSku_item2());
-                obj.put("upc_code2", detailbox.get(0).getUpc_code2());
-                obj.put("qty2", detailbox.get(0).getQty2());
-                obj.put("sizeno2", detailbox.get(0).getSizen02());
-                obj.put("colorno2", detailbox.get(0).getColorn02());
-
-                obj.put("sku_item3", detailbox.get(0).getSku_item3());
-                obj.put("upc_code3", detailbox.get(0).getUpc_code3());
-                obj.put("qty3", detailbox.get(0).getQty3());
-                obj.put("sizeno3", detailbox.get(0).getSizen03());
-                obj.put("colorno3", detailbox.get(0).getColorn03());
-
-                obj.put("sku_item4", detailbox.get(0).getSku_item4());
-                obj.put("upc_code4", detailbox.get(0).getUpc_code4());
-                obj.put("qty4", detailbox.get(0).getQty4());
-                obj.put("sizeno4", detailbox.get(0).getSizen04());
-                obj.put("colorno4", detailbox.get(0).getColorn04());
+                if (listcm1.size() > 0) {
+                    obj.put("sku_item1", listcm1.get(0).getCustomer_no());
+                    obj.put("upc_code1", listcm1.get(0).getCustomer_barcode());
+                    obj.put("qty1", detailbox.get(0).getQty1());
+                    obj.put("sizeno1", listcm1.get(0).getCustomer_size());
+                    obj.put("colorno1", listcm1.get(0).getCustomer_color());
+                }
+                if (listcm2.size() > 0) {
+                    obj.put("sku_item2", listcm2.get(0).getCustomer_no());
+                    obj.put("upc_code2", listcm2.get(0).getCustomer_barcode());
+                    obj.put("qty2", detailbox.get(0).getQty2());
+                    obj.put("sizeno2", listcm2.get(0).getCustomer_size());
+                    obj.put("colorno2", listcm2.get(0).getCustomer_color());
+                }
+                if (listcm3.size() > 0) {
+                    obj.put("sku_item3", listcm3.get(0).getCustomer_no());
+                    obj.put("upc_code3", listcm3.get(0).getCustomer_barcode());
+                    obj.put("qty3", detailbox.get(0).getQty3());
+                    obj.put("sizeno3", listcm3.get(0).getCustomer_size());
+                    obj.put("colorno3", listcm3.get(0).getCustomer_color());
+                }
+                if (listcm4.size() > 0) {
+                    obj.put("sku_item4", listcm4.get(0).getCustomer_no());
+                    obj.put("upc_code4", listcm4.get(0).getCustomer_barcode());
+                    obj.put("qty4", detailbox.get(0).getQty4());
+                    obj.put("sizeno4", listcm4.get(0).getCustomer_size());
+                    obj.put("colorno4", listcm4.get(0).getCustomer_color());
+                }
 
                 obj.put("sfaddress1", detailbox.get(0).getSfaddress1());
                 obj.put("sfaddress2", detailbox.get(0).getSfaddress2());
@@ -323,8 +332,8 @@ public class Detail extends HttpServlet {
                 try {
                     String pobefore = request.getParameter("pobefore").trim();
                     String boxnobefore = request.getParameter("startboxbefore").trim();
-                   
-                  
+
+
                     String po_old = request.getParameter("po_old").trim();
                     String SHIPTO = request.getParameter("shipto").trim();
                     String QTYPERBOX = request.getParameter("qtyperbox").trim();
@@ -373,9 +382,9 @@ public class Detail extends HttpServlet {
                     JSONObject obj = new JSONObject();
 
                     Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
-                    
+
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTBYID(pobefore, PO, boxno, boxnobefore);
-                    
+
                     if (status && statusresult) {
                         obj.put("status", "true");
                     } else {
@@ -564,6 +573,11 @@ public class Detail extends HttpServlet {
 
                 DetailService ds = new DetailService();
                 List<BCDetailBox> detailbox = ds.GetDetailBoxAllForBarcode(posearch, numstart);
+                List<BCCustomer> listcm1 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item1());
+                List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
+                List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
+                List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
+
 
                 JSONObject obj = new JSONObject();
                 obj.put("po", detailbox.get(0).getPo());
@@ -578,29 +592,34 @@ public class Detail extends HttpServlet {
                 obj.put("country_origin", detailbox.get(0).getCountry_origin());
                 obj.put("boxall", detailbox.get(0).getAllbox());
 
-                obj.put("sku_item1", detailbox.get(0).getSku_item1());
-                obj.put("upc_code1", detailbox.get(0).getUpc_code1());
-                obj.put("qty1", detailbox.get(0).getQty1());
-                obj.put("sizeno1", detailbox.get(0).getSizen01());
-                obj.put("colorno1", detailbox.get(0).getColorn01());
-
-                obj.put("sku_item2", detailbox.get(0).getSku_item2());
-                obj.put("upc_code2", detailbox.get(0).getUpc_code2());
-                obj.put("qty2", detailbox.get(0).getQty2());
-                obj.put("sizeno2", detailbox.get(0).getSizen02());
-                obj.put("colorno2", detailbox.get(0).getColorn02());
-
-                obj.put("sku_item3", detailbox.get(0).getSku_item3());
-                obj.put("upc_code3", detailbox.get(0).getUpc_code3());
-                obj.put("qty3", detailbox.get(0).getQty3());
-                obj.put("sizeno3", detailbox.get(0).getSizen03());
-                obj.put("colorno3", detailbox.get(0).getColorn03());
-
-                obj.put("sku_item4", detailbox.get(0).getSku_item4());
-                obj.put("upc_code4", detailbox.get(0).getUpc_code4());
-                obj.put("qty4", detailbox.get(0).getQty4());
-                obj.put("sizeno4", detailbox.get(0).getSizen04());
-                obj.put("colorno4", detailbox.get(0).getColorn04());
+                if (listcm1.size() > 0) {
+                    obj.put("sku_item1", listcm1.get(0).getCustomer_no());
+                    obj.put("upc_code1", listcm1.get(0).getCustomer_barcode());
+                    obj.put("qty1", detailbox.get(0).getQty1());
+                    obj.put("sizeno1", listcm1.get(0).getCustomer_size());
+                    obj.put("colorno1", listcm1.get(0).getCustomer_color());
+                }
+                if (listcm2.size() > 0) {
+                    obj.put("sku_item2", listcm2.get(0).getCustomer_no());
+                    obj.put("upc_code2", listcm2.get(0).getCustomer_barcode());
+                    obj.put("qty2", detailbox.get(0).getQty2());
+                    obj.put("sizeno2", listcm2.get(0).getCustomer_size());
+                    obj.put("colorno2", listcm2.get(0).getCustomer_color());
+                }
+                if (listcm3.size() > 0) {
+                    obj.put("sku_item3", listcm3.get(0).getCustomer_no());
+                    obj.put("upc_code3", listcm3.get(0).getCustomer_barcode());
+                    obj.put("qty3", detailbox.get(0).getQty3());
+                    obj.put("sizeno3", listcm3.get(0).getCustomer_size());
+                    obj.put("colorno3", listcm3.get(0).getCustomer_color());
+                }
+                if (listcm4.size() > 0) {
+                    obj.put("sku_item4", listcm4.get(0).getCustomer_no());
+                    obj.put("upc_code4", listcm4.get(0).getCustomer_barcode());
+                    obj.put("qty4", detailbox.get(0).getQty4());
+                    obj.put("sizeno4", listcm4.get(0).getCustomer_size());
+                    obj.put("colorno4", listcm4.get(0).getCustomer_color());
+                }
 
                 obj.put("sfaddress1", detailbox.get(0).getSfaddress1());
                 obj.put("sfaddress2", detailbox.get(0).getSfaddress2());

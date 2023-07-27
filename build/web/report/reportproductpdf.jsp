@@ -28,7 +28,17 @@
 
         %>
         <script>
-           
+            function getDateNow() {
+                const currentDate = new Date();
+                const day = currentDate.getDate();
+                const month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1 to get the correct month.
+                const year = currentDate.getFullYear();
+
+                // Format the date as "dd/mm/yyyy"
+                const formattedDate = day+"/"+month+"/"+year;
+
+                return formattedDate;
+            }
             
             pdfMake.fonts = {
                 THSarabunNew: {
@@ -59,10 +69,11 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: [],
+                                    text: "ข้อมูลวันที่ ณ " +getDateNow(),
                                     fontSize: 14,
+                                    bold:true,
                                     alignment: 'left',
-                                    margin: [0,0, 0, 0]
+                                    margin: [40,25, 0, 0]
                                              
                                 },
                                 {

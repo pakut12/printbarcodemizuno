@@ -4,7 +4,7 @@
     Author     : Gus
 --%>
 <%@page import="com.pg.lib.model.BCDetailBox"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@page import="com.pg.lib.service.DetailService"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -27,7 +27,17 @@
 
         %>
         <script>
-           
+            function getDateNow() {
+                const currentDate = new Date();
+                const day = currentDate.getDate();
+                const month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1 to get the correct month.
+                const year = currentDate.getFullYear();
+
+                // Format the date as "dd/mm/yyyy"
+                const formattedDate = day+"/"+month+"/"+year;
+
+                return formattedDate;
+            }
             
             pdfMake.fonts = {
                 THSarabunNew: {
@@ -58,10 +68,11 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: [],
+                                    text: "ข้อมูล ณ วันที่ " +getDateNow(),
                                     fontSize: 14,
+                                    bold:true,
                                     alignment: 'left',
-                                    margin: [0,0, 0, 0]
+                                    margin: [40,25, 0, 0]
                                              
                                 },
                                 {
@@ -142,6 +153,10 @@
             int n = 1;
             int n1 = 1;
             int sum = 0;
+            int suzm = 0;
+            List<String> boxsum = new ArrayList<String>();
+
+
             for (int i = 0; i < list.size(); i++) {
                 String mark = "";
                 String qty_result = "";
@@ -179,28 +194,46 @@
 
                 DetailService ds = new DetailService();
 
+
                 if (n <= 12) {
                     sum += Integer.parseInt(ds.ChackNull(qty_result));
                     out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+
+                    boxsum.add(list.get(i).getBoxno());
+
                     n1++;
                 } else if (n == 13) {
-                    if(marknum == 0){
+
+                    if (marknum == 0) {
                         marknum = 0;
-                    }else{
+                    } else {
                         marknum = marknum - 1;
                     }
                     
-                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum) + "'],");
+                    String xzx = "";
+                    for (String op : boxsum) {
+                        if (!xzx.contains("#"+ op+"#")) {
+                            xzx +="#"+ op+"#";
+                        }
+                    }
+
+                    System.out.println(xzx);
+                    System.out.println("------------------------------------------------------------------------------------");
+
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (boxsum.size()) + "','" + sum + "','" + (marknum) + "'],");
                     sum = 0;
                     n = 0;
                     i--;
                     marknum = 0;
+                    boxsum.clear();
+
                 }
 
                 if (n1 == list.size() + 1) {
-                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n) + "','" + sum + "','" + (marknum) + "'],");
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + boxsum.size() + "','" + sum + "','" + (marknum) + "'],");
                     n1 = 1;
                 }
+
                 n++;
             }
                         %>

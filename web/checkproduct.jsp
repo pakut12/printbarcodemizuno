@@ -382,6 +382,11 @@
                 var customer3_number =  $("#customer3_number").val();
                 var customer4_number =  $("#customer4_number").val();
         
+               
+        
+        
+                const listbarcode = [customer1_barcode, customer2_barcode, customer3_barcode,customer4_barcode]   
+        
         
                 if(!customer1_number){
                     customer1_number = 0
@@ -395,9 +400,11 @@
                 if(!customer4_number){
                     customer4_number = 0
                 }
-                
                
-                if(barcode.length == 12 || barcode.length == 13){
+      
+              
+                if(listbarcode.includes(barcode)){
+                    
                     if(barcode === customer1_barcode && customer1_barcode){
                         var num = parseInt(customer1_number)+1;
                         if(num <= $("#customer1_qty").val()){
@@ -410,7 +417,6 @@
                                     text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
                                 })
                             }, 100);
-                            
                             
                         }
                     }else if(barcode === customer2_barcode && customer2_barcode){
@@ -458,25 +464,25 @@
                             
                         }
                     
-                    }else{
-                        setTimeout(function (){
-                            Swal.fire({
-                                icon:'error',
-                                title:'ผิดพลาด',
-                                text:'รหัส barcode ไม่ถูกต้อง'
-                            })
-                        }, 100);
-                        
-                     
                     }
                     
                     setTimeout(function (){
                         $("#barcode_box").val("");
                     }, 100);
+                }else{
+                    setTimeout(function (){
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'รหัส Barcode ไม่ถูกต้อง'
+                        })
+                    }, 100);
                     
+                    setTimeout(function (){
+                        $("#barcode_box").val("");
+                    }, 100);
                 }
-               
-                  
+                
             }
             
             function searchpo(){
@@ -496,6 +502,7 @@
                     success:function(msg){
                         if(msg){  
                             var js = JSON.parse(msg);
+                            console.log(js)
                             today()
                             var qty_result1 = js.qty_result1  
                             var qty_result2 = js.qty_result2  
@@ -571,12 +578,16 @@
             }
               
             $(document).ready(function () {
+                var x = "";
+            
                 $("#bt_search").click(function(){
                     searchpo()
                 });
                 
-                $("#barcode_box").on("input",function() {
-                    checkbarcode()
+                $("#barcode_box").on("keyup",function(e) {
+                    if(e.keyCode === 13){
+                        checkbarcode()
+                    }
                 });
                
                 $("#myform :input").attr("disabled", true);
