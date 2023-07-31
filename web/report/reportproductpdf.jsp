@@ -4,7 +4,7 @@
     Author     : Gus
 --%>
 <%@page import="com.pg.lib.model.BCDetailBox"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@page import="com.pg.lib.service.DetailService"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -24,14 +24,13 @@
             String customer_no = (String) request.getAttribute("customer_no");
             String customer_product = (String) request.getAttribute("customer_product");
             String pallet = (String) request.getAttribute("pallet");
-            String po = (String) request.getAttribute("po");
 
         %>
         <script>
             function getDateNow() {
                 const currentDate = new Date();
-                const day = currentDate.getDate();
-                const month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1 to get the correct month.
+                const day = String(currentDate.getDate()).padStart(2, '0');
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1 to get the correct month.
                 const year = currentDate.getFullYear();
 
                 // Format the date as "dd/mm/yyyy"
@@ -69,7 +68,7 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: "ข้อมูลวันที่ ณ " +getDateNow(),
+                                    text: "ข้อมูล ณ วันที่ " +getDateNow(),
                                     fontSize: 14,
                                     bold:true,
                                     alignment: 'left',
@@ -154,6 +153,10 @@
             int n = 1;
             int n1 = 1;
             int sum = 0;
+            int suzm = 0;
+            List<String> boxsum = new ArrayList<String>();
+
+
             for (int i = 0; i < list.size(); i++) {
                 String mark = "";
                 String qty_result = "";
@@ -191,22 +194,56 @@
 
                 DetailService ds = new DetailService();
 
+
                 if (n <= 12) {
                     sum += Integer.parseInt(ds.ChackNull(qty_result));
                     out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+
+                    boxsum.add(list.get(i).getBoxno());
+
                     n1++;
                 } else if (n == 13) {
-                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n - 1) + "','" + sum + "','" + (marknum - 1) + "'],");
+
+                    if (marknum == 0) {
+                        marknum = 0;
+                    } else {
+                        marknum = marknum - 1;
+                    }
+                    int ax = 0;
+                    List<String> boxtotal = new ArrayList<String>();
+                    for (String op : boxsum) {
+                        if (!boxtotal.contains(op)) {
+                            ax++;
+                            boxtotal.add(op);
+                        }
+                    }
+
+                    System.out.println("------------------------------------------------------------------------------------");
+
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (ax) + "','" + sum + "','" + (marknum) + "'],");
                     sum = 0;
                     n = 0;
                     i--;
                     marknum = 0;
+                    boxsum.clear();
+                    boxtotal.clear();
+
                 }
 
                 if (n1 == list.size() + 1) {
-                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (n) + "','" + sum + "','" + (marknum) + "'],");
+
+                    int ax = 0;
+                    List<String> boxtotal = new ArrayList<String>();
+                    for (String op : boxsum) {
+                        if (!boxtotal.contains(op)) {
+                            ax++;
+                            boxtotal.add(op);
+                        }
+                    }
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + ax + "','" + sum + "','" + (marknum) + "'],");
                     n1 = 1;
                 }
+
                 n++;
             }
                         %>
@@ -222,6 +259,7 @@
                                             font: 'THSarabunNew'
                                         }
                                     }
+            
             
                                     const date = new Date();
                                     const options = { day: 'numeric', month: 'numeric', year: 'numeric' };

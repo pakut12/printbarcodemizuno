@@ -29,11 +29,10 @@
         <script>
             function getDateNow() {
                 const currentDate = new Date();
-                const day = currentDate.getDate();
-                const month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1 to get the correct month.
+                const day = String(currentDate.getDate()).padStart(2, '0');
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1 to get the correct month.
                 const year = currentDate.getFullYear();
 
-                // Format the date as "dd/mm/yyyy"
                 const formattedDate = day+"/"+month+"/"+year;
 
                 return formattedDate;
@@ -209,28 +208,38 @@
                     } else {
                         marknum = marknum - 1;
                     }
-                    
-                    String xzx = "";
+                    int ax = 0;
+                    List<String> boxtotal = new ArrayList<String>();
                     for (String op : boxsum) {
-                        if (!xzx.contains("#"+ op+"#")) {
-                            xzx +="#"+ op+"#";
+                        if (!boxtotal.contains(op)) {
+                            ax++;
+                            boxtotal.add(op);
                         }
                     }
 
-                    System.out.println(xzx);
                     System.out.println("------------------------------------------------------------------------------------");
 
-                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (boxsum.size()) + "','" + sum + "','" + (marknum) + "'],");
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + (ax) + "','" + sum + "','" + (marknum) + "'],");
                     sum = 0;
                     n = 0;
                     i--;
                     marknum = 0;
                     boxsum.clear();
+                    boxtotal.clear();
 
                 }
 
                 if (n1 == list.size() + 1) {
-                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + boxsum.size() + "','" + sum + "','" + (marknum) + "'],");
+                   
+                    int ax = 0;
+                    List<String> boxtotal = new ArrayList<String>();
+                    for (String op : boxsum) {
+                        if (!boxtotal.contains(op)) {
+                            ax++;
+                            boxtotal.add(op);
+                        }
+                    }
+                    out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + ax + "','" + sum + "','" + (marknum) + "'],");
                     n1 = 1;
                 }
 

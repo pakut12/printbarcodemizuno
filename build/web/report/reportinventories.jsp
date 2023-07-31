@@ -4,7 +4,7 @@
     Author     : Gus
 --%>
 <%@page import="com.pg.lib.model.BCDetailBox"%>
-<%@page import="java.util.List"%>
+<%@page import="java.util.*"%>
 <%@page import="com.pg.lib.service.DetailService"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -29,8 +29,8 @@
         <script>
             function getDateNow() {
                 const currentDate = new Date();
-                const day = currentDate.getDate();
-                const month = currentDate.getMonth() + 1; // Months are zero-based, so we add 1 to get the correct month.
+                const day = String(currentDate.getDate()).padStart(2, '0');
+                const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1 to get the correct month.
                 const year = currentDate.getFullYear();
 
                 // Format the date as "dd/mm/yyyy"
@@ -115,6 +115,8 @@
             int sumqty_result = 0;
             int sumdifferent = 0;
 
+            List<String> boxsum = new ArrayList<String>();
+
             for (int i = 0; i < list.size(); i++) {
                 String mark = "";
                 String qty_result = "";
@@ -161,7 +163,7 @@
                 }
                 String po = list.get(i).getPo();
                 if (po.length() > 9) {
-                    po = po.substring(0,9);
+                    po = po.substring(0, 9);
                 }
                 if (n <= 34) {
                     sumqty += Integer.parseInt(ds.ChackNull(qty));
@@ -169,18 +171,40 @@
                     sumdifferent += Integer.parseInt(ds.ChackNull(String.valueOf(different)));
                     out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(po) + "','" + ds.ChackNull(list.get(i).getPo_old()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "'," +
                             "'" + ds.ChackNull(list.get(i).getPallet()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(String.valueOf(different)) + "','" + ds.ChackNull(mark) + "'],");
+                    boxsum.add(list.get(i).getBoxno());
+
+
+
                     n1++;
                 } else if (n == 35) {
-                    out.print("[{ text: 'รวม', colSpan: 8 }, '', '', '', '', '', '', '', '" + sumqty + "','" + sumqty_result + "','" + sumdifferent + "','" + (marknum - 1) + "'],");
+                    int ax = 0;
+                    List<String> boxtotal = new ArrayList<String>();
+                    for (String op : boxsum) {
+                        if (!boxtotal.contains(op)) {
+                            ax++;
+                            boxtotal.add(op);
+                        }
+                    }
+                    out.print("[{ text: 'รวม', colSpan: 7 }, '', '', '', '', '', '', '" + ax + "', '" + sumqty + "','" + sumqty_result + "','" + sumdifferent + "','" + (marknum - 1) + "'],");
                     sumqty = 0;
                     sumdifferent = 0;
                     sumqty_result = 0;
                     n = 0;
                     i--;
                     marknum = 0;
+                    boxsum.clear();
+                    boxtotal.clear();
                 }
                 if (n1 == list.size() + 1) {
-                    out.print("[{ text: 'รวม', colSpan: 8  }, '', '', '', '', '', '', '', '" + sumqty + "','" + sumqty_result + "','" + sumdifferent + "','" + (marknum) + "'],");
+                    int ax = 0;
+                    List<String> boxtotal = new ArrayList<String>();
+                    for (String op : boxsum) {
+                        if (!boxtotal.contains(op)) {
+                            ax++;
+                            boxtotal.add(op);
+                        }
+                    }
+                    out.print("[{ text: 'รวม', colSpan: 7  }, '', '', '', '', '', '', '" + ax + "', '" + sumqty + "','" + sumqty_result + "','" + sumdifferent + "','" + (marknum) + "'],");
                     n1 = 1;
                 }
                 n++;
