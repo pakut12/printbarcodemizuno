@@ -32,8 +32,6 @@
             DetailService ds = new DetailService();
             List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, start, end, firstdigit);
 
-
-
         %>
         
         <script>
@@ -45,6 +43,12 @@
                     bold: 'THSarabunNew-Bold.ttf',
                     italics: 'THSarabunNew-Italic.ttf',
                     bolditalics: 'THSarabunNew-BoldItalic.ttf'
+                },
+                Barcode: {
+                    normal: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff',
+                    bold: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff',
+                    italics: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff',
+                    bolditalics: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff'
                 },
                 Roboto: {
                     normal: 'Roboto-Regular.ttf',
@@ -117,9 +121,7 @@
                 String size1 = l.getSizen01();
                 String col1 = id1.substring(0, id1.length() - size1.length());
                 String qty1 = l.getQty1();
-
-
-                
+                String barcode1 = l.getUpc_code1();
 
                 String Destination = "";
                 if (l.getDestination() != null) {
@@ -140,7 +142,7 @@
                     if (col.equals(col1)) {
                         if (!text.contains("{ text: '" + col1 + "',fontSize: 22}")) {
                              w += 1;
-                            text += "[{ text: '" + col1 + "',fontSize: 22},";
+                            text += "[{ text: [{text: '" + col1 + "\t', fontSize: 22},{text: '*" + barcode1 + "*', fontSize: 20,font:'Barcode'},{text: '\t" + barcode1 + "', fontSize: 10}]},";
                             int sum1 = 0;
                             for (ColSizePair pair1 : liststy) {
                                 String colx = pair1.getCol();
@@ -223,9 +225,9 @@
                                     [{ text: 'ART.NO/COL.',fontSize: 18}, { text: '<%=size1%>',fontSize: 15}, { text: '\t',fontSize: 15}, { text: '\t',fontSize: 15},{ text: '\t',fontSize: 15},{ text: '\t',fontSize: 15}, 'TOTAL'],
                                             
                                             <%
-                                            
+                                           
                                             out.print(text);
-                                            
+                                           
                                             %>
                                             
                                             
