@@ -21,14 +21,26 @@
                     <form id="myform">
                         <div class="container">
                             <div class="row">
-                                <div class="d-flex justify-content-end mb-3">
-                                    <div class="col-sm-12 col-md-3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
-                                            <input type="date" class="form-control text-center" name="date" id="date"  disabled>
-                                        </div>
+                                
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
+                                        <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno" >
                                     </div>
                                 </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
+                                        <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  >
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                        <input type="date" class="form-control text-center" name="date" id="date"  disabled>
+                                    </div>
+                                </div>
+                                
                             </div>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
@@ -402,6 +414,9 @@
             
     
             function senddata(){
+            
+                var invoiceno = $("#invoiceno").val();
+                var invoicedate = $("#invoicedate").val();
                 var customer = $("#customer").val().toUpperCase();
                 var customer_address = $("#customer_address").val().toUpperCase();
                 var quantity_box = $("#quantity_box").val().toUpperCase();
@@ -470,7 +485,9 @@
                                 pallet:pallet,
                                 prodorder:prodorder,
                                 destination:destination,
-                                date:date
+                                date:date,
+                                invoiceno:invoiceno,
+                                invoicedate:invoicedate
                             },
                             success:function(msg){
                             

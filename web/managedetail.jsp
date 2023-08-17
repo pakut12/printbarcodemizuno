@@ -54,15 +54,27 @@
                     <div class="card-body">
                         <div class="container">
                             <div class="row">
-                                <div class="d-flex justify-content-end mb-3">
-                                    <div class="col-sm-12 col-md-3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
-                                            <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
-                                        </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
+                                        <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno"  disabled>
                                     </div>
                                 </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
+                                        <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-4">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                        <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                    </div>
+                                </div>
+                                
                             </div>
+                            
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
@@ -475,7 +487,8 @@
                 
                 var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
         
-               
+                var invoiceno = $("#invoiceno").val();
+                var invoicedate = $("#invoicedate").val();
                 
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
@@ -519,7 +532,9 @@
                             destination:destination,
                             date:date,
                             po_old:po_old,
-                            customer_address:customer_address
+                            customer_address:customer_address,
+                            invoiceno:invoiceno,
+                            invoicedate:invoicedate
                         },
                         success:function(msg){
                            
@@ -613,6 +628,9 @@
                 $("#prodorder").val("");
                 $("#pallet").val("");
                 $("#myform :input").attr("disabled", true);
+                
+                $("#invoiceno").val("");
+                $("#invoicedate").val("");
             }
             
             function getcustomer(){
@@ -741,6 +759,8 @@
                             $("#date_create").val(js.date_create);
                             $("#date_create").attr("disabled", true);
                             
+                            $("#invoiceno").val(js.invoiceno);
+                            $("#invoicedate").val(js.invoicedate.replace(" 00:00:00.0",""));
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

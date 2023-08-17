@@ -59,11 +59,12 @@ public class Detail extends HttpServlet {
                 String prodorder = request.getParameter("prodorder").trim();
                 String destination = request.getParameter("destination").trim();
                 String customer_address = request.getParameter("customer_address").trim();
-
+                String invoiceno = request.getParameter("invoiceno").trim();
+                String invoicedate = request.getParameter("invoicedate").trim();
                 String date = request.getParameter("date").trim();
 
                 DetailService ds = new DetailService();
-                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+                Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date, invoiceno, invoicedate);
                 //Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_address, customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                 Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end, quantitytotal_box);
 
@@ -75,6 +76,7 @@ public class Detail extends HttpServlet {
                 }
 
                 out.print(obj);
+
 
             } else if (type.equals("getdetailsall")) {
                 try {
@@ -143,6 +145,9 @@ public class Detail extends HttpServlet {
                     obj.put("date_modify", detailbox.get(0).getDate_modify());
                     obj.put("customer_address", detailbox.get(0).getCustomer_address());
 
+                    obj.put("invoiceno", detailbox.get(0).getInvoiceno());
+                    obj.put("invoicedate", detailbox.get(0).getInvoicedate());
+
                     out.print(obj);
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -203,6 +208,9 @@ public class Detail extends HttpServlet {
                     String date = request.getParameter("date").trim();
                     String firstdigitbefore = request.getParameter("firstdigitbefore").trim();
                     String customer_address = request.getParameter("customer_address").trim();
+                    String invoiceno = request.getParameter("invoiceno").trim();
+                    String invoicedate = request.getParameter("invoicedate").trim();
+
 
                     DetailService ds = new DetailService();
 
@@ -214,8 +222,7 @@ public class Detail extends HttpServlet {
                     //Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
                     Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore);
-                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date);
-
+                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, invoiceno, invoicedate);
 
 
                     JSONObject obj = new JSONObject();
@@ -226,6 +233,7 @@ public class Detail extends HttpServlet {
                         obj.put("status", "false");
                     }
                     out.print(obj);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -264,7 +272,7 @@ public class Detail extends HttpServlet {
                 List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
                 List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
                 List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
-                
+
                 JSONObject obj = new JSONObject();
                 obj.put("po", detailbox.get(0).getPo());
                 obj.put("po_old", detailbox.get(0).getPo_old());
@@ -326,6 +334,8 @@ public class Detail extends HttpServlet {
                 obj.put("date_create", detailbox.get(0).getDate_create());
                 obj.put("date_modify", detailbox.get(0).getDate_modify());
                 obj.put("customer_address", detailbox.get(0).getCustomer_address());
+                obj.put("invoiceno", detailbox.get(0).getInvoiceno());
+                obj.put("invoicedate", detailbox.get(0).getInvoicedate());
 
                 out.print(obj);
             } else if (type.equals("updatedetails")) {
@@ -377,11 +387,17 @@ public class Detail extends HttpServlet {
                     String customer_address = request.getParameter("customer_address").trim();
 
                     String date = request.getParameter("date").trim();
+                    String invoiceno = request.getParameter("invoiceno").trim();
+                    String invoicedate = request.getParameter("invoicedate").trim();
+                    
+                    System.out.println(invoiceno);
+                    System.out.println(invoicedate);
+                    
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
 
-                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
+                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date,invoiceno,invoicedate);
 
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTBYID(pobefore, PO, boxno, boxnobefore);
 

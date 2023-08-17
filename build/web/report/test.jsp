@@ -3,29 +3,65 @@
     Created on : 5 ก.ย. 2565, 19:05:01
     Author     : Gus
 --%>
-<%@page import="com.pg.lib.model.BCDetailBox"%>
-<%@page import="java.util.List"%>
-<%@page import="com.pg.lib.service.DetailService"%>
+<%@page import="com.pg.lib.utility.*"%>
+<%@page import="net.sf.jasperreports.engine.JasperRunManager"%>
+<%@page import="java.sql.*"%>
+<%@page import="java.util.*"%>
+<%@page import="java.io.File"%>
+
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
     <head>
-        <script src="../js/pdfmake.min.js"></script>
-        <script src="../js/vfs_fonts.js"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/jsbarcode/3.6.0/JsBarcode.all.min.js"></script>
-        <link href="https://fonts.cdnfonts.com/css/3-of-9-barcode" rel="stylesheet">
+        
         <title>JSP Page</title>
-        <style>
-            body{
-                font-family: '3 of 9 Barcode', sans-serif;
-                font-size:20pt
-            }
-        </style>
     </head>
     <body>
-        *12354645648*
+        <%
+
+            String po = "Y111-01";
+            String startbox = "1";
+            String endbox = "10";
+            String firstdigit = "Y";
+
+            String boxno = "";
+
+            for (int n = Integer.parseInt(startbox); n <= Integer.parseInt(endbox); n++) {
+                if (n != Integer.parseInt(endbox)) {
+                    boxno += "'" + firstdigit + n + "',";
+                } else {
+                    boxno += "'" + firstdigit + n + "'";
+                }
+            }
+
+            try {
+                Connection con = ConnectDB.getConnection();
+                File reportFile = new File(application.getRealPath("report/reporttest.jasper"));
+
+                Map pr = new HashMap();
+                pr.put("PO", po);
+                pr.put("STARTBOX", boxno);
+                pr.put("TOTAL", "40");
+                pr.put("BG", "1");
+
+
+                byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), pr, con);
+                response.setContentType("application/pdf");
+                response.setContentLength(bytes.length);
+
+                ServletOutputStream op = response.getOutputStream();
+                response.getOutputStream();
+                op.write(bytes, 0, bytes.length);
+                op.flush();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+
+        %>
+        
     </body>
 </html>

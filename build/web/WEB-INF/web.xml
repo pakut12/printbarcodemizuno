@@ -34,7 +34,7 @@
         <servlet-class>com.pg.lib.Servlet.CustomerAddress</servlet-class>
     </servlet>
     <servlet><servlet-name>User</servlet-name><servlet-class>com.pg.lib.Servlet.User</servlet-class></servlet>
-    <servlet-mapping>
+    <servlet><servlet-name>PackingList</servlet-name><servlet-class>com.pg.lib.Servlet.PackingList</servlet-class></servlet><servlet-mapping>
         <servlet-name>Chklogin</servlet-name>
         <url-pattern>/Chklogin</url-pattern>
     </servlet-mapping>
@@ -69,6 +69,10 @@
     <servlet-mapping>
         <servlet-name>User</servlet-name>
         <url-pattern>/User</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>PackingList</servlet-name>
+        <url-pattern>/PackingList</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

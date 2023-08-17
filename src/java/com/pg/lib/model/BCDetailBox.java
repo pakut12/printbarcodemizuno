@@ -63,6 +63,96 @@ public class BCDetailBox {
     private String customer_no;
     private String customer_product;
     private String customer_address;
+    private String invoiceno;
+    private String invoicedate;
+    private String sumqty1;
+    private String sumqty2;
+    private String sumqty3;
+    private String sumqty4;
+    private String sumnw;
+    private String sumgw;
+    private String ctn;
+    private String customer_color;
+
+    public String getCustomer_color() {
+        return customer_color;
+    }
+
+    public void setCustomer_color(String customer_color) {
+        this.customer_color = customer_color;
+    }
+
+    public String getCtn() {
+        return ctn;
+    }
+
+    public void setCtn(String ctn) {
+        this.ctn = ctn;
+    }
+
+    public String getSumgw() {
+        return sumgw;
+    }
+
+    public void setSumgw(String sumgw) {
+        this.sumgw = sumgw;
+    }
+
+    public String getSumnw() {
+        return sumnw;
+    }
+
+    public void setSumnw(String sumnw) {
+        this.sumnw = sumnw;
+    }
+
+    public String getSumqty1() {
+        return sumqty1;
+    }
+
+    public void setSumqty1(String sumqty1) {
+        this.sumqty1 = sumqty1;
+    }
+
+    public String getSumqty2() {
+        return sumqty2;
+    }
+
+    public void setSumqty2(String sumqty2) {
+        this.sumqty2 = sumqty2;
+    }
+
+    public String getSumqty3() {
+        return sumqty3;
+    }
+
+    public void setSumqty3(String sumqty3) {
+        this.sumqty3 = sumqty3;
+    }
+
+    public String getSumqty4() {
+        return sumqty4;
+    }
+
+    public void setSumqty4(String sumqty4) {
+        this.sumqty4 = sumqty4;
+    }
+
+    public String getInvoicedate() {
+        return invoicedate;
+    }
+
+    public void setInvoicedate(String invoicedate) {
+        this.invoicedate = invoicedate;
+    }
+
+    public String getInvoiceno() {
+        return invoiceno;
+    }
+
+    public void setInvoiceno(String invoiceno) {
+        this.invoiceno = invoiceno;
+    }
 
     public String getCustomer_address() {
         return customer_address;
@@ -87,7 +177,7 @@ public class BCDetailBox {
     public void setCustomer_product(String customer_product) {
         this.customer_product = customer_product;
     }
-    
+
     public String getPo_old() {
         return po_old;
     }

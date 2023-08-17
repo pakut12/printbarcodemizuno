@@ -59,14 +59,25 @@
                         <form id="myform">
                             <div class="container">
                                 <div class="row">
-                                    <div class="d-flex justify-content-end mb-3">
-                                        <div class="col-sm-12 col-md-3">
-                                            <div class="input-group input-group-sm mb-3">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
-                                                <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
-                                            </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
+                                            <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno"  disabled>
                                         </div>
                                     </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
+                                            <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                            <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                        </div>
+                                    </div>
+                                    
                                 </div>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-4">
@@ -423,7 +434,7 @@
                 var customer_address = $("#customer_address").val().toUpperCase();
                 var qtyperbox  = $("#quantity_box").val().toUpperCase();
                 var firstdigit =  $("#initial").val().toUpperCase();
-               // var startbox  = $("#numberbox_start").val().toUpperCase();
+                // var startbox  = $("#numberbox_start").val().toUpperCase();
                 //var endbox  =  $("#numberbox_end").val().toUpperCase();
                 var allbox  =   $("#quantitytotal_box").val().toUpperCase();    
                 var po =  $("#po").val().toUpperCase();
@@ -483,6 +494,9 @@
                 }
                 var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
               
+                var invoiceno = $("#invoiceno").val();
+                var invoicedate = $("#invoicedate").val();
+                
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
@@ -496,8 +510,8 @@
                             shipto:shipto,
                             qtyperbox:qtyperbox,
                             firstdigit:firstdigit,
-                           // startbox:startbox,
-                           // endbox:endbox,
+                            // startbox:startbox,
+                            // endbox:endbox,
                             allbox:allbox,
                             po:po,
                             desctxt:desctxt,
@@ -529,7 +543,9 @@
                             destination:destination,
                             date:date,
                             po_old:po_old,
-                            firstdigitbefore:firstdigitbefore
+                            firstdigitbefore:firstdigitbefore,
+                            invoiceno:invoiceno,
+                            invoicedate:invoicedate
                         },
                         success:function(msg){
                             
@@ -628,9 +644,9 @@
                         if(msg){  
                             var js = JSON.parse(msg);
                             console.log(js)
-                           // var startbox = parseInt(js.boxno.match(/\d+/)[0]);
-                          //  var endbox = parseInt(js.boxall.match(/\d+/)[0]);
-                            //var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
+                            // var startbox = parseInt(js.boxno.match(/\d+/)[0]);
+                            // var endbox = parseInt(js.boxall.match(/\d+/)[0]);
+                            // var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
                             
                             var shipto = js.shipto;
                             var customer_address = js.customer_address
@@ -658,7 +674,7 @@
                             
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
-                                //$("#numberbox_start").val(startbox);
+                            //$("#numberbox_start").val(startbox);
                             //$("#numberbox_end").val(endbox);
                             $("#quantitytotal_box").val(js.allbox);
                             
@@ -700,6 +716,10 @@
                             $("#myform :input").attr("disabled", false);
                             $("#pobefore").attr("disabled", true);
                             $("#date_create").attr("disabled", true);
+                            
+                            $("#invoiceno").val(js.invoiceno);
+                            $("#invoicedate").val(js.invoicedate.replace(" 00:00:00.0",""));
+                       
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",
