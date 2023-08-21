@@ -73,6 +73,15 @@ public class BCDetailBox {
     private String sumgw;
     private String ctn;
     private String customer_color;
+    private String customer_size;
+
+    public String getCustomer_size() {
+        return customer_size;
+    }
+
+    public void setCustomer_size(String customer_size) {
+        this.customer_size = customer_size;
+    }
 
     public String getCustomer_color() {
         return customer_color;

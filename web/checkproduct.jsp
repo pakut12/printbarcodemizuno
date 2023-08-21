@@ -414,7 +414,16 @@
                                 Swal.fire({
                                     icon:'error',
                                     title:'ผิดพลาด',
-                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1',
+                                    showConfirmButton: true,
+                                    didOpen: () => {
+                                        // Find the close button and remove the focus
+                                        const confirmButton = document.querySelector('.swal2-confirm');
+                                        if (confirmButton) {
+                                            confirmButton.blur();
+                                        }
+                                    }
+                                    
                                 })
                             }, 100);
                             
@@ -428,7 +437,15 @@
                                 Swal.fire({
                                     icon:'error',
                                     title:'ผิดพลาด',
-                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2',
+                                    showConfirmButton: true,
+                                    didOpen: () => {
+                                        // Find the close button and remove the focus
+                                        const confirmButton = document.querySelector('.swal2-confirm');
+                                        if (confirmButton) {
+                                            confirmButton.blur();
+                                        }
+                                    }
                                 })
                             }, 100);
                             
@@ -443,7 +460,15 @@
                                 Swal.fire({
                                     icon:'error',
                                     title:'ผิดพลาด',
-                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3',
+                                    showConfirmButton: true,
+                                    didOpen: () => {
+                                        // Find the close button and remove the focus
+                                        const confirmButton = document.querySelector('.swal2-confirm');
+                                        if (confirmButton) {
+                                            confirmButton.blur();
+                                        }
+                                    }
                                 })
                             }, 100);
                             
@@ -458,7 +483,15 @@
                                 Swal.fire({
                                     icon:'error',
                                     title:'ผิดพลาด',
-                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
+                                    text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4',
+                                    showConfirmButton: true,
+                                    didOpen: () => {
+                                        // Find the close button and remove the focus
+                                        const confirmButton = document.querySelector('.swal2-confirm');
+                                        if (confirmButton) {
+                                            confirmButton.blur();
+                                        }
+                                    }
                                 })
                             }, 100);
                             
@@ -470,14 +503,25 @@
                         $("#barcode_box").val("");
                     }, 100);
                 }else{
+                
+                    
                     setTimeout(function (){
                         Swal.fire({
                             icon:'error',
                             title:'ผิดพลาด',
-                            text:'รหัส Barcode ไม่ถูกต้อง'
+                            text:'รหัส Barcode ไม่ถูกต้อง',
+                            
+                            showConfirmButton: true,
+                            didOpen: () => {
+                                // Find the close button and remove the focus
+                                const confirmButton = document.querySelector('.swal2-confirm');
+                                if (confirmButton) {
+                                    confirmButton.blur();
+                                }
+                            }
                         })
                     }, 100);
-                    
+                  
                     setTimeout(function (){
                         $("#barcode_box").val("");
                     }, 100);
@@ -579,6 +623,8 @@
               
             $(document).ready(function () {
                 var x = "";
+                
+              
             
                 $("#bt_search").click(function(){
                     searchpo()

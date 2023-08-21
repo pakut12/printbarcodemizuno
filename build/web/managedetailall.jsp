@@ -106,20 +106,27 @@
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
                                             <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
                                             <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="2">
                                         </div>
                                     </div>
-                                    
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm ">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
+                                            <input type="number" class="form-control text-center" name="numberbox_start" id="numberbox_start" >
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                            <input type="number" class="form-control text-center" name="numberbox_end" id="numberbox_end" >
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนกล่องทั้งหมด</span>
                                             <input type="number" class="form-control text-center" name="quantitytotal_box" id="quantitytotal_box" >
@@ -434,8 +441,8 @@
                 var customer_address = $("#customer_address").val().toUpperCase();
                 var qtyperbox  = $("#quantity_box").val().toUpperCase();
                 var firstdigit =  $("#initial").val().toUpperCase();
-                // var startbox  = $("#numberbox_start").val().toUpperCase();
-                //var endbox  =  $("#numberbox_end").val().toUpperCase();
+                var startbox  = $("#numberbox_start").val();
+                var endbox  =  $("#numberbox_end").val();
                 var allbox  =   $("#quantitytotal_box").val().toUpperCase();    
                 var po =  $("#po").val().toUpperCase();
                 
@@ -510,8 +517,8 @@
                             shipto:shipto,
                             qtyperbox:qtyperbox,
                             firstdigit:firstdigit,
-                            // startbox:startbox,
-                            // endbox:endbox,
+                            startbox:startbox,
+                            endbox:endbox,
                             allbox:allbox,
                             po:po,
                             desctxt:desctxt,
@@ -675,7 +682,7 @@
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
                             //$("#numberbox_start").val(startbox);
-                            //$("#numberbox_end").val(endbox);
+                           // $("#numberbox_end").val(endbox);
                             $("#quantitytotal_box").val(js.allbox);
                             
                             $("#po").val(js.po);
@@ -717,9 +724,24 @@
                             $("#pobefore").attr("disabled", true);
                             $("#date_create").attr("disabled", true);
                             
-                            $("#invoiceno").val(js.invoiceno);
-                            $("#invoicedate").val(js.invoicedate.replace(" 00:00:00.0",""));
+                           
+                            
+                          
                        
+                            $("#numberbox_start").val(numstart);
+                            $("#numberbox_end").val(numend);
+                            $("#invoiceno").val(js.invoiceno);
+                            
+                            if(js.invoicedate){
+                                $("#invoicedate").val(js.invoicedate.replace(" 00:00:00.0",""));
+                            }else{
+                                $("#invoicedate").val("");
+                            }
+                            
+                            console.log(numstart)
+                            console.log(numend)
+                            
+            
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

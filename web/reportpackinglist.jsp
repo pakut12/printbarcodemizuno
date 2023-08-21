@@ -85,7 +85,9 @@
             function printpackinglist(){
                 var invoiceno = $("#invoiceno").val()
                 var invoicedate = $("#invoicedate").val()
-                window.location.href = "report/packinglist.jsp?invoiceno="+invoiceno+"&invoicedate="+invoicedate;
+                var url = "report/packinglist.jsp?invoiceno="+invoiceno+"&invoicedate="+invoicedate;
+                
+                window.open(url,"_blank");
             }
             
             

@@ -41,6 +41,12 @@
            
             
             pdfMake.fonts = {
+                Barcode: {
+                    normal: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff',
+                    bold: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff',
+                    italics: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff',
+                    bolditalics: 'https://fonts.cdnfonts.com/s/11000/3OF9_NEW.woff'
+                },
                 THSarabunNew: {
                     normal: 'THSarabunNew.ttf',
                     bold: 'THSarabunNew-Bold.ttf',
@@ -128,23 +134,25 @@
                 String size1 = l.getSizen01();
                 String col1 = id1.substring(0, id1.length() - size1.length());
                 String qty1 = l.getQty1();
-
+                String barcode1 = l.getUpc_code1();
 
                 String id2 = l.getSku_item2();
                 String size2 = l.getSizen02();
                 String col2 = id2.substring(0, id2.length() - size2.length());
                 String qty2 = l.getQty2();
+                String barcode2 = l.getUpc_code2();
 
                 String id3 = l.getSku_item3();
                 String size3 = l.getSizen03();
                 String col3 = id3.substring(0, id3.length() - size3.length());
                 String qty3 = l.getQty3();
+                String barcode3 = l.getUpc_code3();
 
                 String id4 = l.getSku_item4();
                 String size4 = l.getSizen04();
                 String col4 = id4.substring(0, id4.length() - size4.length());
                 String qty4 = l.getQty4();
-
+                String barcode4 = l.getUpc_code4();
 
                 String widths = "['*',";
                 String header = " [{ text: 'ART.NO/COL.',fontSize: 18},";
@@ -197,7 +205,7 @@
                 liststy.add(new ColSizePair(col4, qty4, size4));
 
 
-             
+
                 String text = "";
                 int w = 0;
                 for (ColSizePair pair : liststy) {
@@ -207,11 +215,16 @@
 
                     if (col.equals(col1)) {
                         System.out.println(1);
-                        if (!text.contains("{ text: '" + col1 + "',fontSize: 22}")) {
+                        if (!text.contains("{ text: [{text: '" + col1 + "\t', fontSize: 15},{text: '*" + barcode1 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode1 + "', fontSize: 10}]},") || !text.contains("{ text: '" + col1 + "',fontSize: 22},")) {
                             w += 1;
                             int sum1 = 0;
+                            if (!barcode1.equals(null)) {
+                                 text += "[{ text: [{text: '" + col1 + "\t', fontSize: 15},{text: '*" + barcode1 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode1 + "', fontSize: 10}]},";
+                            }else{
+                                 text += "[{ text: '" + col1 + "',fontSize: 22},";
+                            }
+                            
 
-                            text += "[{ text: '" + col1 + "',fontSize: 22},";
                             String xz = "";
                             int vf = 0;
                             int sty = 0;
@@ -293,11 +306,18 @@
 
                     } else if (col.equals(col2)) {
                         System.out.println(2);
-                        if (!text.contains("{ text: '" + col2 + "',fontSize: 22}")) {
+                        if (!text.contains("{ text: [{text: '" + col2 + "\t', fontSize: 15},{text: '*" + barcode2 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode2 + "', fontSize: 10}]},") || !text.contains("{ text: '" + col2 + "',fontSize: 22},")) {
                             w += 1;
                             int sum2 = 0;
 
-                            text += "[{ text: '" + col2 + "',fontSize: 22},";
+                            if (!barcode2.equals(null)) {
+                                 text += "[{ text: [{text: '" + col2 + "\t', fontSize: 15},{text: '*" + barcode2 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode2 + "', fontSize: 10}]},";
+                            }else{
+                                 text += "[{ text: '" + col2 + "',fontSize: 22},";
+                            }
+                            
+                            
+                            text += "[{ text: [{text: '" + col2 + "\t', fontSize: 15},{text: '*" + barcode2 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode2 + "', fontSize: 10}]},";
                             String xz = "";
                             int vf = 0;
                             int sty = 0;
@@ -370,11 +390,17 @@
                         }
                     } else if (col.equals(col3)) {
                         System.out.println(3);
-                        if (!text.contains("{ text: '" + col3 + "',fontSize: 22}")) {
+                        if (!text.contains("{ text: [{text: '" + col3 + "\t', fontSize: 15},{text: '*" + barcode3 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode3 + "', fontSize: 10}]},") || !text.contains("{ text: '" + col3 + "',fontSize: 22},")) {
                             w += 1;
                             int sum3 = 0;
-
-                            text += "[{ text: '" + col3 + "',fontSize: 22},";
+                            
+                            if (!barcode3.equals(null)) {
+                                 text += "[{ text: [{text: '" + col3 + "\t', fontSize: 15},{text: '*" + barcode3 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode3 + "', fontSize: 10}]},";
+                            }else{
+                                 text += "[{ text: '" + col3 + "',fontSize: 22},";
+                            }
+                            
+                           
                             String xz = "";
                             int vf = 0;
                             int sty = 0;
@@ -454,11 +480,16 @@
 
                     } else if (col.equals(col4)) {
                         System.out.println(4);
-                        if (!text.contains("{ text: '" + col4 + "',fontSize: 22}")) {
+                        if (!text.contains("{ text: [{text: '" + col4 + "\t', fontSize: 15},{text: '*" + barcode4 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode4 + "', fontSize: 10}]},")) {
                             w += 1;
                             int sum4 = 0;
-
-                            text += "[{ text: '" + col4 + "',fontSize: 22},";
+                            
+                            if (!barcode4.equals(null)) {
+                                 text += "[{ text: [{text: '" + col4 + "\t', fontSize: 15},{text: '*" + barcode4 + "*', fontSize: 18,font:'Barcode'},{text: '\t" + barcode4 + "', fontSize: 10}]},";
+                            }else{
+                                 text += "[{ text: '" + col4 + "',fontSize: 22},";
+                            }
+                            
                             String xz = "";
                             int vf = 0;
                             int sty = 0;

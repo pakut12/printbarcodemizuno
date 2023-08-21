@@ -210,7 +210,8 @@ public class Detail extends HttpServlet {
                     String customer_address = request.getParameter("customer_address").trim();
                     String invoiceno = request.getParameter("invoiceno").trim();
                     String invoicedate = request.getParameter("invoicedate").trim();
-
+                    String startbox = request.getParameter("startbox").trim();
+                    String endbox = request.getParameter("endbox").trim();
 
                     DetailService ds = new DetailService();
 
@@ -220,14 +221,15 @@ public class Detail extends HttpServlet {
                     // Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULT(listresult, endboxbefore, startboxbefore, firstdigit, po, allbox);
 
                     //Boolean statusupdate = ds.UpdateDetailBoxAll(customer_address, po_old, pobefore, startboxbefore, endboxbefore, shipto, qtyperbox, firstdigit, startbox, endbox, allbox, po, desctxt, grossweight, netweight, country_origin, sku_item1, upc_code1, colorno1, sizeno1, qty1, sku_item2, upc_code2, colorno2, sizeno2, qty2, sku_item3, upc_code3, colorno3, sizeno3, qty3, sku_item4, upc_code4, colorno4, sizeno4, qty4, pallet, prodorder, destination, date, firstdigitbefore);
-                    Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
-                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore);
-                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, invoiceno, invoicedate);
+                    // Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
 
+
+                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, invoiceno, invoicedate, firstdigitbefore, startbox, endbox);
+                    Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore, startbox, endbox);
 
                     JSONObject obj = new JSONObject();
 
-                    if (statusresult && statusDT && statusdt) {
+                    if (statusdt) {
                         obj.put("status", "true");
                     } else {
                         obj.put("status", "false");
@@ -389,15 +391,15 @@ public class Detail extends HttpServlet {
                     String date = request.getParameter("date").trim();
                     String invoiceno = request.getParameter("invoiceno").trim();
                     String invoicedate = request.getParameter("invoicedate").trim();
-                    
+
                     System.out.println(invoiceno);
                     System.out.println(invoicedate);
-                    
+
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
 
-                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date,invoiceno,invoicedate);
+                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date, invoiceno, invoicedate);
 
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTBYID(pobefore, PO, boxno, boxnobefore);
 
@@ -584,84 +586,90 @@ public class Detail extends HttpServlet {
                     e.printStackTrace();
                 }
             } else if (type.equals("getdetailsforbarcode")) {
-                String posearch = request.getParameter("posearch").trim();
-                String numstart = request.getParameter("numstart").trim();
+                try {
 
-                DetailService ds = new DetailService();
-                List<BCDetailBox> detailbox = ds.GetDetailBoxAllForBarcode(posearch, numstart);
-                List<BCCustomer> listcm1 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item1());
-                List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
-                List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
-                List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
+                    String posearch = request.getParameter("posearch").trim();
+                    String numstart = request.getParameter("numstart").trim();
+
+                    DetailService ds = new DetailService();
+                    List<BCDetailBox> detailbox = ds.GetDetailBoxAllForBarcode(posearch, numstart);
+                    System.out.println(detailbox.size());
+                    List<BCCustomer> listcm1 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item1());
+                    List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
+                    List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
+                    List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
 
 
-                JSONObject obj = new JSONObject();
-                obj.put("po", detailbox.get(0).getPo());
-                obj.put("shipfrom", detailbox.get(0).getShipfrom());
-                obj.put("shipto", detailbox.get(0).getShipto());
-                obj.put("qtyperbox", detailbox.get(0).getQtyperbox());
-                obj.put("boxno", detailbox.get(0).getBoxno());
-                obj.put("desctxt", detailbox.get(0).getDesctxt());
+                    JSONObject obj = new JSONObject();
+                    obj.put("po", detailbox.get(0).getPo());
+                    obj.put("shipfrom", detailbox.get(0).getShipfrom());
+                    obj.put("shipto", detailbox.get(0).getShipto());
+                    obj.put("qtyperbox", detailbox.get(0).getQtyperbox());
+                    obj.put("boxno", detailbox.get(0).getBoxno());
+                    obj.put("desctxt", detailbox.get(0).getDesctxt());
 
-                obj.put("grossweight", detailbox.get(0).getGrossweight());
-                obj.put("netweight", detailbox.get(0).getNetweight());
-                obj.put("country_origin", detailbox.get(0).getCountry_origin());
-                obj.put("boxall", detailbox.get(0).getAllbox());
+                    obj.put("grossweight", detailbox.get(0).getGrossweight());
+                    obj.put("netweight", detailbox.get(0).getNetweight());
+                    obj.put("country_origin", detailbox.get(0).getCountry_origin());
+                    obj.put("boxall", detailbox.get(0).getAllbox());
 
-                if (listcm1.size() > 0) {
-                    obj.put("sku_item1", listcm1.get(0).getCustomer_no());
-                    obj.put("upc_code1", listcm1.get(0).getCustomer_barcode());
-                    obj.put("qty1", detailbox.get(0).getQty1());
-                    obj.put("sizeno1", listcm1.get(0).getCustomer_size());
-                    obj.put("colorno1", listcm1.get(0).getCustomer_color());
+                    if (listcm1.size() > 0) {
+                        obj.put("sku_item1", listcm1.get(0).getCustomer_no());
+                        obj.put("upc_code1", listcm1.get(0).getCustomer_barcode());
+                        obj.put("qty1", detailbox.get(0).getQty1());
+                        obj.put("sizeno1", listcm1.get(0).getCustomer_size());
+                        obj.put("colorno1", listcm1.get(0).getCustomer_color());
+                    }
+                    if (listcm2.size() > 0) {
+                        obj.put("sku_item2", listcm2.get(0).getCustomer_no());
+                        obj.put("upc_code2", listcm2.get(0).getCustomer_barcode());
+                        obj.put("qty2", detailbox.get(0).getQty2());
+                        obj.put("sizeno2", listcm2.get(0).getCustomer_size());
+                        obj.put("colorno2", listcm2.get(0).getCustomer_color());
+                    }
+                    if (listcm3.size() > 0) {
+                        obj.put("sku_item3", listcm3.get(0).getCustomer_no());
+                        obj.put("upc_code3", listcm3.get(0).getCustomer_barcode());
+                        obj.put("qty3", detailbox.get(0).getQty3());
+                        obj.put("sizeno3", listcm3.get(0).getCustomer_size());
+                        obj.put("colorno3", listcm3.get(0).getCustomer_color());
+                    }
+                    if (listcm4.size() > 0) {
+                        obj.put("sku_item4", listcm4.get(0).getCustomer_no());
+                        obj.put("upc_code4", listcm4.get(0).getCustomer_barcode());
+                        obj.put("qty4", detailbox.get(0).getQty4());
+                        obj.put("sizeno4", listcm4.get(0).getCustomer_size());
+                        obj.put("colorno4", listcm4.get(0).getCustomer_color());
+                    }
+
+                    obj.put("sfaddress1", detailbox.get(0).getSfaddress1());
+                    obj.put("sfaddress2", detailbox.get(0).getSfaddress2());
+                    obj.put("sfaddress3", detailbox.get(0).getSfaddress3());
+                    obj.put("sfaddress4", detailbox.get(0).getSfaddress4());
+                    obj.put("staddress1", detailbox.get(0).getStaddress1());
+                    obj.put("staddress2", detailbox.get(0).getStaddress2());
+                    obj.put("staddress3", detailbox.get(0).getStaddress3());
+                    obj.put("staddress4", detailbox.get(0).getStaddress4());
+
+                    obj.put("pallet", detailbox.get(0).getPallet());
+                    obj.put("prod_order", detailbox.get(0).getProdorder());
+                    obj.put("destination", detailbox.get(0).getDestination());
+
+                    obj.put("qty_result1", detailbox.get(0).getQty_result1());
+                    obj.put("qty_result2", detailbox.get(0).getQty_result2());
+                    obj.put("qty_result3", detailbox.get(0).getQty_result3());
+                    obj.put("qty_result4", detailbox.get(0).getQty_result4());
+
+
+                    obj.put("statusshoot", detailbox.get(0).getStatusshoot());
+
+                    obj.put("date_create", detailbox.get(0).getDate_create());
+                    obj.put("date_modify", detailbox.get(0).getDate_modify());
+
+                    out.print(obj);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                if (listcm2.size() > 0) {
-                    obj.put("sku_item2", listcm2.get(0).getCustomer_no());
-                    obj.put("upc_code2", listcm2.get(0).getCustomer_barcode());
-                    obj.put("qty2", detailbox.get(0).getQty2());
-                    obj.put("sizeno2", listcm2.get(0).getCustomer_size());
-                    obj.put("colorno2", listcm2.get(0).getCustomer_color());
-                }
-                if (listcm3.size() > 0) {
-                    obj.put("sku_item3", listcm3.get(0).getCustomer_no());
-                    obj.put("upc_code3", listcm3.get(0).getCustomer_barcode());
-                    obj.put("qty3", detailbox.get(0).getQty3());
-                    obj.put("sizeno3", listcm3.get(0).getCustomer_size());
-                    obj.put("colorno3", listcm3.get(0).getCustomer_color());
-                }
-                if (listcm4.size() > 0) {
-                    obj.put("sku_item4", listcm4.get(0).getCustomer_no());
-                    obj.put("upc_code4", listcm4.get(0).getCustomer_barcode());
-                    obj.put("qty4", detailbox.get(0).getQty4());
-                    obj.put("sizeno4", listcm4.get(0).getCustomer_size());
-                    obj.put("colorno4", listcm4.get(0).getCustomer_color());
-                }
-
-                obj.put("sfaddress1", detailbox.get(0).getSfaddress1());
-                obj.put("sfaddress2", detailbox.get(0).getSfaddress2());
-                obj.put("sfaddress3", detailbox.get(0).getSfaddress3());
-                obj.put("sfaddress4", detailbox.get(0).getSfaddress4());
-                obj.put("staddress1", detailbox.get(0).getStaddress1());
-                obj.put("staddress2", detailbox.get(0).getStaddress2());
-                obj.put("staddress3", detailbox.get(0).getStaddress3());
-                obj.put("staddress4", detailbox.get(0).getStaddress4());
-
-                obj.put("pallet", detailbox.get(0).getPallet());
-                obj.put("prod_order", detailbox.get(0).getProdorder());
-                obj.put("destination", detailbox.get(0).getDestination());
-
-                obj.put("qty_result1", detailbox.get(0).getQty_result1());
-                obj.put("qty_result2", detailbox.get(0).getQty_result2());
-                obj.put("qty_result3", detailbox.get(0).getQty_result3());
-                obj.put("qty_result4", detailbox.get(0).getQty_result4());
-
-
-                obj.put("statusshoot", detailbox.get(0).getStatusshoot());
-
-                obj.put("date_create", detailbox.get(0).getDate_create());
-                obj.put("date_modify", detailbox.get(0).getDate_modify());
-
-                out.print(obj);
             } else if (type.equals("getpalletbyid")) {
                 String po = request.getParameter("po").trim();
                 DetailService ds = new DetailService();
