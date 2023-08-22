@@ -278,13 +278,152 @@
 
                 // for (BCDetailBox c : listpo) {
                 String arrbox = "";
+                String arrboxtotal = "";
 
                 List<BCDetailBox> list = PackingListService.getPackingListByPO("173332-OP", "M");
+                List<BCDetailBox> Grouplist = PackingListService.GroupCustomerNoByPO("173332-OP", "M");
 
                 int sumctn = 0;
                 int sumqty = 0;
                 double sumnw = 0;
                 double sumgw = 0;
+
+                for (BCDetailBox g : Grouplist) {
+
+                    List<BCDetailBox> listbycolor = PackingListService.getPackingListCustomerColorByPO("173332-OP", "M", g.getCustomer_color());
+                    arrboxtotal += "\n[";
+                    arrboxtotal += "{text: '" + g.getCustomer_color() + "', border: [false, false, false, false]},";
+                    arrboxtotal += "{text: '" + g.getPo() + "', border: [false, false, false, false]},";
+                    arrboxtotal += "{text: '', border: [false, false, false, false]},";
+
+
+                    System.out.println(listbycolor.size());
+
+                    String[] size = {"XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"};
+
+                    for (BCDetailBox l : listbycolor) {
+                        if (l.getCustomer_color().equals("0010")) {
+
+                            if (l.getCustomer_size().equals("XXS")) {
+
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+
+                            } else if (l.getCustomer_size().equals("XS")) {
+
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+                            } else if (l.getCustomer_size().equals("S")) {
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+                            } else if (l.getCustomer_size().equals("M")) {
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+                            } else if (l.getCustomer_size().equals("L")) {
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+                            } else if (l.getCustomer_size().equals("XL")) {
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+                            } else if (l.getCustomer_size().equals("XXL")) {
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+                            } else if (l.getCustomer_size().equals("XXXL")) {
+                                if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+
+                                } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                    arrboxtotal += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                }
+                            }else{
+                                arrboxtotal += "  {text: '', border: [false, false, false, false]},";
+                            }
+                        }
+
+                    }
+
+
+                    arrboxtotal += "  {text: '', border: [false, false, false, false]},";
+                    arrboxtotal += "],\n";
+
+
+                }
 
                 for (BCDetailBox l : list) {
                     String BOXSTART = l.getFirstdigit() + l.getStartbox();
@@ -316,6 +455,10 @@
                             arrbox += "  {text: '', border: [false, false, false, false]},";
                             arrbox += "  {text: '', border: [false, false, false, false]},";
                             arrbox += "  {text: '', border: [false, false, false, false]},";
+
+
+
+
                         } else if (l.getSku_item2().equals(l.getCustomer_no())) {
                             arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
                             arrbox += "  {text: '', border: [false, false, false, false]},";
@@ -403,7 +546,7 @@
                         } else if (l.getSku_item2().equals(l.getCustomer_no())) {
                             arrbox += "  {text: '', border: [false, false, false, false]},";
                             arrbox += "  {text: '', border: [false, false, false, false]},";
-                            arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
+                            arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
                             arrbox += "  {text: '', border: [false, false, false, false]},";
                             arrbox += "  {text: '', border: [false, false, false, false]},";
                             arrbox += "  {text: '', border: [false, false, false, false]},";
@@ -723,6 +866,33 @@
                                              {text: '\nG.W.', border: [false, true, false, true]},
                                          ],
                                 <%=arrbox%>
+                                
+                                                    ]
+                                                }
+                        
+                                            },
+                                            {
+                                                style: 'tbcontent',
+                                                table: {
+                                                    headerRows: 1,
+                                                    widths: [ '*', 'auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto' ],
+                                                    body: [
+                                                        [
+                                                            {text: 'DESCRIPTION',border: [false, true, false, true]}, 
+                                                            {text: '', border: [false, true, false, true]}, 
+                                                            {text: '\nSIZE', border: [false, true, false, true]},
+                                                            {text: '.02\nXXS', border: [false, true, false, true]},
+                                                            {text: '.03\nXS', border: [false, true, false, true]},
+                                                            {text: '.04\nS', border: [false, true, false, true]},
+                                                            {text: '.05\nM', border: [false, true, false, true]},
+                                                            {text: '.06\nL', border: [false, true, false, true]},
+                                                            {text: '.07\nXL', border: [false, true, false, true]},
+                                                            {text: '.08\nXXL', border: [false, true, false, true]},
+                                                            {text: '.09\nXXXL', border: [false, true, false, true]},
+                                                            {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
+                                             
+                                                        ],
+                                <%=arrboxtotal%>
                                 
                                                     ]
                                                 }
