@@ -37,11 +37,11 @@
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Color</span>
-                                <input type="text" class="form-control text-center"  id="edit_customer_color" maxlength="4" required>
+                                <input type="text" class="form-control text-center"  id="edit_customer_color"  required>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">Size</span>
-                                <input type="text" class="form-control text-center" id="edit_customer_size" maxlength="3" required>
+                                <input type="text" class="form-control text-center" id="edit_customer_size"  required>
                             </div>
                             <div class="input-group input-group-sm mb-3">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
@@ -85,17 +85,17 @@
                                             <div class="col-sm-12 col-md-6">
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">Color</span>
-                                                    <input type="text" class="form-control text-center" name="customer_color" id="customer_color" maxlength="4" required>
+                                                    <input type="text" class="form-control text-center" name="customer_color" id="customer_color"  required>
                                                 </div>
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">Size</span>
-                                                    <input type="text" class="form-control text-center" name="customer_barcode" id="customer_size" maxlength="3" required>
+                                                    <input type="text" class="form-control text-center" name="customer_size" id="customer_size"  required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12">
                                                 <div class="input-group input-group-sm mb-3">
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">รหัสสินค้า</span>
-                                                    <input type="text" class="form-control text-center" name="customer_description" id="customer_product" required>
+                                                    <input type="text" class="form-control text-center" name="customer_product" id="customer_product" required>
                                                 </div>
                                             </div>
                                             <div class="col-sm-12 col-md-12">
