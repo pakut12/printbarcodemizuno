@@ -186,6 +186,8 @@ public class PackingListService {
             sql += ") tb ";
             sql += " WHERE firstdigit = ? and po = ? ";
             sql += " ORDER BY tb.PO, tb.firstdigit, tb.boxend ";
+            
+            System.out.println(sql);
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
