@@ -4,6 +4,9 @@
  */
 package com.pg.lib.utility;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 /**
  *
  * @author pakutsing
@@ -20,5 +23,19 @@ public class Utility {
         return coverdate;
     }
 
-    
+    public static String GetDateNow() {
+
+        Date currentDate = new Date();
+
+        // Create a SimpleDateFormat instance with the desired pattern
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+        // Format the current date and time
+        String formattedDate = outputDateFormat.format(currentDate);
+
+        // Display the formatted date and time
+        
+        
+        return formattedDate;
+    }
 }

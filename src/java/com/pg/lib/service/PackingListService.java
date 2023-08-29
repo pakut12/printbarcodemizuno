@@ -186,8 +186,6 @@ public class PackingListService {
             sql += ") tb ";
             sql += " WHERE firstdigit = ? and po = ? ";
             sql += " ORDER BY tb.PO, tb.firstdigit, tb.boxend ";
-            
-            System.out.println(sql);
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -226,6 +224,56 @@ public class PackingListService {
                 detail.setCustomer_color(rs.getString("customer_color"));
                 detail.setCustomer_size(rs.getString("customer_size"));
 
+                listbox.add(detail);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return listbox;
+    }
+
+    public static List<BCDetailBox> getPackingListPO(String Invoiceno, String InvoiceDate) throws SQLException {
+        List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+        String sql = "";
+        try {
+
+            sql += " SELECT tb.* ";
+            sql += " FROM ( ";
+            sql += " SELECT ";
+            sql += "  a.PO, ";
+            sql += "  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') AS firstdigit, ";
+            sql += "  MIN(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+') AS INT)) AS boxstart, ";
+            sql += "  MAX(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+') AS INT)) AS boxend, ";
+            sql += "  a.INVOICENO, ";
+            sql += "  a.INVOICEDATE ";
+            sql += "  FROM MIZUNONEWBARBOXDT a ";
+            sql += "  INNER JOIN MIZUNOCUSTOMER b ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
+            sql += "  GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),a.INVOICENO,a.INVOICEDATE ";
+            sql += "  ) tb ";
+            sql += "  WHERE INVOICENO = ? and INVOICEDATE = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') ";
+            sql += "  ORDER BY tb.PO, tb.firstdigit, tb.boxend ";
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            ps.setString(1, Invoiceno);
+            ps.setString(2, InvoiceDate);
+
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox detail = new BCDetailBox();
+                detail.setPo(rs.getString("PO"));
+                detail.setFirstdigit(rs.getString("firstdigit"));
+                detail.setStartbox(rs.getString("boxstart"));
+                detail.setEndbox(rs.getString("boxend"));
+               
                 listbox.add(detail);
             }
 

@@ -26,6 +26,37 @@
             String invoiceno = "7392300095"; //request.getParameter("invoiceno").trim();
 
             String invoicedate = "2023-06-26";
+
+            List<BCDetailBox> getlistall = PackingListService.getPackingListPO(invoiceno, Utility.CoverDate(invoicedate));
+
+            int totalallpc = 0;
+            int totalallcartons = 0;
+            double totalallnw = 0;
+            double totalallgw = 0;
+
+
+            String POBOX = "";
+            String CTN = "";
+
+            for (BCDetailBox l : getlistall) {
+                String BOXNUM1 = l.getFirstdigit() + l.getStartbox();
+                String BOXNUM2 = l.getFirstdigit() + l.getEndbox();
+                String BOXNUM = BOXNUM1 + "-" + BOXNUM2;
+
+                String PO = l.getPo();
+
+                if (!POBOX.contains(PO)) {
+                    POBOX += PO + ",";
+                }
+
+                if (!CTN.contains(BOXNUM)) {
+                    CTN += BOXNUM + ",";
+                }
+            }
+
+            POBOX = POBOX.substring(0, POBOX.length() - 1);
+            CTN = CTN.substring(0, CTN.length() - 1);
+
             %>
             
                 pdfMake.fonts = {
@@ -48,7 +79,7 @@
                         width: 600,
                         height: 800
                     },
-                    pageMargins: [ 40, 70, 30, 40 ],
+                    pageMargins: [20, 70, 30, 30 ],
                     footer: function(currentPage, pageCount) { 
                         return [
                             { 
@@ -70,7 +101,7 @@
                                         width: 255,
                                         alignment: 'left',
                                         text: [{text:'THAI SPORTS GARMENT CO.LTD',bold:true,fontSize:15},{text:'\n666 RAMA 3 ROAD,YANNAWA, BANGKOK 10120 THAILAND',bold:false,fontSize:12}],
-                                        margin: [40, 10]
+                                        margin: [25, 10]
                                     },
                                     { 
                                         width: '*',
@@ -79,13 +110,13 @@
                                         decoration: 'underline', 
                                         decorationStyle: 'double' ,
                                         bold:true,
-                                        margin: [40, 10]
+                                        margin: [20, 10]
                                     },
                                     {
                                         width: '*',
                                         alignment: 'right',
                                         text: 'Page : '+currentPage,
-                                        margin: [20, 10]
+                                        margin: [30, 10]
                                     },
                                 ]       
                             }
@@ -102,7 +133,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text:'DATED <%=invoicedate%>' 
+                                    text:'DATED <%=Utility.CoverDate(invoicedate)%>' 
                                 },
                                 {
                                     width: '*',
@@ -170,7 +201,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text:'PO.NO.',
+                                    text:'PO.NO. <%=POBOX%>',
                                     alignment: 'center'
                                 }
                             ]
@@ -185,7 +216,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text:'CTN.NO.',
+                                    text:'CTN.NO. <%=CTN%>',
                                     alignment: 'center'
                                 }
                             ]
@@ -273,8 +304,8 @@
             try {
 
 
-                List<BCDetailBox> listpo = PackingListService.getPOByInvoicenoandInvoiceDate(invoiceno, Utility.CoverDate(invoicedate));
 
+                List<BCDetailBox> listpo = PackingListService.getPOByInvoicenoandInvoiceDate(invoiceno, Utility.CoverDate(invoicedate));
 
                 for (BCDetailBox c : listpo) {
                     String arrbox = "";
@@ -325,7 +356,7 @@
                                 }
 
 
-                            //listallsize.add(mapsize);
+
                             }
 
 
@@ -344,6 +375,9 @@
                         arrboxtotal += "{text: '" + g.getCustomer_color() + "', border: [false, false, false, false]},";
                         arrboxtotal += "{text: '" + g.getPo() + "', border: [false, false, false, false]},";
                         arrboxtotal += "{text: '', border: [false, false, false, false]},";
+                        
+                        
+                        
 
                         for (String s : size) {
                             if (mapsize.get(g.getCustomer_color() + "#" + s) == null) {
@@ -356,15 +390,18 @@
 
                         totalpc += num;
                         arrboxtotal += "  {text: '" + num + "', border: [false, false, false, false]},";
+                        arrboxtotal += "{text: '', border: [false, false, false, false]},";
                         arrboxtotal += "],\n";
 
                     }
+
+                    totalallpc += totalpc;
 
                     arrboxtotal += "\n[";
                     arrboxtotal += "{text: 'TOTAL', border: [false, true, false, true]},";
                     arrboxtotal += "{text: '', border: [false, true, false, true]},";
                     arrboxtotal += "{text: '', border: [false, true, false, true]},";
-
+                   
                     for (String s : size) {
                         int sumtotal = 0;
                         for (BCDetailBox l : list) {
@@ -383,443 +420,119 @@
                             }
 
                         }
-                        arrboxtotal += " {text: '" + sumtotal + "', border: [false, true, false, true]},";
+                        if (sumtotal == 0) {
+                            arrboxtotal += " {text: '', border: [false, true, false, true]},";
+                        } else {
+                            arrboxtotal += " {text: '" + sumtotal + "', border: [false, true, false, true]},";
+                        }
+
                     }
 
                     arrboxtotal += " {text: '" + totalpc + "', border: [false, true, false, true]},";
+                    arrboxtotal += "{text: 'Container no. JXLU7848190', border: [false, false, false, false]},";
                     arrboxtotal += "],\n";
+
+                    List<String> groupcolor = new ArrayList<String>();
 
 
                     for (BCDetailBox l : list) {
 
-                        String BOXSTART = l.getFirstdigit() + l.getStartbox();
-                        String BOXEND = l.getFirstdigit() + l.getEndbox();
-                        String CTNNO = "";
-
-                        if (BOXSTART.equals(BOXEND)) {
-                            CTNNO = BOXSTART;
-                        } else {
-                            CTNNO = BOXSTART + "-" + BOXEND;
-                        }
-
-                        String DESC = l.getCustomer_no();
-                        String PO = l.getPo();
+                        if (!groupcolor.contains(l.getCustomer_color())) {
+                            groupcolor.add(l.getCustomer_color());
 
 
-                        arrbox += "[";
-                        arrbox += "  {text: '" + CTNNO + "',border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + DESC + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + PO + "', border: [false, false, false, false]},";
+                            String BOXSTART = l.getFirstdigit() + l.getStartbox();
+                            String BOXEND = l.getFirstdigit() + l.getEndbox();
+                            String CTNNO = "";
 
-                        for (String s : size) {
-                            int qty = 0;
-                            for (BCDetailBox ls : list) {
-                                String BOXSTART1 = ls.getFirstdigit() + ls.getStartbox();
-                                String BOXEND1 = ls.getFirstdigit() + ls.getEndbox();
-                                String CTNNO1 = "";
-
-                                if (BOXSTART1.equals(BOXEND1)) {
-                                    CTNNO1 = BOXSTART1;
-                                } else {
-                                    CTNNO1 = BOXSTART1 + "-" + BOXEND1;
-                                }
-
-
-                                if (CTNNO1.equals(CTNNO)) {
-
-                                    if (ls.getCustomer_size().equals(s) && ls.getCustomer_color().equals(l.getCustomer_color())) {
-                                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                                            qty += Integer.parseInt(l.getQty1());
-                                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                                            qty += Integer.parseInt(l.getQty2());
-                                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                                            qty += Integer.parseInt(l.getQty3());
-                                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                                            qty += Integer.parseInt(l.getQty4());
-                                        }
-                                    }
-                                }
-
-
-                            }
-                            if (qty == 0) {
-                                arrbox += "  {text: '', border: [false, false, false, false]},";
+                            if (BOXSTART.equals(BOXEND)) {
+                                CTNNO = BOXSTART;
                             } else {
-                                arrbox += "  {text: '" + qty + "', border: [false, false, false, false]},";
+                                CTNNO = BOXSTART + "-" + BOXEND;
+                            }
+
+                            String DESC = l.getCustomer_no();
+                            String PO = l.getPo();
+
+
+                            arrbox += "[";
+                            arrbox += "  {text: '" + CTNNO + "',border: [false, false, false, false]},";
+                            arrbox += "  {text: '" + DESC + "', border: [false, false, false, false]},";
+                            arrbox += "  {text: '" + PO + "', border: [false, false, false, false]},";
+
+                            for (String s : size) {
+                                int qty = 0;
+                                for (BCDetailBox ls : list) {
+
+
+
+                                    String BOXSTART1 = ls.getFirstdigit() + ls.getStartbox();
+                                    String BOXEND1 = ls.getFirstdigit() + ls.getEndbox();
+                                    String CTNNO1 = "";
+
+                                    if (BOXSTART1.equals(BOXEND1)) {
+                                        CTNNO1 = BOXSTART1;
+                                    } else {
+                                        CTNNO1 = BOXSTART1 + "-" + BOXEND1;
+                                    }
+
+                                    if (CTNNO1.equals(CTNNO)) {
+
+                                        if (ls.getCustomer_size().equals(s) && ls.getCustomer_color().equals(l.getCustomer_color())) {
+                                            if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                                qty += Integer.parseInt(l.getQty1());
+                                            } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                                qty += Integer.parseInt(l.getQty2());
+                                            } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                                qty += Integer.parseInt(l.getQty3());
+                                            } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                                qty += Integer.parseInt(l.getQty4());
+                                            }
+                                        }
+
+                                    }
+
+
+                                }
+
+                                if (qty == 0) {
+                                    arrbox += "  {text: '', border: [false, false, false, false]},";
+                                } else {
+                                    arrbox += "  {text: '" + qty + "', border: [false, false, false, false]},";
+                                }
+
+
                             }
 
 
-                        }
+                            arrbox += "  {text: '" + l.getCtn() + "', border: [false, false, false, false]},";
+                            sumctn += Integer.parseInt(l.getCtn());
 
 
-                        /*
-                        if (l.getCustomer_size().equals("XXS")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        } else if (l.getCustomer_size().equals("XS")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        } else if (l.getCustomer_size().equals("S")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        } else if (l.getCustomer_size().equals("M")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        } else if (l.getCustomer_size().equals("L")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        } else if (l.getCustomer_size().equals("XL")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        } else if (l.getCustomer_size().equals("XXL")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        } else if (l.getCustomer_size().equals("XXXL")) {
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty1() + "', border: [false, false, false, false]},";
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty2() + "', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty3() + "', border: [false, false, false, false]},";
-                        
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + l.getQty4() + "', border: [false, false, false, false]},";
-                        
-                        }
-                        
-                        }
-                         */
+
+                            if (l.getSku_item1().equals(l.getCustomer_no())) {
+                                arrbox += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
+                                sumqty += Integer.parseInt(l.getSumqty1());
+                            } else if (l.getSku_item2().equals(l.getCustomer_no())) {
+                                arrbox += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
+                                sumqty += Integer.parseInt(l.getSumqty2());
+                            } else if (l.getSku_item3().equals(l.getCustomer_no())) {
+                                arrbox += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
+                                sumqty += Integer.parseInt(l.getSumqty3());
+                            } else if (l.getSku_item4().equals(l.getCustomer_no())) {
+                                arrbox += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
+                                sumqty += Integer.parseInt(l.getSumqty4());
+                            }
+
+                            arrbox += "  {text: '" + String.format("%.2f", Double.parseDouble(l.getSumnw())) + "', border: [false, false, false, false]},";
+                            arrbox += "  {text: '" + String.format("%.2f", Double.parseDouble(l.getSumgw())) + "', border: [false, false, false, false]},";
+                            sumnw += Double.parseDouble(l.getSumnw());
+                            sumgw += Double.parseDouble(l.getSumgw());
+
+                            arrbox += " ],";
 
 
-                        arrbox += "  {text: '" + l.getCtn() + "', border: [false, false, false, false]},";
-                        sumctn += Integer.parseInt(l.getCtn());
-
-
-                        if (l.getSku_item1().equals(l.getCustomer_no())) {
-                            arrbox += "  {text: '" + l.getSumqty1() + "', border: [false, false, false, false]},";
-                            sumqty += Integer.parseInt(l.getSumqty1());
-                        } else if (l.getSku_item2().equals(l.getCustomer_no())) {
-                            arrbox += "  {text: '" + l.getSumqty2() + "', border: [false, false, false, false]},";
-                            sumqty += Integer.parseInt(l.getSumqty2());
-                        } else if (l.getSku_item3().equals(l.getCustomer_no())) {
-                            arrbox += "  {text: '" + l.getSumqty3() + "', border: [false, false, false, false]},";
-                            sumqty += Integer.parseInt(l.getSumqty3());
-                        } else if (l.getSku_item4().equals(l.getCustomer_no())) {
-                            arrbox += "  {text: '" + l.getSumqty4() + "', border: [false, false, false, false]},";
-                            sumqty += Integer.parseInt(l.getSumqty4());
                         }
-
-                        arrbox += "  {text: '" + String.format("%.2f", Double.parseDouble(l.getSumnw())) + "', border: [false, false, false, false]},";
-                        arrbox += "  {text: '" + String.format("%.2f", Double.parseDouble(l.getSumgw())) + "', border: [false, false, false, false]},";
-                        sumnw += Double.parseDouble(l.getSumnw());
-                        sumgw += Double.parseDouble(l.getSumgw());
-
-                        arrbox += " ],";
-
 
                     }
 
@@ -842,6 +555,11 @@
                     arrbox += "{text: '" + String.format("%.2f", sumnw) + "', border: [false, true, false, true]},";
                     arrbox += "{text: '" + String.format("%.2f", sumgw) + "', border: [false, true, false, true]},";
                     arrbox += "],";
+
+                    totalallcartons += sumctn;
+                    totalallgw += sumgw;
+                    totalallnw += sumnw;
+
 
 
                  %>
@@ -878,10 +596,11 @@
                         
                                             },
                                             {
+                                            
                                                 style: 'tbcontent',
                                                 table: {
                                                     headerRows: 1,
-                                                    widths: [ '*', 'auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto' ],
+                                                    widths: [ '*', 'auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto','auto' ],
                                                     body: [
                                                         [
                                                             {text: 'DESCRIPTION',border: [false, true, false, true]}, 
@@ -896,7 +615,7 @@
                                                             {text: '.08\nXXL', border: [false, true, false, true]},
                                                             {text: '.09\nXXXL', border: [false, true, false, true]},
                                                             {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
-                                             
+                                                            {text: '', border: [false, false, false, false]},
                                                         ],
                            <%=arrboxtotal%>
                                 
@@ -913,8 +632,102 @@
 
 
         %>
-                            
-                    
+                    {
+                        columns: [
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 50,
+                                text: 'TOTAL',
+                                alignment: 'center'
+                            },
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 10,
+                                text: '',
+                                alignment: 'center'
+                            },
+                            {
+                                // star-sized columns fill the remaining space
+                                // if there's more than one star-column, available width is divided equally
+                                width: 'auto',
+                                text: '<%=totalallpc%> PC',
+                                alignment: 'center'
+                            }
+                        ],
+                        columnGap: 10                      
+                    }, 
+                    {
+                        columns: [
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 50,
+                                text: '',
+                                alignment: 'center'
+                            },
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 10,
+                                text: ':',
+                                alignment: 'center'
+                            },
+                            {
+                                // star-sized columns fill the remaining space
+                                // if there's more than one star-column, available width is divided equally
+                                width: 'auto',
+                                text: '<%=totalallcartons%>  CARTONS',
+                                alignment: 'center'
+                            }
+                        ],
+                        columnGap: 10                      
+                    },  
+                    {
+                        columns: [
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 50,
+                                text: '',
+                                alignment: 'center'
+                            },
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 10,
+                                text: ':',
+                                alignment: 'center'
+                            },
+                            {
+                                // star-sized columns fill the remaining space
+                                // if there's more than one star-column, available width is divided equally
+                                width: 'auto',
+                                text: '<%=String.format("%.2f", totalallnw)%> KGS.(NET WEIGHT)',
+                                alignment: 'center'
+                            }
+                        ],
+                        columnGap: 10                      
+                    }, 
+                    {
+                        columns: [
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 50,
+                                text: '',
+                                alignment: 'center'
+                            },
+                            {
+                                // auto-sized columns have their widths based on their content
+                                width: 10,
+                                text: ':',
+                                alignment: 'center'
+                            },
+                            {
+                                // star-sized columns fill the remaining space
+                                // if there's more than one star-column, available width is divided equally
+                                width: 'auto',
+                                text: '<%=String.format("%.2f", totalallgw)%> KGS.(GROSS WEIGHT)',
+                                alignment: 'center'
+                            }
+                        ],
+                        columnGap: 10                      
+                    },                     
                 ],
                 styles: {
                     headercontent: {
