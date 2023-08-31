@@ -20,41 +20,22 @@
     </head>
     <body>
         <%
-
-            String po = "Y111-01";
-            String startbox = "1";
-            String endbox = "10";
-            String firstdigit = "Y";
-
-            String boxno = "";
-
-            for (int n = Integer.parseInt(startbox); n <= Integer.parseInt(endbox); n++) {
-                if (n != Integer.parseInt(endbox)) {
-                    boxno += "'" + firstdigit + n + "',";
-                } else {
-                    boxno += "'" + firstdigit + n + "'";
-                }
-            }
-
             try {
-                Connection con = ConnectDB.getConnection();
-                File reportFile = new File(application.getRealPath("report/reporttest.jasper"));
+                List<String> list = new ArrayList<String>();
+                list.add("A1");
+                list.add("A2");
+                list.add("A3");
+                list.add("A4");
+                list.add("A6");
+                list.add("A7");
+                list.add("A8");
+                list.add("A9");
+               
+                List<String> ranges = Utility.getRanges(list);
+                for (String range : ranges) {
+                    System.out.println(range);
+                }
 
-                Map pr = new HashMap();
-                pr.put("PO", po);
-                pr.put("STARTBOX", boxno);
-                pr.put("TOTAL", "40");
-                pr.put("BG", "1");
-
-
-                byte[] bytes = JasperRunManager.runReportToPdf(reportFile.getPath(), pr, con);
-                response.setContentType("application/pdf");
-                response.setContentLength(bytes.length);
-
-                ServletOutputStream op = response.getOutputStream();
-                response.getOutputStream();
-                op.write(bytes, 0, bytes.length);
-                op.flush();
             } catch (Exception e) {
                 e.printStackTrace();
             }

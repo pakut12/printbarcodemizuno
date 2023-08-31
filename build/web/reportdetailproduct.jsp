@@ -367,13 +367,17 @@
                                 sumqty_result += parseInt(v)
                             })
                             
+                            
+                        
                             $.each(listdatamark,function(k,v){
+                                console.log(v)
                                 if(v == "*"){
                                     mark++;
+                                    
                                 }
                                 
                             })
-                            
+                            console.log(mark)
                         
                             return $('<tr/>')
                             .append( '<th colspan="7" class="text-end ">รวม : </th>' )

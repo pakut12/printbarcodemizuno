@@ -7,9 +7,11 @@ package com.pg.lib.Servlet;
 import com.google.gson.Gson;
 import com.pg.lib.model.BCInvoice;
 import com.pg.lib.service.InvoiceService;
+import com.pg.lib.utility.Utility;
 import java.io.*;
 import java.net.*;
 
+import java.util.List;
 import javax.servlet.*;
 import javax.servlet.http.*;
 import org.json.JSONArray;
@@ -40,29 +42,70 @@ public class Invoice extends HttpServlet {
                     String invoicedate = request.getParameter("invoicedate");
                     String saveingno = request.getParameter("saveingno");
                     String listpo = request.getParameter("po");
-                    
-                    
-                    System.out.println(invoiceno);
-                    System.out.println(invoicedate);
-                    System.out.println(saveingno);
-                    System.out.println(listpo);
-                    
+
                     boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo);
 
-                    if(status){
+                    if (status) {
                         out.print("true");
-                    }else{
+                    } else {
                         out.print("false");
                     }
-                    
-                    
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
+            } else if (type.equals("gettableinvoice")) {
+                try {
+                    int draw = Integer.parseInt(request.getParameter("draw"));
+                    int start = Integer.parseInt(request.getParameter("start"));
+                    int length = Integer.parseInt(request.getParameter("length"));
+                    String searchValue = request.getParameter("search[value]");
+                    String orderColumn = request.getParameter("order[0][column]");
+                    String orderDir = request.getParameter("order[0][dir]");
+
+                    InvoiceService ivs = new InvoiceService();
+                    List<BCInvoice> rows = ivs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir);
+
+                    Gson gson = new Gson();
+
+                    JSONObject obj = new JSONObject();
+                    obj.put("draw", draw);
+                    obj.put("recordsTotal", ivs.getTotalRecords());
+                    obj.put("recordsFiltered", ivs.getFilteredRecords(searchValue));
+                    obj.put("data", gson.toJsonTree(rows));
+
+                    response.setContentType("application/json");
+                    response.getWriter().write(obj.toString());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else if (type.equals("viewinvoice")) {
+
+                try {
+
+                    String invoiceid = request.getParameter("invoiceid").trim();
+                    List<BCInvoice> listdata = InvoiceService.getDataFromDatabaseById(invoiceid);
+
+                    Gson gson = new Gson();
+
+                    JSONObject obj = new JSONObject();
+                    obj.put("invoiceid", listdata.get(0).getInvoiceid());
+                    obj.put("invoiceno", listdata.get(0).getInvoiceno());
+                    obj.put("invoicedate", Utility.CoverDatetoInput(listdata.get(0).getInvoicedate()));
+                    obj.put("saveingno", listdata.get(0).getSaveingno());
+                    obj.put("data", gson.toJsonTree(listdata));
+
+                    out.print(obj);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
             }
-
-
 
         } finally {
             out.close();

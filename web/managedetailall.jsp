@@ -58,6 +58,7 @@
                     <div class="card-body">
                         <form id="myform">
                             <div class="container">
+                                <input type="hidden" id="boxseq">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
@@ -504,6 +505,9 @@
                 var invoiceno = $("#invoiceno").val();
                 var invoicedate = $("#invoicedate").val();
                 
+                var boxseq = $("#boxseq").val();
+                     
+                
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
                         type:"post",
@@ -552,7 +556,8 @@
                             po_old:po_old,
                             firstdigitbefore:firstdigitbefore,
                             invoiceno:invoiceno,
-                            invoicedate:invoicedate
+                            invoicedate:invoicedate,
+                            boxseq:boxseq
                         },
                         success:function(msg){
                             
@@ -724,10 +729,7 @@
                             $("#pobefore").attr("disabled", true);
                             $("#date_create").attr("disabled", true);
                             
-                           
-                            
                           
-                       
                             $("#numberbox_start").val(numstart);
                             $("#numberbox_end").val(numend);
                             $("#invoiceno").val(js.invoiceno);
@@ -737,6 +739,8 @@
                             }else{
                                 $("#invoicedate").val("");
                             }
+                            
+                            $("#boxseq").val(js.boxseq);
                             
                             console.log(numstart)
                             console.log(numend)

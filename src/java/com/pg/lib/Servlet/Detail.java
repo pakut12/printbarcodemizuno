@@ -108,6 +108,7 @@ public class Detail extends HttpServlet {
                     obj.put("netweight", detailbox.get(0).getNetweight());
                     obj.put("country_origin", detailbox.get(0).getCountry_origin());
                     obj.put("allbox", detailbox.get(0).getAllbox());
+                    obj.put("boxseq", detailbox.get(0).getBoxseq());
 
                     if (listcm1.size() > 0) {
                         obj.put("sku_item1", listcm1.get(0).getCustomer_no());
@@ -213,6 +214,7 @@ public class Detail extends HttpServlet {
                     String startbox = request.getParameter("startbox").trim();
                     String endbox = request.getParameter("endbox").trim();
 
+                    String boxseq = request.getParameter("boxseq").trim();
                     DetailService ds = new DetailService();
 
                     // List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigitbefore);
@@ -224,7 +226,7 @@ public class Detail extends HttpServlet {
                     // Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
 
 
-                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, invoiceno, invoicedate, firstdigitbefore, startbox, endbox);
+                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, invoiceno, invoicedate, firstdigitbefore, startbox, endbox,boxseq);
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore, startbox, endbox);
 
                     JSONObject obj = new JSONObject();
@@ -338,7 +340,8 @@ public class Detail extends HttpServlet {
                 obj.put("customer_address", detailbox.get(0).getCustomer_address());
                 obj.put("invoiceno", detailbox.get(0).getInvoiceno());
                 obj.put("invoicedate", detailbox.get(0).getInvoicedate());
-
+                obj.put("boxseq", detailbox.get(0).getBoxseq());
+                
                 out.print(obj);
             } else if (type.equals("updatedetails")) {
                 try {

@@ -74,6 +74,15 @@ public class BCDetailBox {
     private String ctn;
     private String customer_color;
     private String customer_size;
+    private String boxseq;
+
+    public String getBoxseq() {
+        return boxseq;
+    }
+
+    public void setBoxseq(String boxseq) {
+        this.boxseq = boxseq;
+    }
 
     public String getCustomer_size() {
         return customer_size;

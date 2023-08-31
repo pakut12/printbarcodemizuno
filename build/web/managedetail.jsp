@@ -53,6 +53,7 @@
                     <div class="card-header">คีย์ข้อมูล</div>
                     <div class="card-body">
                         <div class="container">
+                            <input id="boxseq" type="hidden">
                             <div class="row">
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
@@ -489,6 +490,7 @@
         
                 var invoiceno = $("#invoiceno").val();
                 var invoicedate = $("#invoicedate").val();
+                var boxseq = $("#boxseq").val();
                 
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
@@ -761,6 +763,8 @@
                             
                             $("#invoiceno").val(js.invoiceno);
                             $("#invoicedate").val(js.invoicedate.replace(" 00:00:00.0",""));
+                            $("#boxseq").val(js.boxseq);
+                            
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

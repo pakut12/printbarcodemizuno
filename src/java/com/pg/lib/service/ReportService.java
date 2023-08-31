@@ -65,7 +65,7 @@ public class ReportService {
             }
 
             if (!po_old.equals("")) {
-                sql += " a.PO_OLD = '" + po_old + "' and '";
+                sql += " a.PO_OLD = '" + po_old + "' and ";
             }
 
             if (!pallet.equals("")) {
@@ -166,7 +166,7 @@ public class ReportService {
             }
 
             if (!po_old.equals("")) {
-                sql += " a.PO_OLD = '" + po_old + "' and '";
+                sql += " a.PO_OLD = '" + po_old + "' and ";
             }
 
             if (!pallet.equals("")) {
@@ -246,7 +246,7 @@ public class ReportService {
             }
 
             if (!po_old.equals("")) {
-                sql += " a.PO_OLD = '" + po_old + "' and '";
+                sql += " a.PO_OLD = '" + po_old + "' and ";
             }
 
             if (!pallet.equals("")) {
@@ -326,7 +326,7 @@ public class ReportService {
             }
 
             if (!po_old.equals("")) {
-                sql += " a.PO_OLD = '" + po_old + "' and '";
+                sql += " a.PO_OLD = '" + po_old + "' and ";
             }
 
             if (!pallet.equals("")) {
@@ -406,7 +406,7 @@ public class ReportService {
     }
 
     public int getFilteredRecordsproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit,
-            int start, int length, String searchValue, String orderColumn, String orderDir,String datestart,String datestop) throws ClassNotFoundException, SQLException, NamingException {
+            int start, int length, String searchValue, String orderColumn, String orderDir, String datestart, String datestop) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
             String sql = "";
@@ -421,7 +421,7 @@ public class ReportService {
             if (!datestart.isEmpty() && !datestop.isEmpty()) {
                 sql += " c.DATE_CREATE BETWEEN TO_DATE('" + datestart + "', 'yyyy/mm/dd') AND TO_DATE('" + datestop + "', 'yyyy/mm/dd') and ";
             }
-            
+
             if (!customer_no.isEmpty()) {
                 sql += " b.customer_no = '" + customer_no + "' and ";
             }
@@ -471,7 +471,7 @@ public class ReportService {
         return totalRecords;
     }
 
-    public int getTotalRecordsproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit,String datestart,String datestop) throws ClassNotFoundException, SQLException, NamingException {
+    public int getTotalRecordsproductdetails(String po, String customer_no, String customer_product, String pallet, String boxstart, String boxend, String firstdigit, String datestart, String datestop) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
             String sql = "";
@@ -482,11 +482,11 @@ public class ReportService {
             if (!po.isEmpty()) {
                 sql += "a.po = '" + po + "' and";
             }
-            
+
             if (!datestart.isEmpty() && !datestop.isEmpty()) {
                 sql += " c.DATE_CREATE BETWEEN TO_DATE('" + datestart + "', 'yyyy/mm/dd') AND TO_DATE('" + datestop + "', 'yyyy/mm/dd') and ";
             }
-            
+
             if (!customer_no.isEmpty()) {
                 sql += " b.customer_no = '" + customer_no + "' and ";
             }
@@ -840,6 +840,48 @@ public class ReportService {
             ps.close();
         }
         return filteredRecords;
+    }
+
+    private static boolean chackboxseq(String po) throws SQLException {
+        boolean status = false;
+
+        try {
+            String sql = "select boxseq from MIZUNONEWBARBOXDT where po = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, po);
+            rs = ps.executeQuery();
+
+            int a = 0;
+            String str1 = "";
+            String str2 = "";
+            while (rs.next()) {
+                if (a == 0) {
+                    str1 = rs.getString("boxseq");
+                } else if (a == 1) {
+                    str2 = rs.getString("boxseq");
+                } else {
+                    break;
+                }
+                a++;
+            }
+
+            if (str1.equals(str2)) {
+                status = false;
+            } else {
+                status = true;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+
+        return status;
     }
 
     public List<BCDetailBox> listreportviewpo(

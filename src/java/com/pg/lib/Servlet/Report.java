@@ -101,37 +101,27 @@ public class Report extends HttpServlet {
                     for (BCDetailBox li : listsum) {
                         int mark = 0;
 
-                        System.out.println(li.getPo());
+
                         if (li.getSku_item1().equals(li.getCustomer_no())) {
-
-
                             qty_result = li.getQty_result1();
                             qty = li.getQty1();
-                            if (Integer.parseInt(li.getQty_result1()) < Integer.parseInt(li.getQty1())) {
-                                mark++;
-                                diff = Integer.parseInt(li.getQty1()) - Integer.parseInt(li.getQty_result1());
-                            }
                         } else if (li.getSku_item2().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result2();
                             qty = li.getQty2();
-                            if (Integer.parseInt(li.getQty_result2()) < Integer.parseInt(li.getQty1())) {
-                                mark++;
-                                diff = Integer.parseInt(li.getQty2()) - Integer.parseInt(li.getQty_result2());
-                            }
+
                         } else if (li.getSku_item3().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result3();
                             qty = li.getQty3();
-                            if (Integer.parseInt(li.getQty_result3()) < Integer.parseInt(li.getQty1())) {
-                                mark++;
-                                diff = Integer.parseInt(li.getQty3()) - Integer.parseInt(li.getQty_result3());
-                            }
+
                         } else if (li.getSku_item4().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result4();
                             qty = li.getQty4();
-                            if (Integer.parseInt(li.getQty_result4()) < Integer.parseInt(li.getQty1())) {
-                                mark++;
-                                diff = Integer.parseInt(li.getQty4()) - Integer.parseInt(li.getQty_result4());
-                            }
+
+                        }
+
+                        if (Integer.parseInt(qty_result) < Integer.parseInt(qty)) {
+                            mark++;
+                            diff = Integer.parseInt(qty) - Integer.parseInt(qty_result);
                         }
 
                         sumqty_result += Integer.parseInt(qty_result);

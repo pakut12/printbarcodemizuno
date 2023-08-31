@@ -16,46 +16,78 @@
         
         <%@ include file="share/navbar.jsp" %>
         
-        <div class="modal fade" id="modal_editinvoice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog ">
+        <div class="modal fade" id="modal_viewinvoice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">เเก้ไขข้อมูลที่อยู่ลูกค้า</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <form id="myformeditaddress">
-                        <div class="container mt-3">
-                            <input type="hidden" class="form-control text-center" name="edit_address_id" id="edit_address_id" readonly>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                <input type="text" class="form-control text-center" name="edit_address_customer" id="edit_address_customer" required>
+                    <form id="myformaddinvoice" novalidate>
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">เเก้ไขข้อมูล Invoice</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        
+                        <div class="container">
+                            <div class="d-flex justify-content-center">
+                                <div class="row mt-3 mx-auto ">
+                                    <div class="col-sm-12 col-md-12">
+                                        
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
+                                            <input type="text" class="form-control text-center" name="edit_invoiceno" id="edit_invoiceno" required>
+                                        </div> 
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">INVOICEDATE</span>
+                                            <input type="date" class="form-control text-center" name="edit_invoicedate" id="edit_invoicedate" required>
+                                        </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">SAVEING NO</span>
+                                            <input type="text" class="form-control text-center" name="edit_saveingno" id="edit_saveingno" required>
+                                        </div>
+                                        
+                                    </div>
+                                    <hr>
+                                    <div class="col-sm-12 col-md-12 ">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
+                                            <input type="text" class="form-control text-center" name="edit_po" id="edit_po" required>
+                                        </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Firstdigit</span>
+                                            <input type="text" class="form-control text-center" name="edit_firstdigit" id="edit_firstdigit" required>
+                                        </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Startbox</span>
+                                            <input type="text" class="form-control text-center" name="edit_startbox" id="edit_startbox" required>
+                                        </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Endbox</span>
+                                            <input type="text" class="form-control text-center" name="edit_endbox" id="edit_endbox" required>
+                                        </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Container no</span>
+                                            <input type="text" class="form-control text-center" name="edit_containerno" id="edit_containerno" required>
+                                        </div>
+                                        <button type="button" class="btn btn-success btn-sm w-100" id="edit_addpo" onclick="addpoedit()" >เพิ่ม PO</button>
+                                    </div>
+                                </div> 
                             </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">สถานที่ส่ง</span>
-                                <input type="text" class="form-control text-center" name="edit_address_deliveredto" id="edit_address_deliveredto" required>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">ที่อยู่ 1</span>
-                                <input type="text" class="form-control text-center" name="edit_address_address1" id="edit_address_address1" required>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">ที่อยู่ 2</span>
-                                <input type="text" class="form-control text-center" name="edit_address_address2" id="edit_address_address2" required>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">ที่อยู่ 3</span>
-                                <input type="text" class="form-control text-center" name="edit_address_address3" id="edit_address_address3" required>
-                            </div>
-                            <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">ที่อยู่ 4</span>
-                                <input type="text" class="form-control text-center" name="edit_address_address4" id="edit_address_address4" required>
-                            </div>
+                            
+                            <div class="row mt-3 mx-auto mb-3">
+                                <div class="col-sm-12 col-md-12">
+                                    
+                                    <table class="table table-sm  w-100" id="table_editinvoice">
+                                        
+                                    </table>
+                                    
+                                </div>
+                            </div> 
+                            
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
+                            <button type="submit" class="btn btn-primary" id="address_save" >บันทึก</button>
                         </div>
                     </form>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                        <button type="button" class="btn btn-primary" id="address_save" onclick="update_address()" >บันทึก</button>
-                    </div>
                 </div>
             </div>
         </div>
@@ -115,12 +147,10 @@
                                 </div> 
                             </div>
                             
-                            
-                            
                             <div class="row mt-3 mx-auto mb-3">
                                 <div class="col-sm-12 col-md-12">
                                     
-                                    <table class="table table-sm " id="table_addinvoice">
+                                    <table class="table table-sm w-100" id="table_addinvoice">
                                         
                                     </table>
                                     
@@ -144,10 +174,10 @@
             <div class="card shadow-lg mt-3">
                 <div class="card-header">เเสดงข้อมูล INVOICE</div>
                 <div class="card-body">
-                    <div class="d-flex justify-content-end">
-                        <button class="btn btn-sm btn-success" id="addinvoice" onclick="$('#modal_addinvoice').modal('show')">เพิ่มข้อมูล</button>
+                    <div class="d-flex justify-content-end mb-3">
+                        <button class="btn btn-sm btn-success" id="addinvoice" onclick="btninvoice()">เพิ่มข้อมูล</button>
                     </div>
-                    <table class="table table-sm" id="table_invoice">
+                    <table class="table table-sm w-100 text-center table-bordered" id="table_invoice">
                         
                     </table>
                 </div>
@@ -163,22 +193,186 @@
             $( "#myformaddinvoice" ).on( "submit", function( event ) {
               
                 if (this.checkValidity() === false) {
-                  
                     $("#myformaddinvoice").addClass('was-validated');
                 } else {
-                    event.preventDefault();
                     addInvoice();
                 }
+                event.preventDefault();
             });
            
+            function gettableinvoice(){
+                $("#table_invoice").DataTable({
+                    serverSide: true,
+                    ajax: {
+                        type:"post",
+                        url:"Invoice",
+                        data:{
+                            type:"gettableinvoice" 
+                        },
+                        dataSrc:function(json){
+                            var arr = [];
+                            var data = JSON.parse(json.data);
+                            
+                            $.each(data,function(k,v){
+                                
+                                var txtgroup = '<div class="container"><div class="d-flex justify-content-between">'
+                                txtgroup    += '<div class="">'
+                                txtgroup    += 'Invoiceno : '+v.invoiceno+'<br>'
+                                txtgroup    += 'Invoicedate : '+v.invoicedate+'<br>'
+                                txtgroup    += 'Saveingno : '+v.saveingno+'<br>'
+                                txtgroup    += 'Invoice Create : '+v.date_create+'</div>'
+                                txtgroup  += '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid+')" id="bt_edit">ดูรายละเอียด</button>'
+                                txtgroup  += '</div></div>'
+                                
+                                var result = {
+                                    textgroup : txtgroup,
+                                    invoiceid : v.invoiceid,
+                                    invoiceno : v.invoiceno,
+                                    invoicedate :  v.invoicedate,
+                                    saveingno :  v.saveingno,
+                                    po :  v.po,
+                                    firstdigit :  v.firstdigit,
+                                    startbox :  v.startbox,
+                                    endbox :  v.endbox,
+                                    containerno :  v.containerno,
+                                    date_create : v.date_create,
+                                    btn_edit : '<button class="btn btn-warning btn-sm" type="button" onclick="edit_customer('+v.invoiceid+')" id="bt_edit">เเก้ไข</button>',
+                                    btn_del : '<button class="btn btn-danger btn-sm" type="button" onclick="del_customer('+v.invoiceid+')" id="bt_del">ลบ</button>'
+                                }
+                                arr.push(result);
+                             
+                            })
+                            return arr
+                        }
+                    },
+                    columns: [
+                       
+                        {
+                            title : 'po',
+                            data : 'po'
+                        },
+                        {
+                            title:'firstdigit',
+                            data : 'firstdigit' 
+                        },
+                        {
+                            title:'startbox',
+                            data : 'startbox' 
+                        },
+                        {
+                            title:'endbox',
+                            data : 'endbox' 
+                        },
+                        {
+                            title:'containerno',
+                            data : 'containerno' 
+                        },
+                                      
+                        
+                    ],
+                    rowGroup: {
+                        dataSrc: 'textgroup'
+                    },
+                    bDestroy: true
+                  
+                          
+                });
+            }
             
+         
+            /********************************************* EDIT PO ************************************************/
+            function viewInvoice(id){
+                $('#modal_viewinvoice').modal('show')
+                
+                $.ajax({
+                    type:'post',
+                    url:'Invoice',
+                    data:{
+                        type:'viewinvoice',
+                        invoiceid:id
+                    },
+                    success:function(msg){
+                        var js = JSON.parse(msg)
+                        var jsdecode = JSON.parse(js.data)
+           
+                        $("#edit_invoiceno").val(js.invoiceno)
+                        $("#edit_invoicedate").val(js.invoicedate)
+                        $("#edit_saveingno").val(js.saveingno)
+                       
+                        listpo.length = 0
+                        $.each(jsdecode,function(k,v){
+                            
+                            var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="delpo(\'' + v.po + '\')">ลบ</button>';
+           
+                            var objpo = {
+                                po:v.po,
+                                firstdigit:v.firstdigit,
+                                startbox:v.startbox,
+                                endbox:v.endbox,
+                                containerno:v.containerno,
+                                btdel:btndel
+                            }
+                           
+                            listpo.push(objpo);
+        
+                        })
+                        gettbeditpo()
+                        console.log(listpo)
+                        
+                    }
+                })
+                
+            }
+           
+
+            function gettbeditpo(){
+                $("#table_editinvoice").DataTable({
+                    destroy: true,
+                    data:listpo,
+                    columns: [
+                        { 
+                            title: 'PO',
+                            data: "po"
+                        },
+                        { 
+                            title: 'Firstdigit',
+                            data: "firstdigit"
+                        },
+                        { 
+                            title: 'Startbox',
+                            data: "startbox"
+                        },
+                        { 
+                            title: 'Endbox',
+                            data: "endbox"
+                        },
+                        { 
+                            title: 'Container No',
+                            data: "containerno"
+                        },
+                        { 
+                            title: 'Del',
+                            data: "btdel"
+                        },
+                    ]
+                }) 
+            }
+
+
+            
+            /********************************************* EDIT PO ************************************************/
     
-    
-    
+   
             /********************************************* ADDPO ************************************************/
+            
+            function btninvoice(){
+                listpo.length = 0
+                $('#modal_addinvoice').modal('show')
+                gettbpo()
+            }
+            
             function addInvoice(){
                
-                
                 $.ajax({
                     type:"POST",
                     url:"Invoice",
@@ -207,6 +401,7 @@
                         $('#myformaddinvoice input').val('')
                         listpo.length = 0
                         gettbpo()
+                        
                     }
                 })
         
@@ -218,9 +413,7 @@
                     console.log(listpo[i].po)
                     if (listpo[i].po == po) {
                         listpo.splice(i, 1);
-                        console.log(listpo)
-                        gettbpo()
-                                    
+                        gettbpo()  
                         break;
                         //i--; // Decrement i to recheck the current index after the splice
                     }
@@ -228,6 +421,8 @@
             }
     
             function addpo(){
+                
+        
                 var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="delpo(\'' + $('#add_po').val() + '\')">ลบ</button>';
                
                 
@@ -263,7 +458,13 @@
                         text:"บันทึกไม่สำเร็จ : มีข้อมูลอยู่เเล้ว"
                     })
                 }
-                
+         
+                $("#add_po").val('')
+                $("#add_firstdigit").val('')
+                $("#add_startbox").val('')
+                $("#add_endbox").val('')
+                $("#add_containerno").val('')
+        
             }
             
            
@@ -305,7 +506,7 @@
             
             
             $(document).ready(function(){
-               
+                gettableinvoice()
                 
             })
         </script>

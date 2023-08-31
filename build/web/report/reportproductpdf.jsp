@@ -33,7 +33,6 @@
                 const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based, so we add 1 to get the correct month.
                 const year = currentDate.getFullYear();
 
-                // Format the date as "dd/mm/yyyy"
                 const formattedDate = day+"/"+month+"/"+year;
 
                 return formattedDate;
@@ -155,62 +154,55 @@
             int sum = 0;
             int suzm = 0;
             List<String> boxsum = new ArrayList<String>();
+            List<String> boxtotal = new ArrayList<String>();
 
 
             for (int i = 0; i < list.size(); i++) {
                 String mark = "";
                 String qty_result = "";
+                String qty = "";
                 customer_no = list.get(i).getCustomer_no();
                 if (list.get(i).getSku_item1().equals(customer_no)) {
                     qty_result = list.get(i).getQty_result1();
-                    if (Integer.parseInt(list.get(i).getQty_result1()) < Integer.parseInt(list.get(i).getQty1())) {
-                        mark = "*";
-                    }
+                    qty = list.get(i).getQty1();
                 } else if (list.get(i).getSku_item2().equals(customer_no)) {
                     qty_result = list.get(i).getQty_result2();
-                    if (Integer.parseInt(list.get(i).getQty_result2()) < Integer.parseInt(list.get(i).getQty1())) {
-                        mark = "*";
-                    }
+                    qty = list.get(i).getQty2();
                 } else if (list.get(i).getSku_item3().equals(customer_no)) {
                     qty_result = list.get(i).getQty_result3();
-                    if (Integer.parseInt(list.get(i).getQty_result3()) < Integer.parseInt(list.get(i).getQty1())) {
-                        mark = "*";
-                    }
+                    qty = list.get(i).getQty3();
                 } else if (list.get(i).getSku_item4().equals(customer_no)) {
                     qty_result = list.get(i).getQty_result4();
-                    if (Integer.parseInt(list.get(i).getQty_result4()) < Integer.parseInt(list.get(i).getQty1())) {
-                        mark = "*";
-                    }
+                    qty = list.get(i).getQty4();
                 }
+
 
                 String D = (String) list.get(i).getDate_create();
                 if (D != null) {
                     D = list.get(i).getDate_create().substring(0, 10);
                 }
 
-                if (mark.equals("*")) {
-                    marknum++;
-                }
-
                 DetailService ds = new DetailService();
 
 
                 if (n <= 12) {
+                    if (Integer.parseInt(qty_result) < Integer.parseInt(qty) && marknum < 12) {
+                        mark = "*";
+                        marknum++;
+                    }
+
                     sum += Integer.parseInt(ds.ChackNull(qty_result));
                     out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+
 
                     boxsum.add(list.get(i).getBoxno());
 
                     n1++;
                 } else if (n == 13) {
 
-                    if (marknum == 0) {
-                        marknum = 0;
-                    } else {
-                        marknum = marknum - 1;
-                    }
+
                     int ax = 0;
-                    List<String> boxtotal = new ArrayList<String>();
+
                     for (String op : boxsum) {
                         if (!boxtotal.contains(op)) {
                             ax++;
@@ -226,20 +218,21 @@
                     i--;
                     marknum = 0;
                     boxsum.clear();
-                    boxtotal.clear();
+
 
                 }
 
                 if (n1 == list.size() + 1) {
 
                     int ax = 0;
-                    List<String> boxtotal = new ArrayList<String>();
+
                     for (String op : boxsum) {
                         if (!boxtotal.contains(op)) {
                             ax++;
                             boxtotal.add(op);
                         }
                     }
+                    //System.out.println(boxtotal);
                     out.print("[{text: 'รวม',colSpan: 5},'" + sum + "','" + sum + "','" + sum + "','" + sum + "','" + ax + "','" + sum + "','" + (marknum) + "'],");
                     n1 = 1;
                 }
@@ -259,7 +252,6 @@
                                             font: 'THSarabunNew'
                                         }
                                     }
-            
             
                                     const date = new Date();
                                     const options = { day: 'numeric', month: 'numeric', year: 'numeric' };

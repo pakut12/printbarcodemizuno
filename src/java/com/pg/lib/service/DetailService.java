@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import javax.naming.NamingException;
 
 /**
  *
@@ -147,7 +148,7 @@ public class DetailService {
         return status;
     }
 
-    public Boolean UpdateMIZUNONEWBARBOXRESULTTEST(String pobefore, String po, String firstdigit, String startboxbefore, String endboxbefore, String firstdigitbefore,String startbox,String endbox) throws SQLException {
+    public Boolean UpdateMIZUNONEWBARBOXRESULTTEST(String pobefore, String po, String firstdigit, String startboxbefore, String endboxbefore, String firstdigitbefore, String startbox, String endbox) throws SQLException {
         Boolean status = false;
         try {
 
@@ -819,6 +820,8 @@ public class DetailService {
                 box.setCustomer_address(rs.getString("DELIVERY"));
                 box.setInvoiceno(rs.getString("invoiceno"));
                 box.setInvoicedate(rs.getString("invoicedate"));
+                
+                box.setBoxseq(rs.getString("boxseq"));
                 listdetail.add(box);
 
             }
@@ -1086,6 +1089,8 @@ public class DetailService {
 
                 box.setInvoiceno(rs.getString("invoiceno"));
                 box.setInvoicedate(rs.getString("invoicedate"));
+                box.setBoxseq(rs.getString("boxseq"));
+                
                 listdetail.add(box);
             }
 
@@ -1221,6 +1226,26 @@ public class DetailService {
         return sql;
     }
 
+    private int getboxseq() throws SQLException, NamingException, ClassNotFoundException {
+        int seq = 0;
+
+        try {
+            String sql = "select  max(boxseq) as lastseq  from MIZUNONEWBARBOXDT ";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                seq = rs.getInt("lastseq");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return seq;
+    }
+
     public Boolean AddDataToMIZUNONEWBARBOXDT(String customer_address, String po_old, String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date, String invoiceno, String invoicedate) throws SQLException {
         Boolean status = false;
 
@@ -1237,6 +1262,8 @@ public class DetailService {
                 invoicedate = "";
             }
 
+            int ax = getboxseq()+1;
+            
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -1306,7 +1333,7 @@ public class DetailService {
         return status;
     }
 
-    public Boolean UpdateDataToMIZUNONEWBARBOXDT(String customer_address, String po_old, String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date, String invoiceno, String invoicedate, String firstdigitbefore, String startbox, String endbox) throws SQLException {
+    public Boolean UpdateDataToMIZUNONEWBARBOXDT(String customer_address, String po_old, String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date, String invoiceno, String invoicedate, String firstdigitbefore, String startbox, String endbox,String boxseq) throws SQLException {
         Boolean status = false;
 
         try {
