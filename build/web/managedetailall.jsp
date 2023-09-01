@@ -61,16 +61,20 @@
                                 <input type="hidden" id="boxseq">
                                 <div class="row">
                                     <div class="col-sm-12 col-md-4">
+                                        <!--
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
                                             <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno"  disabled>
                                         </div>
+                                        -->
                                     </div>
                                     <div class="col-sm-12 col-md-4">
+                                        <!--
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
                                             <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  disabled>
                                         </div>
+                                        -->
                                     </div>
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">

@@ -5,6 +5,7 @@
 package com.pg.lib.service;
 
 import com.pg.lib.model.BCDetailBox;
+import com.pg.lib.model.BCInvoice;
 import com.pg.lib.utility.ConnectDB;
 import com.pg.lib.utility.Utility;
 import java.sql.*;
@@ -238,43 +239,32 @@ public class PackingListService {
         return listbox;
     }
 
-    public static List<BCDetailBox> getPackingListPO(String Invoiceno, String InvoiceDate) throws SQLException {
-        List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+    public static List<BCInvoice> getPackingListByid(String id) throws SQLException {
+        List<BCInvoice> listbox = new ArrayList<BCInvoice>();
         String sql = "";
         try {
 
-            sql += " SELECT tb.* ";
-            sql += " FROM ( ";
-            sql += " SELECT ";
-            sql += "  a.PO, ";
-            sql += "  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') AS firstdigit, ";
-            sql += "  MIN(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+') AS INT)) AS boxstart, ";
-            sql += "  MAX(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+') AS INT)) AS boxend, ";
-            sql += "  a.INVOICENO, ";
-            sql += "  a.INVOICEDATE ";
-            sql += "  FROM MIZUNONEWBARBOXDT a ";
-            sql += "  INNER JOIN MIZUNOCUSTOMER b ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
-            sql += "  GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),a.INVOICENO,a.INVOICEDATE ";
-            sql += "  ) tb ";
-            sql += "  WHERE INVOICENO = ? and INVOICEDATE = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') ";
-            sql += "  ORDER BY tb.PO, tb.firstdigit, tb.boxend ";
-
+            sql = "select * from MIZUNONEWBARBOXINVOICE where INVOICEID = ? ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-
-            ps.setString(1, Invoiceno);
-            ps.setString(2, InvoiceDate);
-
+            ps.setString(1, id);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                BCDetailBox detail = new BCDetailBox();
-                detail.setPo(rs.getString("PO"));
-                detail.setFirstdigit(rs.getString("firstdigit"));
-                detail.setStartbox(rs.getString("boxstart"));
-                detail.setEndbox(rs.getString("boxend"));
-               
-                listbox.add(detail);
+                BCInvoice iv = new BCInvoice();
+                iv.setInvoiceid(rs.getString("INVOICEID"));
+                iv.setInvoiceno(rs.getString("INVOICENO"));
+                iv.setInvoicedate(rs.getString("INVOICEDATE"));
+                iv.setPo(rs.getString("PO"));
+                iv.setSaveingno(rs.getString("SAVEINGNO"));
+                iv.setFirstdigit(rs.getString("FIRSTDIGIT"));
+                iv.setStartbox(rs.getString("STARTBOX"));
+                iv.setEndbox(rs.getString("ENDBOX"));
+                iv.setContainerno(rs.getString("CONTAINERNO"));
+                iv.setDate_create(rs.getString("DATE_CREATE"));
+                iv.setDate_modified(rs.getString("DATE_MODIFIED"));
+                
+                listbox.add(iv);
             }
 
         } catch (Exception e) {

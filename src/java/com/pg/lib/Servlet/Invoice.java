@@ -8,12 +8,18 @@ import com.google.gson.Gson;
 import com.pg.lib.model.BCInvoice;
 import com.pg.lib.service.InvoiceService;
 import com.pg.lib.utility.Utility;
+
 import java.io.*;
 import java.net.*;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.http.*;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -30,7 +36,7 @@ public class Invoice extends HttpServlet {
      * @param response servlet response
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException, SQLException {
         response.setContentType("text/html;charset=UTF-8");
         PrintWriter out = response.getWriter();
         try {
@@ -58,6 +64,12 @@ public class Invoice extends HttpServlet {
 
             } else if (type.equals("gettableinvoice")) {
                 try {
+
+                    String search_invoiceno = request.getParameter("search_invoiceno");
+                    String search_invoicedate = request.getParameter("search_invoicedate");
+                    String search_datestart = request.getParameter("search_datestart");
+                    String search_dateend = request.getParameter("search_dateend");
+
                     int draw = Integer.parseInt(request.getParameter("draw"));
                     int start = Integer.parseInt(request.getParameter("start"));
                     int length = Integer.parseInt(request.getParameter("length"));
@@ -66,7 +78,7 @@ public class Invoice extends HttpServlet {
                     String orderDir = request.getParameter("order[0][dir]");
 
                     InvoiceService ivs = new InvoiceService();
-                    List<BCInvoice> rows = ivs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir);
+                    List<BCInvoice> rows = ivs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir,search_invoiceno,search_invoicedate,search_datestart,search_dateend);
 
                     Gson gson = new Gson();
 
@@ -97,6 +109,7 @@ public class Invoice extends HttpServlet {
                     obj.put("invoicedate", Utility.CoverDatetoInput(listdata.get(0).getInvoicedate()));
                     obj.put("saveingno", listdata.get(0).getSaveingno());
                     obj.put("data", gson.toJsonTree(listdata));
+                    obj.put("datecreate", listdata.get(0).getDate_create());
 
                     out.print(obj);
 
@@ -105,6 +118,48 @@ public class Invoice extends HttpServlet {
                 }
 
 
+            } else if (type.equals("delinvoice")) {
+                try {
+                    String delid = request.getParameter("id").trim();
+                    System.out.println(delid);
+                    Boolean delstatus = InvoiceService.delinvoice(delid);
+
+                    if (delstatus) {
+                        out.print("true");
+                    } else {
+                        out.print("false");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            } else if (type.equals("updateinvoice")) {
+                try {
+                    String delid = request.getParameter("id").trim();
+                    String invoiceno = request.getParameter("invoiceno");
+                    String invoicedate = request.getParameter("invoicedate");
+                    String saveingno = request.getParameter("saveingno");
+                    String listpo = request.getParameter("po");
+                    String datecreate = request.getParameter("datecreate");
+
+                    boolean delstatus = InvoiceService.delinvoice(delid);
+
+                    if (delstatus) {
+                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate);
+                        if (status) {
+                            out.print("true");
+                        } else {
+                            out.print("false");
+                        }
+                    } else {
+                        out.print("false");
+                    }
+
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         } finally {
@@ -120,7 +175,11 @@ public class Invoice extends HttpServlet {
      */
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Invoice.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** 
@@ -130,7 +189,11 @@ public class Invoice extends HttpServlet {
      */
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        try {
+            processRequest(request, response);
+        } catch (SQLException ex) {
+            Logger.getLogger(Invoice.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /** 

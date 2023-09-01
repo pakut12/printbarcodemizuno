@@ -91,7 +91,6 @@
                                             <th  class='text-center'>Firstdigit</th>
                                             <th  class='text-center'>Startbox</th>
                                             <th  class='text-center'>Endbox</th>
-                                            
                                             <th  class='text-center'>Date</th>
                                         </tr>
                                     </thead>

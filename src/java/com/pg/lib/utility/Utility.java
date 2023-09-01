@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
@@ -96,7 +97,7 @@ public class Utility {
         Date currentDate = new Date();
 
         // Create a SimpleDateFormat instance with the desired pattern
-        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        SimpleDateFormat outputDateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.ENGLISH);
 
         // Format the current date and time
         String formattedDate = outputDateFormat.format(currentDate);
@@ -106,4 +107,6 @@ public class Utility {
 
         return formattedDate;
     }
+    
+    
 }

@@ -722,8 +722,8 @@ public class DetailService {
             ps.setString(43, po_old);
             ps.setString(44, customer_address);
             ps.setString(45, date);
-            ps.setString(46, invoiceno);
-            ps.setString(47, invoicedate);
+            ps.setString(46, "");
+            ps.setString(47, "");
 
             ps.setString(48, pobefore);
             ps.setString(49, boxnobefore);
@@ -820,7 +820,7 @@ public class DetailService {
                 box.setCustomer_address(rs.getString("DELIVERY"));
                 box.setInvoiceno(rs.getString("invoiceno"));
                 box.setInvoicedate(rs.getString("invoicedate"));
-                
+
                 box.setBoxseq(rs.getString("boxseq"));
                 listdetail.add(box);
 
@@ -1090,7 +1090,7 @@ public class DetailService {
                 box.setInvoiceno(rs.getString("invoiceno"));
                 box.setInvoicedate(rs.getString("invoicedate"));
                 box.setBoxseq(rs.getString("boxseq"));
-                
+
                 listdetail.add(box);
             }
 
@@ -1256,14 +1256,10 @@ public class DetailService {
             String sql = "INSERT INTO MIZUNONEWBARBOXDT (PO,BOXSEQ,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY,INVOICENO,INVOICEDATE) VALUES " +
                     "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
 
-            if (!invoicedate.equals("")) {
-                invoicedate = Utility.CoverDate(invoicedate);
-            } else {
-                invoicedate = "";
-            }
+      
 
-            int ax = getboxseq()+1;
-            
+            int ax = getboxseq() + 1;
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -1314,8 +1310,8 @@ public class DetailService {
                 ps.setString(44, po_old);
                 ps.setString(45, date);
                 ps.setString(46, customer_address);
-                ps.setString(47, invoiceno);
-                ps.setString(48, invoicedate);
+                ps.setString(47, "");
+                ps.setString(48, "");
                 ps.addBatch();
             }
 
@@ -1333,7 +1329,7 @@ public class DetailService {
         return status;
     }
 
-    public Boolean UpdateDataToMIZUNONEWBARBOXDT(String customer_address, String po_old, String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date, String invoiceno, String invoicedate, String firstdigitbefore, String startbox, String endbox,String boxseq) throws SQLException {
+    public Boolean UpdateDataToMIZUNONEWBARBOXDT(String customer_address, String po_old, String pobefore, String customer_num, String quantity_box, String initial, String numberbox_start, String numberbox_end, String po, String gw, String nw, String country, String quantitytotal_box, String description, String[] customer1_id, String[] customer2_id, String[] customer3_id, String[] customer4_id, String pallet, String prodorder, String destination, String date, String invoiceno, String invoicedate, String firstdigitbefore, String startbox, String endbox, String boxseq) throws SQLException {
         Boolean status = false;
 
         try {
@@ -1392,11 +1388,7 @@ public class DetailService {
                     "WHERE PO=? and BOXNO=? ";
 
 
-            if (!invoicedate.equals("")) {
-                invoicedate = Utility.CoverDate(invoicedate);
-            } else {
-                invoicedate = "";
-            }
+       
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -1452,8 +1444,8 @@ public class DetailService {
                 ps.setString(44, po_old);
                 ps.setString(45, date);
                 ps.setString(46, customer_address);
-                ps.setString(47, invoiceno);
-                ps.setString(48, invoicedate);
+                ps.setString(47, "");
+                ps.setString(48, "");
 
                 ps.setString(49, pobefore);
                 ps.setString(50, firstdigitbefore + n);

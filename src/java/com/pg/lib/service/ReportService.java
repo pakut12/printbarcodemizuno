@@ -842,34 +842,41 @@ public class ReportService {
         return filteredRecords;
     }
 
-    private static boolean chackboxseq(String po) throws SQLException {
-        boolean status = false;
-
+    public static List<BCDetailBox> GetPOALL(String id) throws SQLException {
+        List<BCDetailBox> list = new ArrayList<BCDetailBox>();
+        String sql = "";
         try {
-            String sql = "select boxseq from MIZUNONEWBARBOXDT where po = ?";
+            sql += "SELECT * ";
+            sql += " FROM (";
+            sql += "   SELECT";
+            sql += "    a.po,";
+            sql += "   REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') AS firstdigit,";
+            sql += "   REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+') AS boxno,";
+            sql += "    a.DATE_CREATE AS date_create";
+            sql += "   FROM";
+            sql += "     MIZUNONEWBARBOXDT a";
+            sql += "  INNER JOIN";
+            sql += "      MIZUNONEWBARBOXRESULT c ON c.po = a.po AND c.boxno = a.boxno";
+            sql += "  INNER JOIN";
+            sql += "    MIZUNOCUSTOMER b ON b.customer_no = a.SKU_ITEM1";
+            sql += "      OR b.customer_no = a.SKU_ITEM2";
+            sql += "   OR b.customer_no = a.SKU_ITEM3";
+            sql += "    OR b.customer_no = a.SKU_ITEM4";
+            sql += " ) where po = ?";
+            sql += " group by po,firstdigit,boxno,date_create ";
+            sql += " ORDER BY po,firstdigit,CAST(REGEXP_SUBSTR(BOXNO, '[[:digit:]]+')  as int),date_create ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, po);
+            ps.setString(1, id);
             rs = ps.executeQuery();
-
-            int a = 0;
-            String str1 = "";
-            String str2 = "";
             while (rs.next()) {
-                if (a == 0) {
-                    str1 = rs.getString("boxseq");
-                } else if (a == 1) {
-                    str2 = rs.getString("boxseq");
-                } else {
-                    break;
-                }
-                a++;
-            }
-
-            if (str1.equals(str2)) {
-                status = false;
-            } else {
-                status = true;
+                BCDetailBox box = new BCDetailBox();
+                box.setPo(rs.getString("po"));
+                box.setFirstdigit(rs.getString("firstdigit"));
+                box.setBoxno(rs.getString("boxno"));
+                box.setDate_create(rs.getString("date_create"));
+                list.add(box);
+                
             }
 
         } catch (Exception e) {
@@ -880,8 +887,7 @@ public class ReportService {
             rs.close();
         }
 
-
-        return status;
+        return list;
     }
 
     public List<BCDetailBox> listreportviewpo(
@@ -920,6 +926,8 @@ public class ReportService {
                     ")x )where rnum BETWEEN ? AND ? ";
 
 
+            System.out.println(sql);
+            
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             if (!datestart.equals("") || !dateend.equals("")) {
@@ -945,7 +953,6 @@ public class ReportService {
                 report.setEndbox(rs.getString("boxend"));
                 report.setDate_create(rs.getString("DATE_CREATE"));
                 report.setFirstdigit(rs.getString("firstdigit"));
-
                 list.add(report);
             }
 

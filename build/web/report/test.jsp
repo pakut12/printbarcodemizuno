@@ -4,6 +4,8 @@
     Author     : Gus
 --%>
 <%@page import="com.pg.lib.utility.*"%>
+<%@page import="com.pg.lib.service.*"%>
+<%@page import="com.pg.lib.model.*"%>
 <%@page import="net.sf.jasperreports.engine.JasperRunManager"%>
 <%@page import="java.sql.*"%>
 <%@page import="java.util.*"%>
@@ -20,25 +22,37 @@
     </head>
     <body>
         <%
+
             try {
-                List<String> list = new ArrayList<String>();
-                list.add("A1");
-                list.add("A2");
-                list.add("A3");
-                list.add("A4");
-                list.add("A6");
-                list.add("A7");
-                list.add("A8");
-                list.add("A9");
-               
-                List<String> ranges = Utility.getRanges(list);
-                for (String range : ranges) {
-                    System.out.println(range);
+                String id = "Y111-01";
+                List<BCDetailBox> listpo = ReportService.GetPOALL(id);
+
+                List<String> listg = new ArrayList<String>();
+                for (BCDetailBox x : listpo) {
+                    String ad = x.getPo() + "#" + x.getFirstdigit() + "#" + x.getBoxno();
+                    if (!listg.contains(ad)) {
+                        listg.add(ad);
+                    }
                 }
+
+                int n = 1;
+                for (String g : listg) {
+                    String[] box = g.split("#");
+                    int no = Integer.parseInt(box[2]);
+                    String f = box[1];
+                    String p = box[0];
+                    
+                    
+                    out.print(g +"<br>");
+                    
+                }
+
 
             } catch (Exception e) {
                 e.printStackTrace();
+
             }
+
 
 
 
