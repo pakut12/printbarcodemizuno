@@ -22,34 +22,35 @@
     </head>
     <body>
         <%
+            String id = "100";
+            List<BCInvoice> inv = PackingListService.getPackingListByid(id);
+            String[] size = {"XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"};
 
+            HashMap<String, String> map = new HashMap<String, String>();
             try {
-                String id = "Y111-01";
-                List<BCDetailBox> listpo = ReportService.GetPOALL(id);
-
-                List<String> listg = new ArrayList<String>();
-                for (BCDetailBox x : listpo) {
-                    String ad = x.getPo() + "#" + x.getFirstdigit() + "#" + x.getBoxno();
-                    if (!listg.contains(ad)) {
-                        listg.add(ad);
+                for (BCInvoice i : inv) {
+                    List<BCDetailBox> listsizebypo = PackingListService.GroupCustomeSizeTotal(i.getPo(), i.getFirstdigit(), i.getStartbox(), i.getEndbox());
+                    HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
+                    for (BCDetailBox x : listsizebypo) {
+                        
+                        for (BCDetailBox z : listsizebypo) {
+                            arrsize.put(z.getCustomer_color()+"#"+z.getCustomer_size(), x);
+                        }
+                        
+                        System.out.println("---------------------------------------------------------------------");
+                        System.out.println(x.getPo());
+                        System.out.println(x.getCustomer_color());
+                        System.out.println(x.getCustomer_size());
+                        System.out.println("---------------------------------------------------------------------");
                     }
-                }
 
-                int n = 1;
-                for (String g : listg) {
-                    String[] box = g.split("#");
-                    int no = Integer.parseInt(box[2]);
-                    String f = box[1];
-                    String p = box[0];
-                    
-                    
-                    out.print(g +"<br>");
-                    
                 }
 
 
             } catch (Exception e) {
                 e.printStackTrace();
+
+
 
             }
 

@@ -59,18 +59,18 @@ public class Detail extends HttpServlet {
                     String prodorder = request.getParameter("prodorder").trim();
                     String destination = request.getParameter("destination").trim();
                     String customer_address = request.getParameter("customer_address").trim();
-                    String invoiceno = request.getParameter("invoiceno");
-                    String invoicedate = request.getParameter("invoicedate");
+                    
                     String date = request.getParameter("date").trim();
 
                     DetailService ds = new DetailService();
-                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date, invoiceno, invoicedate);
+                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
                     //Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_address, customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
-                    Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end, quantitytotal_box);
 
                     JSONObject obj = new JSONObject();
                     if (statusdt) {
+                        Boolean statusresult = ds.AddDataToMIZUNONEWBARBOXRESULT(po, initial, date, numberbox_start, numberbox_end, quantitytotal_box);
                         obj.put("status", "true");
+
                     } else {
                         obj.put("status", "false");
                     }
@@ -229,7 +229,7 @@ public class Detail extends HttpServlet {
                     // Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
 
 
-                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, invoiceno, invoicedate, firstdigitbefore, startbox, endbox, boxseq);
+                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, firstdigitbefore, startbox, endbox, boxseq);
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore, startbox, endbox);
 
                     JSONObject obj = new JSONObject();
@@ -395,17 +395,13 @@ public class Detail extends HttpServlet {
                     String customer_address = request.getParameter("customer_address").trim();
 
                     String date = request.getParameter("date").trim();
-                    String invoiceno = request.getParameter("invoiceno");
-                    String invoicedate = request.getParameter("invoicedate");
-
-                    System.out.println(invoiceno);
-                    System.out.println(invoicedate);
+                    
 
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
 
-                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date, invoiceno, invoicedate);
+                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
 
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTBYID(pobefore, PO, boxno, boxnobefore);
 

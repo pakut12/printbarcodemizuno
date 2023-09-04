@@ -75,6 +75,15 @@ public class BCDetailBox {
     private String customer_color;
     private String customer_size;
     private String boxseq;
+    private String countbox;
+
+    public String getCountbox() {
+        return countbox;
+    }
+
+    public void setCountbox(String countbox) {
+        this.countbox = countbox;
+    }
 
     public String getBoxseq() {
         return boxseq;

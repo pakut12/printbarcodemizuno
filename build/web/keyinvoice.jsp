@@ -361,9 +361,7 @@
                     confirmButtonText: 'ใช่'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        
                         delinvoice()
-                        
                     }
                 })
             }
