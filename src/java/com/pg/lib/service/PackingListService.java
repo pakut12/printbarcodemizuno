@@ -21,38 +21,38 @@ public class PackingListService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    
-     public static List<BCDetailBox> GroupCustomeSizeTotal(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+    public static List<BCDetailBox> CheckQty(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
 
-            sql += " SELECT COUNT(DISTINCT boxno) AS countbox, po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,sum(NETWEIGHT) as totalnw,sum(GROSSWEIGHT) as totalgw , DESTINATION ";
+            sql += " SELECT  boxno,po,QTY1,QTY2,QTY3,QTY4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4 ";
             sql += " FROM ( ";
             sql += " SELECT ";
-            sql += " a.PO,";
+            sql += " a.PO, ";
             sql += " a.BOXNO, ";
-            sql += "   b.customer_color, ";
-            sql += "  b.customer_size, ";
-            sql += "  a.SIZENO1, ";
-            sql += "  a.SIZENO2, ";
+            sql += " b.customer_color, ";
+            sql += " b.customer_size, ";
+            sql += " a.SIZENO1, ";
+            sql += " a.SIZENO2, ";
             sql += " a.SIZENO3, ";
             sql += " a.SIZENO4, ";
-            sql += " a.NETWEIGHT, ";
-            sql += " a.GROSSWEIGHT, ";
+            sql += " a.QTY1, ";
+            sql += " a.QTY2, ";
+            sql += " a.QTY3, ";
+            sql += " a.QTY4, ";
             sql += " c.QTY_RESULT1, ";
             sql += " c.QTY_RESULT2, ";
-            sql += "  c.QTY_RESULT3, ";
-            sql += "  c.QTY_RESULT4, ";
-            sql += "  a.DESTINATION ";
-            sql += "  FROM ";
-            sql += "  MIZUNONEWBARBOXDT a ";
-            sql += "INNER JOIN ";
-            sql += "  MIZUNOCUSTOMER b ON ";
+            sql += " c.QTY_RESULT3, ";
+            sql += " c.QTY_RESULT4 ";
+            sql += " FROM ";
+            sql += " MIZUNONEWBARBOXDT a ";
+            sql += " INNER JOIN ";
+            sql += " MIZUNOCUSTOMER b ON ";
             sql += "  b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
-            sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po ";
+            sql += "  INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po ";
             sql += "  WHERE ";
-            sql += "    REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN (";
+            sql += " REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN ( ";
 
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
                 if (s < Integer.parseInt(ENDBOX)) {
@@ -62,25 +62,126 @@ public class PackingListService {
                 }
             }
 
-            sql += " GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
+            sql += "  GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4, a.QTY1, a.QTY2, a.QTY3, a.QTY4,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4 ";
             sql += " ) tb ";
             sql += " GROUP BY ";
-            sql += " po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
-            sql += " ORDER BY ";
-            sql += " customer_size ";
+            sql += "  boxno,po,QTY1,QTY2,QTY3,QTY4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4 ";
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
             ps.setString(2, po);
-            
             rs = ps.executeQuery();
 
-
-            System.out.println(sql);
             while (rs.next()) {
                 BCDetailBox detail = new BCDetailBox();
-                detail.setCountbox(rs.getString("countbox"));
+                detail.setBoxno(rs.getString("boxno"));
+                detail.setPo(rs.getString("po"));
+                detail.setQty1(rs.getString("qty1"));
+                detail.setQty2(rs.getString("qty2"));
+                detail.setQty3(rs.getString("qty3"));
+                detail.setQty4(rs.getString("qty4"));
+                detail.setQty_result1(rs.getString("qty_result1"));
+                detail.setQty_result2(rs.getString("qty_result2"));
+                detail.setQty_result3(rs.getString("qty_result3"));
+                detail.setQty_result4(rs.getString("qty_result4"));
+
+                listbox.add(detail);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return listbox;
+    }
+
+    public static List<BCDetailBox> GroupCustomeColor(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+
+        List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+        String sql = "";
+        try {
+
+            sql += " SELECT  a.PO, b.customer_color  FROM   MIZUNONEWBARBOXDT a ";
+            sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
+            sql += " WHERE REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN ( ";
+            for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
+                if (s < Integer.parseInt(ENDBOX)) {
+                    sql += "'" + firstdigit + String.valueOf(s) + "',";
+                } else {
+                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
+                }
+            }
+            sql += " GROUP BY a.po, b.customer_color ";
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, firstdigit);
+            ps.setString(2, po);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox detail = new BCDetailBox();
+                detail.setPo(rs.getString("po"));
+                detail.setCustomer_color(rs.getString("customer_color"));
+                listbox.add(detail);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return listbox;
+    }
+
+    public static List<BCDetailBox> GroupCustomeSizeTotal(String po, String firstdigit, String STARTBOX, String ENDBOX, String color) throws SQLException {
+        List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+        String sql = "";
+        try {
+
+            sql += " SELECT ";
+            sql += " po, ";
+            sql += " customer_color, ";
+            sql += " customer_size, ";
+            sql += " SIZENO1, ";
+            sql += " SIZENO2, ";
+            sql += " SIZENO3, ";
+            sql += " SIZENO4, ";
+            sql += " sum(QTY_RESULT1), ";
+            sql += " sum(QTY_RESULT2), ";
+            sql += " sum(QTY_RESULT3),  ";
+            sql += " sum(QTY_RESULT4)  ";
+            sql += " FROM (  ";
+            sql += " SELECT  a.PO, a.BOXNO,    b.customer_color,   b.customer_size,   a.SIZENO1,   a.SIZENO2,  a.SIZENO3,  a.SIZENO4,  a.NETWEIGHT,  a.GROSSWEIGHT,  c.QTY_RESULT1,  c.QTY_RESULT2,   c.QTY_RESULT3,   c.QTY_RESULT4 FROM   MIZUNONEWBARBOXDT a  ";
+            sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4   ";
+            sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po  ";
+            sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN (  ";
+
+            for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
+                if (s < Integer.parseInt(ENDBOX)) {
+                    sql += "'" + firstdigit + String.valueOf(s) + "',";
+                } else {
+                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
+                }
+            }
+            sql += " AND b.customer_color = ? ";
+            sql += " GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4  ";
+            sql += " ) tb   ";
+            sql += " GROUP BY  po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4  ";
+            sql += " ORDER BY  customer_size  ";
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, firstdigit);
+            ps.setString(2, po);
+            ps.setString(3, color);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox detail = new BCDetailBox();
                 detail.setPo(rs.getString("po"));
                 detail.setCustomer_color(rs.getString("customer_color"));
                 detail.setCustomer_size(rs.getString("customer_size"));
@@ -88,13 +189,11 @@ public class PackingListService {
                 detail.setSizen02(rs.getString("SIZENO2"));
                 detail.setSizen03(rs.getString("SIZENO3"));
                 detail.setSizen04(rs.getString("SIZENO4"));
-                detail.setQty_result1(rs.getString("QTY_RESULT1"));
-                detail.setQty_result2(rs.getString("QTY_RESULT2"));
-                detail.setQty_result3(rs.getString("QTY_RESULT3"));
-                detail.setQty_result4(rs.getString("QTY_RESULT4"));
-                detail.setSumnw(rs.getString("totalnw"));
-                detail.setSumgw(rs.getString("totalgw"));
-                detail.setDestination(rs.getString("DESTINATION"));
+                detail.setQty_result1(rs.getString("sum(QTY_RESULT1)"));
+                detail.setQty_result2(rs.getString("sum(QTY_RESULT2)"));
+                detail.setQty_result3(rs.getString("sum(QTY_RESULT3)"));
+                detail.setQty_result4(rs.getString("sum(QTY_RESULT4)"));
+
                 listbox.add(detail);
             }
 
@@ -108,7 +207,7 @@ public class PackingListService {
 
         return listbox;
     }
-    
+
     public static List<BCDetailBox> GroupCustomerSizeByPO(String po, String firstdigit, String STARTBOX, String ENDBOX, String BOXSEQ) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
@@ -119,7 +218,7 @@ public class PackingListService {
             sql += " SELECT ";
             sql += " a.PO,";
             sql += " a.BOXNO, ";
-            sql += "   b.customer_color, ";
+            sql += "  b.customer_color, ";
             sql += "  b.customer_size, ";
             sql += "  a.SIZENO1, ";
             sql += "  a.SIZENO2, ";
@@ -164,8 +263,6 @@ public class PackingListService {
 
             rs = ps.executeQuery();
 
-
-            System.out.println(sql);
             while (rs.next()) {
                 BCDetailBox detail = new BCDetailBox();
                 detail.setCountbox(rs.getString("countbox"));
@@ -296,8 +393,6 @@ public class PackingListService {
 
         return listbox;
     }
-
-  
 
     public static List<BCDetailBox> GroupCustomerNoByPO(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();

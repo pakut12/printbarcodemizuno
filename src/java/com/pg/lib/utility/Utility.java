@@ -62,7 +62,7 @@ public class Utility {
                     }
                 }
 
-                ranges.add(start == end ? String.valueOf(start) : grouppo.get(0).getFirstdigit() + start + "-" + grouppo.get(0).getFirstdigit() + end);
+                ranges.add(start == end ? String.valueOf(grouppo.get(0).getFirstdigit() + start) : grouppo.get(0).getFirstdigit() + start + "-" + grouppo.get(0).getFirstdigit() + end);
 
                 StringBuilder result = new StringBuilder(key);
                 result.append(" ");
@@ -72,7 +72,9 @@ public class Utility {
                     }
                     result.append(ranges.get(j));
                 }
-
+                
+                System.out.println(result.toString());
+                
                 group = result.toString().replace(grouppo.get(0).getPo() + " " + grouppo.get(0).getFirstdigit(), "");
             }
 

@@ -407,50 +407,83 @@
          
             /********************************************* EDIT Invoice************************************************/
             
-            function addeditpo(){
-                
-        
-                var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="deleditpo(\'' + $('#edit_po').val() + '\')">ลบ</button>';
-               
-                
-                var objpo = {
-                    po:$('#edit_po').val().toUpperCase(),
-                    firstdigit:$('#edit_firstdigit').val().toUpperCase(),
-                    startbox:$('#edit_startbox').val().toUpperCase(),
-                    endbox:$('#edit_endbox').val().toUpperCase(),
-                    containerno:$('#edit_containerno').val().toUpperCase(),
-                    btdel:btndel
-                }
-                
-                const result = listpo.find((em) => {
-                    let chk = null; 
+            function addeditpo() {
+                if ($('#edit_po').val() && $('#edit_firstdigit').val() && $('#edit_startbox').val() && $('#edit_endbox').val() && $('#edit_containerno').val()) {
+                   
+                    var po = $('#edit_po').val().toUpperCase()
+                    var startbox = $('#edit_firstdigit').val().toUpperCase() + $('#edit_startbox').val().toUpperCase()
+                    var endbox = $('#edit_firstdigit').val().toUpperCase() + $('#edit_endbox').val().toUpperCase()
                     
-                    if($('#edit_po').val().toUpperCase() == em.po && $('#edit_firstdigit').val().toUpperCase() == em. firstdigit && $('#edit_startbox').val().toUpperCase() == em.startbox && $('#edit_endbox').val().toUpperCase() == em.endbox){
-                        chk = true;
-                    }else{
-                        chk = false;
-                    }
-            
-                    return chk
-                });
-                
-                if(!result){
-                    listpo.push(objpo)
-                    gettbeditpo()
-                }else{
+                    $.ajax({
+                        type: 'post',
+                        url: 'PackingList',
+                        data: {
+                            type: "checkqty",
+                            po: $('#edit_po').val().toUpperCase(),
+                            firstdigit: $('#edit_firstdigit').val().toUpperCase(),
+                            startbox: $('#edit_startbox').val().toUpperCase(),
+                            endbox: $('#edit_endbox').val().toUpperCase()
+                        },
+                        success: function (msg) {
+                            var js = JSON.parse(msg)
+
+                            if (js.status == "false") {
+                                Swal.fire({
+                                    title: "บันทึก",
+                                    icon: "error",
+                                    text: "บันทึกไม่สำเร็จ : PO "+ po+ " "+startbox +" - "+endbox +"มีกล่องที่ยิงไม่ครบ คือ" + js.boxno
+                                })
+                            } else if (js.status == "true") {
+
+                                var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="deleditpo(\'' + $('#edit_po').val() + '\')">ลบ</button>';
+
+                                var objpo = {
+                                    po: $('#edit_po').val().toUpperCase(),
+                                    firstdigit: $('#edit_firstdigit').val().toUpperCase(),
+                                    startbox: $('#edit_startbox').val().toUpperCase(),
+                                    endbox: $('#edit_endbox').val().toUpperCase(),
+                                    containerno: $('#edit_containerno').val().toUpperCase(),
+                                    btdel: btndel
+                                }
+
+                                const result = listpo.find((em) => {
+                                    let chk = null;
+
+                                    if ($('#edit_po').val().toUpperCase() == em.po && $('#edit_firstdigit').val().toUpperCase() == em.firstdigit && $('#edit_startbox').val().toUpperCase() == em.startbox && $('#edit_endbox').val().toUpperCase() == em.endbox) {
+                                        chk = true;
+                                    } else {
+                                        chk = false;
+                                    }
+
+                                    return chk
+                                });
+
+                                if (!result) {
+                                    listpo.push(objpo)
+                                    gettbeditpo()
+                                } else {
+                                    Swal.fire({
+                                        title: "บันทึก",
+                                        icon: "error",
+                                        text: "บันทึกไม่สำเร็จ : มีข้อมูลอยู่เเล้ว"
+                                    })
+                                }
+                            } 
+                        }
+                    }); 
+                }else {
                     Swal.fire({
-                        title:"บันทึก",
-                        icon:"error",
-                        text:"บันทึกไม่สำเร็จ : มีข้อมูลอยู่เเล้ว"
+                        title: "บันทึก",
+                        icon: "error",
+                        text: "บันทึกไม่สำเร็จ : กรุณากรอกข้อมูลให้ครบ"
                     })
                 }
-         
+
                 $("#edit_po").val('')
                 $("#edit_firstdigit").val('')
                 $("#edit_startbox").val('')
                 $("#edit_endbox").val('')
                 $("#edit_containerno").val('')
-        
             }
             
 
@@ -470,9 +503,6 @@
             
             function updateInvoice(){
                
-             
-             
-          
                 $.ajax({
                     type:"POST",
                     url:"Invoice",
@@ -630,6 +660,7 @@
                 $('#modal_addinvoice').modal('show')
                 gettbpo()
                 $("#myformaddinvoice").removeClass('was-validated');
+                $("#myformaddinvoice input").val("");
             }
             
             function addInvoice(){
@@ -683,50 +714,94 @@
             }
     
             function addpo(){
-                
-        
-                var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="delpo(\'' + $('#add_po').val() + '\')">ลบ</button>';
                
-                
-                var objpo = {
-                    po:$('#add_po').val().toUpperCase(),
-                    firstdigit:$('#add_firstdigit').val().toUpperCase(),
-                    startbox:$('#add_startbox').val().toUpperCase(),
-                    endbox:$('#add_endbox').val().toUpperCase(),
-                    containerno:$('#add_containerno').val().toUpperCase(),
-                    btdel:btndel
-                }
-                
-                const result = listpo.find((em) => {
-                    let chk = null; 
+
+                if ($('#add_po').val() && $('#add_firstdigit').val() && $('#add_startbox').val() && $('#add_endbox').val() && $('#add_containerno').val()) {
                     
-                    if($('#add_po').val().toUpperCase() == em.po && $('#add_firstdigit').val().toUpperCase() == em. firstdigit && $('#add_startbox').val().toUpperCase() == em.startbox && $('#add_endbox').val().toUpperCase() == em.endbox){
-                        chk = true;
-                    }else{
-                        chk = false;
-                    }
-            
-                    return chk
-                });
+                    var po = $('#add_po').val().toUpperCase()
+                    var startbox = $('#add_firstdigit').val().toUpperCase() + $('#add_startbox').val().toUpperCase()
+                    var endbox = $('#add_firstdigit').val().toUpperCase() + $('#add_endbox').val().toUpperCase()
+                    
+                    $.ajax({
+                        type: 'post',
+                        url: 'PackingList',
+                        data: {
+                            type: "checkqty",
+                            po: $('#add_po').val().toUpperCase(),
+                            firstdigit: $('#add_firstdigit').val().toUpperCase(),
+                            startbox: $('#add_startbox').val().toUpperCase(),
+                            endbox: $('#add_endbox').val().toUpperCase()
+                        },
+                        success: function (msg) {
+                           
+                            var js = JSON.parse(msg)
+
+                            if (js.status == "false") {
+                                Swal.fire({
+                                    title: "บันทึก",
+                                    icon: "error",
+                                    text: "บันทึกไม่สำเร็จ : PO "+ po+ " "+startbox +" - "+endbox +"มีกล่องที่ยิงไม่ครบ คือ" + js.boxno
+                                })
+                            } else if (js.status == "true") {
+                                console.log(msg)
+                                var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="delpo(\'' + $('#add_po').val() + '\')">ลบ</button>';
+               
+                                var objpo = {
+                                    po:$('#add_po').val().toUpperCase(),
+                                    firstdigit:$('#add_firstdigit').val().toUpperCase(),
+                                    startbox:$('#add_startbox').val().toUpperCase(),
+                                    endbox:$('#add_endbox').val().toUpperCase(),
+                                    containerno:$('#add_containerno').val().toUpperCase(),
+                                    btdel:btndel
+                                }
                 
-                if(!result){
-                    listpo.push(objpo)
-                   
-                    gettbpo()
+                                const result = listpo.find((em) => {
+                                    let chk = null; 
+                    
+                                    if($('#add_po').val().toUpperCase() == em.po && $('#add_firstdigit').val().toUpperCase() == em. firstdigit && $('#add_startbox').val().toUpperCase() == em.startbox && $('#add_endbox').val().toUpperCase() == em.endbox){
+                                        chk = true;
+                                    }else{
+                                        chk = false;
+                                    }
+            
+                                    return chk
+                                });
+                
+                                if(!result){
+                                    listpo.push(objpo)
+                                    gettbpo()
+                                }else{
+                                    Swal.fire({
+                                        title:"บันทึก",
+                                        icon:"error",
+                                        text:"บันทึกไม่สำเร็จ : มีข้อมูลอยู่เเล้ว"
+                                    })
+                                }
+                                    
+            
+                                $("#add_po").val('')
+                                $("#add_firstdigit").val('')
+                                $("#add_startbox").val('')
+                                $("#add_endbox").val('')
+                                $("#add_containerno").val('')
+            
+            
+                            }
+                        }
+                    });
                 }else{
                     Swal.fire({
                         title:"บันทึก",
                         icon:"error",
-                        text:"บันทึกไม่สำเร็จ : มีข้อมูลอยู่เเล้ว"
+                        text:"บันทึกไม่สำเร็จ : กรุณากรอกข้อมูลให้ครบ"
                     })
+            
                 }
-         
-                $("#add_po").val('')
-                $("#add_firstdigit").val('')
-                $("#add_startbox").val('')
-                $("#add_endbox").val('')
-                $("#add_containerno").val('')
+                   
         
+
+          
+                
             }
             
            
