@@ -5,24 +5,22 @@
 package com.pg.lib.Servlet;
 
 import com.google.gson.Gson;
+import com.pg.lib.model.BCCustomerAddress;
 import com.pg.lib.model.BCInvoice;
+import com.pg.lib.service.CustomerAddressService;
 import com.pg.lib.service.InvoiceService;
 import com.pg.lib.utility.Utility;
 
 import java.io.*;
-import java.net.*;
 
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 /**
  *
@@ -48,8 +46,9 @@ public class Invoice extends HttpServlet {
                     String invoicedate = request.getParameter("invoicedate");
                     String saveingno = request.getParameter("saveingno");
                     String listpo = request.getParameter("po");
+                    String customer = request.getParameter("customer");
 
-                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo);
+                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer);
 
                     if (status) {
                         out.print("true");
@@ -78,7 +77,7 @@ public class Invoice extends HttpServlet {
                     String orderDir = request.getParameter("order[0][dir]");
 
                     InvoiceService ivs = new InvoiceService();
-                    List<BCInvoice> rows = ivs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir,search_invoiceno,search_invoicedate,search_datestart,search_dateend);
+                    List<BCInvoice> rows = ivs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir, search_invoiceno, search_invoicedate, search_datestart, search_dateend);
 
                     Gson gson = new Gson();
 
@@ -101,6 +100,17 @@ public class Invoice extends HttpServlet {
                     String invoiceid = request.getParameter("invoiceid").trim();
                     List<BCInvoice> listdata = InvoiceService.getDataFromDatabaseById(invoiceid);
 
+                    List<BCCustomerAddress> list = CustomerAddressService.GetTableMIZUNOCUSTOMERADDRESS();
+
+                    String opt = "";
+                    for (BCCustomerAddress z : list) {
+                        opt += "<option value='" + z.getAddress_customer() + "'>" + z.getAddress_customer() + "</option>";
+                    }
+                    opt = opt.replace("<option value='" + listdata.get(0).getCustomer() + "'>" + listdata.get(0).getCustomer() + "</option>", "");
+
+                    String html = "<option value='" + listdata.get(0).getCustomer() + "'>" + listdata.get(0).getCustomer() + "</option>";
+                    html += opt;
+
                     Gson gson = new Gson();
 
                     JSONObject obj = new JSONObject();
@@ -110,6 +120,7 @@ public class Invoice extends HttpServlet {
                     obj.put("saveingno", listdata.get(0).getSaveingno());
                     obj.put("data", gson.toJsonTree(listdata));
                     obj.put("datecreate", listdata.get(0).getDate_create());
+                    obj.put("customer", html);
 
                     out.print(obj);
 
@@ -141,11 +152,12 @@ public class Invoice extends HttpServlet {
                     String saveingno = request.getParameter("saveingno");
                     String listpo = request.getParameter("po");
                     String datecreate = request.getParameter("datecreate");
+                    String customer = request.getParameter("customer");
 
                     boolean delstatus = InvoiceService.delinvoice(delid);
 
                     if (delstatus) {
-                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate);
+                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate,customer);
                         if (status) {
                             out.print("true");
                         } else {

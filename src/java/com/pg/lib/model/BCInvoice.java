@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package com.pg.lib.model;
 
 /**
@@ -10,18 +9,27 @@ package com.pg.lib.model;
  * @author pakutsing
  */
 public class BCInvoice {
-    
-   private String invoiceid;
-   private String invoiceno;
-   private String invoicedate;
-   private String saveingno;
-   private String po;
-   private String firstdigit;
-   private String startbox;
-   private String endbox;
-   private String containerno;
-   private String date_create;
-   private String date_modified;
+
+    private String invoiceid;
+    private String invoiceno;
+    private String invoicedate;
+    private String saveingno;
+    private String po;
+    private String firstdigit;
+    private String startbox;
+    private String endbox;
+    private String containerno;
+    private String date_create;
+    private String date_modified;
+    private String customer;
+
+    public String getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(String customer) {
+        this.customer = customer;
+    }
 
     public String getContainerno() {
         return containerno;
@@ -110,10 +118,4 @@ public class BCInvoice {
     public void setStartbox(String startbox) {
         this.startbox = startbox;
     }
-   
-   
-   
-    
-    
-
 }

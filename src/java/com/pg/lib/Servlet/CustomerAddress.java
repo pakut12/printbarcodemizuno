@@ -57,8 +57,8 @@ public class CustomerAddress extends HttpServlet {
                 }
             } else if (type.equals("gettablearddress")) {
                 try {
-                    CustomerAddressService cas = new CustomerAddressService();
-                    List<BCCustomerAddress> listdata = cas.GetTableMIZUNOCUSTOMERADDRESS();
+                    
+                    List<BCCustomerAddress> listdata = CustomerAddressService.GetTableMIZUNOCUSTOMERADDRESS();
 
                     String html = "";
                     html += "<table class='table table-striped text-nowrap table-bordered table-sm w-100' id='mytableaddress'>";

@@ -21,6 +21,49 @@ public class PackingListService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
+    public static List<BCDetailBox> CheckSize(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+        List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+        String sql = "";
+        try {
+            sql += " SELECT customer_size   FROM ";
+            sql += " (  ";
+            sql += " SELECT   a.PO,  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') AS firstdigit, a.BOXNO, a.boxseq,  b.customer_color,b.customer_size FROM MIZUNONEWBARBOXDT a ";
+            sql += "  INNER JOIN MIZUNOCUSTOMER b ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4   ";
+            sql += " GROUP BY a.PO,a.BOXNO,a.boxseq, b.customer_color,b.customer_size ";
+            sql += " ) tb ";
+            sql += " WHERE firstdigit = ? and po = ?  and boxno in (   ";
+
+            for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
+                if (s < Integer.parseInt(ENDBOX)) {
+                    sql += "'" + firstdigit + String.valueOf(s) + "',";
+                } else {
+                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
+                }
+            }
+            sql += " group by customer_size ";
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, firstdigit);
+            ps.setString(2, po);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox detail = new BCDetailBox();
+                detail.setCustomer_size(rs.getString("customer_size"));
+
+                listbox.add(detail);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+        return listbox;
+    }
+
     public static List<BCDetailBox> CheckQty(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
@@ -66,6 +109,8 @@ public class PackingListService {
             sql += " ) tb ";
             sql += " GROUP BY ";
             sql += "  boxno,po,QTY1,QTY2,QTY3,QTY4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4 ";
+
+            System.out.println(sql);
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -425,7 +470,7 @@ public class PackingListService {
 
             sql += "  ORDER BY tb.PO,CAST(REGEXP_SUBSTR(tb.boxno, '\\d+')  as int) ";
 
-
+            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);

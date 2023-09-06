@@ -52,7 +52,7 @@ public class InvoiceService {
                 invoice.setContainerno(rs.getString("containerno"));
                 invoice.setDate_create(Utility.CoverDateFromSql(rs.getTimestamp("date_create"), 2));
                 invoice.setDate_modified(Utility.CoverDateFromSql(rs.getTimestamp("date_modified"), 2));
-
+                invoice.setCustomer(rs.getString("customer"));
                 list.add(invoice);
             }
 
@@ -152,9 +152,9 @@ public class InvoiceService {
 
             sql += ") WHERE rnum BETWEEN ? AND ?";
 
-            
+
             System.out.println(sql);
-            
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -241,12 +241,12 @@ public class InvoiceService {
 
     }
 
-    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate, String customer) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED,CUSTOMER) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -272,10 +272,11 @@ public class InvoiceService {
                 ps.setString(9, containerno);
                 ps.setString(10, datecreate);
                 ps.setString(11, Utility.GetDateNow());
-
+                ps.setString(12, customer);
+                
                 ps.addBatch();
 
-               
+
             }
 
             ps.executeBatch();
@@ -291,12 +292,13 @@ public class InvoiceService {
         return status;
     }
 
-    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String customer) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,CUSTOMER) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?)";
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -321,6 +323,7 @@ public class InvoiceService {
                 ps.setString(8, endbox);
                 ps.setString(9, containerno);
                 ps.setString(10, Utility.GetDateNow());
+                ps.setString(11, customer);
 
                 ps.addBatch();
 

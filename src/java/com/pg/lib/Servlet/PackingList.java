@@ -46,13 +46,13 @@ public class PackingList extends HttpServlet {
                     List<BCDetailBox> CheckQty = PackingListService.CheckQty(po, firstdigit, STARTBOX, ENDBOX);
 
                     String txt = "";
-                    int qty1 = 0;
-                    int qty2 = 0;
-                    int qty3 = 0;
-                    int qty4 = 0;
+
 
                     for (BCDetailBox box : CheckQty) {
-
+                        int qty1 = 0;
+                        int qty2 = 0;
+                        int qty3 = 0;
+                        int qty4 = 0;
 
                         if (box.getQty1() != null) {
                             qty1 = Integer.parseInt(box.getQty1());
@@ -72,12 +72,26 @@ public class PackingList extends HttpServlet {
 
 
                         if (qty1 == Integer.parseInt(box.getQty_result1()) && qty2 == Integer.parseInt(box.getQty_result2()) && qty3 == Integer.parseInt(box.getQty_result3()) && qty4 == Integer.parseInt(box.getQty_result4())) {
-                            
                         } else {
                             txt += box.getBoxno() + ",";
                         }
 
+
+                        System.out.println("-------------------------------------------------------------");
+                        System.out.println(box.getBoxno());
+                        System.out.println(qty1);
+                        System.out.println(qty2);
+                        System.out.println(qty3);
+                        System.out.println(qty4);
+                        System.out.println(box.getQty_result1());
+                        System.out.println(box.getQty_result2());
+                        System.out.println(box.getQty_result3());
+                        System.out.println(box.getQty_result4());
+                        System.out.println("-------------------------------------------------------------");
+
                     }
+
+                    System.out.println(txt);
 
                     String status = "";
 

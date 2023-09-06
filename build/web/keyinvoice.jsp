@@ -45,6 +45,12 @@
                                             <span class="input-group-text" id="inputGroup-sizing-sm">SAVEING NO</span>
                                             <input type="text" class="form-control text-center" name="edit_saveingno" id="edit_saveingno" required>
                                         </div>
+                                        <div class="input-group input-group-sm mb-3">
+                                            <label class="input-group-text" for="edit_customer">CUSTOMER</label>
+                                            <select class="form-select text-center" id="edit_customer">
+                                                
+                                            </select>
+                                        </div>
                                         
                                     </div>
                                     <hr>
@@ -128,6 +134,12 @@
                                             <input type="text" class="form-control text-center" name="add_saveingno" id="add_saveingno" required>
                                         </div>
                                         
+                                        <div class="input-group input-group-sm mb-3">
+                                            <label class="input-group-text" for="add_customer">CUSTOMER</label>
+                                            <select class="form-select text-center" id="add_customer">
+                                                
+                                            </select>
+                                        </div>
                                     </div>
                                     <hr>
                                     <div class="col-sm-12 col-md-12 ">
@@ -288,7 +300,6 @@
                                 
                                 txtgroup  += '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase()+')" id="bt_edit">ดูรายละเอียด</button>'
                                 
-                                
                                 txtgroup  += '</div></div>'
                                 
                                 var result = {
@@ -431,7 +442,7 @@
                                 Swal.fire({
                                     title: "บันทึก",
                                     icon: "error",
-                                    text: "บันทึกไม่สำเร็จ : PO "+ po+ " "+startbox +" - "+endbox +"มีกล่องที่ยิงไม่ครบ คือ" + js.boxno
+                                    html: "บันทึกไม่สำเร็จ : PO "+ po+ " "+startbox +" - "+endbox +"<br>มีกล่องที่ยิงไม่ครบ คือ" + js.boxno
                                 })
                             } else if (js.status == "true") {
 
@@ -513,6 +524,7 @@
                         saveingno:$("#edit_saveingno").val().toUpperCase(),
                         datecreate:$("#edit_datecreate").val().toUpperCase(),
                         id : $("#edit_invoiceid").val().toUpperCase(),
+                        customer :$("#edit_customer").val(),
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){
@@ -562,6 +574,8 @@
                         $("#edit_invoicedate").val(js.invoicedate.toUpperCase())
                         $("#edit_saveingno").val(js.saveingno.toUpperCase())
                         $("#edit_datecreate").val(js.datecreate.toUpperCase())
+                        $("#edit_customer").html(js.customer)
+        
                         listpo.length = 0
                         $.each(jsdecode,function(k,v){
                             
@@ -661,6 +675,19 @@
                 gettbpo()
                 $("#myformaddinvoice").removeClass('was-validated');
                 $("#myformaddinvoice input").val("");
+                
+                $.ajax({
+                    type:"post",
+                    url:"CustomerAddress",
+                    data:{
+                        type:"getlistcustomer"
+                    },
+                    success:function(msg){
+                        $("#add_customer").empty();
+                        $("#add_customer").html(msg);
+                       
+                    }
+                })
             }
             
             function addInvoice(){
@@ -673,6 +700,7 @@
                         invoiceno:$("#add_invoiceno").val(),
                         invoicedate:$("#add_invoicedate").val(),
                         saveingno:$("#add_saveingno").val(),
+                        customer:$("#add_customer").val(),
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){
@@ -798,10 +826,6 @@
             
                 }
                    
-        
-
-          
-                
             }
             
            

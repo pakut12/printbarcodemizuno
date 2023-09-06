@@ -9,6 +9,7 @@ import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.model.BCReportDetailsProduct;
 import com.pg.lib.service.DetailService;
 import com.pg.lib.service.ReportService;
+import com.pg.lib.utility.Utility;
 import java.io.*;
 import java.net.*;
 
@@ -346,6 +347,36 @@ public class Report extends HttpServlet {
 
                     ReportService rs = new ReportService();
                     List<BCDetailBox> list = rs.listreportviewpo(customer, customer_no, customer_product, datestart, dateend, start, length, searchValue, orderColumn, orderDir, po);
+
+                  
+                    List<BCDetailBox> Alllist = new ArrayList<BCDetailBox>();
+                    for (BCDetailBox z : list) {
+                        String input = z.getBoxno();
+                        String digits = "";
+                        String letters = "";
+
+                        for (int i = 0; i < input.length(); i++) {
+                            char c = input.charAt(i);
+                            if (Character.isDigit(c)) {
+                                digits += c;
+                            } else if (Character.isLetter(c)) {
+                                letters += c;
+                            }
+                        }
+
+                        BCDetailBox box = new BCDetailBox();
+                        box.setBoxno(digits);
+                        box.setFirstdigit(letters);
+                        box.setPo(z.getPo());
+                        box.setDate_create(z.getDate_create());
+                        Alllist.add(box);
+                    }
+
+               
+                    String txt = Utility.groupnumberbypo(Alllist);
+                   
+                    System.out.println(txt);
+                
 
                     Gson gson = new Gson();
 

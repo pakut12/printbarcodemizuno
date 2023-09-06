@@ -134,11 +134,7 @@
                                 รายงานแสดงพีโอ
                             </a>
                         </li>
-                         <li>
-                            <a class="dropdown-item" href="reportpackinglist.jsp">
-                                PACKING LIST
-                            </a>
-                        </li>
+                         
                         
                     </ul>
                 </li>

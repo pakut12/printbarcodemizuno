@@ -876,7 +876,7 @@ public class ReportService {
                 box.setBoxno(rs.getString("boxno"));
                 box.setDate_create(rs.getString("date_create"));
                 list.add(box);
-                
+
             }
 
         } catch (Exception e) {
@@ -926,8 +926,6 @@ public class ReportService {
                     ")x )where rnum BETWEEN ? AND ? ";
 
 
-            System.out.println(sql);
-            
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             if (!datestart.equals("") || !dateend.equals("")) {
@@ -953,6 +951,7 @@ public class ReportService {
                 report.setEndbox(rs.getString("boxend"));
                 report.setDate_create(rs.getString("DATE_CREATE"));
                 report.setFirstdigit(rs.getString("firstdigit"));
+
                 list.add(report);
             }
 

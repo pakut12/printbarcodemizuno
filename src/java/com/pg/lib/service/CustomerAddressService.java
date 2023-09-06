@@ -142,7 +142,7 @@ public class CustomerAddressService {
         return list;
     }
 
-    public List<BCCustomerAddress> GetTableMIZUNOCUSTOMERADDRESS() throws SQLException {
+    public static  List<BCCustomerAddress> GetTableMIZUNOCUSTOMERADDRESS() throws SQLException {
 
         List<BCCustomerAddress> list = new ArrayList<BCCustomerAddress>();
 
