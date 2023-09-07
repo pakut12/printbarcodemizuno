@@ -20,36 +20,40 @@
                     ค้นหา
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-3">
-                            <div class="input-group input-group-sm ">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                <input type="text" class="form-control text-center" id="posearch">
+                    <form id="myformsearch">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3">
+                                <div class="input-group input-group-sm ">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
+                                    <input type="text" class="form-control text-center" id="posearch" >
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-2">
-                            <div class="input-group input-group-sm ">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                <input type="text" class="form-control text-center" id="firstdigit" maxlength="2">
+                            <div class="col-sm-12 col-md-2">
+                                <div class="input-group input-group-sm ">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                    <select class="form-select form-select-sm text-center" id="firstdigit" >
+                                        
+                                    </select>
+                                    
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-3">
-                            <div class="input-group input-group-sm ">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                <input type="number" class="form-control text-center" name="numstart" id="numstart" >
-                                <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                <input type="number" class="form-control text-center" name="numend" id="numend" >
+                            <div class="col-sm-12 col-md-3">
+                                <div class="input-group input-group-sm ">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
+                                    <input type="number" class="form-control text-center" name="numstart" id="numstart" >
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                    <input type="number" class="form-control text-center" name="numend" id="numend" >
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4 ">
-                            <div class="d-flex justify-content-center justify-content-md-start">
-                                <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
-                                <button class="btn btn-outline-danger btn-sm w-25  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
+                            <div class="col-sm-12 col-md-4 ">
+                                <div class="d-flex justify-content-center justify-content-md-start">
+                                    <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
+                                    <button class="btn btn-outline-danger btn-sm w-25  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
+                                </div>
                             </div>
+                            
                         </div>
-                        
-                    </div>
-                    
+                    </form>
                 </div>
             </div>
             <div id="myform">
@@ -299,6 +303,22 @@
         </footer>
         <script>
             
+            
+            function getfirstdigit(){
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"getfirstdigit",
+                        po:$("#posearch").val()
+                    },
+                    success:function(msg){
+                        $("#firstdigit").html(msg)
+                    }
+                })
+                
+            }
+            
             function isNumberKey(evt){
                 var charCode = (evt.which) ? evt.which : evt.keyCode
                 if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -510,7 +530,9 @@
                 var invoicedate = $("#invoicedate").val();
                 
                 var boxseq = $("#boxseq").val();
-                     
+                
+                console.log(sumqty_result) 
+                console.log($("#quantity_box").val())
                 
                 if(sumqty_result <= parseInt($("#quantity_box").val())){
                     $.ajax({
@@ -600,6 +622,10 @@
                         text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
                     })
                 }
+                
+                $("#myformsearch input").val('')
+                $("#firstdigit").html('')
+                
             }
             
             function clearinput(){
@@ -691,7 +717,7 @@
                             $("#quantity_box").val(js.qtyperbox);
                             $("#initial").val(js.firstdigit);
                             //$("#numberbox_start").val(startbox);
-                           // $("#numberbox_end").val(endbox);
+                            // $("#numberbox_end").val(endbox);
                             $("#quantitytotal_box").val(js.allbox);
                             
                             $("#po").val(js.po);
@@ -829,6 +855,10 @@
                 });
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
+                });
+                
+                $("#posearch").on('input', function() {
+                    getfirstdigit()
                 });
                 $("#myform :input").attr("disabled", true);
             });

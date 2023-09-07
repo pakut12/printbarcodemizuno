@@ -18,64 +18,80 @@ import java.util.Locale;
  */
 public class Utility {
 
-    public static List<String> getallsize(String cm) {
+    public static List<String> getallsize(String cm, List<BCDetailBox> listbox) {
         List<String> size = new ArrayList<String>();
-
         if (cm.equals("MUS") || cm.equals("MCL") || cm.equals("MOC")) {
-
-            size.add("03.XS");
-            size.add("04.S");
-            size.add("05.M");
-            size.add("06.L");
-            size.add("07.XL");
-            size.add("08.XXL");
-            size.add("09.XXXL");
-
-        } else if (cm.equals("TMC")) {
-
+            size.add("XXS");
+            size.add("XS");
             size.add("S");
             size.add("M");
             size.add("L");
             size.add("XL");
-            size.add("2XL");
+            size.add("XXL");
+            size.add("XXXL");
 
-        } else if (cm.equals("MKL")) {
+        } else {
+            List<String> s = new ArrayList<String>();
+            s.add("SS");
+            s.add("S");
+            s.add("M");
+            s.add("L");
+            s.add("O");
+            s.add("XO");
+            s.add("2XO");
+            s.add("3XO");
+            s.add("2XO-4");
+            s.add("4XO-5");
+            s.add("6XO-6");
+            s.add("8XO-7");
+            s.add("120");
+            s.add("130");
+            s.add("140");
+            s.add("150");
+            s.add("160");
+            s.add("XL");
+            s.add("2XL");
+            s.add("3XL-8");
+            s.add("4XL-8");
+            s.add("6XL-8");
+            s.add("8XL-8");
+            s.add("XSS");
+            s.add("XS");
+            s.add("XXL");
+            s.add("XXXL");
 
-            size.add("S");
-            size.add("M");
-            size.add("L");
-            size.add("O");
-            size.add("XO");
 
-        } else if (cm.equals("MCJ")) {
-
-            size.add("SS");
-            size.add("S");
-            size.add("M");
-            size.add("L");
-            size.add("O");
-            size.add("XO");
-            size.add("2XO");
-            size.add("3XO");
-            size.add("2XO-4");
-            size.add("4XO-5");
-            size.add("6XO-6");
-            size.add("8XO-7");
-            size.add("120");
-            size.add("130");
-            size.add("140");
-            size.add("150");
-            size.add("160");
-            size.add("XL");
-            size.add("2XL");
-            size.add("3XL-8");
-            size.add("4XL-8");
-            size.add("6XL-8");
-            size.add("8XL-8");
+            /*
+            for (BCDetailBox l : listbox) {
+            size.add(l.getCustomer_size());
+            }
             
+            int n = size.size();
+            for (String x : s) {
+            if (n < 8) {
+            if (!size.contains(x)) {
+            size.add(x);
+            }
+            }
+            n++;
+            
+            }
+             */
+
+            for (BCDetailBox l : listbox) {
+                size.add(l.getCustomer_size());
+            }
+            int n = size.size();
+            for (String x : s) {
+                if (n < 8) {
+                    if (!listbox.contains(x)) {
+                        size.add(x);
+                    }
+                }
+                n++;
+            }
+
         }
-
-
         return size;
 
     }

@@ -34,7 +34,7 @@
 
             String pono = "";
             String ctnno = "";
-            String[] size = {"XXS", "XS", "S", "M", "L", "XL", "XXL", "XXXL"};
+
 
             for (BCInvoice i : inv) {
                 pono += i.getPo() + ",";
@@ -303,7 +303,34 @@
 
                     List<String> listseq = new ArrayList<String>();
                     List<BCDetailBox> inva = PackingListService.GroupCustomerNoByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
-
+                    
+                    /***************************** set size ******************************/
+                    List<BCDetailBox> CheckSize = PackingListService.CheckSize(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
+                    List<String> size = Utility.getallsize(i1.getCustomer(), CheckSize); // List Size 
+                    
+                    System.out.println(size);
+                    
+                    String txtsize = "";
+                    int n = 2;
+                    for (String res : size) {
+                        if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
+                            txtsize += "{text: '0" + n + "\\n" + res + "', border: [false, true, false, true]},";
+                        } else {
+                            txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
+                        }
+                        n++;
+                    }
+                    /*
+                   int n1 = size.size();
+                   while(n1 != 8){
+                       txtsize += "{text: '\\t', border: [false, true, false, true]},";
+                       n1++;
+                        System.out.println(txtsize);
+                   }
+ */
+                    
+                   
+                    /***************************** end size ******************************/
 
                     HashMap<String, BCDetailBox> listtotal = new HashMap<String, BCDetailBox>();
 
@@ -332,8 +359,6 @@
                         for (BCDetailBox z : listsizebypo) {
                             arrsize.put(z.getCustomer_size(), z);
                         }
-
-
 
                         String sizetxt = "";
 
@@ -480,7 +505,7 @@
                     txt1 += "],";
 
                     datatable2 = txt1;
-                    
+
                     /***************************** End table2 ***************************************/
 
     %>
@@ -494,20 +519,13 @@
                                 {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
                                 {text: 'DESCRIPTION', border: [false, true, false, true]}, 
                                 {text: 'PO', border: [false, true, false, true]},
-                                {text: '.02\nXXS', border: [false, true, false, true]},
-                                {text: '.03\nXS', border: [false, true, false, true]},
-                                {text: '.04\nS', border: [false, true, false, true]},
-                                {text: '.05\nM', border: [false, true, false, true]},
-                                {text: '.06\nL', border: [false, true, false, true]},
-                                {text: '.07\nXL', border: [false, true, false, true]},
-                                {text: '.08\nXXL', border: [false, true, false, true]},
-                                {text: '.09\nXXXL', border: [false, true, false, true]},
-                                {text: '', border: [false, true, false, true]},
-                                {text: 'TOTAL\nCTN.', border: [false, true, false, true]},
-                                {text: '\nQTY', border: [false, true, false, true]},
-                                {text: 'WEIGHT\nN.W.', border: [false, true, false, true]},
-                                {text: '\nG.W.', border: [false, true, false, true]},
-                            ],
+                                <%=txtsize%>
+                                                            {text: '', border: [false, true, false, true]},
+                                                            {text: 'TOTAL\nCTN.', border: [false, true, false, true]},
+                                                            {text: '\nQTY', border: [false, true, false, true]},
+                                                            {text: 'WEIGHT\nN.W.', border: [false, true, false, true]},
+                                                            {text: '\nG.W.', border: [false, true, false, true]},
+                                                        ],
                                 <%=datatable1%>
                                 
                                                     ]
@@ -525,17 +543,10 @@
                                                             {text: 'DESCRIPTION',border: [false, true, false, true]}, 
                                                             {text: '', border: [false, true, false, true]}, 
                                                             {text: '\nSIZE', border: [false, true, false, true]},
-                                                            {text: '.02\nXXS', border: [false, true, false, true]},
-                                                            {text: '.03\nXS', border: [false, true, false, true]},
-                                                            {text: '.04\nS', border: [false, true, false, true]},
-                                                            {text: '.05\nM', border: [false, true, false, true]},
-                                                            {text: '.06\nL', border: [false, true, false, true]},
-                                                            {text: '.07\nXL', border: [false, true, false, true]},
-                                                            {text: '.08\nXXL', border: [false, true, false, true]},
-                                                            {text: '.09\nXXXL', border: [false, true, false, true]},
+                                                             <%=txtsize%>
                                                             {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
                                                             {text: '', border: [false, false, false, false]},
-                                                        ],
+                                                                                     ],
                         
 <%=datatable2%>
 

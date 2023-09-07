@@ -33,7 +33,9 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" id="firstdigit" maxlength="2">
+                                        <select class="form-select form-select-sm text-center" id="firstdigit" >
+                                            
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-4">
@@ -111,6 +113,22 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            
+            function getfirstdigit(){
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"getfirstdigit",
+                        po:$("#po").val()
+                    },
+                    success:function(msg){
+                        $("#firstdigit").html(msg)
+                    }
+                })
+                
+            }
+            
             function barcode(){
                 var firstdigit = $("#firstdigit").val().toUpperCase();
                 var po = $("#po").val().toUpperCase();
@@ -139,6 +157,10 @@
             } 
             
             $(document).ready(function () {
+                $("#po").on('input', function() {
+                    getfirstdigit()
+                });
+                
                 $("#printbarcode").click(function(){
                     var firstdigit = $("#firstdigit").val().toUpperCase();
                     var po = $("#po").val().toUpperCase();

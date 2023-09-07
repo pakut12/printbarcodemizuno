@@ -480,6 +480,11 @@
                                     })
                                 }
                             } 
+                            $("#edit_po").val('')
+                $("#edit_firstdigit").val('')
+                $("#edit_startbox").val('')
+                $("#edit_endbox").val('')
+                $("#edit_containerno").val('')
                         }
                     }); 
                 }else {
@@ -490,11 +495,7 @@
                     })
                 }
 
-                $("#edit_po").val('')
-                $("#edit_firstdigit").val('')
-                $("#edit_startbox").val('')
-                $("#edit_endbox").val('')
-                $("#edit_containerno").val('')
+                
             }
             
 

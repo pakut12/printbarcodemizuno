@@ -363,6 +363,7 @@ public class PackingListService {
                 iv.setContainerno(rs.getString("CONTAINERNO"));
                 iv.setDate_create(rs.getString("DATE_CREATE"));
                 iv.setDate_modified(rs.getString("DATE_MODIFIED"));
+                iv.setCustomer(rs.getString("customer"));
 
                 listbox.add(iv);
             }

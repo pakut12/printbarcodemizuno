@@ -618,7 +618,7 @@ public class DetailService {
         HashMap<String, String> addresstsg = GetAddress("TSG");
         HashMap<String, String> addresscustomer = GetAddress(SHIPTO);
 
-       
+
 
         try {
             String sql = "UPDATE MIZUNONEWBARBOXDT SET " +
@@ -667,7 +667,6 @@ public class DetailService {
                     "PO_OLD = ?," +
                     "DELIVERY = ?," +
                     "DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') " +
-                    
                     "WHERE PO = ? AND BOXNO = ?";
 
             conn = ConnectDB.getConnection();
@@ -717,7 +716,7 @@ public class DetailService {
             ps.setString(43, po_old);
             ps.setString(44, customer_address);
             ps.setString(45, date);
-           
+
 
             ps.setString(46, pobefore);
             ps.setString(47, boxnobefore);
@@ -1250,7 +1249,7 @@ public class DetailService {
             String sql = "INSERT INTO MIZUNONEWBARBOXDT (PO,BOXSEQ,BOXNO,BOXALL,SHIPFROM,SFADDRESS1,SFADDRESS2,SFADDRESS3,SFADDRESS4,SHIPTO,STADDRESS1,STADDRESS2,STADDRESS3,STADDRESS4,QTYPERBOX,DESCTXT,GROSSWEIGHT,NETWEIGHT,COUNTRY_ORIGIN,SKU_ITEM1,UPC_CODE1,COLORNO1,SIZENO1,QTY1,SKU_ITEM2,UPC_CODE2,COLORNO2,SIZENO2,QTY2,SKU_ITEM3,UPC_CODE3,COLORNO3,SIZENO3,QTY3,SKU_ITEM4,UPC_CODE4,COLORNO4,SIZENO4,QTY4,PALLET,PROD_ORDER,STATUSSHOOT,DESTINATION,PO_OLD,DATE_CREATE,DELIVERY) VALUES " +
                     "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?)";
 
-      
+
 
             int ax = getboxseq() + 1;
 
@@ -1304,7 +1303,7 @@ public class DetailService {
                 ps.setString(44, po_old);
                 ps.setString(45, date);
                 ps.setString(46, customer_address);
-               
+
                 ps.addBatch();
             }
 
@@ -1331,7 +1330,6 @@ public class DetailService {
             //String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
             String sql = "UPDATE MIZUNONEWBARBOXDT SET " +
                     "PO=?," +
-                  
                     "BOXNO=?," +
                     "BOXALL=?," +
                     "SHIPFROM=?," +
@@ -1376,11 +1374,10 @@ public class DetailService {
                     "PO_OLD=?," +
                     "DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS')," +
                     "DELIVERY=? " +
-                   
                     "WHERE PO=? and BOXNO=? ";
 
 
-       
+
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -1391,7 +1388,7 @@ public class DetailService {
                 System.out.println(nostart);
 
                 ps.setString(1, po);
-         
+
                 ps.setString(2, initial + nostart);
                 ps.setString(3, initial + quantitytotal_box);
                 ps.setString(4, "TSG");
@@ -1436,7 +1433,7 @@ public class DetailService {
                 ps.setString(43, po_old);
                 ps.setString(44, date);
                 ps.setString(45, customer_address);
-               
+
 
                 ps.setString(46, pobefore);
                 ps.setString(47, firstdigitbefore + n);
@@ -1540,6 +1537,31 @@ public class DetailService {
                     pallet = "";
                 }
                 listdetail.add(pallet);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return listdetail;
+    }
+
+    public static List<String> getfirstdigit(String PO) throws SQLException {
+
+        List<String> listdetail = new ArrayList<String>();
+
+        try {
+            String sql = "select REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') as firstdigit  from MIZUNONEWBARBOXDT where po = ? group by REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, PO);
+            rs = ps.executeQuery();
+            while (rs.next()) {
+                listdetail.add(rs.getString("firstdigit"));
             }
 
         } catch (Exception e) {

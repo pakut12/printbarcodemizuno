@@ -281,7 +281,7 @@ public class Report extends HttpServlet {
                     String customer = request.getParameter("customer").trim();
                     String destination = request.getParameter("destination").trim();
                     String pallet = request.getParameter("pallet").trim();
-                    String firstdigit = request.getParameter("firstdigit").trim();
+                    String firstdigit = request.getParameter("firstdigit");
                     String start = request.getParameter("numberbox_start").trim();
                     String end = request.getParameter("numberbox_end").trim();
                     String po = request.getParameter("po").trim();

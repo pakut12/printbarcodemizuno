@@ -59,7 +59,7 @@ public class Detail extends HttpServlet {
                     String prodorder = request.getParameter("prodorder").trim();
                     String destination = request.getParameter("destination").trim();
                     String customer_address = request.getParameter("customer_address").trim();
-                    
+
                     String date = request.getParameter("date").trim();
 
                     DetailService ds = new DetailService();
@@ -395,7 +395,7 @@ public class Detail extends HttpServlet {
                     String customer_address = request.getParameter("customer_address").trim();
 
                     String date = request.getParameter("date").trim();
-                    
+
 
                     DetailService ds = new DetailService();
 
@@ -682,6 +682,21 @@ public class Detail extends HttpServlet {
                 obj.put("listpallet", listpallet);
 
                 out.print(obj);
+
+            } else if (type.equals("getfirstdigit")) {
+                try {
+                    
+                    String po = request.getParameter("po").toUpperCase();
+                    List<String> listfirstdigit = DetailService.getfirstdigit(po);
+
+                    String html = "";
+                    for (String f : listfirstdigit) {
+                        html += "<option value='" + f + "'>" + f + "</option>";
+                    }
+                    out.print(html);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
             }
 

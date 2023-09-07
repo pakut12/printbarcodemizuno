@@ -31,7 +31,8 @@
                         <div class="col-sm-12 col-md-3">
                             <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                <input type="text" class="form-control text-center" id="firstdigitbefore" maxlength="2">
+                                 <select class="form-select form-select-sm text-center" id="firstdigitbefore" >
+                                 </select>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-2">
@@ -264,7 +265,20 @@
         </footer>
         <script>
             
-            
+            function getfirstdigit(){
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"getfirstdigit",
+                        po:$("#posearch").val()
+                    },
+                    success:function(msg){
+                        $("#firstdigitbefore").html(msg)
+                    }
+                })
+                
+            }
             function isNumberKey(evt){
                 var charCode = (evt.which) ? evt.which : evt.keyCode
                 if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -364,6 +378,7 @@
                         
 
                 }
+                $("#firstdigitbefore").html('')
             }
             function clearinput(){
                 $("#myform :input").val("");
@@ -634,6 +649,9 @@
                     if(e.keyCode === 13){
                         checkbarcode()
                     }
+                });
+                $("#posearch").on('input', function() {
+                    getfirstdigit()
                 });
                
                 $("#myform :input").attr("disabled", true);

@@ -61,7 +61,9 @@
                                     <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                            <input type="text" class="form-control text-center"  name="firstdigit" id="firstdigit" maxlength="1">
+                                             <select class="form-select form-select-sm text-center" id="firstdigit" name="firstdigit" >
+                                                
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3 mt-3 mt-md-0">
@@ -163,6 +165,24 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            function getfirstdigit(){
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"getfirstdigit",
+                        po:$("#po").val()
+                    },
+                    success:function(msg){
+                      var txt = '<option value=""></option>'
+                        txt += msg
+                        $("#firstdigit").html(txt)
+                    }
+                })
+                
+            }
+            
+    
             function getcustomer(){
                 $.ajax({
                     type:"post",
@@ -393,7 +413,7 @@
                     scrollX: true,
                     rowGroup: {
                         startRender: function ( rows, group ) {
-                            return "รหัสสินค้า : "+group ;
+                            return "รหัสลูกค้า : "+group ;
                         },
                         endRender: function ( rows, group ) {
                             var listdataqty_result = rows.data().pluck("qty_result");
@@ -545,6 +565,7 @@
                 
                 $("#po").on('input', function() {
                     getpallet()
+                    getfirstdigit()
                 });
                 
                 ckpallat()

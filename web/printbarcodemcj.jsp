@@ -41,7 +41,9 @@
                                 <div class="col-sm-12 col-md-5">
                                     <div class="input-group input-group-sm ">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" id="firstdigit" maxlength="2">
+                                        <select class="form-select form-select-sm text-center" id="firstdigit" >
+                                            
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-5">
@@ -88,7 +90,7 @@
                                             สามรหัสในกล่อง
                                         </label>
                                     </div>
-                                   
+                                    
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="style_box" id="style_box4" value="4">
                                         <label class="form-check-label" for="flexRadioDefault2">
@@ -121,6 +123,24 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            function getfirstdigit(){
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"getfirstdigit",
+                        po:$("#po").val()
+                    },
+                    success:function(msg){
+                        var txt = '<option value=""></option>'
+                        txt += msg
+                        $("#firstdigit").html(txt)
+                    }
+                })
+                
+            }
+            
+            
             function barcode(){
                 var firstdigit = $("#firstdigit").val().toUpperCase();
                 var po = $("#po").val().toUpperCase();
@@ -149,6 +169,12 @@
             } 
             
             $(document).ready(function () {
+                $("#po").on('input', function() {
+                    getfirstdigit()
+                });
+                
+                
+                
                 $("#printbarcode").click(function(){
                     var firstdigit = $("#firstdigit").val().toUpperCase();
                     var po = $("#po").val().toUpperCase();

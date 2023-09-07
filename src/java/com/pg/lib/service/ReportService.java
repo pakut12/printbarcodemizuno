@@ -131,62 +131,68 @@ public class ReportService {
         int totalRecords = 0;
         try {
             String sql = "";
-            sql += "select count(*) from ( select rownum as rnum,x.* from (";
-            if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
-                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-                sql += "where ";
-            } else {
-                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-                sql += "where a.boxno in (";
+            sql += " SELECT ROWNUM, a.* ";
+            sql += " FROM ( ";
+            sql += " SELECT ";
+            sql += " b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
+            sql += "  a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
+            sql += " FROM MIZUNONEWBARBOXDT a ";
+            sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
+            sql += " INNER JOIN MIZUNOCUSTOMER b ON (b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4) ";
+            sql += "  WHERE  ";
+            sql += " (a.boxno  LIKE '%" + searchValue + "%' or a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%') ";
+
+            if (!firstdigit.equals("") || !startbox.equals("") || !endbox.equals("")) {
+                sql += " and a.boxno in (";
                 for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
                     if (n < Integer.parseInt(endbox)) {
                         sql += "'" + num + "',";
                     } else {
-                        sql += "'" + num + "') and ";
+                        sql += "'" + num + "') ";
                     }
                 }
             }
 
-
             if (!prodorder.equals("")) {
-                sql += " a.PROD_ORDER = '" + prodorder + "' and ";
+                sql += " and a.PROD_ORDER = '" + prodorder + "'  ";
             }
 
             if (!po.equals("")) {
-                sql += " a.PO = '" + po + "' and ";
+                sql += " and  a.PO = '" + po + "'  ";
             }
 
             if (!SHIPTO.equals("")) {
-                sql += " a.SHIPTO = '" + SHIPTO + "' and  ";
+                sql += " and  a.SHIPTO = '" + SHIPTO + "'   ";
             }
 
             if (!DESTINATION.equals("")) {
-                sql += " a.DESTINATION = '" + DESTINATION + "' and ";
+                sql += " and  a.DESTINATION = '" + DESTINATION + "'  ";
             }
 
             if (!po_old.equals("")) {
-                sql += " a.PO_OLD = '" + po_old + "' and ";
+                sql += " and  a.PO_OLD = '" + po_old + "'  ";
             }
 
             if (!pallet.equals("")) {
-                sql += " a.PALLET = '" + pallet + "' and  ";
+                sql += " and  a.PALLET = '" + pallet + "'   ";
             }
 
             if (!customer_no.equals("")) {
-                sql += " b.customer_no  = '" + customer_no + "' and ";
+                sql += " and  b.customer_no  = '" + customer_no + "'  ";
             }
 
             if (!customer_product.equals("")) {
-                sql += " b.customer_product  = '" + customer_product + "' and";
+                sql += " and  b.customer_product  = '" + customer_product + "' ";
             }
 
-            sql += " (a.boxno  LIKE '%" + searchValue + "%' or a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%')";
-            sql += " GROUP BY  b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3, c.qty_result4 ";
 
+            sql += " GROUP BY ";
+            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  ORDER BY ";
+            sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
 
-            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
-            sql += ")x)";
+            sql += " ) a";
 
             System.out.println(sql);
             conn = ConnectDB.getConnection();
@@ -209,67 +215,70 @@ public class ReportService {
 
     public int getTotalRecordsdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
+
         try {
             String sql = "";
-            sql += "select count(*) from ( select rownum as rnum,x.* from (";
-            if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
-                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-                sql += "where ";
-            } else {
-                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-                sql += "where a.boxno in (";
+            sql += " SELECT count(*) ";
+            sql += " FROM ( ";
+            sql += " SELECT ";
+            sql += " b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
+            sql += "  a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
+            sql += " FROM MIZUNONEWBARBOXDT a ";
+            sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
+            sql += " INNER JOIN MIZUNOCUSTOMER b ON (b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4) ";
+            sql += "  WHERE  ";
+            sql += " (a.boxno  LIKE '%%' or a.PROD_ORDER  LIKE '%%' or a.PO LIKE '%%' or a.SHIPTO LIKE '%%'  or  a.DESTINATION  LIKE '%%' or a.PO_OLD LIKE '%%'  or a.PALLET LIKE '%%' or b.customer_no  LIKE '%%'  or b.customer_product  LIKE  '%%')  ";
+
+            if (!firstdigit.equals("") || !startbox.equals("") || !endbox.equals("")) {
+                sql += " and a.boxno in (";
                 for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
                     if (n < Integer.parseInt(endbox)) {
                         sql += "'" + num + "',";
                     } else {
-                        sql += "'" + num + "') and ";
+                        sql += "'" + num + "') ";
                     }
                 }
             }
 
-
             if (!prodorder.equals("")) {
-                sql += " a.PROD_ORDER = '" + prodorder + "' and ";
+                sql += " and a.PROD_ORDER = '" + prodorder + "'  ";
             }
 
             if (!po.equals("")) {
-                sql += " a.PO = '" + po + "' and ";
+                sql += " and  a.PO = '" + po + "'  ";
             }
 
             if (!SHIPTO.equals("")) {
-                sql += " a.SHIPTO = '" + SHIPTO + "' and  ";
+                sql += " and  a.SHIPTO = '" + SHIPTO + "'   ";
             }
 
             if (!DESTINATION.equals("")) {
-                sql += " a.DESTINATION = '" + DESTINATION + "' and ";
+                sql += " and  a.DESTINATION = '" + DESTINATION + "'  ";
             }
 
             if (!po_old.equals("")) {
-                sql += " a.PO_OLD = '" + po_old + "' and ";
+                sql += " and  a.PO_OLD = '" + po_old + "'  ";
             }
 
             if (!pallet.equals("")) {
-                sql += " a.PALLET = '" + pallet + "' and  ";
+                sql += " and  a.PALLET = '" + pallet + "'   ";
             }
 
             if (!customer_no.equals("")) {
-                sql += " b.customer_no  = '" + customer_no + "' and ";
+                sql += " and  b.customer_no  = '" + customer_no + "'  ";
             }
 
             if (!customer_product.equals("")) {
-                sql += " b.customer_product  = '" + customer_product + "' and";
+                sql += " and  b.customer_product  = '" + customer_product + "' ";
             }
 
-            sql += " (a.boxno  LIKE '%%' or a.PROD_ORDER  LIKE '%%' or a.PO LIKE '%%' or a.SHIPTO LIKE '%%'  or  a.DESTINATION  LIKE '%%' or a.PO_OLD LIKE '%%'  or a.PALLET LIKE '%%' or b.customer_no  LIKE '%%'  or b.customer_product  LIKE  '%%')";
-            sql += " GROUP BY  b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3, c.qty_result4 ";
+            sql += " GROUP BY ";
+            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  ORDER BY ";
+            sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
+            sql += " ) a ";
 
-
-
-            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
-            sql += ")x)";
-
-            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -291,66 +300,71 @@ public class ReportService {
     private String sqllistreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue) {
         String sql = "";
         try {
-            sql += "select * from ( select rownum as rnum,x.* from (";
-            if (firstdigit.equals("") || startbox.equals("") || endbox.equals("")) {
-                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-                sql += "where ";
-            } else {
-                sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
-                sql += "where  a.boxno in (";
+
+            sql += " select * from ( ";
+            sql += " SELECT ROWNUM as rnum, a.* ";
+            sql += " FROM ( ";
+            sql += " SELECT ";
+            sql += " b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
+            sql += "  a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
+            sql += " FROM MIZUNONEWBARBOXDT a ";
+            sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
+            sql += " INNER JOIN MIZUNOCUSTOMER b ON (b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4) ";
+            sql += "  WHERE  ";
+            sql += " (a.boxno  LIKE '%" + searchValue + "%' or a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%') ";
+
+            if (!firstdigit.equals("") || !startbox.equals("") || !endbox.equals("")) {
+                sql += " and a.boxno in (";
                 for (int n = Integer.parseInt(startbox); n < Integer.parseInt(endbox) + 1; n++) {
                     String num = firstdigit + String.valueOf(n);
                     if (n < Integer.parseInt(endbox)) {
                         sql += "'" + num + "',";
                     } else {
-                        sql += "'" + num + "') and";
+                        sql += "'" + num + "') ";
                     }
                 }
             }
 
-
             if (!prodorder.equals("")) {
-                sql += " a.PROD_ORDER = '" + prodorder + "' and ";
+                sql += " and a.PROD_ORDER = '" + prodorder + "'  ";
             }
 
             if (!po.equals("")) {
-                sql += " a.PO = '" + po + "' and ";
+                sql += " and  a.PO = '" + po + "'  ";
             }
 
             if (!SHIPTO.equals("")) {
-                sql += " a.SHIPTO = '" + SHIPTO + "' and  ";
+                sql += " and  a.SHIPTO = '" + SHIPTO + "'   ";
             }
 
             if (!DESTINATION.equals("")) {
-                sql += " a.DESTINATION = '" + DESTINATION + "' and ";
+                sql += " and  a.DESTINATION = '" + DESTINATION + "'  ";
             }
 
             if (!po_old.equals("")) {
-                sql += " a.PO_OLD = '" + po_old + "' and ";
+                sql += " and  a.PO_OLD = '" + po_old + "'  ";
             }
 
             if (!pallet.equals("")) {
-                sql += " a.PALLET = '" + pallet + "' and  ";
+                sql += " and  a.PALLET = '" + pallet + "'   ";
             }
 
             if (!customer_no.equals("")) {
-                sql += " b.customer_no  = '" + customer_no + "' and ";
+                sql += " and  b.customer_no  = '" + customer_no + "'  ";
             }
 
             if (!customer_product.equals("")) {
-                sql += " b.customer_product  = '" + customer_product + "' and";
+                sql += " and  b.customer_product  = '" + customer_product + "' ";
             }
 
-            sql += " (a.boxno  LIKE '%" + searchValue + "%' or a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%')";
-            sql += " GROUP BY  b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3, c.qty_result4 ";
 
+            sql += " GROUP BY ";
+            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  ORDER BY ";
+            sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
 
-
-            sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int))x)";
-
-            if (!start.isEmpty() && !end.isEmpty()) {
-                sql += "where rnum BETWEEN " + Integer.parseInt(start) + " AND " + (Integer.parseInt(start) + Integer.parseInt(end));
-            }
+            sql += " ) a  ) ";
+            sql += "where rnum  between " + Integer.parseInt(start) + " AND " + (Integer.parseInt(start) + Integer.parseInt(end));
 
             System.out.println(sql);
         } catch (Exception e) {
@@ -655,7 +669,7 @@ public class ReportService {
                 sql += " a.PALLET  = '" + pallet + "' and ";
             }
 
-            if (!firstdigit.equals("") || !boxstart.equals("") || !boxend.equals("")) {
+            if (!firstdigit.isEmpty() || !boxstart.isEmpty() || !boxend.isEmpty()) {
                 sql += " a.boxno in (";
 
                 for (int n = Integer.parseInt(boxstart); n < Integer.parseInt(boxend) + 1; n++) {

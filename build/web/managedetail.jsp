@@ -20,32 +20,36 @@
                     ค้นหา
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-sm-12 col-md-3">
-                            <div class="input-group input-group-sm ">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                <input type="text" class="form-control text-center" id="posearch">
+                    <form id="myformsearch">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3">
+                                <div class="input-group input-group-sm ">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
+                                    <input type="text" class="form-control text-center" id="posearch">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-2">
+                                <div class="input-group input-group-sm ">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
+                                    <select class="form-select form-select-sm text-center" id="firstdigitbefore" >
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <div class="input-group input-group-sm ">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
+                                    <input type="number" class="form-control text-center" name="numstart" id="numstart">
+                                </div>
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <div class="d-flex justify-content-center justify-content-md-start ">
+                                    <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
+                                    <button class="btn btn-outline-danger btn-sm w-25 mx-3 " type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-sm-12 col-md-2">
-                            <div class="input-group input-group-sm ">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                <input type="text" class="form-control text-center" id="firstdigitbefore" maxlength="2">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-3">
-                            <div class="input-group input-group-sm ">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                <input type="number" class="form-control text-center" name="numstart" id="numstart">
-                            </div>
-                        </div>
-                        <div class="col-sm-12 col-md-4">
-                            <div class="d-flex justify-content-center justify-content-md-start ">
-                                <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
-                                <button class="btn btn-outline-danger btn-sm w-25 mx-3 " type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
-                            </div>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <div id="myform">
@@ -55,7 +59,7 @@
                         <div class="container">
                             <input id="boxseq" type="hidden">
                             <div class="row">
-                             
+                                
                                 <div class="col-sm-12 col-md-4">
                                     <!--
                                     <div class="input-group input-group-sm mb-3">
@@ -292,6 +296,20 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
+            function getfirstdigit(){
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"getfirstdigit",
+                        po:$("#posearch").val()
+                    },
+                    success:function(msg){
+                        $("#firstdigitbefore").html(msg)
+                    }
+                })
+                
+            }
             function isNumberKey(evt){
                 var charCode = (evt.which) ? evt.which : evt.keyCode
                 if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -580,7 +598,8 @@
                         text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
                     })
                 }
-             
+                 $("#firstdigitbefore").html('')
+                 $("#myformsearch input").val('')
             }
             
           
@@ -848,6 +867,9 @@
                 });
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
+                });
+                $("#posearch").on('input', function() {
+                    getfirstdigit()
                 });
                 $("#myform :input").attr("disabled", true);
             });
