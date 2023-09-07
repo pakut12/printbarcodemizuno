@@ -29,7 +29,6 @@
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
                                             <select class="form-select form-select-sm text-center" id="customer" name="customer">
                                                 
-                                                
                                             </select>
                                         </div>
                                     </div>
@@ -109,10 +108,24 @@
                                     </div>
                                     
                                 </div>
-                                <div class="row mt-3 text-center">
-                                    <div class="col-sm-12 col-md-12">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
-                                        <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
+                                 <div class="row mt-3">
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                            <input class="form-control text-center" type="date" value="" id="datestart" name="datestart">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-5">
+                                        <div class="input-group input-group-sm  mt-3 mt-md-0">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
+                                            <input class="form-control text-center" type="date" value="" id="datestop" name="datestop">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-2">
+                                        <div class="d-flex justify-content-center justify-content-md-start mt-3 mt-md-0">
+                                            <button type="button" class="btn btn-outline-primary btn-sm" onclick="getdate()">ค้นหา</button>
+                                            <button type="reset" class="btn btn-outline-danger btn-sm ms-2 " onclick="">ล้างข้อมูล</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -271,7 +284,8 @@
                 var customer_no = $("#customer_no").val();
                 var customer_product = $("#customer_product").val();
                 var prodorder = $("#prodorder").val();
-                
+                var datestart = $("#datestart").val();
+                var datestop = $("#datestop").val();
         
                 var table =   $("#tablereport").DataTable({
                     lengthMenu: [[10, 25, 50,100,9999999], [10, 25, 50,100 ,"All"]],
@@ -292,7 +306,9 @@
                             po_old:po_old,
                             customer_no:customer_no,
                             customer_product:customer_product,
-                            prodorder:prodorder
+                            prodorder:prodorder,
+                            datestart:datestart,
+                            datestop:datestop
                         },
                         dataSrc:function(json){
                           

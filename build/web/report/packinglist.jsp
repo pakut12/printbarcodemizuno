@@ -291,25 +291,31 @@
     <%
             String datatable2 = "";
             String datatable1 = "";
+                int allpc = 0;
+                int allcartons = 0;
+                double allnw = 0;
+                double allgw = 0;
             try {
+
+              
 
                 for (BCInvoice i1 : inv) {
                     /******************************  set table1 ********************************************/
                     String data[];
                     int totalqty = 0;
                     int totalctn = 0;
-                    int totalnw = 0;
-                    int totalgw = 0;
+                    double totalnw = 0;
+                    double totalgw = 0;
 
                     List<String> listseq = new ArrayList<String>();
                     List<BCDetailBox> inva = PackingListService.GroupCustomerNoByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
-                    
+
                     /***************************** set size ******************************/
                     List<BCDetailBox> CheckSize = PackingListService.CheckSize(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
                     List<String> size = Utility.getallsize(i1.getCustomer(), CheckSize); // List Size 
-                    
+
                     System.out.println(size);
-                    
+
                     String txtsize = "";
                     int n = 2;
                     for (String res : size) {
@@ -321,17 +327,16 @@
                         n++;
                     }
                     /*
-                   int n1 = size.size();
-                   while(n1 != 8){
-                       txtsize += "{text: '\\t', border: [false, true, false, true]},";
-                       n1++;
-                        System.out.println(txtsize);
-                   }
- */
-                    
-                   
-                    /***************************** end size ******************************/
+                    int n1 = size.size();
+                    while(n1 != 8){
+                    txtsize += "{text: '\\t', border: [false, true, false, true]},";
+                    n1++;
+                    System.out.println(txtsize);
+                    }
+                     */
 
+
+                    /***************************** end size ******************************/
                     HashMap<String, BCDetailBox> listtotal = new HashMap<String, BCDetailBox>();
 
                     for (BCDetailBox ae : inva) {
@@ -420,6 +425,12 @@
                         totalqty += (ctn * qty);
                         totalnw += nw;
                         totalgw += gw;
+
+                        
+                        allcartons += ctn;
+                        allnw += nw;
+                        allgw += gw;
+
                     }
 
                     txt += "[{text: 'TOTAL',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '" + totalctn + "',border: [false, true, false, true]},{text: '" + totalqty + "',border: [false, true, false, true]},{text: '" + totalnw + "',border: [false, true, false, true]},{text: '" + totalgw + "',border: [false, true, false, true]}],";
@@ -505,7 +516,7 @@
                     txt1 += "],";
 
                     datatable2 = txt1;
-
+                    allpc += qtyall;
                     /***************************** End table2 ***************************************/
 
     %>
@@ -544,8 +555,8 @@
                                                             {text: '', border: [false, true, false, true]}, 
                                                             {text: '\nSIZE', border: [false, true, false, true]},
                                                              <%=txtsize%>
-                                                            {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
-                                                            {text: '', border: [false, false, false, false]},
+                                                                                         {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
+                                                                                         {text: '', border: [false, false, false, false]},
                                                                                      ],
                         
 <%=datatable2%>
@@ -571,7 +582,22 @@
 
 
     %>
-                                          
+              { 
+                                text:'TOTAL \t\t  <%=allpc%>   PC',
+                                margin: [9, 2]   
+              },
+              { 
+                                text:'\t\t\t :\t\t\t    <%=allcartons%>  CARTONS',
+                                margin: [10, 2]   
+              },
+              { 
+                                text:'\t\t\t :\t\t\t    <%=allnw%>  KGS.(NET WEIGHT)',
+                                margin: [10, 2]   
+              },
+              { 
+                                text:'\t\t\t :\t\t\t    <%=allgw%>  KGS.(GROSS WEIGHT)',
+                                margin: [10, 2]   
+              }
             ],
             styles: {
                 headercontent: {
