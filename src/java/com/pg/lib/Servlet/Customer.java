@@ -6,7 +6,9 @@ package com.pg.lib.Servlet;
 
 import com.google.gson.Gson;
 import com.pg.lib.model.BCCustomer;
+import com.pg.lib.model.BCSap;
 import com.pg.lib.service.CustomerService;
+import com.pg.lib.service.SapService;
 import java.io.*;
 import java.net.*;
 
@@ -180,7 +182,7 @@ public class Customer extends HttpServlet {
 
                     CustomerService cs = new CustomerService();
                     List<BCCustomer> rows = cs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir);
-                    
+
                     Gson gson = new Gson();
 
                     JSONObject obj = new JSONObject();
@@ -201,16 +203,62 @@ public class Customer extends HttpServlet {
                     String customer_id = request.getParameter("customer_id").trim();
                     CustomerService cs = new CustomerService();
                     List<BCCustomer> list = cs.ChackDetailCustomerAll(customer_id);
-                    
-                    
-                   
+
+
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
-            }else if(type.equals("getdatafromsap")){
-            
-            
+            } else if (type.equals("getdatafromsap")) {
+
+                try {
+                    
+                    
+                    String VKORG = request.getParameter("VKORG").trim();
+                    String VTWEG = request.getParameter("VTWEG").trim();
+                    String KUNNR = request.getParameter("KUNNR").trim();
+                    String LKDMAT = request.getParameter("LKDMAT").trim();
+                    String HKDMAT = request.getParameter("HKDMAT").trim();
+                    String LWERKS = request.getParameter("LWERKS").trim();
+                    String HWERKS = request.getParameter("HWERKS").trim();
+                    
+                    /*
+                    String VKORG = "9200";  //request.getParameter("VKORG").trim();
+                    String VTWEG = "94";  //request.getParameter("VTWEG").trim();
+                    String KUNNR = "9210000003";  //request.getParameter("KUNNR").trim();
+                    String LKDMAT = "3501*";  //request.getParameter("LKDMAT").trim();
+                    String HKDMAT = "";  //request.getParameter("HKDMAT").trim();
+                    String LWERKS = "9000";  // request.getParameter("LWERKS").trim();
+                    String HWERKS = "9300"; // request.getParameter("HWERKS").trim();
+                    */
+                    
+                    List<BCSap> datasap = SapService.GetCustomerMat(VKORG, VTWEG, KUNNR, LKDMAT, HKDMAT, LWERKS, HWERKS);
+
+
+                    JSONArray listarr = new JSONArray();
+
+                    for (BCSap sap : datasap) {
+                        JSONObject obj = new JSONObject();
+                        obj.put("KDMAT", sap.getKDMAT());
+                        obj.put("COLOR", sap.getCOLOR());
+                        obj.put("SIZES", sap.getSIZES());
+                        obj.put("UPCCODE", sap.getUPCCODE());
+                        obj.put("MATNR", sap.getMATNR());
+                        obj.put("MAKTX", sap.getMAKTX());
+                        obj.put("KUNNR", sap.getKUNNR());
+                        obj.put("NAME1", sap.getNAME1());
+                        obj.put("WERKS", sap.getWERKS());
+                        listarr.put(obj);
+                    }
+
+                    out.print(listarr);
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
             }
 
         } finally {
