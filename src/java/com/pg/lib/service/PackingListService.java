@@ -7,6 +7,7 @@ package com.pg.lib.service;
 import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.model.BCInvoice;
 import com.pg.lib.utility.ConnectDB;
+import com.pg.lib.utility.Utility;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -146,10 +147,11 @@ public class PackingListService {
     public static List<BCDetailBox> GroupCustomeColor(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
 
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+
         String sql = "";
         try {
 
-            sql += " SELECT  a.PO, b.customer_color  FROM   MIZUNONEWBARBOXDT a ";
+            sql += " SELECT  a.PO, b.customer_color,b.customer_no  FROM   MIZUNONEWBARBOXDT a ";
             sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
             sql += " WHERE REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN ( ";
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
@@ -159,8 +161,9 @@ public class PackingListService {
                     sql += "'" + firstdigit + String.valueOf(s) + "') ";
                 }
             }
-            sql += " GROUP BY a.po, b.customer_color ";
+            sql += " GROUP BY a.po, b.customer_color,b.customer_no ";
 
+            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
@@ -171,6 +174,8 @@ public class PackingListService {
                 BCDetailBox detail = new BCDetailBox();
                 detail.setPo(rs.getString("po"));
                 detail.setCustomer_color(rs.getString("customer_color"));
+                detail.setCustomer_no(rs.getString("customer_no"));
+
                 listbox.add(detail);
             }
 
@@ -258,11 +263,12 @@ public class PackingListService {
         String sql = "";
         try {
 
-            sql += " SELECT COUNT(DISTINCT boxno) AS countbox, po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,sum(NETWEIGHT) as totalnw,sum(GROSSWEIGHT) as totalgw , DESTINATION ";
+            sql += " SELECT COUNT(DISTINCT boxno) AS countbox, po,customer_no,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,sum(NETWEIGHT) as totalnw,sum(GROSSWEIGHT) as totalgw , DESTINATION ";
             sql += " FROM ( ";
             sql += " SELECT ";
             sql += " a.PO,";
             sql += " a.BOXNO, ";
+            sql += " b.customer_no, ";
             sql += "  b.customer_color, ";
             sql += "  b.customer_size, ";
             sql += "  a.SIZENO1, ";
@@ -293,10 +299,10 @@ public class PackingListService {
                 }
             }
 
-            sql += " GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
+            sql += " GROUP BY a.po, a.boxno, b.customer_no, b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
             sql += " ) tb ";
             sql += " GROUP BY ";
-            sql += " po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
+            sql += " po,customer_color,customer_no,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
             sql += " ORDER BY ";
             sql += " customer_size ";
 
@@ -312,6 +318,7 @@ public class PackingListService {
                 BCDetailBox detail = new BCDetailBox();
                 detail.setCountbox(rs.getString("countbox"));
                 detail.setPo(rs.getString("po"));
+                detail.setCustomer_no(rs.getString("customer_no"));
                 detail.setCustomer_color(rs.getString("customer_color"));
                 detail.setCustomer_size(rs.getString("customer_size"));
                 detail.setSizen01(rs.getString("SIZENO1"));

@@ -18,6 +18,18 @@ import java.util.Locale;
  */
 public class Utility {
 
+    public static String subsize(String cm) {
+        String des = "";
+        if (cm.contains(".")) {
+            des = cm.substring(0, 11);
+        } else {
+            des = cm.substring(0, 10);
+        }
+
+        return des;
+
+    }
+
     public static List<String> getallsize(String cm, List<BCDetailBox> listbox) {
         List<String> size = new ArrayList<String>();
         if (cm.equals("MUS") || cm.equals("MCL") || cm.equals("MOC")) {
@@ -31,6 +43,7 @@ public class Utility {
             size.add("XXXL");
 
         } else {
+
             List<String> s = new ArrayList<String>();
             s.add("SS");
             s.add("S");
@@ -61,35 +74,19 @@ public class Utility {
             s.add("XXXL");
 
 
-            /*
-            for (BCDetailBox l : listbox) {
-            size.add(l.getCustomer_size());
-            }
-            
-            int n = size.size();
-            for (String x : s) {
-            if (n < 8) {
-            if (!size.contains(x)) {
-            size.add(x);
-            }
-            }
-            n++;
-            
-            }
-             */
 
             for (BCDetailBox l : listbox) {
-                size.add(l.getCustomer_size());
-            }
-            int n = size.size();
-            for (String x : s) {
-                if (n < 8) {
-                    if (!listbox.contains(x)) {
-                        size.add(x);
-                    }
+                if (!size.contains(l.getCustomer_size()) && size.size() < 8) {
+                    size.add(l.getCustomer_size());
                 }
-                n++;
             }
+
+            for (String z : s) {
+                if (!size.contains(z) && size.size() < 8) {
+                    size.add(z);
+                }
+            }
+
 
         }
         return size;

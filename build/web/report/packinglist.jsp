@@ -30,6 +30,11 @@
             String invoiceno = inv.get(0).getInvoiceno();
             String invoicedate = Utility.CoverDate(inv.get(0).getInvoicedate().replace(" 00:00:00.0", ""));
             String saveingno = inv.get(0).getSaveingno();
+            String cms = inv.get(0).getCustomer();
+            
+
+            DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+            DecimalFormat decimalFormat1 = new DecimalFormat("#,###");
 
 
             String pono = "";
@@ -64,6 +69,8 @@
                 }
             
                 var docDefinition = {
+                    
+        
                     pageSize: {
                         width: 600,
                         height: 800
@@ -174,7 +181,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text:'MUS\nNORCROSS,GA\nVIA DOWNEY,CA',
+                                    text:'<%=cms%>\nNORCROSS,GA\nVIA DOWNEY,CA',
                                     alignment: 'center',
                                     bold:true
                                 }
@@ -291,13 +298,13 @@
     <%
             String datatable2 = "";
             String datatable1 = "";
-                int allpc = 0;
-                int allcartons = 0;
-                double allnw = 0;
-                double allgw = 0;
+            int allpc = 0;
+            int allcartons = 0;
+            double allnw = 0;
+            double allgw = 0;
             try {
 
-              
+
 
                 for (BCInvoice i1 : inv) {
                     /******************************  set table1 ********************************************/
@@ -338,6 +345,7 @@
 
                     /***************************** end size ******************************/
                     HashMap<String, BCDetailBox> listtotal = new HashMap<String, BCDetailBox>();
+
 
                     for (BCDetailBox ae : inva) {
                         if (!listseq.contains(ae.getBoxseq())) {
@@ -394,7 +402,7 @@
                                     sizetxt += "{text: '" + getsize.getQty_result4() + "',border: [false, false, false, false]},";
                                 }
 
-                                Color = getsize.getCustomer_color();
+                                Color = Utility.subsize(getsize.getCustomer_no());
                                 ctn = Integer.parseInt(getsize.getCountbox());
                                 nw = Double.parseDouble(getsize.getSumnw());
                                 gw = Double.parseDouble(getsize.getSumgw());
@@ -416,8 +424,8 @@
                         txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
                         txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
                         txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                        txt += "{text: '" + nw + "',border: [false, false, false, false]},";
-                        txt += "{text: '" + gw + "',border: [false, false, false, false]},";
+                        txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
+                        txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
                         txt += "],\n";
 
 
@@ -426,14 +434,14 @@
                         totalnw += nw;
                         totalgw += gw;
 
-                        
+
                         allcartons += ctn;
                         allnw += nw;
                         allgw += gw;
 
                     }
 
-                    txt += "[{text: 'TOTAL',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '" + totalctn + "',border: [false, true, false, true]},{text: '" + totalqty + "',border: [false, true, false, true]},{text: '" + totalnw + "',border: [false, true, false, true]},{text: '" + totalgw + "',border: [false, true, false, true]}],";
+                    txt += "[{text: 'TOTAL',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '" + totalctn + "',border: [false, true, false, true]},{text: '" + totalqty + "',border: [false, true, false, true]},{text: '" + decimalFormat.format(totalnw) + "',border: [false, true, false, true]},{text: '" + decimalFormat.format(totalgw) + "',border: [false, true, false, true]}],";
                     datatable1 += txt;
                     /******************************  End table1 ********************************************/
                     /***************************** set table2 ***************************************/
@@ -443,58 +451,67 @@
                     HashMap<String, String> map = new HashMap<String, String>();
                     HashMap<String, String> maptotal = new HashMap<String, String>();
 
+                    List<String> alltotal = new ArrayList<String>();
+
                     for (BCDetailBox g : listgroupcolor) {
 
-                        List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), g.getCustomer_color());
+                        String grouptxt = Utility.subsize(g.getCustomer_no());
+                        if (!alltotal.contains(grouptxt)) {
+                            List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), g.getCustomer_color());
 
-                        for (BCDetailBox x : listtotalgroup) {
-                            String q = "";
-                            String s = "";
+                            for (BCDetailBox x : listtotalgroup) {
+                                String q = "";
+                                String s = "";
 
-                            if (x.getCustomer_size().equals(x.getSizen01())) {
-                                s = x.getSizen01();
-                                q = x.getQty_result1();
-                            } else if (x.getCustomer_size().equals(x.getSizen02())) {
-                                s = x.getSizen02();
-                                q = x.getQty_result2();
-                            } else if (x.getCustomer_size().equals(x.getSizen03())) {
-                                s = x.getSizen03();
-                                q = x.getQty_result3();
-                            } else if (x.getCustomer_size().equals(x.getSizen04())) {
-                                s = x.getSizen04();
-                                q = x.getQty_result4();
+                                if (x.getCustomer_size().equals(x.getSizen01())) {
+                                    s = x.getSizen01();
+                                    q = x.getQty_result1();
+                                } else if (x.getCustomer_size().equals(x.getSizen02())) {
+                                    s = x.getSizen02();
+                                    q = x.getQty_result2();
+                                } else if (x.getCustomer_size().equals(x.getSizen03())) {
+                                    s = x.getSizen03();
+                                    q = x.getQty_result3();
+                                } else if (x.getCustomer_size().equals(x.getSizen04())) {
+                                    s = x.getSizen04();
+                                    q = x.getQty_result4();
+                                }
+
+                                String data1 = map.get(g.getCustomer_color() + "#" + s);
+
+                                if (data1 == null) {
+                                    map.put(g.getCustomer_color() + "#" + s, q);
+                                    maptotal.put(s, q);
+                                } else {
+                                    int qt = Integer.parseInt(q) + Integer.parseInt(data1);
+                                    map.put(g.getCustomer_color() + "#" + s, String.valueOf(qt));
+                                    maptotal.put(s, String.valueOf(qt));
+                                }
+
                             }
 
-                            String data1 = map.get(g.getCustomer_color() + "#" + s);
 
-                            if (data1 == null) {
-                                map.put(g.getCustomer_color() + "#" + s, q);
-                                maptotal.put(s, q);
-                            } else {
-                                int qt = Integer.parseInt(q) + Integer.parseInt(data1);
-                                map.put(g.getCustomer_color() + "#" + s, String.valueOf(qt));
-                                maptotal.put(s, String.valueOf(qt));
+
+
+                            txt1 += "[";
+                            txt1 += "{text: '" + grouptxt + "',border: [false, false, false, false]},";
+                            txt1 += "{text: '" + g.getPo() + "',border: [false, false, false, false]},";
+                            txt1 += "{text: '',border: [false, false, false, false]},";
+                            int qtytotal = 0;
+                            for (String s : size) {
+                                if (map.get(g.getCustomer_color() + "#" + s) == null) {
+                                    txt1 += "{text: '',border: [false, false, false, false]},";
+                                } else {
+                                    txt1 += "{text: '" + map.get(g.getCustomer_color() + "#" + s) + "',border: [false, false, false, false]},";
+                                    qtytotal += Integer.parseInt(map.get(g.getCustomer_color() + "#" + s));
+                                }
                             }
+                            txt1 += "{text: '" + qtytotal + "',border: [false, false, false, false]},";
+                            txt1 += "{text: '',border: [false, false, false, false]},";
+                            txt1 += "],";
 
+                            alltotal.add(grouptxt);
                         }
-
-
-                        txt1 += "[";
-                        txt1 += "{text: '" + g.getCustomer_color() + "',border: [false, false, false, false]},";
-                        txt1 += "{text: '" + g.getPo() + "',border: [false, false, false, false]},";
-                        txt1 += "{text: '',border: [false, false, false, false]},";
-                        int qtytotal = 0;
-                        for (String s : size) {
-                            if (map.get(g.getCustomer_color() + "#" + s) == null) {
-                                txt1 += "{text: '',border: [false, false, false, false]},";
-                            } else {
-                                txt1 += "{text: '" + map.get(g.getCustomer_color() + "#" + s) + "',border: [false, false, false, false]},";
-                                qtytotal += Integer.parseInt(map.get(g.getCustomer_color() + "#" + s));
-                            }
-                        }
-                        txt1 += "{text: '" + qtytotal + "',border: [false, false, false, false]},";
-                        txt1 += "{text: '',border: [false, false, false, false]},";
-                        txt1 += "],";
 
                     }
 
@@ -582,22 +599,22 @@
 
 
     %>
-              { 
-                                text:'TOTAL \t\t  <%=allpc%>   PC',
-                                margin: [9, 2]   
-              },
-              { 
-                                text:'\t\t\t :\t\t\t    <%=allcartons%>  CARTONS',
-                                margin: [10, 2]   
-              },
-              { 
-                                text:'\t\t\t :\t\t\t    <%=allnw%>  KGS.(NET WEIGHT)',
-                                margin: [10, 2]   
-              },
-              { 
-                                text:'\t\t\t :\t\t\t    <%=allgw%>  KGS.(GROSS WEIGHT)',
-                                margin: [10, 2]   
-              }
+                { 
+                    text:'TOTAL \t\t  <%=decimalFormat1.format(allpc)%>   PC',
+                    margin: [9, 2]   
+                },
+                { 
+                    text:'\t\t\t :\t\t\t    <%=decimalFormat1.format(allcartons)%>  CARTONS',
+                    margin: [10, 2]   
+                },
+                { 
+                    text:'\t\t\t :\t\t\t    <%=decimalFormat.format(allnw)%>  KGS.(NET WEIGHT)',
+                    margin: [10, 2]   
+                },
+                { 
+                    text:'\t\t\t :\t\t\t    <%=decimalFormat.format(allgw)%>  KGS.(GROSS WEIGHT)',
+                    margin: [10, 2]   
+                }
             ],
             styles: {
                 headercontent: {

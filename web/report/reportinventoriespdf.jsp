@@ -116,7 +116,7 @@
             int sumdifferent = 0;
 
             List<String> boxsum = new ArrayList<String>();
-
+List<String> boxtotal = new ArrayList<String>();
             for (int i = 0; i < list.size(); i++) {
                 String mark = "";
                 String qty_result = "";
@@ -178,7 +178,7 @@
                     n1++;
                 } else if (n == 35) {
                     int ax = 0;
-                    List<String> boxtotal = new ArrayList<String>();
+                    
                     for (String op : boxsum) {
                         if (!boxtotal.contains(op)) {
                             ax++;
@@ -193,11 +193,11 @@
                     i--;
                     marknum = 0;
                     boxsum.clear();
-                    boxtotal.clear();
+                    
                 }
                 if (n1 == list.size() + 1) {
                     int ax = 0;
-                    List<String> boxtotal = new ArrayList<String>();
+                    
                     for (String op : boxsum) {
                         if (!boxtotal.contains(op)) {
                             ax++;

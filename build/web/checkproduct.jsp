@@ -378,7 +378,7 @@
                         
 
                 }
-                $("#firstdigitbefore").html('')
+               
             }
             function clearinput(){
                 $("#myform :input").val("");

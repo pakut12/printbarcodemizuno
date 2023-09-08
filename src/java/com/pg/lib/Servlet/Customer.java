@@ -208,6 +208,9 @@ public class Customer extends HttpServlet {
                     e.printStackTrace();
                 }
 
+            }else if(type.equals("getdatafromsap")){
+            
+            
             }
 
         } finally {
