@@ -151,7 +151,7 @@ public class PackingListService {
         String sql = "";
         try {
 
-            sql += " SELECT  a.PO, b.customer_color,b.customer_no  FROM   MIZUNONEWBARBOXDT a ";
+            sql += " SELECT  a.PO, b.customer_color,b.customer_no,a.DESTINATION   FROM   MIZUNONEWBARBOXDT a ";
             sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
             sql += " WHERE REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN ( ";
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
@@ -161,7 +161,7 @@ public class PackingListService {
                     sql += "'" + firstdigit + String.valueOf(s) + "') ";
                 }
             }
-            sql += " GROUP BY a.po, b.customer_color,b.customer_no ";
+            sql += " GROUP BY a.po, b.customer_color,b.customer_no,a.DESTINATION  ";
 
             System.out.println(sql);
             conn = ConnectDB.getConnection();
@@ -175,6 +175,7 @@ public class PackingListService {
                 detail.setPo(rs.getString("po"));
                 detail.setCustomer_color(rs.getString("customer_color"));
                 detail.setCustomer_no(rs.getString("customer_no"));
+                detail.setDestination(rs.getString("DESTINATION"));
 
                 listbox.add(detail);
             }
@@ -371,7 +372,10 @@ public class PackingListService {
                 iv.setDate_create(rs.getString("DATE_CREATE"));
                 iv.setDate_modified(rs.getString("DATE_MODIFIED"));
                 iv.setCustomer(rs.getString("customer"));
-
+                iv.setShipper(rs.getString("shipper"));
+                iv.setShipfrom(rs.getString("shipfrom"));
+                iv.setShipto(rs.getString("shipto"));
+                
                 listbox.add(iv);
             }
 

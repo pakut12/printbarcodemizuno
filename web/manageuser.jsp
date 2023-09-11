@@ -24,7 +24,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formedit">
+                        <form id="formedituser">
                             <div class="container">
                                 <div class="text-center">
                                     <input type="hidden" id="edit_id" name="edit_id" value="">
@@ -72,7 +72,7 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="formadd">
+                        <form id="formadduser">
                             <div class="container">
                                 <div class="text-center">
                                     <div class="mb-3">
@@ -156,7 +156,7 @@
             }
     
             function updateuser(){
-                var form = $("#formedit").serialize();
+                var form = $("#formedituser").serialize();
                 form += "&type=edituserbyid";
                 
                 $.ajax({
@@ -230,7 +230,7 @@
             }
             
             function adduser(){
-                var form = $("#formadd").serialize();
+                var form = $("#formadduser").serialize();
                 form += "&type=adduser";
                 
                 $.ajax({
@@ -278,7 +278,7 @@
                 gettableuser()
                 
                 $("#adduser").click(function(){
-                    $("#formadd")[0].reset()
+                    $("#formadduser")[0].reset()
                     $("#modal_adduser").modal('show')  
                 })
                 

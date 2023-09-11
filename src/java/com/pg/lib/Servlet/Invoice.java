@@ -47,8 +47,11 @@ public class Invoice extends HttpServlet {
                     String saveingno = request.getParameter("saveingno");
                     String listpo = request.getParameter("po");
                     String customer = request.getParameter("customer");
+                    String shipper = request.getParameter("shipper");
+                    String from = request.getParameter("from");
+                    String to = request.getParameter("to");
 
-                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer);
+                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to);
 
                     if (status) {
                         out.print("true");
@@ -121,6 +124,9 @@ public class Invoice extends HttpServlet {
                     obj.put("data", gson.toJsonTree(listdata));
                     obj.put("datecreate", listdata.get(0).getDate_create());
                     obj.put("customer", html);
+                    obj.put("shipper", listdata.get(0).getShipper());
+                    obj.put("shipfrom", listdata.get(0).getShipfrom());
+                    obj.put("shipto", listdata.get(0).getShipto());
 
                     out.print(obj);
 
@@ -153,11 +159,15 @@ public class Invoice extends HttpServlet {
                     String listpo = request.getParameter("po");
                     String datecreate = request.getParameter("datecreate");
                     String customer = request.getParameter("customer");
+                    String shipper = request.getParameter("shipper");
+                    String from = request.getParameter("from");
+                    String to = request.getParameter("to");
+
 
                     boolean delstatus = InvoiceService.delinvoice(delid);
 
                     if (delstatus) {
-                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate,customer);
+                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to);
                         if (status) {
                             out.print("true");
                         } else {

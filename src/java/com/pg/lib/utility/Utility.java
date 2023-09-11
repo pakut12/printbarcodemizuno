@@ -18,6 +18,16 @@ import java.util.Locale;
  */
 public class Utility {
 
+    public static String Chacknull(String txt) {
+
+        if (txt == null) {
+            txt = "";
+        } 
+
+
+        return txt;
+    }
+
     public static String subsize(String cm) {
         String des = "";
         if (cm.contains(".")) {

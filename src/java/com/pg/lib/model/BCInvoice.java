@@ -22,6 +22,33 @@ public class BCInvoice {
     private String date_create;
     private String date_modified;
     private String customer;
+    private String shipper;
+    private String shipfrom;
+    private String shipto;
+
+    public String getShipfrom() {
+        return shipfrom;
+    }
+
+    public void setShipfrom(String shipfrom) {
+        this.shipfrom = shipfrom;
+    }
+
+    public String getShipper() {
+        return shipper;
+    }
+
+    public void setShipper(String shipper) {
+        this.shipper = shipper;
+    }
+
+    public String getShipto() {
+        return shipto;
+    }
+
+    public void setShipto(String shipto) {
+        this.shipto = shipto;
+    }
 
     public String getCustomer() {
         return customer;

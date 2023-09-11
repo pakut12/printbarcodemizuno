@@ -16,65 +16,97 @@
         
         <%@ include file="share/navbar.jsp" %>
         
-
-      
         <div class="modal fade" id="modal_viewinvoice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <form id="myformeditinvoice" novalidate>
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">เเก้ไขข้อมูล Invoice</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">รายละเอียดข้อมูล PackingList</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         
                         <div class="container">
                             <div class="d-flex justify-content-center">
                                 <div class="row mt-3 mx-auto ">
-                                    <div class="col-sm-12 col-md-12">
+                                    <div class="col-sm-12 col-md-3">
                                         <input id="edit_invoiceid" name="edit_invoiceid" type="hidden">
                                         <input id="edit_datecreate" name="edit_datecreate" type="hidden">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
                                             <input type="text" class="form-control text-center" name="edit_invoiceno" id="edit_invoiceno" maxlength="10" required>
                                         </div> 
+                                    </div>
+                                    <div class="col-sm-3 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">INVOICEDATE</span>
                                             <input type="date" class="form-control text-center" name="edit_invoicedate" id="edit_invoicedate" maxlength="10" required>
                                         </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">SAVEING NO</span>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">SAVING NO</span>
                                             <input type="text" class="form-control text-center" name="edit_saveingno" id="edit_saveingno" required>
                                         </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group-text" for="edit_customer">CUSTOMER</label>
                                             <select class="form-select text-center" id="edit_customer">
-                                                
                                             </select>
                                         </div>
-                                        
                                     </div>
                                     <hr>
-                                    <div class="col-sm-12 col-md-12 ">
+                                    <div class="col-sm-3 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">SHIP PER</span>
+                                            <input type="text" class="form-control text-center" name="edit_shipper" id="edit_shipper" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FROM</span>
+                                            <input type="text" class="form-control text-center" name="edit_from" id="edit_from" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-3 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <label class="input-group-text" for="edit_customer">TO</label>
+                                            <input type="text" class="form-control text-center" name="edit_to" id="edit_to" required>
+                                        </div>
+                                    </div>   
+                                    
+                                    <hr>   
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                             <input type="text" class="form-control text-center" name="edit_po" id="edit_po" maxlength="10">
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Firstdigit</span>
                                             <input type="text" class="form-control text-center" name="edit_firstdigit" id="edit_firstdigit" maxlength="10">
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Startbox</span>
                                             <input type="text" class="form-control text-center" name="edit_startbox" id="edit_startbox" maxlength="10" >
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Endbox</span>
                                             <input type="text" class="form-control text-center" name="edit_endbox" id="edit_endbox" maxlength="10">
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Container no</span>
                                             <input type="text" class="form-control text-center" name="edit_containerno" id="edit_containerno" maxlength="15">
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 ">
                                         <button type="button" class="btn btn-success btn-sm w-100" id="edit_addpo" onclick="addeditpo()" >เพิ่ม PO</button>
                                     </div>
                                 </div> 
@@ -82,21 +114,18 @@
                             
                             <div class="row mt-3 mx-auto mb-3">
                                 <div class="col-sm-12 col-md-12">
-                                    
                                     <table class="table table-sm  w-100 table-bordered" id="table_editinvoice">
                                         
                                     </table>
-                                    
                                 </div>
                             </div> 
-                            
                         </div>
                         
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                            <button type="button" class="btn btn-danger" onclick="btdelinvoice()" >ลบ INVOICE</button>
-                            <button type="button" class="btn btn-success" onclick="btprintinvoice()" >พิมพ์ INVOICE</button>
-                            <button type="button" class="btn btn-primary" onclick="bteditinvoice()" >เเก้ไข INVOICE</button>
+                            <button type="button" class="btn btn-danger" onclick="btdelinvoice()" >ลบ PackingList</button>
+                            <button type="button" class="btn btn-success" onclick="btprintinvoice()" >พิมพ์ PackingList</button>
+                            <button type="button" class="btn btn-primary" onclick="bteditinvoice()" >เเก้ไข PackingList</button>
                             
                         </div>
                     </form>
@@ -104,36 +133,37 @@
             </div>
         </div>
         
-        
-        
-        
         <div class="modal fade" id="modal_addinvoice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <form id="myformaddinvoice" novalidate>
                         <div class="modal-header">
-                            <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มข้อมูล Invoice</h1>
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">เพิ่มข้อมูล PackingList</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         
                         <div class="container">
                             <div class="d-flex justify-content-center">
                                 <div class="row mt-3 mx-auto ">
-                                    <div class="col-sm-12 col-md-12">
-                                        
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
                                             <input type="text" class="form-control text-center" name="add_invoiceno" id="add_invoiceno" maxlength="10" required>
                                         </div> 
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">INVOICEDATE</span>
                                             <input type="date" class="form-control text-center" name="add_invoicedate" id="add_invoicedate" maxlength="10" required>
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">SAVEING NO</span>
                                             <input type="text" class="form-control text-center" name="add_saveingno" id="add_saveingno" required>
                                         </div>
-                                        
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <label class="input-group-text" for="add_customer">CUSTOMER</label>
                                             <select class="form-select text-center" id="add_customer">
@@ -141,28 +171,58 @@
                                             </select>
                                         </div>
                                     </div>
+                                    
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">SHIP PER</span>
+                                            <input type="text" class="form-control text-center" name="add_shipper" id="add_shipper" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FROM</span>
+                                            <input type="text" class="form-control text-center" name="add_from" id="add_from" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">TO</span>
+                                            <input type="text" class="form-control text-center" name="add_to" id="add_to" required>
+                                        </div>
+                                    </div>
                                     <hr>
-                                    <div class="col-sm-12 col-md-12 ">
+                                    
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                             <input type="text" class="form-control text-center" name="add_po" id="add_po" maxlength="10" >
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Firstdigit</span>
                                             <input type="text" class="form-control text-center" name="add_firstdigit" id="add_firstdigit" maxlength="10">
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Startbox</span>
                                             <input type="number" class="form-control text-center" name="add_startbox" id="add_startbox" maxlength="10" >
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Endbox</span>
                                             <input type="number" class="form-control text-center" name="add_endbox" id="add_endbox" maxlength="10" >
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Container no</span>
                                             <input type="text" class="form-control text-center" name="add_containerno" id="add_containerno" maxlength="15" >
                                         </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-12 ">
                                         <button type="button" class="btn btn-success btn-sm w-100" id="add_addpo" onclick="addpo()" >เพิ่ม PO</button>
                                     </div>
                                 </div> 
@@ -192,7 +252,7 @@
         
         <div class="container mt-5 ">
             <div class="card shadow-lg mt-3">
-                <div class="card-header">ค้นหาข้อมูล INVOICE</div>
+                <div class="card-header">ค้นหาข้อมูล PackingList</div>
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-3">
@@ -209,7 +269,7 @@
                         </div>
                         <div class="col-sm-12 col-md-3">
                             <div class="input-group input-group-sm mb-3">
-                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง PackingList</span>
                                 <input type="date" class="form-control text-center" name="search_saveingno" id="search_datestart" required>
                             </div>
                         </div>
@@ -226,13 +286,11 @@
                         </div>
                     </div>
                     
-                    
-                    
                 </div>
             </div>
             
             <div class="card shadow-lg mt-3">
-                <div class="card-header">เเสดงข้อมูล INVOICE</div>
+                <div class="card-header">เเสดงข้อมูล PackingList</div>
                 <div class="card-body">
                     <div class="d-flex justify-content-end mb-3">
                         <button class="btn btn-sm btn-success" id="addinvoice" onclick="btninvoice()">เพิ่มข้อมูล</button>
@@ -295,13 +353,23 @@
                                 txtgroup    += '<div class="">'
                                 txtgroup    += 'Invoiceno : '+v.invoiceno.toUpperCase()+'<br>'
                                 txtgroup    += 'Invoicedate : '+v.invoicedate.toUpperCase()+'<br>'
-                                txtgroup    += 'Saveingno : '+v.saveingno.toUpperCase()+'<br>'
-                                txtgroup    += 'Invoice Create : '+v.date_create.toUpperCase()+'</div>'
+                                txtgroup    += 'Savingno : '+v.saveingno.toUpperCase()+'<br>'
+                                txtgroup    += 'Customer : '+v.customer.toUpperCase()+'<br>'
+                                txtgroup    += 'PackingList Create : '+v.date_create.toUpperCase()+'</div>'
+                             
                                 
                                 txtgroup  += '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase()+')" id="bt_edit">ดูรายละเอียด</button>'
                                 
                                 txtgroup  += '</div></div>'
                                 
+                                var containerno = ""
+                                if(v.containerno){
+                                    containerno = v.containerno
+                                }else{
+                                    containerno = ""
+            
+                                }
+        
                                 var result = {
                                     textgroup : txtgroup,
                                     invoiceid : v.invoiceid.toUpperCase(),
@@ -312,7 +380,7 @@
                                     firstdigit :  v.firstdigit.toUpperCase(),
                                     startbox :  v.startbox.toUpperCase(),
                                     endbox :  v.endbox.toUpperCase(),
-                                    containerno :  v.containerno.toUpperCase(),
+                                    containerno :  containerno,
                                     date_create : v.date_create.toUpperCase(),
                                     btn_edit : '<button class="btn btn-warning btn-sm" type="button" onclick="edit_customer('+v.invoiceid.toUpperCase()+')" id="bt_edit">เเก้ไข</button>',
                                     btn_del : '<button class="btn btn-danger btn-sm" type="button" onclick="del_customer('+v.invoiceid.toUpperCase()+')" id="bt_del">ลบ</button>'
@@ -419,7 +487,7 @@
             /********************************************* EDIT Invoice************************************************/
             
             function addeditpo() {
-                if ($('#edit_po').val() && $('#edit_firstdigit').val() && $('#edit_startbox').val() && $('#edit_endbox').val() && $('#edit_containerno').val()) {
+                if ($('#edit_po').val() && $('#edit_firstdigit').val() && $('#edit_startbox').val() && $('#edit_endbox').val() ) {
                    
                     var po = $('#edit_po').val().toUpperCase()
                     var startbox = $('#edit_firstdigit').val().toUpperCase() + $('#edit_startbox').val().toUpperCase()
@@ -448,12 +516,22 @@
 
                                 var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="deleditpo(\'' + $('#edit_po').val() + '\')">ลบ</button>';
 
+                                var containerno = ""
+            
+                                if($('#edit_containerno').val()){
+                                    containerno = $('#edit_containerno').val()
+                                }else{
+                                    containerno = "";
+                                }
+            
+            
+            
                                 var objpo = {
                                     po: $('#edit_po').val().toUpperCase(),
                                     firstdigit: $('#edit_firstdigit').val().toUpperCase(),
                                     startbox: $('#edit_startbox').val().toUpperCase(),
                                     endbox: $('#edit_endbox').val().toUpperCase(),
-                                    containerno: $('#edit_containerno').val().toUpperCase(),
+                                    containerno: containerno,
                                     btdel: btndel
                                 }
 
@@ -481,10 +559,10 @@
                                 }
                             } 
                             $("#edit_po").val('')
-                $("#edit_firstdigit").val('')
-                $("#edit_startbox").val('')
-                $("#edit_endbox").val('')
-                $("#edit_containerno").val('')
+                            $("#edit_firstdigit").val('')
+                            $("#edit_startbox").val('')
+                            $("#edit_endbox").val('')
+                            $("#edit_containerno").val('')
                         }
                     }); 
                 }else {
@@ -501,7 +579,7 @@
 
             function bteditinvoice(){
                 $("#myformeditinvoice").addClass('was-validated');
-                if(listpo.length != 0 && $("#edit_invoiceno").val().toUpperCase() && $("#edit_invoicedate").val().toUpperCase() && $("#edit_saveingno").val().toUpperCase()){
+                if(listpo.length != 0 && $("#edit_invoiceno").val().toUpperCase() && $("#edit_invoicedate").val().toUpperCase() && $("#edit_saveingno").val().toUpperCase() && $("#edit_shipper").val().toUpperCase() && $("#edit_from").val().toUpperCase() && $("#edit_to").val().toUpperCase()){
                     updateInvoice()
                    
                 }else{
@@ -526,6 +604,9 @@
                         datecreate:$("#edit_datecreate").val().toUpperCase(),
                         id : $("#edit_invoiceid").val().toUpperCase(),
                         customer :$("#edit_customer").val(),
+                        shipper:$("#edit_shipper").val(),
+                        from:$("#edit_from").val(),
+                        to:$("#edit_to").val(),
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){
@@ -575,19 +656,30 @@
                         $("#edit_invoicedate").val(js.invoicedate.toUpperCase())
                         $("#edit_saveingno").val(js.saveingno.toUpperCase())
                         $("#edit_datecreate").val(js.datecreate.toUpperCase())
-                        $("#edit_customer").html(js.customer)
+                        $("#edit_customer").html(js.customer.toUpperCase())
+                        
+                        $("#edit_shipper").val(js.shipper)
+                        $("#edit_from").val(js.shipfrom)
+                        $("#edit_to").val(js.shipto)
         
                         listpo.length = 0
                         $.each(jsdecode,function(k,v){
                             
                             var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="deleditpo(\'' + v.po + '\')">ลบ</button>';
            
+                            var containerno = ""
+                            if(v.containerno){
+                                containerno = v.containerno
+                            }else{
+                                containerno = ""
+                            }
+        
                             var objpo = {
                                 po:v.po.toUpperCase(),
                                 firstdigit:v.firstdigit.toUpperCase(),
                                 startbox:v.startbox.toUpperCase(),
                                 endbox:v.endbox.toUpperCase(),
-                                containerno:v.containerno.toUpperCase(),
+                                containerno:containerno,
                                 btdel:btndel
                             }
                            
@@ -601,6 +693,8 @@
                 })
                 
             }
+            
+
             function deleditpo(po){
                 for (var i = 0; i < listpo.length; i++) {
                     console.log(listpo[i].po)
@@ -659,7 +753,7 @@
             
             function btsaveinvoice(){
                 $("#myformaddinvoice").addClass('was-validated');
-                if(listpo.length != 0 && $("#add_invoiceno").val() && $("#add_invoicedate").val() && $("#add_saveingno").val()){
+                if(listpo.length != 0 && $("#add_invoiceno").val() && $("#add_invoicedate").val() && $("#add_saveingno").val() && $("#add_shipper").val()  && $("#add_from").val()  && $("#add_to").val() ){
                     addInvoice()
                 }else{
                     Swal.fire({
@@ -692,7 +786,6 @@
             }
             
             function addInvoice(){
-               
                 $.ajax({
                     type:"POST",
                     url:"Invoice",
@@ -702,6 +795,9 @@
                         invoicedate:$("#add_invoicedate").val(),
                         saveingno:$("#add_saveingno").val(),
                         customer:$("#add_customer").val(),
+                        shipper:$("#add_shipper").val(),
+                        from:$("#add_from").val(),
+                        to:$("#add_to").val(),
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){
@@ -727,7 +823,6 @@
                     }
                 })
         
-        
             }
     
             function delpo(po){
@@ -745,7 +840,7 @@
             function addpo(){
                
 
-                if ($('#add_po').val() && $('#add_firstdigit').val() && $('#add_startbox').val() && $('#add_endbox').val() && $('#add_containerno').val()) {
+                if ($('#add_po').val() && $('#add_firstdigit').val() && $('#add_startbox').val() && $('#add_endbox').val() ) {
                     
                     var po = $('#add_po').val().toUpperCase()
                     var startbox = $('#add_firstdigit').val().toUpperCase() + $('#add_startbox').val().toUpperCase()
@@ -774,13 +869,20 @@
                             } else if (js.status == "true") {
                                 console.log(msg)
                                 var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="delpo(\'' + $('#add_po').val() + '\')">ลบ</button>';
-               
+                                var containerno = ""
+                                if(!$('#add_containerno').val()){
+                                    containerno = ""
+                                }else{
+                                    containerno = $('#add_containerno').val()
+                
+                                }
+            
                                 var objpo = {
                                     po:$('#add_po').val().toUpperCase(),
                                     firstdigit:$('#add_firstdigit').val().toUpperCase(),
                                     startbox:$('#add_startbox').val().toUpperCase(),
                                     endbox:$('#add_endbox').val().toUpperCase(),
-                                    containerno:$('#add_containerno').val().toUpperCase(),
+                                    containerno:containerno,
                                     btdel:btndel
                                 }
                 
@@ -868,7 +970,7 @@
             
             
             $(document).ready(function(){
-              
+               
                 
             })
         </script>

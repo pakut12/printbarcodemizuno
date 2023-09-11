@@ -31,7 +31,10 @@
             String invoicedate = Utility.CoverDate(inv.get(0).getInvoicedate().replace(" 00:00:00.0", ""));
             String saveingno = inv.get(0).getSaveingno();
             String cms = inv.get(0).getCustomer();
-            
+
+            String shipper = inv.get(0).getShipper();
+            String shipfrom = inv.get(0).getShipfrom();
+            String shipto = inv.get(0).getShipto();
 
             DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
             DecimalFormat decimalFormat1 = new DecimalFormat("#,###");
@@ -257,11 +260,12 @@
                                 },
                                 {
                                     width: '*',
-                                    text:'SHIP PER : CCNI ANGOL V327W',
+                                    text:'SHIP PER : <%=shipper%>',
                                     alignment: 'center'
                                 }
                             ]
                         },
+            
                         {
                             style:['headercontent'],
                             alignment: 'justify',
@@ -272,7 +276,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text:'FROM : LAEM CHABANG,THAILAND',
+                                    text:'FROM : <%=shipfrom%>',
                                     alignment: 'center'
                                 }
                             ]
@@ -288,7 +292,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text:'TO : ATLANTA,USA',
+                                    text:'TO :  <%=shipto%>',
                                     alignment: 'center'
                                 }
                             ]
@@ -493,9 +497,11 @@
 
 
 
+
                             txt1 += "[";
                             txt1 += "{text: '" + grouptxt + "',border: [false, false, false, false]},";
                             txt1 += "{text: '" + g.getPo() + "',border: [false, false, false, false]},";
+                            txt1 += "{text: '" + Utility.Chacknull(g.getDestination()) + "',border: [false, false, false, false]},";
                             txt1 += "{text: '',border: [false, false, false, false]},";
                             int qtytotal = 0;
                             for (String s : size) {
@@ -515,8 +521,10 @@
 
                     }
 
+                   
                     txt1 += "[";
                     txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
+                    txt1 += "{text: '',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
                     int qtyall = 0;
@@ -529,7 +537,7 @@
                         }
                     }
                     txt1 += "{text: '" + qtyall + "',border: [false, true, false, true]},";
-                    txt1 += "{text: 'Container no. " + i1.getContainerno() + "',border: [false, false, false, false]},";
+                    txt1 += "{text: 'Container no. " + Utility.Chacknull(i1.getContainerno()) + "',border: [false, false, false, false],alignment:'left' },";
                     txt1 += "],";
 
                     datatable2 = txt1;
@@ -565,10 +573,11 @@
                                                 style: 'tbcontent',
                                                 table: {
                                                     headerRows: 1,
-                                                    widths: [ '*', 'auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto','auto' ],
+                                                    widths: [ '*', 'auto','auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto',110 ],
                                                     body: [
                                                         [
                                                             {text: 'DESCRIPTION',border: [false, true, false, true]}, 
+                                                            {text: '', border: [false, true, false, true]}, 
                                                             {text: '', border: [false, true, false, true]}, 
                                                             {text: '\nSIZE', border: [false, true, false, true]},
                                                              <%=txtsize%>

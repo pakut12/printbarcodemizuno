@@ -14,7 +14,7 @@
         
     </head>
     <body>
-        <form action="User" method="post">
+        <form action="User" method="post" id="formlogin">
             <div class="container mt-5">
                 <div class="row">
                     <img src="img/mizunoicon.png" style="height: 100px;width: 400px;" class="mx-auto mb-4">
