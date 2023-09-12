@@ -8,9 +8,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <script>
-    $('input:not(#formlogin input, #formadduser input, #formedituser input)').keyup(function() {
+   
+    $('input:not(#formlogin input, #formadduser input, #formedituser input,input[type=date])').keyup(function() {
         this.value = this.value.toUpperCase();
     });
+    
 </script>
 <div id="footer-style">
     <p class="text-center mt-3" >Copyright © People's garment public Co.Ltd. 666 Rama3 Bangpongpang Yannawa Bangkok 10120 Tel. 02-685-6500 Fax. 02-294-5159</p>

@@ -22,7 +22,7 @@ public class Utility {
 
         if (txt == null) {
             txt = "";
-        } 
+        }
 
 
         return txt;
@@ -42,6 +42,7 @@ public class Utility {
 
     public static List<String> getallsize(String cm, List<BCDetailBox> listbox) {
         List<String> size = new ArrayList<String>();
+        List<String> sortedSize = new ArrayList<String>();
         if (cm.equals("MUS") || cm.equals("MCL") || cm.equals("MOC")) {
             size.add("XXS");
             size.add("XS");
@@ -51,7 +52,7 @@ public class Utility {
             size.add("XL");
             size.add("XXL");
             size.add("XXXL");
-
+            sortedSize = size;
         } else {
 
             List<String> s = new ArrayList<String>();
@@ -98,8 +99,17 @@ public class Utility {
             }
 
 
+
+
+            for (String item : s) {
+                if (size.contains(item)) {
+                    sortedSize.add(item);
+                }
+            }
+
+
         }
-        return size;
+        return sortedSize;
 
     }
 
@@ -174,11 +184,16 @@ public class Utility {
     public static String groupnumber(List<BCDetailBox> grouppo) {
         String group = "";
         try {
+            
+       
+            
             List<String> sp = new ArrayList<String>();
 
             for (BCDetailBox zx : grouppo) {
                 String txt = zx.getPo() + "#" + zx.getFirstdigit() + "#" + zx.getBoxno().replace(zx.getFirstdigit(), "");
+                System.out.println(txt);
                 sp.add(txt);
+                
             }
 
 
@@ -196,6 +211,8 @@ public class Utility {
                 }
 
                 groupedData.get(key).add(number);
+   
+                
             }
 
             for (Map.Entry<String, List<Integer>> entry : groupedData.entrySet()) {
@@ -210,7 +227,13 @@ public class Utility {
                     if (numbers.get(i) == end + 1) {
                         end = numbers.get(i);
                     } else {
-                        ranges.add(start == end ? String.valueOf(start) : start + "-" + end);
+                        if (start == end) {
+                            ranges.add("");
+                        } else {
+                            ranges.add(start + "-" + end);
+                        }
+                        
+                        
                         start = end = numbers.get(i);
                     }
                 }
@@ -220,10 +243,13 @@ public class Utility {
                 StringBuilder result = new StringBuilder(key);
                 result.append(" ");
                 for (int j = 0; j < ranges.size(); j++) {
+                    /*
                     if (j > 0) {
-                        result.append(", ");
+                    result.append(", ");
                     }
+                     */                    
                     result.append(ranges.get(j));
+                    
                 }
 
                 System.out.println(result.toString());

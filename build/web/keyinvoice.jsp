@@ -56,24 +56,31 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="col-sm-3 col-md-4">
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">SHIP PER</span>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">SHIPPER</span>
                                             <input type="text" class="form-control text-center" name="edit_shipper" id="edit_shipper" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3 col-md-4">
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">FROM</span>
                                             <input type="text" class="form-control text-center" name="edit_from" id="edit_from" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-3 col-md-4">
+                                    <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
-                                            <label class="input-group-text" for="edit_customer">TO</label>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">TO</span>
                                             <input type="text" class="form-control text-center" name="edit_to" id="edit_to" required>
                                         </div>
-                                    </div>   
+                                    </div>
+                                    <div class="col-sm-12 col-md-3 ">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DEATINATION</span>
+                                            <input type="text" class="form-control text-center" name="edit_final" id="edit_final" required>
+                                        </div>
+                                    </div>
+                                    
                                     
                                     <hr>   
                                     <div class="col-sm-12 col-md-3 ">
@@ -172,22 +179,28 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">SHIP PER</span>
                                             <input type="text" class="form-control text-center" name="add_shipper" id="add_shipper" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">FROM</span>
                                             <input type="text" class="form-control text-center" name="add_from" id="add_from" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">TO</span>
                                             <input type="text" class="form-control text-center" name="add_to" id="add_to" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DEATINTION</span>
+                                            <input type="text" class="form-control text-center" name="add_final" id="add_final" required>
                                         </div>
                                     </div>
                                     <hr>
@@ -367,12 +380,11 @@
                                     containerno = v.containerno
                                 }else{
                                     containerno = ""
-            
                                 }
         
                                 var result = {
                                     textgroup : txtgroup,
-                                    invoiceid : v.invoiceid.toUpperCase(),
+                                    invoiceid : 'PackingList ID '+v.invoiceid.toUpperCase(),
                                     invoiceno : v.invoiceno.toUpperCase(),
                                     invoicedate :  v.invoicedate.toUpperCase(),
                                     saveingno :  v.saveingno.toUpperCase(),
@@ -417,7 +429,7 @@
                         
                     ],
                     rowGroup: {
-                        dataSrc: 'textgroup'
+                        dataSrc: ['invoiceid','textgroup']
                     },
                     searching: false,
                     bDestroy: true
@@ -592,7 +604,10 @@
             }
             
             function updateInvoice(){
-               
+                
+                console.log('SHIP : ' + $("#edit_shipper").val())
+                console.log('FROM : ' + $("#edit_from").val())
+                console.log('TO : ' + $("#edit_to").val())
                 $.ajax({
                     type:"POST",
                     url:"Invoice",
@@ -607,6 +622,7 @@
                         shipper:$("#edit_shipper").val(),
                         from:$("#edit_from").val(),
                         to:$("#edit_to").val(),
+                        finald:$("#edit_final").val(),
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){
@@ -661,6 +677,8 @@
                         $("#edit_shipper").val(js.shipper)
                         $("#edit_from").val(js.shipfrom)
                         $("#edit_to").val(js.shipto)
+                        
+                        $("#edit_final").val(js.finald)
         
                         listpo.length = 0
                         $.each(jsdecode,function(k,v){
@@ -798,6 +816,7 @@
                         shipper:$("#add_shipper").val(),
                         from:$("#add_from").val(),
                         to:$("#add_to").val(),
+                        addfinal:$("#add_final").val(),
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){

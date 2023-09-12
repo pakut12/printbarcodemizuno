@@ -25,6 +25,15 @@ public class BCInvoice {
     private String shipper;
     private String shipfrom;
     private String shipto;
+    private String finald;
+
+    public String getFinald() {
+        return finald;
+    }
+
+    public void setFinald(String finald) {
+        this.finald = finald;
+    }
 
     public String getShipfrom() {
         return shipfrom;

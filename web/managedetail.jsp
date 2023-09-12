@@ -737,7 +737,7 @@
                                 $("#destination").append("<option value='SCCR'>SCCR</option><option value='ADC'>ADC</option><option value='ODC'>ODC</option>");
                             }else{
                                 $("#destination").empty();
-                                $("#destination").append("<option value=''></option><option value=ADC''>ADC</option><option value='ODC'>ODC</option><option value='SCCR'>SCCR</option>");
+                                $("#destination").append("<option value=''></option><option value='ADC'>ADC</option><option value='ODC'>ODC</option><option value='SCCR'>SCCR</option>");
                             }
                             
                         

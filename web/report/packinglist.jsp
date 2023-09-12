@@ -30,8 +30,43 @@
             String invoiceno = inv.get(0).getInvoiceno();
             String invoicedate = Utility.CoverDate(inv.get(0).getInvoicedate().replace(" 00:00:00.0", ""));
             String saveingno = inv.get(0).getSaveingno();
-            String cms = inv.get(0).getCustomer();
 
+
+            /********************** set Custome *******************/
+            String cms = inv.get(0).getCustomer();
+            String address1 = "";
+            String address2 = "";
+            String fineldeatination = "";
+
+            HashSet<String> gd = new HashSet<String>();
+            for (BCInvoice item : inv) {
+                List<BCDetailBox> GroupDESCRIPTION = PackingListService.GroupDESCRIPTION(item.getPo(), item.getFirstdigit(), item.getStartbox(), item.getEndbox());
+
+                for (BCDetailBox DG : GroupDESCRIPTION) {
+                    gd.add(DG.getDestination());
+                }
+
+
+            }
+
+            if (cms.equals("MCJ")) {
+                cms = "MC";
+
+                fineldeatination += "FINAL DEATINATION : ";
+                for (String z : gd) {
+                    if (z != null) {
+                        fineldeatination += z + ".";
+                    }
+                }
+
+
+            } else {
+                address1 = "NORCROSS,GA";
+                address2 = "VIA DOWNEY,CA";
+            }
+
+
+            /********************** end Custome *******************/
             String shipper = inv.get(0).getShipper();
             String shipfrom = inv.get(0).getShipfrom();
             String shipto = inv.get(0).getShipto();
@@ -39,14 +74,17 @@
             DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
             DecimalFormat decimalFormat1 = new DecimalFormat("#,###");
 
-
             String pono = "";
             String ctnno = "";
-
+            HashSet<String> getpo = new HashSet<String>();
 
             for (BCInvoice i : inv) {
-                pono += i.getPo() + ",";
+                getpo.add(i.getPo());
                 ctnno += i.getFirstdigit() + i.getStartbox() + "-" + i.getFirstdigit() + i.getEndbox() + ",";
+            }
+
+            for (String p : getpo) {
+                pono += p + ",";
             }
 
             pono = pono.substring(0, pono.length());
@@ -178,15 +216,17 @@
                             style:['headercontent'],
                             columns: [
                                 {
-                                    width: '*',
+                                    width: 'auto',
                                     text:'\t\t\tBUKKHALO BRANCH,THAILAND',
-                                    bold:true
+                                    bold:true,
+                                    margin: [90, 0,0,0]
                                 },
                                 {
                                     width: '*',
-                                    text:'<%=cms%>\nNORCROSS,GA\nVIA DOWNEY,CA',
+                                    text:'<%=cms%>\n<%=address1%>\n<%=address2%>',
                                     alignment: 'center',
                                     bold:true
+                                    
                                 }
                             ]  
                         },
@@ -231,6 +271,21 @@
                                 {
                                     width: '*',
                                     text:'MADE IN THAILAND',
+                                    alignment: 'center'
+                                }
+                            ]
+                        },
+                        {
+                            style:['headercontent'],
+                            alignment: 'justify',
+                            columns: [
+                                {
+                                    width: '*',
+                                    text:''
+                                },
+                                {
+                                    width: '*',
+                                    text:'<%=fineldeatination%>',
                                     alignment: 'center'
                                 }
                             ]
@@ -450,7 +505,8 @@
                     /******************************  End table1 ********************************************/
                     /***************************** set table2 ***************************************/
                     String txt1 = "";
-
+                    String conn = i1.getContainerno() == null ? "" : "Container no."+i1.getContainerno();
+                    
                     List<BCDetailBox> listgroupcolor = PackingListService.GroupCustomeColor(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
                     HashMap<String, String> map = new HashMap<String, String>();
                     HashMap<String, String> maptotal = new HashMap<String, String>();
@@ -459,7 +515,7 @@
 
                     for (BCDetailBox g : listgroupcolor) {
 
-                        String grouptxt = Utility.subsize(g.getCustomer_no());
+                        String grouptxt = Utility.subsize(g.getCustomer_no()) + g.getDestination();
                         if (!alltotal.contains(grouptxt)) {
                             List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), g.getCustomer_color());
 
@@ -481,16 +537,19 @@
                                     q = x.getQty_result4();
                                 }
 
-                                String data1 = map.get(g.getCustomer_color() + "#" + s);
-
+                                String data1 = map.get(g.getCustomer_color() + "#"+s +"#"+g.getDestination());
+                                int qt = 0;
                                 if (data1 == null) {
-                                    map.put(g.getCustomer_color() + "#" + s, q);
+                                    map.put(g.getCustomer_color() + "#" + s+"#"+g.getDestination(), q);
                                     maptotal.put(s, q);
                                 } else {
-                                    int qt = Integer.parseInt(q) + Integer.parseInt(data1);
-                                    map.put(g.getCustomer_color() + "#" + s, String.valueOf(qt));
+                                    qt = Integer.parseInt(q) + Integer.parseInt(data1);
+                                    map.put(g.getCustomer_color() + "#" + s+"#"+g.getDestination(), String.valueOf(qt));
                                     maptotal.put(s, String.valueOf(qt));
                                 }
+
+
+
 
                             }
 
@@ -505,11 +564,11 @@
                             txt1 += "{text: '',border: [false, false, false, false]},";
                             int qtytotal = 0;
                             for (String s : size) {
-                                if (map.get(g.getCustomer_color() + "#" + s) == null) {
+                                if (map.get(g.getCustomer_color() + "#" + s+"#"+g.getDestination()) == null) {
                                     txt1 += "{text: '',border: [false, false, false, false]},";
                                 } else {
-                                    txt1 += "{text: '" + map.get(g.getCustomer_color() + "#" + s) + "',border: [false, false, false, false]},";
-                                    qtytotal += Integer.parseInt(map.get(g.getCustomer_color() + "#" + s));
+                                    txt1 += "{text: '" + map.get(g.getCustomer_color() + "#" + s+"#"+g.getDestination()) + "',border: [false, false, false, false]},";
+                                    qtytotal += Integer.parseInt(map.get(g.getCustomer_color() + "#" + s+"#"+g.getDestination()));
                                 }
                             }
                             txt1 += "{text: '" + qtytotal + "',border: [false, false, false, false]},";
@@ -521,7 +580,7 @@
 
                     }
 
-                   
+
                     txt1 += "[";
                     txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
@@ -537,7 +596,8 @@
                         }
                     }
                     txt1 += "{text: '" + qtyall + "',border: [false, true, false, true]},";
-                    txt1 += "{text: 'Container no. " + Utility.Chacknull(i1.getContainerno()) + "',border: [false, false, false, false],alignment:'left' },";
+
+                    txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left' },";
                     txt1 += "],";
 
                     datatable2 = txt1;
@@ -549,7 +609,7 @@
                     style: 'tbcontent',
                     table: {
                         headerRows: 1,
-                        widths: [ '*', 'auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto' , 'auto'],
+                        widths: [ '*', 'auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 17,'auto', 'auto', 'auto' , 'auto'],
                         body: [
                             [
                                 {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
@@ -573,7 +633,7 @@
                                                 style: 'tbcontent',
                                                 table: {
                                                     headerRows: 1,
-                                                    widths: [ '*', 'auto','auto','*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto',110 ],
+                                                    widths: [ '*', 'auto',17,'*', 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto',110 ],
                                                     body: [
                                                         [
                                                             {text: 'DESCRIPTION',border: [false, true, false, true]}, 

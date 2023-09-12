@@ -1330,6 +1330,7 @@ public class DetailService {
             //String sql = SqlAddDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, customer_num, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
             String sql = "UPDATE MIZUNONEWBARBOXDT SET " +
                     "PO=?," +
+                    "BOXSEQ=?," +
                     "BOXNO=?," +
                     "BOXALL=?," +
                     "SHIPFROM=?," +
@@ -1374,10 +1375,11 @@ public class DetailService {
                     "PO_OLD=?," +
                     "DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS')," +
                     "DELIVERY=? " +
+                   
                     "WHERE PO=? and BOXNO=? ";
 
 
-
+       
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -1388,55 +1390,55 @@ public class DetailService {
                 System.out.println(nostart);
 
                 ps.setString(1, po);
+                ps.setInt(2, ax);
+                ps.setString(3, initial + nostart);
+                ps.setString(4, initial + quantitytotal_box);
+                ps.setString(5, "TSG");
+                ps.setString(6, addresstsg.get("address1"));
+                ps.setString(7, addresstsg.get("address2"));
+                ps.setString(8, addresstsg.get("address3"));
+                ps.setString(9, addresstsg.get("address4"));
+                ps.setString(10, customer_num);
+                ps.setString(11, addresscustomer.get("address1"));
+                ps.setString(12, addresscustomer.get("address2"));
+                ps.setString(13, addresscustomer.get("address3"));
+                ps.setString(14, addresscustomer.get("address4"));
+                ps.setString(15, quantity_box);
+                ps.setString(16, description);
+                ps.setString(17, gw);
+                ps.setString(18, nw);
+                ps.setString(19, country);
+                ps.setString(20, customer1_id[0]);
+                ps.setString(21, customer1_id[1]);
+                ps.setString(22, customer1_id[2]);
+                ps.setString(23, customer1_id[3]);
+                ps.setString(24, customer1_id[4]);
+                ps.setString(25, customer2_id[0]);
+                ps.setString(26, customer2_id[1]);
+                ps.setString(27, customer2_id[2]);
+                ps.setString(28, customer2_id[3]);
+                ps.setString(29, customer2_id[4]);
+                ps.setString(30, customer3_id[0]);
+                ps.setString(31, customer3_id[1]);
+                ps.setString(32, customer3_id[2]);
+                ps.setString(33, customer3_id[3]);
+                ps.setString(34, customer3_id[4]);
+                ps.setString(35, customer4_id[0]);
+                ps.setString(36, customer4_id[1]);
+                ps.setString(37, customer4_id[2]);
+                ps.setString(38, customer4_id[3]);
+                ps.setString(39, customer4_id[4]);
+                ps.setString(40, pallet);
+                ps.setString(41, prodorder);
+                ps.setString(42, "N");
+                ps.setString(43, destination);
+                ps.setString(44, po_old);
+                ps.setString(45, Utility.GetDateNow());
+                ps.setString(46, customer_address);
+                
 
-                ps.setString(2, initial + nostart);
-                ps.setString(3, initial + quantitytotal_box);
-                ps.setString(4, "TSG");
-                ps.setString(5, addresstsg.get("address1"));
-                ps.setString(6, addresstsg.get("address2"));
-                ps.setString(7, addresstsg.get("address3"));
-                ps.setString(8, addresstsg.get("address4"));
-                ps.setString(9, customer_num);
-                ps.setString(10, addresscustomer.get("address1"));
-                ps.setString(11, addresscustomer.get("address2"));
-                ps.setString(12, addresscustomer.get("address3"));
-                ps.setString(13, addresscustomer.get("address4"));
-                ps.setString(14, quantity_box);
-                ps.setString(15, description);
-                ps.setString(16, gw);
-                ps.setString(17, nw);
-                ps.setString(18, country);
-                ps.setString(19, customer1_id[0]);
-                ps.setString(20, customer1_id[1]);
-                ps.setString(21, customer1_id[2]);
-                ps.setString(22, customer1_id[3]);
-                ps.setString(23, customer1_id[4]);
-                ps.setString(24, customer2_id[0]);
-                ps.setString(25, customer2_id[1]);
-                ps.setString(26, customer2_id[2]);
-                ps.setString(27, customer2_id[3]);
-                ps.setString(28, customer2_id[4]);
-                ps.setString(29, customer3_id[0]);
-                ps.setString(30, customer3_id[1]);
-                ps.setString(31, customer3_id[2]);
-                ps.setString(32, customer3_id[3]);
-                ps.setString(33, customer3_id[4]);
-                ps.setString(34, customer4_id[0]);
-                ps.setString(35, customer4_id[1]);
-                ps.setString(36, customer4_id[2]);
-                ps.setString(37, customer4_id[3]);
-                ps.setString(38, customer4_id[4]);
-                ps.setString(39, pallet);
-                ps.setString(40, prodorder);
-                ps.setString(41, "N");
-                ps.setString(42, destination);
-                ps.setString(43, po_old);
-                ps.setString(44, date);
-                ps.setString(45, customer_address);
-
-
-                ps.setString(46, pobefore);
-                ps.setString(47, firstdigitbefore + n);
+                ps.setString(47, pobefore);
+                ps.setString(48, firstdigitbefore + n);
 
                 ps.addBatch();
 

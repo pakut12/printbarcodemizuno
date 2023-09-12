@@ -53,9 +53,10 @@ public class InvoiceService {
                 invoice.setDate_create(Utility.CoverDateFromSql(rs.getTimestamp("date_create"), 2));
                 invoice.setDate_modified(Utility.CoverDateFromSql(rs.getTimestamp("date_modified"), 2));
                 invoice.setCustomer(rs.getString("customer"));
-                invoice.setShipfrom(rs.getString("SHIPPER"));
-                invoice.setShipto(rs.getString("SHIPFROM"));
-                invoice.setShipper(rs.getString("SHIPTO"));
+                invoice.setShipfrom(rs.getString("SHIPFROM"));
+                invoice.setShipto(rs.getString("SHIPTO"));
+                invoice.setShipper(rs.getString("SHIPPER"));
+                invoice.setFinald(rs.getString("FINAL"));
 
                 list.add(invoice);
             }
@@ -246,12 +247,12 @@ public class InvoiceService {
 
     }
 
-    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate, String customer, String shipper, String from, String to) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate, String customer, String shipper, String from, String to,String finald) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?)";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -266,6 +267,12 @@ public class InvoiceService {
                 String endbox = obj.getString("endbox");
                 String containerno = obj.getString("containerno");
 
+                System.out.println("-----------------------");
+                System.out.println(shipper);
+                System.out.println(from);
+                System.out.println(to);
+                System.out.println("-----------------------");
+                
                 ps.setInt(1, primarykey);
                 ps.setString(2, invoiceno);
                 ps.setString(3, Utility.CoverDate(invoicedate));
@@ -281,6 +288,7 @@ public class InvoiceService {
                 ps.setString(13, shipper);
                 ps.setString(14, from);
                 ps.setString(15, to);
+                ps.setString(16, finald);
                 ps.addBatch();
 
 
@@ -299,12 +307,12 @@ public class InvoiceService {
         return status;
     }
 
-    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String customer, String shipper, String from, String to) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String customer, String shipper, String from, String to,String addfinal) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?)";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?)";
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -334,6 +342,7 @@ public class InvoiceService {
                 ps.setString(12, shipper);
                 ps.setString(13, from);
                 ps.setString(14, to);
+                ps.setString(15, addfinal);
 
                 ps.addBatch();
 

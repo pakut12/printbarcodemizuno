@@ -50,8 +50,10 @@ public class Invoice extends HttpServlet {
                     String shipper = request.getParameter("shipper");
                     String from = request.getParameter("from");
                     String to = request.getParameter("to");
+                    String addfinal = request.getParameter("addfinal");
 
-                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to);
+
+                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to, addfinal);
 
                     if (status) {
                         out.print("true");
@@ -127,7 +129,7 @@ public class Invoice extends HttpServlet {
                     obj.put("shipper", listdata.get(0).getShipper());
                     obj.put("shipfrom", listdata.get(0).getShipfrom());
                     obj.put("shipto", listdata.get(0).getShipto());
-
+                    obj.put("finald", listdata.get(0).getFinald());
                     out.print(obj);
 
                 } catch (Exception e) {
@@ -162,12 +164,18 @@ public class Invoice extends HttpServlet {
                     String shipper = request.getParameter("shipper");
                     String from = request.getParameter("from");
                     String to = request.getParameter("to");
+                    String finald = request.getParameter("finald");
+ 
+ 
+                    System.out.println(shipper);
+                    System.out.println(from);
+                    System.out.println(to);
 
 
                     boolean delstatus = InvoiceService.delinvoice(delid);
 
                     if (delstatus) {
-                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to);
+                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to,finald);
                         if (status) {
                             out.print("true");
                         } else {

@@ -375,7 +375,7 @@ public class PackingListService {
                 iv.setShipper(rs.getString("shipper"));
                 iv.setShipfrom(rs.getString("shipfrom"));
                 iv.setShipto(rs.getString("shipto"));
-                
+
                 listbox.add(iv);
             }
 
@@ -446,6 +446,48 @@ public class PackingListService {
             ConnectDB.closeConnection(conn);
             ps.close();
             rs.close();
+        }
+
+        return listbox;
+    }
+
+    public static List<BCDetailBox> GroupDESCRIPTION(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+
+        List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+
+        String sql = "";
+        try {
+
+            sql += " SELECT  a.DESTINATION   FROM   MIZUNONEWBARBOXDT a ";
+            sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
+            sql += " WHERE REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN ( ";
+            for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
+                if (s < Integer.parseInt(ENDBOX)) {
+                    sql += "'" + firstdigit + String.valueOf(s) + "',";
+                } else {
+                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
+                }
+            }
+            sql += " GROUP BY a.DESTINATION  ";
+
+            System.out.println(sql);
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, firstdigit);
+            ps.setString(2, po);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox detail = new BCDetailBox();
+               
+                detail.setDestination(rs.getString("DESTINATION"));
+
+                listbox.add(detail);
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         return listbox;
