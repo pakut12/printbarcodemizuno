@@ -362,18 +362,7 @@
                             console.log(data);
                             $.each(data,function(k,v){
                                 
-                                var txtgroup = '<div class="container"><div class="d-flex justify-content-between">'
-                                txtgroup    += '<div class="">'
-                                txtgroup    += 'Invoiceno : '+v.invoiceno.toUpperCase()+'<br>'
-                                txtgroup    += 'Invoicedate : '+v.invoicedate.toUpperCase()+'<br>'
-                                txtgroup    += 'Savingno : '+v.saveingno.toUpperCase()+'<br>'
-                                txtgroup    += 'Customer : '+v.customer.toUpperCase()+'<br>'
-                                txtgroup    += 'PackingList Create : '+v.date_create.toUpperCase()+'</div>'
-                             
-                                
-                                txtgroup  += '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase()+')" id="bt_edit">ดูรายละเอียด</button>'
-                                
-                                txtgroup  += '</div></div>'
+                               
                                 
                                 var containerno = ""
                                 if(v.containerno){
@@ -383,19 +372,14 @@
                                 }
         
                                 var result = {
-                                    textgroup : txtgroup,
-                                    invoiceid : 'PackingList ID '+v.invoiceid.toUpperCase(),
+                                    
+                                    customer:v.customer,
+                                    invoiceid : v.invoiceid.toUpperCase(),
                                     invoiceno : v.invoiceno.toUpperCase(),
                                     invoicedate :  v.invoicedate.toUpperCase(),
-                                    saveingno :  v.saveingno.toUpperCase(),
-                                    po :  v.po.toUpperCase(),
-                                    firstdigit :  v.firstdigit.toUpperCase(),
-                                    startbox :  v.startbox.toUpperCase(),
-                                    endbox :  v.endbox.toUpperCase(),
-                                    containerno :  containerno,
                                     date_create : v.date_create.toUpperCase(),
-                                    btn_edit : '<button class="btn btn-warning btn-sm" type="button" onclick="edit_customer('+v.invoiceid.toUpperCase()+')" id="bt_edit">เเก้ไข</button>',
-                                    btn_del : '<button class="btn btn-danger btn-sm" type="button" onclick="del_customer('+v.invoiceid.toUpperCase()+')" id="bt_del">ลบ</button>'
+                                    btn_edit : '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase()+')" id="bt_edit">ดูรายละเอียด</button>'
+                                   
                                 }
                                 arr.push(result);
                              
@@ -406,31 +390,29 @@
                     columns: [
                        
                         {
-                            title : 'po',
-                            data : 'po'
+                            title : 'invoiceno',
+                            data : 'invoiceno'
                         },
                         {
-                            title:'firstdigit',
-                            data : 'firstdigit' 
+                            title:'invoicedate',
+                            data : 'invoicedate' 
                         },
                         {
-                            title:'startbox',
-                            data : 'startbox' 
+                            title:'customer',
+                            data : 'customer' 
                         },
                         {
-                            title:'endbox',
-                            data : 'endbox' 
+                            title:'date_create',
+                            data : 'date_create' 
                         },
                         {
-                            title:'containerno',
-                            data : 'containerno' 
+                            title:'view',
+                            data : 'btn_edit' 
                         },
                                       
                         
                     ],
-                    rowGroup: {
-                        dataSrc: ['invoiceid','textgroup']
-                    },
+                    
                     searching: false,
                     bDestroy: true
                   

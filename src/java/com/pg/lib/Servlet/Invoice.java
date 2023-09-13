@@ -88,8 +88,8 @@ public class Invoice extends HttpServlet {
 
                     JSONObject obj = new JSONObject();
                     obj.put("draw", draw);
-                    obj.put("recordsTotal", ivs.getTotalRecords());
-                    obj.put("recordsFiltered", ivs.getFilteredRecords(searchValue));
+                    obj.put("recordsTotal", ivs.getTotalRecords(start, length, searchValue, orderColumn, orderDir, search_invoiceno, search_invoicedate, search_datestart, search_dateend));
+                    obj.put("recordsFiltered", ivs.getFilteredRecords(start, length, searchValue, orderColumn, orderDir, search_invoiceno, search_invoicedate, search_datestart, search_dateend));
                     obj.put("data", gson.toJsonTree(rows));
 
                     response.setContentType("application/json");

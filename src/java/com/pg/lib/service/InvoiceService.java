@@ -71,10 +71,30 @@ public class InvoiceService {
         return list;
     }
 
-    public int getTotalRecords() throws ClassNotFoundException, SQLException, NamingException {
+    public int getTotalRecords(int start, int length, String searchValue, String orderColumn, String orderDir, String search_invoiceno, String search_invoicedate, String search_datestart, String search_dateend) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
-            String sql = "SELECT COUNT(*) FROM MIZUNONEWBARBOXINVOICE c where c.INVOICEID > 99";
+            String sql = "SELECT count(*) as total FROM ( ";
+            sql += " SELECT ROWNUM AS rnum, INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE  ";
+            sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
+            sql += "  WHERE c.INVOICEID > 99 ";
+
+            if (!search_invoiceno.equals("")) {
+                sql += "  and c.INVOICENO = '" + search_invoiceno + "' ";
+            }
+
+            if (!search_invoicedate.equals("")) {
+                sql += " and c.INVOICEDATE = TO_DATE('" + Utility.CoverDate(search_invoicedate) + "', 'dd/mm/yyyy HH24:MI:SS') ";
+            }
+
+
+
+            if (!search_datestart.equals("") && !search_dateend.equals("")) {
+                sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
+            }
+
+            sql += ") ";
+            sql += " group by  INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -91,30 +111,38 @@ public class InvoiceService {
         return totalRecords;
     }
 
-    public int getFilteredRecords(String searchValue) throws ClassNotFoundException, SQLException, NamingException {
+    public int getFilteredRecords(int start, int length, String searchValue, String orderColumn, String orderDir, String search_invoiceno, String search_invoicedate, String search_datestart, String search_dateend) throws ClassNotFoundException, SQLException, NamingException {
         int filteredRecords = 0;
         try {
-            String sql = "SELECT count(*) as total  FROM ( ";
-            sql += " SELECT ROWNUM AS rnum, c.* ";
+            String sql = "SELECT count(*) as total FROM ( ";
+            sql += " SELECT ROWNUM AS rnum, INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE  ";
             sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
             sql += "  WHERE c.INVOICEID > 99 ";
-            sql += "  AND (c.INVOICEID like ?  or c.INVOICENO like ?  or   c.INVOICEDATE LIKE '%' || TO_DATE(?, 'dd/mm/yyyy') || '%'  or c.SAVEINGNO like ? or c.PO like ? or c.FIRSTDIGIT like ? or  c.STARTBOX like ? or c.ENDBOX like ? or c.CONTAINERNO like ? or c.DATE_CREATE LIKE '%' || TO_DATE(?, 'dd/mm/yyyy') || '%' or  c.DATE_MODIFIED LIKE '%' || TO_DATE(?, 'dd/mm/yyyy') || '%'  ) ";
-            sql += ") ";
 
+            if (!search_invoiceno.equals("")) {
+                sql += "  and c.INVOICENO = '" + search_invoiceno + "' ";
+            }
+
+            if (!search_invoicedate.equals("")) {
+                sql += " and c.INVOICEDATE = TO_DATE('" + Utility.CoverDate(search_invoicedate) + "', 'dd/mm/yyyy HH24:MI:SS') ";
+            }
+
+
+
+            if (!search_datestart.equals("") && !search_dateend.equals("")) {
+                sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
+            }
+
+            sql += " and (INVOICEID like ? or INVOICENO like ? or INVOICEDATE like ? or CUSTOMER like ? )";
+
+            sql += ") ";
+            sql += " group by  INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + searchValue + "%");
             ps.setString(2, "%" + searchValue + "%");
             ps.setString(3, "%" + searchValue + "%");
             ps.setString(4, "%" + searchValue + "%");
-            ps.setString(5, "%" + searchValue + "%");
-            ps.setString(6, "%" + searchValue + "%");
-            ps.setString(7, "%" + searchValue + "%");
-            ps.setString(8, "%" + searchValue + "%");
-            ps.setString(9, "%" + searchValue + "%");
-            ps.setString(10, "%" + searchValue + "%");
-            ps.setString(11, "%" + searchValue + "%");
-
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -134,8 +162,8 @@ public class InvoiceService {
     public List<BCInvoice> getDataFromDatabase(int start, int length, String searchValue, String orderColumn, String orderDir, String search_invoiceno, String search_invoicedate, String search_datestart, String search_dateend) throws ClassNotFoundException, SQLException, NamingException {
         List<BCInvoice> list = new ArrayList<BCInvoice>();
         try {
-            String sql = "SELECT * FROM ( ";
-            sql += " SELECT ROWNUM AS rnum, c.* ";
+            String sql = "SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE FROM ( ";
+            sql += " SELECT ROWNUM AS rnum, INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE  ";
             sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
             sql += "  WHERE c.INVOICEID > 99 ";
 
@@ -154,10 +182,10 @@ public class InvoiceService {
                 sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
 
-
             sql += ") WHERE rnum BETWEEN ? AND ?";
 
-
+            sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
+            sql += " order by INVOICEID ";
             System.out.println(sql);
 
             conn = ConnectDB.getConnection();
@@ -175,16 +203,11 @@ public class InvoiceService {
                 invoice.setInvoiceid(rs.getString("invoiceid"));
                 invoice.setInvoiceno(rs.getString("invoiceno"));
                 invoice.setInvoicedate(Utility.CoverDateFromSql(rs.getDate("invoicedate"), 1));
-                invoice.setSaveingno(rs.getString("saveingno"));
-                invoice.setPo(rs.getString("po"));
-                invoice.setFirstdigit(rs.getString("firstdigit"));
-                invoice.setStartbox(rs.getString("startbox"));
-                invoice.setEndbox(rs.getString("endbox"));
-                invoice.setContainerno(rs.getString("containerno"));
+
                 invoice.setDate_create(Utility.CoverDateFromSql(rs.getTimestamp("date_create"), 2));
-                invoice.setDate_modified(Utility.CoverDateFromSql(rs.getTimestamp("date_modified"), 2));
+
                 invoice.setCustomer(rs.getString("customer"));
-                
+
                 list.add(invoice);
             }
 
@@ -247,7 +270,7 @@ public class InvoiceService {
 
     }
 
-    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate, String customer, String shipper, String from, String to,String finald) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate, String customer, String shipper, String from, String to, String finald) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
@@ -272,7 +295,7 @@ public class InvoiceService {
                 System.out.println(from);
                 System.out.println(to);
                 System.out.println("-----------------------");
-                
+
                 ps.setInt(1, primarykey);
                 ps.setString(2, invoiceno);
                 ps.setString(3, Utility.CoverDate(invoicedate));
@@ -307,7 +330,7 @@ public class InvoiceService {
         return status;
     }
 
-    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String customer, String shipper, String from, String to,String addfinal) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String customer, String shipper, String from, String to, String addfinal) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {

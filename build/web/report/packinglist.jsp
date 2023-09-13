@@ -52,14 +52,7 @@
             if (cms.equals("MCJ")) {
                 cms = "MC";
 
-                fineldeatination += "FINAL DEATINATION : ";
-                for (String z : gd) {
-                    if (z != null) {
-                        fineldeatination += z + ".";
-                    }
-                }
-
-
+                fineldeatination += "FINAL DEATINATION : " + inv.get(0).getFinald();
             } else {
                 address1 = "NORCROSS,GA";
                 address2 = "VIA DOWNEY,CA";
@@ -505,19 +498,22 @@
                     /******************************  End table1 ********************************************/
                     /***************************** set table2 ***************************************/
                     String txt1 = "";
-                    String conn = i1.getContainerno() == null ? "" : "Container no."+i1.getContainerno();
-                    
+                    String conn = i1.getContainerno() == null ? "" : "Container no." + i1.getContainerno();
+
                     List<BCDetailBox> listgroupcolor = PackingListService.GroupCustomeColor(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
                     HashMap<String, String> map = new HashMap<String, String>();
                     HashMap<String, String> maptotal = new HashMap<String, String>();
 
                     List<String> alltotal = new ArrayList<String>();
+                    String data1 = "";
 
                     for (BCDetailBox g : listgroupcolor) {
+                        HashSet<String> kl = new HashSet<String>();
+                        kl.add(g.getDestination());
 
                         String grouptxt = Utility.subsize(g.getCustomer_no()) + g.getDestination();
                         if (!alltotal.contains(grouptxt)) {
-                            List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), g.getCustomer_color());
+                            List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), g.getCustomer_color(), g.getDestination());
 
                             for (BCDetailBox x : listtotalgroup) {
                                 String q = "";
@@ -537,40 +533,49 @@
                                     q = x.getQty_result4();
                                 }
 
-                                String data1 = map.get(g.getCustomer_color() + "#"+s +"#"+g.getDestination());
+
+                                data1 = map.get(g.getCustomer_color() + "#" + s + "#" + g.getDestination());
                                 int qt = 0;
                                 if (data1 == null) {
-                                    map.put(g.getCustomer_color() + "#" + s+"#"+g.getDestination(), q);
-                                    maptotal.put(s, q);
+                                    map.put(g.getCustomer_color() + "#" + s + "#" + g.getDestination(), q);
+                                    
                                 } else {
                                     qt = Integer.parseInt(q) + Integer.parseInt(data1);
-                                    map.put(g.getCustomer_color() + "#" + s+"#"+g.getDestination(), String.valueOf(qt));
-                                    maptotal.put(s, String.valueOf(qt));
+                                    map.put(g.getCustomer_color() + "#" + s + "#" + g.getDestination(), String.valueOf(qt));
+                                    
                                 }
-
-
-
+                                
+                                
+                                
+                                
+                               
 
                             }
 
-
-
+                           
 
 
                             txt1 += "[";
-                            txt1 += "{text: '" + grouptxt + "',border: [false, false, false, false]},";
+                            txt1 += "{text: '" + grouptxt.replace(g.getDestination(), "") + "',border: [false, false, false, false]},";
                             txt1 += "{text: '" + g.getPo() + "',border: [false, false, false, false]},";
                             txt1 += "{text: '" + Utility.Chacknull(g.getDestination()) + "',border: [false, false, false, false]},";
                             txt1 += "{text: '',border: [false, false, false, false]},";
                             int qtytotal = 0;
-                            for (String s : size) {
-                                if (map.get(g.getCustomer_color() + "#" + s+"#"+g.getDestination()) == null) {
-                                    txt1 += "{text: '',border: [false, false, false, false]},";
-                                } else {
-                                    txt1 += "{text: '" + map.get(g.getCustomer_color() + "#" + s+"#"+g.getDestination()) + "',border: [false, false, false, false]},";
-                                    qtytotal += Integer.parseInt(map.get(g.getCustomer_color() + "#" + s+"#"+g.getDestination()));
+                            for (String s1 : size) {
+                                for (String k1 : kl) {
+                                    if (map.get(g.getCustomer_color() + "#" + s1 + "#" + g.getDestination()) == null) {
+                                        txt1 += "{text: '',border: [false, false, false, false]},";
+                                        
+                                    } else {
+                                        txt1 += "{text: '" + map.get(g.getCustomer_color() + "#" + s1 + "#" + g.getDestination()) + "',border: [false, false, false, false]},";
+                                        qtytotal += Integer.parseInt(map.get(g.getCustomer_color() + "#" + s1 + "#" + g.getDestination()));
+                                       
+                                    }
+                                     
                                 }
+                                
                             }
+
                             txt1 += "{text: '" + qtytotal + "',border: [false, false, false, false]},";
                             txt1 += "{text: '',border: [false, false, false, false]},";
                             txt1 += "],";
@@ -581,6 +586,8 @@
                     }
 
 
+                   
+                    
                     txt1 += "[";
                     txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
@@ -588,6 +595,10 @@
                     txt1 += "{text: '',border: [false, true, false, true]},";
                     int qtyall = 0;
                     for (String s : size) {
+                        
+                       
+                        
+                        
                         if (maptotal.get(s) == null) {
                             txt1 += "{text: '',border: [false, true, false, true]},";
                         } else {
@@ -596,7 +607,6 @@
                         }
                     }
                     txt1 += "{text: '" + qtyall + "',border: [false, true, false, true]},";
-
                     txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left' },";
                     txt1 += "],";
 

@@ -162,6 +162,7 @@ public class PackingListService {
                 }
             }
             sql += " GROUP BY a.po, b.customer_color,b.customer_no,a.DESTINATION  ";
+            sql += " order by a.DESTINATION  ";
 
             System.out.println(sql);
             conn = ConnectDB.getConnection();
@@ -188,7 +189,7 @@ public class PackingListService {
         return listbox;
     }
 
-    public static List<BCDetailBox> GroupCustomeSizeTotal(String po, String firstdigit, String STARTBOX, String ENDBOX, String color) throws SQLException {
+    public static List<BCDetailBox> GroupCustomeSizeTotal(String po, String firstdigit, String STARTBOX, String ENDBOX, String color,String DESTINATION) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
@@ -204,9 +205,11 @@ public class PackingListService {
             sql += " sum(QTY_RESULT1), ";
             sql += " sum(QTY_RESULT2), ";
             sql += " sum(QTY_RESULT3),  ";
-            sql += " sum(QTY_RESULT4)  ";
+            sql += " sum(QTY_RESULT4),";
+            sql += " DESTINATION  ";
+   
             sql += " FROM (  ";
-            sql += " SELECT  a.PO, a.BOXNO,    b.customer_color,   b.customer_size,   a.SIZENO1,   a.SIZENO2,  a.SIZENO3,  a.SIZENO4,  a.NETWEIGHT,  a.GROSSWEIGHT,  c.QTY_RESULT1,  c.QTY_RESULT2,   c.QTY_RESULT3,   c.QTY_RESULT4 FROM   MIZUNONEWBARBOXDT a  ";
+            sql += " SELECT  a.PO, a.BOXNO,    b.customer_color,   b.customer_size,   a.SIZENO1,   a.SIZENO2,  a.SIZENO3,  a.SIZENO4,  a.NETWEIGHT,  a.GROSSWEIGHT,  c.QTY_RESULT1,  c.QTY_RESULT2,   c.QTY_RESULT3,   c.QTY_RESULT4,a.DESTINATION FROM   MIZUNONEWBARBOXDT a  ";
             sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4   ";
             sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po  ";
             sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN (  ";
@@ -218,17 +221,19 @@ public class PackingListService {
                     sql += "'" + firstdigit + String.valueOf(s) + "') ";
                 }
             }
-            sql += " AND b.customer_color = ? ";
-            sql += " GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4  ";
+            sql += " AND b.customer_color = ? and a.DESTINATION = ? ";
+            sql += " GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
             sql += " ) tb   ";
-            sql += " GROUP BY  po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4  ";
+            sql += " GROUP BY  po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
             sql += " ORDER BY  customer_size  ";
 
+            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
             ps.setString(2, po);
             ps.setString(3, color);
+            ps.setString(4, DESTINATION);
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -244,7 +249,7 @@ public class PackingListService {
                 detail.setQty_result2(rs.getString("sum(QTY_RESULT2)"));
                 detail.setQty_result3(rs.getString("sum(QTY_RESULT3)"));
                 detail.setQty_result4(rs.getString("sum(QTY_RESULT4)"));
-
+ 
                 listbox.add(detail);
             }
 
@@ -375,6 +380,7 @@ public class PackingListService {
                 iv.setShipper(rs.getString("shipper"));
                 iv.setShipfrom(rs.getString("shipfrom"));
                 iv.setShipto(rs.getString("shipto"));
+                iv.setFinald(rs.getString("FINAL"));
 
                 listbox.add(iv);
             }
