@@ -86,7 +86,7 @@
                                     <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                            <input type="text" class="form-control text-center" name="edit_po" id="edit_po" maxlength="10">
+                                            <input type="text" class="form-control text-center" name="edit_po" id="edit_po" >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3 ">
@@ -110,7 +110,7 @@
                                     <div class="col-sm-12 col-md-12 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Container no</span>
-                                            <input type="text" class="form-control text-center" name="edit_containerno" id="edit_containerno" maxlength="15">
+                                            <input type="text" class="form-control text-center" name="edit_containerno" id="edit_containerno" maxlength="25">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 ">
@@ -208,7 +208,7 @@
                                     <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                            <input type="text" class="form-control text-center" name="add_po" id="add_po" maxlength="10" >
+                                            <input type="text" class="form-control text-center" name="add_po" id="add_po" >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3 ">
@@ -232,7 +232,7 @@
                                     <div class="col-sm-12 col-md-12 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Container no</span>
-                                            <input type="text" class="form-control text-center" name="add_containerno" id="add_containerno" maxlength="15" >
+                                            <input type="text" class="form-control text-center" name="add_containerno" id="add_containerno" maxlength="25" >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 ">
