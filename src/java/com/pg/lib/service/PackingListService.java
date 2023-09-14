@@ -317,6 +317,9 @@ public class PackingListService {
             sql += " ORDER BY ";
             sql += " customer_size ";
 
+            
+            
+            System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
@@ -432,7 +435,9 @@ public class PackingListService {
 
             sql += "  ORDER BY tb.PO,CAST(REGEXP_SUBSTR(tb.boxno, '\\d+')  as int) ";
 
-
+System.out.println(sql);
+            
+            
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);

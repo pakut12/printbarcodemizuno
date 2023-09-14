@@ -442,8 +442,6 @@
     
             $(document).ready(function () {
                 gettable();
-                
-                
             });
     
         </script>

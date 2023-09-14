@@ -24,6 +24,8 @@ public class AuthenticationService {
             statustext = "Admin";
         } else if (status.equals("2")) {
             statustext = "User";
+        } else if (status.equals("3")) {
+            statustext = "Packing";
         }
 
         return statustext;

@@ -74,8 +74,8 @@ public class InvoiceService {
     public int getTotalRecords(int start, int length, String searchValue, String orderColumn, String orderDir, String search_invoiceno, String search_invoicedate, String search_datestart, String search_dateend) throws ClassNotFoundException, SQLException, NamingException {
         int totalRecords = 0;
         try {
-            String sql = "SELECT count(*) as total FROM ( ";
-            sql += " SELECT ROWNUM AS rnum, INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE  ";
+            String sql = "SELECT count(*) as total  FROM ( ";
+            sql += " SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE   ";
             sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
             sql += "  WHERE c.INVOICEID > 99 ";
 
@@ -87,14 +87,16 @@ public class InvoiceService {
                 sql += " and c.INVOICEDATE = TO_DATE('" + Utility.CoverDate(search_invoicedate) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
 
-
+            System.out.println(search_datestart);
+            System.out.println(search_dateend);
 
             if (!search_datestart.equals("") && !search_dateend.equals("")) {
                 sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
+            sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
+            sql += ")tb ";
 
-            sql += ") ";
-            sql += " group by  INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
+            sql += " order by INVOICEID ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
@@ -114,8 +116,8 @@ public class InvoiceService {
     public int getFilteredRecords(int start, int length, String searchValue, String orderColumn, String orderDir, String search_invoiceno, String search_invoicedate, String search_datestart, String search_dateend) throws ClassNotFoundException, SQLException, NamingException {
         int filteredRecords = 0;
         try {
-            String sql = "SELECT count(*) as total FROM ( ";
-            sql += " SELECT ROWNUM AS rnum, INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE  ";
+            String sql = "SELECT count(*) as total  FROM ( ";
+            sql += " SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE   ";
             sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
             sql += "  WHERE c.INVOICEID > 99 ";
 
@@ -127,22 +129,18 @@ public class InvoiceService {
                 sql += " and c.INVOICEDATE = TO_DATE('" + Utility.CoverDate(search_invoicedate) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
 
-
+            System.out.println(search_datestart);
+            System.out.println(search_dateend);
 
             if (!search_datestart.equals("") && !search_dateend.equals("")) {
                 sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
+            sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
+            sql += ")tb ";
 
-            sql += " and (INVOICEID like ? or INVOICENO like ? or INVOICEDATE like ? or CUSTOMER like ? )";
-
-            sql += ") ";
-            sql += " group by  INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
+            sql += " order by INVOICEID ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1, "%" + searchValue + "%");
-            ps.setString(2, "%" + searchValue + "%");
-            ps.setString(3, "%" + searchValue + "%");
-            ps.setString(4, "%" + searchValue + "%");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -162,8 +160,8 @@ public class InvoiceService {
     public List<BCInvoice> getDataFromDatabase(int start, int length, String searchValue, String orderColumn, String orderDir, String search_invoiceno, String search_invoicedate, String search_datestart, String search_dateend) throws ClassNotFoundException, SQLException, NamingException {
         List<BCInvoice> list = new ArrayList<BCInvoice>();
         try {
-            String sql = "SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE FROM ( ";
-            sql += " SELECT ROWNUM AS rnum, INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE  ";
+            String sql = "SELECT rownum,tb.*  FROM ( ";
+            sql += " SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE   ";
             sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
             sql += "  WHERE c.INVOICEID > 99 ";
 
@@ -181,10 +179,10 @@ public class InvoiceService {
             if (!search_datestart.equals("") && !search_dateend.equals("")) {
                 sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
-
-            sql += ") WHERE rnum BETWEEN ? AND ?";
-
             sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
+            sql += ")tb WHERE rownum BETWEEN ? AND ?";
+
+
             sql += " order by INVOICEID ";
             System.out.println(sql);
 

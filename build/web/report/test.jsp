@@ -27,8 +27,8 @@
                 GET MAT FROM SAP
             </div>
             
-            <div class="row ">
-                <div class="col-sm-12 col-md-6 mx-auto">
+            <div class="row mt-3 ">
+                <div class="col-sm-12 col-md-3 ">
                     <div class="card">
                         <div class="card-header">
                             ค้นหา
@@ -45,12 +45,16 @@
                                     <input type="text" class="form-control text-center" id="VTWEG" name="VTWEG" required value="94">
                                 </div>
                                 <div class="input-group input-group-sm mb-3">
-                                    <span class="input-group-text" id="inputGroup-sizing-sm">KUNNR</span>
-                                    <input type="text" class="form-control text-center" id="KUNNR" name="KUNNR" required value="9210000003">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">LKUNNR</span>
+                                    <input type="text" class="form-control text-center" id="LKUNNR" name="LKUNNR" required value="9210000003">
+                                </div>
+                                <div class="input-group input-group-sm mb-3">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">HKUNNR</span>
+                                    <input type="text" class="form-control text-center" id="HKUNNR" name="HKUNNR" required value="9210000003">
                                 </div>
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">LKDMAT</span>
-                                    <input type="text" class="form-control text-center" id="LKDMAT" name="LKDMAT" required value="3501*">
+                                    <input type="text" class="form-control text-center" id="LKDMAT" name="LKDMAT" required value="350007.0000*">
                                 </div>
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">HKDMAT</span>
@@ -62,27 +66,32 @@
                                 </div>
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">HWERKS</span>
-                                    <input type="text" class="form-control text-center" id="HWERKS" name="HWERKS" required value="9300">
+                                    <input type="text" class="form-control text-center" id="HWERKS" name="HWERKS" required value="">
                                 </div>
                                 
                                 
                                 <div class="d-flex justify-content-center">
-                                    <button class="btn  btn-success" type="button" onclick="getmatformsap()">ดึงข้อมูล</button>
+                                    <button class="btn  btn-primary btn-sm" type="button" onclick="getmatformsap()">ดึงข้อมูล</button>
+                                    <button class="btn  btn-success ms-3 btn-sm" type="button" >บันทึกข้อมูล</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="card mt-3">
-                <div class="card-header">
-                    เเสดงข้อมูล
+                <div class="col-sm-12 col-md-9">
+                    <div class="card ">
+                        <div class="card-header">
+                            เเสดงข้อมูล
+                        </div>
+                        <div class="card-body" >
+                            <table class="table text-nowrap" id="mytable">
+                            </table>
+                        </div>
+                    </div>
                 </div>
-                <div class="card-body" >
-                    <table class="table" id="mytable">
-                    </table>
-                </div>
+                
             </div>
+            
         </div>        
         
         <script>
@@ -92,65 +101,95 @@
                 var form = $("#myformsap").serialize();
                 form += "&type=getdatafromsap";
                 
+        
+                Swal.fire({
+                    title: 'Loading...',
+                    allowOutsideClick: false, // Prevent users from closing the dialog
+                    didOpen: () => {
+                        Swal.showLoading();
+                    },
+                    showConfirmButton: false
+                });
+        
                 $.ajax({
                     type:"post",
                     url:"../Customer",
                     data:form,
+                    
                     success:function(msg){
-                        var listmat = JSON.parse(msg)             
-        
-                        $("#mytable").DataTable({
-                            dom: 'Bfrtip',
-                            buttons: [
-                                'copy', 'csv', 'excel', 'pdf', 'print'
-                            ],
-                            destroy: true,
-                            data:listmat,
-                            columns: [
-                                { 
-                                    title: 'KDMAT',
-                                    data: "KDMAT"
-                                },
-                                { 
-                                    title: 'COLOR',
-                                    data: "COLOR"
-                                },
-                                { 
-                                    title: 'SIZES',
-                                    data: "SIZES"
-                                },
-                                { 
-                                    title: 'UPCCODE',
-                                    data: "UPCCODE"
-                                },
-                                { 
-                                    title: 'MATNR',
-                                    data: "MATNR"
-                                },
-                                { 
-                                    title: 'MAKTX',
-                                    data: "MAKTX"
-                                },
-                                { 
-                                    title: 'KUNNR',
-                                    data: "KUNNR"
-                                },
-                                { 
-                                    title: 'NAME1',
-                                    data: "NAME1"
-                                },
-                                { 
-                                    title: 'WERKS',
-                                    data: "WERKS"
-                                },
-                            ]
-                        })
+                        
+                        Swal.close()
+                        var listmat = JSON.parse(msg)   
+
+                        if(listmat.length > 0){
+                            Swal.fire({
+                                title:'ดึงข้อมูล',
+                                text:'ดึงข้อมูลสำเร็จมีข้อมูลจำนวน : ' + listmat.length + ' เเถว',
+                                icon:'success'
+                            })
+            
+                            $("#mytable").DataTable({
+                                dom: 'Bfrtip',
+                                buttons: [
+                                    'pageLength','excel'
+                                ],
+                                scrollX: true,
+                                destroy: true,
+                                dom: 'Bfrtip',
+                                lengthMenu: [[10, 25, 50,100,9999999], [10, 25, 50,100 ,"All"]],
+                                data:listmat,
+                                columns: [
+                                    { 
+                                        title: 'KDMAT',
+                                        data: "KDMAT"
+                                    },
+                                    { 
+                                        title: 'COLOR',
+                                        data: "COLOR"
+                                    },
+                                    { 
+                                        title: 'SIZES',
+                                        data: "SIZES"
+                                    },
+                                    { 
+                                        title: 'UPCCODE',
+                                        data: "UPCCODE"
+                                    },
+                                    { 
+                                        title: 'MATNR',
+                                        data: "MATNR"
+                                    },
+                                    { 
+                                        title: 'MAKTX',
+                                        data: "MAKTX"
+                                    },
+                                    { 
+                                        title: 'KUNNR',
+                                        data: "KUNNR"
+                                    },
+                                    { 
+                                        title: 'NAME1',
+                                        data: "NAME1"
+                                    },
+                                    { 
+                                        title: 'WERKS',
+                                        data: "WERKS"
+                                    },
+                                ]
+                            })
+                        }else{
+                            Swal.fire({
+                                title:'ดึงข้อมูล',
+                                text:'ดึงข้อมูลไม่สำเร็จ',
+                                icon:'error'
+                            }) 
+                        }
                     }
                 })
             }
             
             $(document).ready(function() {
-                getmatformsap()
+                //getmatformsap()
             });
             
         </script>

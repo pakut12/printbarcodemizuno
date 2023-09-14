@@ -18,7 +18,7 @@ import java.util.List;
  */
 public class SapService {
 
-    public static List<BCSap> GetCustomerMat(String VKORG, String VTWEG, String KUNNR, String LKDMAT, String HKDMAT, String LWERKS, String HWERKS) {
+    public static List<BCSap> GetCustomerMat(String VKORG, String VTWEG, String LKUNNR, String HKUNNR, String LKDMAT, String HKDMAT, String LWERKS, String HWERKS) {
         List<BCSap> listmat = new ArrayList<BCSap>();
         int numrow = 0;
         try {
@@ -35,7 +35,8 @@ public class SapService {
 
             input1.setValue(VKORG, "VKORG");
             input1.setValue(VTWEG, "VTWEG");
-            input1.setValue(KUNNR, "KUNNR");
+            input1.setValue(LKUNNR, "LKUNNR");
+            input1.setValue(HKUNNR, "HKUNNR");
             input1.setValue(LKDMAT, "LKDMAT");
             input1.setValue(HKDMAT, "HKDMAT");
             input1.setValue(LWERKS, "LWERKS");
@@ -48,8 +49,8 @@ public class SapService {
             int numColumns = output.getFieldCount();
             numrow = output.getNumRows();
 
-            //System.out.println("C : " + numColumns);
-            //System.out.println("R" + HWERKS + " : " + numrow);
+            System.out.println("C : " + numColumns);
+            System.out.println("R" + HWERKS + " : " + numrow);
 
             int a = 0;
             while (a < numrow) {

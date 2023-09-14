@@ -41,6 +41,7 @@
                                         <select class="form-select form-select-sm text-center" id="edit_status" name="edit_status">
                                             <option value="1">Admin</option>
                                             <option value="2">User</option>
+                                            <option value="3">Packing</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">
@@ -88,6 +89,7 @@
                                         <select class="form-select form-select-sm text-center" id="add_status" name="add_status">
                                             <option value="1">Admin</option>
                                             <option value="2">User</option>
+                                            <option value="3">Packing</option>
                                         </select>
                                     </div>
                                     <div class="mb-3">

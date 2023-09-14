@@ -217,7 +217,8 @@ public class Customer extends HttpServlet {
                     
                     String VKORG = request.getParameter("VKORG").trim();
                     String VTWEG = request.getParameter("VTWEG").trim();
-                    String KUNNR = request.getParameter("KUNNR").trim();
+                    String LKUNNR = request.getParameter("LKUNNR").trim();
+                    String HKUNNR = request.getParameter("HKUNNR").trim();
                     String LKDMAT = request.getParameter("LKDMAT").trim();
                     String HKDMAT = request.getParameter("HKDMAT").trim();
                     String LWERKS = request.getParameter("LWERKS").trim();
@@ -226,14 +227,15 @@ public class Customer extends HttpServlet {
                     /*
                     String VKORG = "9200";  //request.getParameter("VKORG").trim();
                     String VTWEG = "94";  //request.getParameter("VTWEG").trim();
-                    String KUNNR = "9210000003";  //request.getParameter("KUNNR").trim();
+                    String LKUNNR = "9210000003";  //request.getParameter("LKUNNR").trim();
+                    String HKUNNR = "9210000003";  //request.getParameter("HKUNNR").trim();
                     String LKDMAT = "3501*";  //request.getParameter("LKDMAT").trim();
                     String HKDMAT = "";  //request.getParameter("HKDMAT").trim();
                     String LWERKS = "9000";  // request.getParameter("LWERKS").trim();
                     String HWERKS = "9300"; // request.getParameter("HWERKS").trim();
                     */
                     
-                    List<BCSap> datasap = SapService.GetCustomerMat(VKORG, VTWEG, KUNNR, LKDMAT, HKDMAT, LWERKS, HWERKS);
+                    List<BCSap> datasap = SapService.GetCustomerMat(VKORG, VTWEG, LKUNNR,HKUNNR, LKDMAT, HKDMAT, LWERKS, HWERKS);
 
 
                     JSONArray listarr = new JSONArray();

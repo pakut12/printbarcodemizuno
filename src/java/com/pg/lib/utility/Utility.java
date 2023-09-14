@@ -24,7 +24,6 @@ public class Utility {
             txt = "";
         }
 
-
         return txt;
     }
 
@@ -97,10 +96,7 @@ public class Utility {
                     size.add(z);
                 }
             }
-
-
-
-
+            
             for (String item : s) {
                 if (size.contains(item)) {
                     sortedSize.add(item);
@@ -243,11 +239,11 @@ public class Utility {
                 StringBuilder result = new StringBuilder(key);
                 result.append(" ");
                 for (int j = 0; j < ranges.size(); j++) {
-                    /*
+                    
                     if (j > 0) {
                     result.append(", ");
                     }
-                     */                    
+                                         
                     result.append(ranges.get(j));
                     
                 }
