@@ -179,7 +179,7 @@
                                     <div class="col-sm-12 col-md-2">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
-                                            <input type="text" class="form-control text-center" name="nw" id="nw" >
+                                            <input type="text" class="form-control text-center" name="nw" id="nw" disabled>
                                             <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                         </div>
                                     </div>
@@ -758,7 +758,7 @@
                             $("#myform :input").attr("disabled", false);
                             $("#pobefore").attr("disabled", true);
                             $("#date_create").attr("disabled", true);
-                            
+                            $("#nw").attr("disabled", true);
                           
                             $("#numberbox_start").val(numstart);
                             $("#numberbox_end").val(numend);
@@ -860,6 +860,22 @@
                 $("#posearch").on('input', function() {
                     getfirstdigit()
                 });
+                
+    
+                $("#gw").on('input', function() {
+                    var gw = $(this).val()
+                    
+                    if(gw && gw.length > 0){
+                        var nw = $(this).val() - 1.3
+                        if(nw <= 0 || isNaN(nw)){
+                            nw = 0
+                        }
+                        $("#nw").val(nw.toFixed(2))
+                    }else{
+                        $("#nw").val("")
+                    }  
+                });
+                
                 $("#myform :input").attr("disabled", true);
             });
         </script>

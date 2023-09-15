@@ -14,6 +14,7 @@ import java.net.*;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -213,8 +214,8 @@ public class Customer extends HttpServlet {
             } else if (type.equals("getdatafromsap")) {
 
                 try {
-                    
-                    
+
+
                     String VKORG = request.getParameter("VKORG").trim();
                     String VTWEG = request.getParameter("VTWEG").trim();
                     String LKUNNR = request.getParameter("LKUNNR").trim();
@@ -223,7 +224,7 @@ public class Customer extends HttpServlet {
                     String HKDMAT = request.getParameter("HKDMAT").trim();
                     String LWERKS = request.getParameter("LWERKS").trim();
                     String HWERKS = request.getParameter("HWERKS").trim();
-                    
+
                     /*
                     String VKORG = "9200";  //request.getParameter("VKORG").trim();
                     String VTWEG = "94";  //request.getParameter("VTWEG").trim();
@@ -233,9 +234,9 @@ public class Customer extends HttpServlet {
                     String HKDMAT = "";  //request.getParameter("HKDMAT").trim();
                     String LWERKS = "9000";  // request.getParameter("LWERKS").trim();
                     String HWERKS = "9300"; // request.getParameter("HWERKS").trim();
-                    */
-                    
-                    List<BCSap> datasap = SapService.GetCustomerMat(VKORG, VTWEG, LKUNNR,HKUNNR, LKDMAT, HKDMAT, LWERKS, HWERKS);
+                     */
+
+                    List<BCSap> datasap = SapService.GetCustomerMat(VKORG, VTWEG, LKUNNR, HKUNNR, LKDMAT, HKDMAT, LWERKS, HWERKS);
 
 
                     JSONArray listarr = new JSONArray();
@@ -251,6 +252,7 @@ public class Customer extends HttpServlet {
                         obj.put("KUNNR", sap.getKUNNR());
                         obj.put("NAME1", sap.getNAME1());
                         obj.put("WERKS", sap.getWERKS());
+                        obj.put("POSTX", sap.getPOSTX());
                         listarr.put(obj);
                     }
 
@@ -259,8 +261,54 @@ public class Customer extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            } else if (type.equals("savedatafromsap")) {
+                try {
+                    String datajson = request.getParameter("alllist");
+                    JSONArray jsonArray = new JSONArray(datajson);
 
+                    List<BCSap> listsap = new ArrayList<BCSap>();
 
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        String item = jsonArray.getString(i);
+                        JSONObject obj = new JSONObject(item);
+                        String s = "";
+                        if (obj.get("SIZES").toString().contains(".")) {
+                            String arr[] = obj.get("SIZES").toString().split("\\.");
+                            
+                            s = arr[1];
+                        } else {
+                            s = obj.get("SIZES").toString();
+                        }
+
+                        BCSap datasap = new BCSap();
+                        datasap.setKDMAT(obj.get("KDMAT").toString());
+                        datasap.setCOLOR(obj.get("COLOR").toString().replace(".", ""));
+                        datasap.setSIZES(s);
+                        datasap.setUPCCODE(obj.get("UPCCODE").toString());
+                        datasap.setMATNR(obj.get("MATNR").toString());
+                        datasap.setMAKTX(obj.get("MAKTX").toString());
+                        datasap.setKUNNR(obj.get("KUNNR").toString());
+                        datasap.setNAME1(obj.get("NAME1").toString());
+                        datasap.setWERKS(obj.get("WERKS").toString());
+                        datasap.setPOSTX(obj.get("POSTX").toString());
+
+                        listsap.add(datasap);
+
+                    }
+
+                    boolean status = CustomerService.savedatafromsap(listsap);
+
+                    if (status) {
+                        out.print("true");
+                    } else {
+                        out.print("false");
+                    }
+
+                    out.print("LIST SIZE : " + listsap.size());
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
         } finally {

@@ -113,7 +113,7 @@
                         <div class="table-responsive">
                             <div id="mytable" class="mt-3">
                                 <div class='row mb-3 text-center fs-4'>
-                                    <div class='text-center h3 fw-bold'>รายละเอียดสินค้า</div>
+                                    <div class='text-center h3 fw-bold'>รายงานสต๊อกการ์ด</div>
                                     
                                 </div>
                                 <table class='table table-hover table-bordered text-nowrap text-center table-sm' id='tablereport'>

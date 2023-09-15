@@ -21,9 +21,9 @@
                     <form id="myform">
                         <div class="container">
                             <div class="row">
-                               
+                                
                                 <div class="col-sm-12 col-md-4">
-                                     <!--
+                                    <!--
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
                                         <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno" >
@@ -38,7 +38,7 @@
                                     </div>
                                     -->
                                 </div>
-                               
+                                
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
@@ -141,7 +141,7 @@
                                 <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
-                                        <input type="text" class="form-control text-center" name="nw" id="nw" >
+                                        <input type="text" class="form-control text-center" name="nw" id="nw" disabled >
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
@@ -528,7 +528,7 @@
                         text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
                     })
                 }
-                 $("#myform input").val('')
+                $("#myform input").val('')
             }
 
             $(document).ready(function () {
@@ -551,6 +551,25 @@
                 $("#customer4_id").on('input', function() {
                     chack_customer4($(this).val())
                 });
+                
+                $("#gw").on('input', function() {
+                    var gw = $(this).val()
+                    
+                    if(gw && gw.length > 0){
+                        
+                        var nw = $(this).val() - 1.3
+                        if(nw <= 0 || isNaN(nw)){
+                            nw = 0
+                        }
+                        
+                        $("#nw").val(nw.toFixed(2))
+                    }else{
+                        $("#nw").val("")
+                    }  
+                });
+                
+    
+    
                 today()
             });
             

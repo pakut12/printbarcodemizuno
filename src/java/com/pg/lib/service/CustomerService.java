@@ -5,6 +5,7 @@
 package com.pg.lib.service;
 
 import com.pg.lib.model.BCCustomer;
+import com.pg.lib.model.BCSap;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pg.lib.utility.*;
+import java.util.HashMap;
 import javax.naming.NamingException;
 
 /**
@@ -23,6 +25,7 @@ public class CustomerService {
 
     private static Connection conn;
     private static PreparedStatement ps;
+    private static PreparedStatement ps1;
     private static ResultSet rs;
 
     public int getTotalRecords() throws ClassNotFoundException, SQLException, NamingException {
@@ -83,7 +86,7 @@ public class CustomerService {
             /*
             String[] columns = {"customer_id", "customer_no", "customer_barcode", "customer_color", "customer_size", "customer_description", "customer_product"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
-                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }
              */
             sql += ") WHERE rnum BETWEEN ? AND ?";
@@ -126,16 +129,16 @@ public class CustomerService {
         return list;
     }
 
-    public static  List<BCCustomer> ChackDetailCustomerAll(String CUSTOMER_NO) throws ClassNotFoundException, SQLException, NamingException {
+    public static List<BCCustomer> ChackDetailCustomerAll(String CUSTOMER_NO) throws ClassNotFoundException, SQLException, NamingException {
 
         List<BCCustomer> list = new ArrayList<BCCustomer>();
-        
+
         try {
             DetailService ds = new DetailService();
             String sql = "select * from  MIZUNOCUSTOMER  c where c.CUSTOMER_NO = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
-            ps.setString(1,CUSTOMER_NO);
+            ps.setString(1, CUSTOMER_NO);
             rs = ps.executeQuery();
             while (rs.next()) {
                 BCCustomer cs = new BCCustomer();
@@ -195,7 +198,7 @@ public class CustomerService {
                 ps.setString(7, list.get(i).getCustomer_description());
                 ps.addBatch();
                 primarykey++;
-                
+
             }
             ps.executeBatch();
             status = true;
@@ -379,7 +382,7 @@ public class CustomerService {
         return listcustomerdetail;
     }
 
-    private int getprimarykey() throws ClassNotFoundException, SQLException, NamingException {
+    private static int getprimarykey() throws ClassNotFoundException, SQLException, NamingException {
         int primarykey = 0;
         try {
             String sql = "select MAX(customer_id) as lastkey from MIZUNOCUSTOMER";
@@ -397,5 +400,99 @@ public class CustomerService {
         }
 
         return primarykey;
+    }
+
+    private static HashMap<String, BCCustomer> getallmatcustomer() throws ClassNotFoundException, SQLException, NamingException {
+        HashMap<String, BCCustomer> allmat = new HashMap<String, BCCustomer>();
+        try {
+
+            String sql = "select * from MIZUNOCUSTOMER";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCCustomer customerdetail = new BCCustomer();
+                customerdetail.setCustomer_id(rs.getString("customer_id"));
+                customerdetail.setCustomer_no(rs.getString("customer_no"));
+                customerdetail.setCustomer_barcode(rs.getString("customer_barcode"));
+                customerdetail.setCustomer_color(rs.getString("customer_color"));
+                customerdetail.setCustomer_size(rs.getString("customer_size"));
+                customerdetail.setCustomer_description(rs.getString("customer_description"));
+                customerdetail.setCustomer_product(rs.getString("customer_product"));
+
+                if (!allmat.containsKey(rs.getString("customer_no"))) {
+                    allmat.put(rs.getString("customer_no"), customerdetail);
+                }
+
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return allmat;
+    }
+
+    public static boolean savedatafromsap(List<BCSap> listsap) throws ClassNotFoundException, SQLException, NamingException {
+        boolean status = false;
+        try {
+            HashMap<String, BCCustomer> getallmatcustomer = getallmatcustomer();
+
+            String sqlin = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (?,?,?,?,?,?,?)";
+            String sqlup = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?,c.customer_product = ?  where c.CUSTOMER_ID = ?";
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sqlin);
+            ps1 = conn.prepareStatement(sqlup);
+
+            for (BCSap sap : listsap) {
+                if (getallmatcustomer.get(sap.getKDMAT()) == null) {
+                    int primarykey = getprimarykey() + 1;
+                    ps.setInt(1, primarykey);
+                    ps.setString(2, sap.getKDMAT());
+                    ps.setString(3, sap.getUPCCODE());
+                    ps.setString(4, sap.getCOLOR());
+                    ps.setString(5, sap.getSIZES());
+                    ps.setString(6, sap.getMATNR());
+                    ps.setString(7, sap.getPOSTX());
+                    ps.addBatch();
+                } else {
+                    BCCustomer cm = getallmatcustomer.get(sap.getKDMAT());
+
+                    ps1.setString(1, sap.getKDMAT());
+                    ps1.setString(2, sap.getUPCCODE());
+                    ps1.setString(3, sap.getCOLOR());
+                    ps1.setString(4, sap.getSIZES());
+                    ps1.setString(5, sap.getPOSTX());
+                    ps1.setString(6, sap.getMATNR());
+                    ps1.setString(7, cm.getCustomer_id());
+                    ps1.addBatch();
+
+                }
+
+            }
+
+            ps.executeBatch();
+            ps1.executeBatch();
+            status = true;
+
+        } catch (Exception e) {
+            status = false;
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            ps1.close();
+            rs.close();
+        }
+
+        return status;
     }
 }

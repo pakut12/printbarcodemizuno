@@ -14,6 +14,7 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
+        
         <div class="modal fade" id="modal_edit" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -69,6 +70,7 @@
                             <div class="card shadow-lg">
                                 <div class="card-header">เพิ่มข้อมูลสินค้า</div>
                                 <div class="card-body">
+                                    
                                     <form id="myform">
                                         <div class="row justify-content-center">
                                             <div class="col-sm-12 col-md-6">
@@ -80,7 +82,6 @@
                                                     <span class="input-group-text" id="inputGroup-sizing-sm">รหัสบาร์โค้ด</span>
                                                     <input type="number" class="form-control text-center" name="customer_barcode" id="customer_barcode" required>
                                                 </div>
-                                                
                                             </div>
                                             <div class="col-sm-12 col-md-6">
                                                 <div class="input-group input-group-sm mb-3">
@@ -143,6 +144,9 @@
                     <div class="card shadow-lg mt-3">
                         <div class="card-header">เเสดงข้อมูลสินค้า</div>
                         <div class="card-body">
+                            <div class="text-end mb-3">
+                                <button class="btn btn-success btn-sm" onclick="location.assign('getdatafromsap.jsp')">ดึงข้อมูลจาก Sap</button>
+                            </div>
                             <div id="table_customer">
                                 <table class='table table-striped table-sm w-100' id='mytable'>
                                     <thead>

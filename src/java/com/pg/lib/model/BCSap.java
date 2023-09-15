@@ -19,6 +19,17 @@ public class BCSap {
     private String KUNNR;
     private String NAME1;
     private String WERKS;
+    private String POSTX;
+
+    public String getPOSTX() {
+        return POSTX;
+    }
+
+    public void setPOSTX(String POSTX) {
+        this.POSTX = POSTX;
+    }
+    
+    
 
     public String getCOLOR() {
         return COLOR;

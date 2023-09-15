@@ -57,13 +57,13 @@ public class SapService {
                 output.setRow(a);
                 //System.out.println("Row: " + String.valueOf(output.getRow()));
 
-                /*
+
                 int n = 0;
                 while (n < numColumns) {
-                System.out.println(output.getName(n) + " : " + output.getString(n));
-                n++;
+                    System.out.println(output.getName(n) + " : " + output.getString(n));
+                    n++;
                 }
-                 */
+
                 BCSap sap = new BCSap();
                 sap.setKDMAT(output.getString(0));
                 sap.setCOLOR(output.getString(1));
@@ -74,6 +74,7 @@ public class SapService {
                 sap.setKUNNR(output.getString(6));
                 sap.setNAME1(output.getString(7));
                 sap.setWERKS(output.getString(8));
+                sap.setPOSTX(output.getString(9));
                 listmat.add(sap);
 
                 System.out.println("------------------------------------------------------------------");

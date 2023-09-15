@@ -76,7 +76,7 @@
                                 },
                                 {
                                     width: '*',
-                                    text: 'รายละเอียดสินค้า',
+                                    text: 'รายงานสต๊อกการ์ด',
                                     fontSize: 20,
                                     alignment: 'center',
                                     bold:true,

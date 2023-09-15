@@ -598,8 +598,8 @@
                         text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
                     })
                 }
-                 $("#firstdigitbefore").html('')
-                 $("#myformsearch input").val('')
+                $("#firstdigitbefore").html('')
+                $("#myformsearch input").val('')
             }
             
           
@@ -656,8 +656,7 @@
                 $("#pallet").val("");
                 $("#myform :input").attr("disabled", true);
                 
-                $("#invoiceno").val("");
-                $("#invoicedate").val("");
+                
             }
             
             function getcustomer(){
@@ -780,14 +779,14 @@
                             $("#customer4_number").val(js.qty4);
                             $("#myform :input").attr("disabled", false);
                             $("#pobefore").attr("disabled", true);
+                            $("#nw").attr("disabled", true);
                             
                             $("#prodorder").val(js.prod_order);
                             $("#pallet").val(js.pallet);
                             $("#date_create").val(js.date_create);
                             $("#date_create").attr("disabled", true);
                             
-                            $("#invoiceno").val(js.invoiceno);
-                            $("#invoicedate").val(js.invoicedate.replace(" 00:00:00.0",""));
+                           
                             $("#boxseq").val(js.boxseq);
                             
                         }else{
@@ -871,6 +870,23 @@
                 $("#posearch").on('input', function() {
                     getfirstdigit()
                 });
+                
+                $("#gw").on('input', function() {
+                    var gw = $(this).val()
+                    
+                    if(gw && gw.length > 0){
+                        
+                        var nw = $(this).val() - 1.3
+                        if(nw <= 0 || isNaN(nw)){
+                            nw = 0
+                        }
+                        
+                        $("#nw").val(nw.toFixed(2))
+                    }else{
+                        $("#nw").val("")
+                    }  
+                });
+                
                 $("#myform :input").attr("disabled", true);
             });
         </script>
