@@ -14,6 +14,7 @@ import java.io.*;
 import java.net.*;
 
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -141,10 +142,17 @@ public class Report extends HttpServlet {
                     obj.put("recordsFiltered", rs.getFilteredRecordsproductdetails(po, customer_no, customer_product, pallet, boxstart, boxend, firstdigit, start, length, searchValue, orderColumn, orderDir, datestart, datestop));
                     obj.put("data", gson.toJsonTree(list));
 
-                    obj.put("sumqty_result", sumqty_result);
-                    obj.put("sumqty", sumqty);
-                    obj.put("sumdiff", sumdiff);
-                    obj.put("summark", summark);
+                    DecimalFormat df = new DecimalFormat("#,###");
+
+                    System.out.println(df.format(sumqty_result));
+                    System.out.println(df.format(sumqty));
+                    System.out.println(df.format(sumdiff));
+                    System.out.println(df.format(summark));
+
+                    obj.put("sumqty_result", df.format(sumqty_result));
+                    obj.put("sumqty", df.format(sumqty));
+                    obj.put("sumdiff", df.format(sumdiff));
+                    obj.put("summark", df.format(summark));
 
                     response.setContentType("application/json");
                     response.getWriter().write(obj.toString());
@@ -205,8 +213,8 @@ public class Report extends HttpServlet {
                     String orderDir = request.getParameter("order[0][dir]").trim();
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop);
-                    List<BCDetailBox> listsum = rs.getsumdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue,datestart, datestop);
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop,orderColumn,orderDir);
+                    List<BCDetailBox> listsum = rs.getsumdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop,orderColumn,orderDir);
 
                     int sumqty = 0;
                     int sumqty_result = 0;
@@ -266,11 +274,13 @@ public class Report extends HttpServlet {
                     obj.put("recordsTotal", rs.getTotalRecordsdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, datestart, datestop));
                     obj.put("recordsFiltered", rs.getFilteredRecordsdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, start, length, searchValue, datestart, datestop));
                     obj.put("data", gson.toJsonTree(list));
+                    DecimalFormat df = new DecimalFormat("#,###");
 
-                    obj.put("sumqty_result", sumqty_result);
-                    obj.put("sumqty", sumqty);
-                    obj.put("sumdiff", sumdiff);
-                    obj.put("summark", summark);
+
+                    obj.put("sumqty_result", String.valueOf(df.format(sumqty_result)));
+                    obj.put("sumqty", String.valueOf(df.format(sumqty)));
+                    obj.put("sumdiff", String.valueOf(df.format(sumdiff)));
+                    obj.put("summark", String.valueOf(df.format(summark)));
 
                     response.setContentType("application/json");
                     response.getWriter().write(obj.toString());
@@ -297,7 +307,7 @@ public class Report extends HttpServlet {
 
                     ReportService rs = new ReportService();
 
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop);
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop,"","");
                     request.setAttribute("listproduct", list);
 
                     request.setAttribute("po", po);
@@ -324,9 +334,9 @@ public class Report extends HttpServlet {
                     String prodorder = request.getParameter("prodorder").trim();
                     String datestart = request.getParameter("datestart").trim();
                     String datestop = request.getParameter("datestop").trim();
-                    
+
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop);
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop,"","");
                     request.setAttribute("listproduct", list);
 
 

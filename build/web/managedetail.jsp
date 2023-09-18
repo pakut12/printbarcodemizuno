@@ -880,8 +880,7 @@
                         if(nw <= 0 || isNaN(nw)){
                             nw = 0
                         }
-                        
-                        $("#nw").val(nw.toFixed(2))
+                        $("#nw").val(nw.toFixed(1))
                     }else{
                         $("#nw").val("")
                     }  

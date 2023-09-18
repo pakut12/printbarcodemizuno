@@ -25,7 +25,7 @@ public class ReportService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    public List<BCDetailBox> getsumdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue, String datestart, String datestop) throws ClassNotFoundException, SQLException, NamingException {
+    public List<BCDetailBox> getsumdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue, String datestart, String datestop, String orderColumn, String orderDir) throws ClassNotFoundException, SQLException, NamingException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
         try {
 
@@ -99,7 +99,10 @@ public class ReportService {
             sql += " ) a  ) ";
 
 
-
+            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "PO_OLD", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty1, qty2,qty3,qty4 ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+            if (orderColumn != null && !orderColumn.isEmpty()) {
+                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            }
             System.out.println(sql);
 
 
@@ -321,7 +324,7 @@ public class ReportService {
         return totalRecords;
     }
 
-    private String sqllistreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue, String datestart, String datestop) {
+    private String sqllistreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue, String datestart, String datestop, String orderColumn, String orderDir) {
         String sql = "";
         try {
 
@@ -329,7 +332,7 @@ public class ReportService {
             sql += " SELECT ROWNUM as rnum, a.* ";
             sql += " FROM ( ";
             sql += " SELECT ";
-            sql += " b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
+            sql += " b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') AS DATE_MODIFY,a.PO, ";
             sql += "  a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
             sql += " FROM MIZUNONEWBARBOXDT a ";
             sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
@@ -350,7 +353,7 @@ public class ReportService {
                     }
                 }
             }
-            
+
             if (!prodorder.equals("")) {
                 sql += " and a.PROD_ORDER = '" + prodorder + "'  ";
             }
@@ -388,7 +391,7 @@ public class ReportService {
             }
 
             sql += " GROUP BY ";
-            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
             sql += "  ORDER BY ";
             sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
 
@@ -396,6 +399,12 @@ public class ReportService {
             if (!start.equals("") && !end.equals("")) {
                 sql += "where rnum  between " + Integer.parseInt(start) + " AND " + (Integer.parseInt(start) + Integer.parseInt(end));
             }
+
+            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "PO_OLD", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty1, qty2,qty3,qty4 ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+            if (orderColumn != null && !orderColumn.isEmpty()) {
+                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            }
+
 
 
             System.out.println(sql);
@@ -405,11 +414,11 @@ public class ReportService {
         return sql;
     }
 
-    public List<BCDetailBox> listreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue, String datestart, String datestop) throws SQLException {
+    public List<BCDetailBox> listreportdetailinventories(String prodorder, String SHIPTO, String DESTINATION, String po, String po_old, String customer_no, String customer_product, String pallet, String startbox, String endbox, String firstdigit, String start, String end, String searchValue, String datestart, String datestop, String orderColumn, String orderDir) throws SQLException {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = sqllistreportdetailinventories(prodorder, SHIPTO, DESTINATION, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, start, end, searchValue, datestart, datestop);
+            String sql = sqllistreportdetailinventories(prodorder, SHIPTO, DESTINATION, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, start, end, searchValue, datestart, datestop, orderColumn, orderDir);
             System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -418,6 +427,7 @@ public class ReportService {
 
                 BCDetailBox report = new BCDetailBox();
                 report.setDate_create(rs.getString("DATE_CREATE"));
+                report.setDate_modify(rs.getString("DATE_MODIFY"));
                 report.setPo(rs.getString("po"));
                 report.setPo_old(rs.getString("po_old"));
                 report.setPallet(rs.getString("pallet"));
@@ -634,6 +644,11 @@ public class ReportService {
             sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
             sql += ")x) ";
 
+            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+            if (orderColumn != null && !orderColumn.isEmpty()) {
+                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            }
+
             System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -677,7 +692,7 @@ public class ReportService {
         String sql = "";
         try {
             sql += "select * from (select rownum as rnum,x.* from (";
-            sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
+            sql += "select b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as DATE_CREATE,TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as DATE_MODIFY,a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 from MIZUNONEWBARBOXDT a inner join MIZUNONEWBARBOXRESULT c on c.po = a.po and c.boxno = a.boxno inner join MIZUNOCUSTOMER b ON  b.customer_no = a.SKU_ITEM1 or  b.customer_no = a.SKU_ITEM2 or b.customer_no = a.SKU_ITEM3 or  b.customer_no = a.SKU_ITEM4 ";
             sql += "where ";
 
 
@@ -714,7 +729,7 @@ public class ReportService {
                 }
             }
             sql += "(a.PO LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%' or a.PROD_ORDER LIKE  '%" + searchValue + "%' or a.BOXNO LIKE '%" + searchValue + "%')";
-            sql += " GROUP BY b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += " GROUP BY b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS'),TO_CHAR(c.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 ";
 
             sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
             sql += ")x)";
@@ -723,6 +738,13 @@ public class ReportService {
             } else {
                 sql += " where rnum BETWEEN " + start + " AND " + (start + length);
             }
+
+            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+            if (orderColumn != null && !orderColumn.isEmpty()) {
+                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            }
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -743,6 +765,7 @@ public class ReportService {
             while (rs.next()) {
                 BCDetailBox report = new BCDetailBox();
                 report.setDate_create(rs.getString("DATE_CREATE"));
+                report.setDate_modify(rs.getString("DATE_MODIFY"));
                 report.setPo(rs.getString("po"));
                 report.setProdorder(rs.getString("prod_order"));
                 report.setBoxno(rs.getString("boxno"));

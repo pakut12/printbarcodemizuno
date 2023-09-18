@@ -65,7 +65,9 @@
             <div class="card shadow-lg">
                 <div class="card-header">จัดการข้อมูลสินค้า</div>
                 <div class="card-body">
+                    <!--
                     <div class="row">
+                        
                         <div class="col-sm-12 col-md-6">
                             <div class="card shadow-lg">
                                 <div class="card-header">เพิ่มข้อมูลสินค้า</div>
@@ -116,6 +118,7 @@
                                 </div>
                             </div>
                         </div>
+                    
                         <div class="col-sm-12 col-md-6">
                             <div class="card shadow-lg">
                                 <div class="card-header">อัพโหลดข้อมูลสินค้า</div>
@@ -140,31 +143,32 @@
                                 </div>
                             </div>
                         </div>
+                        
+                        
+                        
                     </div>
-                    <div class="card shadow-lg mt-3">
-                        <div class="card-header">เเสดงข้อมูลสินค้า</div>
-                        <div class="card-body">
-                            <div class="text-end mb-3">
-                                <button class="btn btn-success btn-sm" onclick="location.assign('getdatafromsap.jsp')">ดึงข้อมูลจาก Sap</button>
-                            </div>
-                            <div id="table_customer">
-                                <table class='table table-striped table-sm w-100' id='mytable'>
-                                    <thead>
-                                        <tr>
-                                            <th>ID</th>
-                                            <th>รหัสลูกค้า</th>
-                                            <th>รหัสสินค้า</th>
-                                            <th>รหัสบาร์โค้ด</th>
-                                            <th>Color</th>
-                                            <th>Size</th>
-                                            <th>Description</th>
-                                            <th>เเก้ไข</th>
-                                            <th>ลบ</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                            </div>
-                        </div>
+                    -->
+                    <div class="text-end mb-3">
+                        <button class="btn btn-success btn-sm" onclick="location.assign('getdatafromsap.jsp')">ดึงข้อมูลจาก Sap</button>
+                    </div>
+                    <div id="table_customer">
+                        <table class='table table-striped table-sm w-100 table-bordered' id='mytable'>
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>รหัสลูกค้า</th>
+                                    <th>รหัสสินค้า</th>
+                                    <th>รหัสบาร์โค้ด</th>
+                                    <th>Color</th>
+                                    <th>Size</th>
+                                    <th>Description</th>
+                                    <!--
+                                      <th>เเก้ไข</th>
+                                      <th>ลบ</th>
+                                    -->
+                                </tr>
+                            </thead>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -384,10 +388,7 @@
                         { data: 'customer_barcode'},
                         { data: 'customer_color' },
                         { data: 'customer_size' },
-                        { data: 'customer_description' },
-                        { data: 'btn_edit' },
-                        { data: 'btn_del' }
-                        
+                        { data: 'customer_description' }
                     ],
                     bDestroy: true
                   

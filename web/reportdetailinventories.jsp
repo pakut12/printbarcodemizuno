@@ -60,7 +60,7 @@
                                     <div class="col-sm-12 col-md-2 mt-3 mt-md-0">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                             <select class="form-select form-select-sm text-center" id="firstdigit" name="firstdigit" >
+                                            <select class="form-select form-select-sm text-center" id="firstdigit" name="firstdigit" >
                                                 
                                             </select>
                                         </div>
@@ -108,7 +108,7 @@
                                     </div>
                                     
                                 </div>
-                                 <div class="row mt-3">
+                                <div class="row mt-3">
                                     <div class="col-sm-12 col-md-5">
                                         <div class="input-group input-group-sm  mt-3 mt-md-0">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
@@ -142,7 +142,8 @@
                             <table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>
                                 <thead>
                                     <tr>
-                                        <th scope='col'>วันที่</th>
+                                        <th scope='col'>วันที่สร้าง</th>
+                                        <th scope='col'>วันที่เเก้ไข</th>
                                         <th scope='col'>PO</th>
                                         <th scope='col'>PO เดิม</th>
                                         <th scope='col'>รหัสลูกค้า</th>
@@ -160,7 +161,7 @@
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="8" class="text-center">รวมทั้งหมด</th>
+                                        <th colspan="9" class="text-center">รวมทั้งหมด</th>
                                         <th class="text-center" id="sumqty"></th>
                                         <th class="text-center" id="sumqty_result"></th>
                                         <th class="text-center" id="sumdiff"></th>
@@ -187,7 +188,7 @@
                         po:$("#po").val()
                     },
                     success:function(msg){
-                      var txt = '<option value=""></option>'
+                        var txt = '<option value=""></option>'
                         txt += msg
                         $("#firstdigit").html(txt)
                     }
@@ -314,7 +315,7 @@
                           
                             var arr = [];
                             var data = JSON.parse(json.data);
-                           
+                            console.log(json)
                        
                             $("#sumqty").text(json.sumqty)
                             $("#sumqty_result").text(json.sumqty_result)
@@ -364,6 +365,7 @@
                                 
                                 var result = {
                                     date_create : chacknull(v.date_create),
+                                    date_modify : chacknull(v.date_modify),
                                     po : chacknull(v.po),
                                     po_old : chacknull(v.po_old),
                                     customer_no : chacknull( v.customer_no),
@@ -387,6 +389,7 @@
                     },
                     columns: [
                         { data: 'date_create' },
+                        { data: 'date_modify' },
                         { data: 'po' },
                         { data: 'po_old' },
                         { data: 'customer_no' },
@@ -461,11 +464,11 @@
                             })
                             
                             return $('<tr/>')
-                            .append( '<th colspan="8" class="text-end ">รวม : </th>' )
-                            .append( '<th class="text-center">'+sumqty+'</td>' )
-                            .append( '<th class="text-center">'+sumqty_result+'</th>' )
-                            .append( '<th class="text-center">'+sumdiff+'</th>' )
-                            .append( '<th class="text-center">'+summark+'</th>' )
+                            .append( '<th colspan="9" class="text-end ">รวม : </th>' )
+                            .append( '<th class="text-center">'+sumqty.toLocaleString('en-US')+'</td>' )
+                            .append( '<th class="text-center">'+sumqty_result.toLocaleString('en-US')+'</th>' )
+                            .append( '<th class="text-center">'+sumdiff.toLocaleString('en-US')+'</th>' )
+                            .append( '<th class="text-center">'+summark.toLocaleString('en-US')+'</th>' )
                             .append( '<th/>' )
                         },
                         dataSrc: function(row) {

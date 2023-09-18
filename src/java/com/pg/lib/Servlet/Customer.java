@@ -274,8 +274,8 @@ public class Customer extends HttpServlet {
                         String s = "";
                         if (obj.get("SIZES").toString().contains(".")) {
                             String arr[] = obj.get("SIZES").toString().split("\\.");
-                            
-                            s = arr[1];
+
+                            s = arr[2];
                         } else {
                             s = obj.get("SIZES").toString();
                         }
@@ -296,15 +296,20 @@ public class Customer extends HttpServlet {
 
                     }
 
-                    boolean status = CustomerService.savedatafromsap(listsap);
+                    HashMap<String, String> status = CustomerService.savedatafromsap(listsap);
 
-                    if (status) {
-                        out.print("true");
-                    } else {
-                        out.print("false");
+                    JSONObject obj = new JSONObject();
+                    if (status.get("true") != null) {
+                        obj.put("status", "true");
+                        obj.put("msg", status.get("true"));
+                    } else if (status.get("false") != null) {
+                        obj.put("status", "false");
+                        obj.put("msg", status.get("false"));
                     }
+                    
+                    out.print(obj);
 
-                    out.print("LIST SIZE : " + listsap.size());
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

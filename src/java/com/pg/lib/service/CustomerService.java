@@ -145,9 +145,9 @@ public class CustomerService {
                 cs.setCustomer_id(rs.getString("customer_id"));
                 cs.setCustomer_no(rs.getString("customer_no"));
                 cs.setCustomer_barcode(rs.getString("customer_barcode"));
-                cs.setCustomer_color(rs.getString("customer_color").toUpperCase());
-                cs.setCustomer_size(rs.getString("customer_size").toUpperCase());
-                cs.setCustomer_description(rs.getString("customer_description").toUpperCase());
+                cs.setCustomer_color(rs.getString("customer_color"));
+                cs.setCustomer_size(rs.getString("customer_size"));
+                cs.setCustomer_description(rs.getString("customer_description"));
                 list.add(cs);
             }
         } catch (Exception e) {
@@ -440,12 +440,12 @@ public class CustomerService {
         return allmat;
     }
 
-    public static boolean savedatafromsap(List<BCSap> listsap) throws ClassNotFoundException, SQLException, NamingException {
-        boolean status = false;
+    public static HashMap<String, String> savedatafromsap(List<BCSap> listsap) throws ClassNotFoundException, SQLException, NamingException {
+        HashMap<String, String> status = new HashMap<String, String>();
         try {
             HashMap<String, BCCustomer> getallmatcustomer = getallmatcustomer();
-
-            String sqlin = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (?,?,?,?,?,?,?)";
+            int primarykey = getprimarykey() + 1;
+            String sqlin = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (?, ?, ?, ?,?,?,?)";
             String sqlup = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?,c.customer_product = ?  where c.CUSTOMER_ID = ?";
 
             conn = ConnectDB.getConnection();
@@ -454,7 +454,7 @@ public class CustomerService {
 
             for (BCSap sap : listsap) {
                 if (getallmatcustomer.get(sap.getKDMAT()) == null) {
-                    int primarykey = getprimarykey() + 1;
+
                     ps.setInt(1, primarykey);
                     ps.setString(2, sap.getKDMAT());
                     ps.setString(3, sap.getUPCCODE());
@@ -463,6 +463,7 @@ public class CustomerService {
                     ps.setString(6, sap.getMATNR());
                     ps.setString(7, sap.getPOSTX());
                     ps.addBatch();
+                    primarykey++;
                 } else {
                     BCCustomer cm = getallmatcustomer.get(sap.getKDMAT());
 
@@ -479,12 +480,16 @@ public class CustomerService {
 
             }
 
-            ps.executeBatch();
-            ps1.executeBatch();
-            status = true;
+            int[] in = ps.executeBatch();
+            int[] up = ps1.executeBatch();
+
+            System.out.println(in.length);
+            System.out.println(up.length);
+
+            status.put("true", "เพิ่มข้อมูลจำนวน " + in.length + " เเถว เเก้ไขข้อมูลจำนวน " + up.length + " เเถว<br> รวมทั้งหมดจำนวน " + (in.length + up.length) + " เเถว");
 
         } catch (Exception e) {
-            status = false;
+            status.put("false", "ผิดพลาด Code : " + e.getMessage());
             e.printStackTrace();
         } finally {
             ConnectDB.closeConnection(conn);

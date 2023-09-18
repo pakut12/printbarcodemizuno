@@ -119,7 +119,8 @@
                                 <table class='table table-hover table-bordered text-nowrap text-center table-sm' id='tablereport'>
                                     <thead>
                                         <tr>
-                                            <th scope='col'>วันที่</th>
+                                            <th scope='col'>วันที่สร้าง</th>
+                                            <th scope='col'>วันที่เเก้ไข</th>
                                             <th scope='col'>PO</th>
                                             <th scope='col'>รหัสลูกค้า</th>
                                             <th scope='col'>รหัสสินค้า</th>
@@ -134,7 +135,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="7" class="text-center">รวมทั้งหมด</th>
+                                            <th colspan="8" class="text-center">รวมทั้งหมด</th>
                                             <th class="text-center" id="sumqty_result"></th>
                                             <th class="text-center" id="summark"></th>
                                             
@@ -264,8 +265,10 @@
                             var arr = [];
                             var data = JSON.parse(json.data);
  
+                            console.log(data)
+        
                             $.each(data,function(k,v){
-                                console.log(v)
+                                //console.log(v)
                                 var date = "";
                                 if(v.date_create){
                                     date = v.date_create
@@ -309,6 +312,7 @@
                                 
                                 var result = {
                                     date_create : chacknull(v.date_create),
+                                    date_modify : chacknull(v.date_modify),
                                     po : chacknull(v.po),
                                     po_old : chacknull(v.po_old),
                                     customer_no : chacknull( v.customer_no),
@@ -331,6 +335,7 @@
                     },
                     columns: [
                         { data: 'date_create' },
+                        { data: 'date_modify' },
                         { data: 'po' },
                         { data: 'customer_no' },
                         { data: 'customer_product' },
@@ -398,9 +403,9 @@
                             console.log(mark)
                         
                             return $('<tr/>')
-                            .append( '<th colspan="7" class="text-end ">รวม : </th>' )
-                            .append( '<th class="text-center">'+sumqty_result+'</td>' )
-                            .append( '<th class="text-center">'+mark+'</td>' )
+                            .append( '<th colspan="8" class="text-end ">รวม : </th>' )
+                            .append( '<th class="text-center">'+sumqty_result.toLocaleString('en-US')+'</td>' )
+                            .append( '<th class="text-center">'+mark.toLocaleString('en-US')+'</td>' )
                             .append( '<th/>' )
                             
                         },
