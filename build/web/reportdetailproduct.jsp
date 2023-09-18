@@ -119,8 +119,7 @@
                                 <table class='table table-hover table-bordered text-nowrap text-center table-sm' id='tablereport'>
                                     <thead>
                                         <tr>
-                                            <th scope='col'>วันที่สร้าง</th>
-                                            <th scope='col'>วันที่เเก้ไข</th>
+                                            
                                             <th scope='col'>PO</th>
                                             <th scope='col'>รหัสลูกค้า</th>
                                             <th scope='col'>รหัสสินค้า</th>
@@ -129,15 +128,19 @@
                                             <th scope='col'>กล่องที่</th>
                                             <th scope='col'>จำนวน</th>
                                             <th scope='col'>หมายเหตุ</th>
+                                            <th scope='col'>วันที่สร้าง</th>
+                                            <th scope='col'>วันที่เเก้ไข</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="8" class="text-center">รวมทั้งหมด</th>
+                                            <th colspan="6" class="text-center">รวมทั้งหมด</th>
                                             <th class="text-center" id="sumqty_result"></th>
                                             <th class="text-center" id="summark"></th>
+                                            <th class="text-center" ></th>
+                                            <th class="text-center" ></th>
                                             
                                         </tr>
                                     </tfoot>
@@ -152,7 +155,7 @@
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
-             function getfirstdigit(){
+            function getfirstdigit(){
                 $.ajax({
                     type:"post",
                     url:"Detail",
@@ -334,8 +337,7 @@
                         
                     },
                     columns: [
-                        { data: 'date_create' },
-                        { data: 'date_modify' },
+                        
                         { data: 'po' },
                         { data: 'customer_no' },
                         { data: 'customer_product' },
@@ -343,7 +345,9 @@
                         { data: 'pallet' },
                         { data: 'boxno' },
                         { data: 'qty_result' },
-                        { data: 'mark' }
+                        { data: 'mark' },
+                        { data: 'date_create' },
+                        { data: 'date_modify' }
                     ],
                     bDestroy: true,
                     dom: 'Bfrtip',
@@ -403,9 +407,11 @@
                             console.log(mark)
                         
                             return $('<tr/>')
-                            .append( '<th colspan="8" class="text-end ">รวม : </th>' )
+                            .append( '<th colspan="6" class="text-end ">รวม : </th>' )
                             .append( '<th class="text-center">'+sumqty_result.toLocaleString('en-US')+'</td>' )
                             .append( '<th class="text-center">'+mark.toLocaleString('en-US')+'</td>' )
+                            .append( '<th class="text-center"></td>' )
+                            .append( '<th class="text-center"></td>' )
                             .append( '<th/>' )
                             
                         },

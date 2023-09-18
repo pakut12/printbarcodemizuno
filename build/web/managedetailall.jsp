@@ -348,7 +348,7 @@
                     url:'Customer',
                     data:{
                         type:"chack_customer",
-                        customer_id:customer_id
+                        customer_id:customer_id.toUpperCase()
                     },
                     success:function(msg){
                         
@@ -378,7 +378,7 @@
                     url:'Customer',
                     data:{
                         type:"chack_customer",
-                        customer_id:customer_id
+                        customer_id:customer_id.toUpperCase()
                     },
                     success:function(msg){
                         if(msg){
@@ -405,7 +405,7 @@
                     url:'Customer',
                     data:{
                         type:"chack_customer",
-                        customer_id:customer_id
+                        customer_id:customer_id.toUpperCase()
                     },
                     success:function(msg){
                         if(msg){
@@ -432,7 +432,7 @@
                     url:'Customer',
                     data:{
                         type:"chack_customer",
-                        customer_id:customer_id
+                        customer_id:customer_id.toUpperCase()
                     },
                     success:function(msg){
                         if(msg){

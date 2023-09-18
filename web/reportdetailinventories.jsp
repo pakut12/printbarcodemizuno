@@ -142,8 +142,7 @@
                             <table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>
                                 <thead>
                                     <tr>
-                                        <th scope='col'>วันที่สร้าง</th>
-                                        <th scope='col'>วันที่เเก้ไข</th>
+                                        
                                         <th scope='col'>PO</th>
                                         <th scope='col'>PO เดิม</th>
                                         <th scope='col'>รหัสลูกค้า</th>
@@ -155,17 +154,21 @@
                                         <th scope='col'>จำนวนในกล่อง</th>
                                         <th scope='col'>ต่าง</th>
                                         <th scope='col'>หมายเหตุ</th>
+                                        <th scope='col'>วันที่สร้าง</th>
+                                        <th scope='col'>วันที่เเก้ไข</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                 </tbody>
                                 <tfoot>
                                     <tr>
-                                        <th colspan="9" class="text-center">รวมทั้งหมด</th>
+                                        <th colspan="7" class="text-center">รวมทั้งหมด</th>
                                         <th class="text-center" id="sumqty"></th>
                                         <th class="text-center" id="sumqty_result"></th>
                                         <th class="text-center" id="sumdiff"></th>
                                         <th class="text-center" id="summark"></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center" ></th>
                                     </tr>
                                 </tfoot>
                             </table>
@@ -388,8 +391,7 @@
                         
                     },
                     columns: [
-                        { data: 'date_create' },
-                        { data: 'date_modify' },
+                        
                         { data: 'po' },
                         { data: 'po_old' },
                         { data: 'customer_no' },
@@ -401,6 +403,8 @@
                         { data: 'qty_result' },
                         { data: 'diff' },
                         { data: 'mark' },
+                        { data: 'date_create' },
+                        { data: 'date_modify' }
                     ],
                     bDestroy: true,
                     dom: 'Bfrtip',
@@ -464,11 +468,13 @@
                             })
                             
                             return $('<tr/>')
-                            .append( '<th colspan="9" class="text-end ">รวม : </th>' )
+                            .append( '<th colspan="7" class="text-end ">รวม : </th>' )
                             .append( '<th class="text-center">'+sumqty.toLocaleString('en-US')+'</td>' )
                             .append( '<th class="text-center">'+sumqty_result.toLocaleString('en-US')+'</th>' )
                             .append( '<th class="text-center">'+sumdiff.toLocaleString('en-US')+'</th>' )
                             .append( '<th class="text-center">'+summark.toLocaleString('en-US')+'</th>' )
+                            .append( '<th class="text-center"></th>' )
+                            .append( '<th class="text-center"></th>' )
                             .append( '<th/>' )
                         },
                         dataSrc: function(row) {
