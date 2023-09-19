@@ -159,8 +159,10 @@ public class InvoiceService {
 
     public List<BCInvoice> getDataFromDatabase(int start, int length, String searchValue, String orderColumn, String orderDir, String search_invoiceno, String search_invoicedate, String search_datestart, String search_dateend) throws ClassNotFoundException, SQLException, NamingException {
         List<BCInvoice> list = new ArrayList<BCInvoice>();
+        String sql = "";
         try {
-            String sql = "SELECT rownum,tb.*  FROM ( ";
+            sql += "SELECT * FROM ( ";
+            sql += "SELECT rownum as rnum,tb.*  FROM ( ";
             sql += " SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE   ";
             sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
             sql += "  WHERE c.INVOICEID > 99 ";
@@ -173,17 +175,19 @@ public class InvoiceService {
                 sql += " and c.INVOICEDATE = TO_DATE('" + Utility.CoverDate(search_invoicedate) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
 
-            System.out.println(search_datestart);
-            System.out.println(search_dateend);
 
             if (!search_datestart.equals("") && !search_dateend.equals("")) {
                 sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
             sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
-            sql += ")tb WHERE rownum BETWEEN ? AND ?";
+         
 
+            String[] columns = {"INVOICENO", "INVOICEDATE", "CUSTOMER", "DATE_CREATE"};
+            if (orderColumn != null && !orderColumn.isEmpty()) {
+                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            }
+            sql += ")tb) where rnum BETWEEN ? and ? ";
 
-            sql += " order by INVOICEID ";
             System.out.println(sql);
 
             conn = ConnectDB.getConnection();
@@ -191,6 +195,9 @@ public class InvoiceService {
 
             ps.setInt(1, start);
             ps.setInt(2, length + start);
+
+            System.out.println(start);
+            System.out.println(length + start);
 
             rs = ps.executeQuery();
 
@@ -201,9 +208,7 @@ public class InvoiceService {
                 invoice.setInvoiceid(rs.getString("invoiceid"));
                 invoice.setInvoiceno(rs.getString("invoiceno"));
                 invoice.setInvoicedate(Utility.CoverDateFromSql(rs.getDate("invoicedate"), 1));
-
                 invoice.setDate_create(Utility.CoverDateFromSql(rs.getTimestamp("date_create"), 2));
-
                 invoice.setCustomer(rs.getString("customer"));
 
                 list.add(invoice);

@@ -152,7 +152,7 @@
                         <button class="btn btn-success btn-sm" onclick="location.assign('getdatafromsap.jsp')">ดึงข้อมูลจาก Sap</button>
                     </div>
                     <div id="table_customer">
-                        <table class='table table-striped table-sm w-100 table-bordered' id='mytable'>
+                        <table class='table table-striped table-sm w-100 table-bordered text-nowrap' id='mytable'>
                             <thead>
                                 <tr>
                                     <th>ID</th>
@@ -162,10 +162,8 @@
                                     <th>Color</th>
                                     <th>Size</th>
                                     <th>Description</th>
-                                    <!--
-                                      <th>เเก้ไข</th>
-                                      <th>ลบ</th>
-                                    -->
+                                    <th>วันที่สร้าง</th>
+                                    <th>วันที่เเก้ไข</th>
                                 </tr>
                             </thead>
                         </table>
@@ -351,6 +349,7 @@
             function gettable(){
                 $("#mytable").DataTable({
                     serverSide: true,
+                    scrollX: true,
                     ajax: {
                         type:"post",
                         url:"Customer",
@@ -360,9 +359,11 @@
                         dataSrc:function(json){
                             var arr = [];
                             var data = JSON.parse(json.data);
-                            
+                            console.log(data)
                             $.each(data,function(k,v){
                                 var result = {
+                                    date_create : v.date_create,
+                                    date_modify : v.date_modify,
                                     customer_id : v.customer_id,
                                     customer_no :  v.customer_no,
                                     customer_barcode :  v.customer_barcode,
@@ -376,7 +377,7 @@
                                 arr.push(result);
                              
                             })
-                            console.log(arr)
+                            //console.log(arr)
                           
                             return arr
                         }
@@ -388,7 +389,9 @@
                         { data: 'customer_barcode'},
                         { data: 'customer_color' },
                         { data: 'customer_size' },
-                        { data: 'customer_description' }
+                        { data: 'customer_description' },
+                        { data: 'date_create' },
+                        { data: 'date_modify' }
                     ],
                     bDestroy: true
                   

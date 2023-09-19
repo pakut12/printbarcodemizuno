@@ -510,30 +510,29 @@
                             totalgw += gw;
 
 
-                         /******** count cartons ทั้งหมด **********/
+                            /******** count cartons ทั้งหมด **********/
                             allcartons += ctn;
                             allnw += nw;
                             allgw += gw;
                         /******* end count cartons ทั้งหมด *******/
-                            
                         } else {
 
                             List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
+                            int status = 0;
 
-                            HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
+                            HashMap<String, BCDetailBox> grouplist = new HashMap<String, BCDetailBox>();
+                            HashSet<String> groupid = new HashSet<String>();
 
-                            HashSet<String> arrcustomer = new HashSet<String>();
-
-                            for (BCDetailBox cm : listsizebypo) {
-                                arrcustomer.add(cm.getCustomer_no());
+                            for (BCDetailBox box : listsizebypo) {
+                                String Color = Utility.subsize(box.getCustomer_no());
+                                grouplist.put(Color, box);
+                                groupid.add(Color);
                             }
 
-                            for (BCDetailBox z : listsizebypo) {
-                                arrsize.put(z.getCustomer_size() + "#" + z.getCustomer_no(), z);
-                            }
-                             System.out.println("arrsize" + arrsize);
 
-                            for (String cm : arrcustomer) {
+                            for (String box : groupid) {
+                                BCDetailBox listb = grouplist.get(box);
+
                                 String sizetxt = "";
 
                                 int qty = 0;
@@ -543,72 +542,72 @@
                                 String DESTINATION = "";
                                 String Color = "";
 
-                                for (String s : size) {
-                                    BCDetailBox getsize = arrsize.get(s + "#" + cm);
-                                    if (getsize == null) {
-                                        sizetxt += "{text: '',border: [false, false, false, false]},";
-                                    } else {
-
-                                        if (getsize.getCustomer_size().equals(getsize.getSizen01())) {
-                                            qty += Integer.parseInt(getsize.getQty_result1());
-                                            sizetxt += "{text: '" + getsize.getQty_result1() + "',border: [false, false, false, false]},";
-                                        } else if (getsize.getCustomer_size().equals(getsize.getSizen02())) {
-                                            qty += Integer.parseInt(getsize.getQty_result2());
-                                            sizetxt += "{text: '" + getsize.getQty_result2() + "',border: [false, false, false, false]},";
-                                        } else if (getsize.getCustomer_size().equals(getsize.getSizen03())) {
-                                            qty += Integer.parseInt(getsize.getQty_result3());
-                                            sizetxt += "{text: '" + getsize.getQty_result3() + "',border: [false, false, false, false]},";
-                                        } else if (getsize.getCustomer_size().equals(getsize.getSizen04())) {
-                                            qty += Integer.parseInt(getsize.getQty_result4());
-                                            sizetxt += "{text: '" + getsize.getQty_result4() + "',border: [false, false, false, false]},";
-                                        }
-
-                                        Color = Utility.subsize(getsize.getCustomer_no());
-                                        ctn = Integer.parseInt(getsize.getCountbox());
-                                        nw = Double.parseDouble(getsize.getSumnw());
-                                        gw = Double.parseDouble(getsize.getSumgw());
-                                        if (getsize.getDestination() == null) {
-                                            DESTINATION = "";
-                                        } else {
-                                            DESTINATION = getsize.getDestination();
-                                        }
-
-                                    }
+                                if (listb.getCustomer_size().equals(listb.getSizen01()) && Utility.subsize(listb.getCustomer_no()).equals(box)) {
+                                    qty += Integer.parseInt(listb.getQty_result1());
+                                    sizetxt += "{text: '" + listb.getQty_result1() + "',border: [false, false, false, false]},";
+                                } else if (listb.getCustomer_size().equals(listb.getSizen02()) && Utility.subsize(listb.getCustomer_no()).equals(box) ) {
+                                    qty += Integer.parseInt(listb.getQty_result2());
+                                    sizetxt += "{text: '" + listb.getQty_result2() + "',border: [false, false, false, false]},";
+                                } else if (listb.getCustomer_size().equals(listb.getSizen03()) && Utility.subsize(listb.getCustomer_no()).equals(box) ) {
+                                    qty += Integer.parseInt(listb.getQty_result3());
+                                    sizetxt += "{text: '" + listb.getQty_result3() + "',border: [false, false, false, false]},";
+                                } else if (listb.getCustomer_size().equals(listb.getSizen04()) && Utility.subsize(listb.getCustomer_no()).equals(box)) {
+                                    qty += Integer.parseInt(listb.getQty_result4());
+                                    sizetxt += "{text: '" + listb.getQty_result4() + "',border: [false, false, false, false]},";
                                 }
 
+                                Color = Utility.subsize(listb.getCustomer_no());
+                                ctn = Integer.parseInt(listb.getCountbox());
+                                nw = Double.parseDouble(listb.getSumnw());
+                                gw = Double.parseDouble(listb.getSumgw());
 
-                                txt += "[";
-                                txt += "{text: '" + group + "',border: [false, false, false, false]},";
-                                txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-                                txt += sizetxt;
-                                txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
-                                txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
-                                txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
-                                txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
-                                txt += "],\n";
-
-
-                                totalctn += ctn;
+                                if (status == 0) {
+                                    txt += "[";
+                                    txt += "{text: '" + group.replace(",", "") + "',border: [false, false, false, false]},";
+                                    txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                    txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+                                    for (String s : size) {
+                                        txt += "{text: '" + s + "',border: [false, false, false, false]},";
+                                    }
+                                    txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
+                                    txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
+                                    txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                    txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
+                                    txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
+                                    txt += "],\n";
+                                    status++;
+                                     totalctn += ctn;
                                 totalqty += (ctn * qty);
                                 totalnw += nw;
                                 totalgw += gw;
 
-                                /******** count cartons ทั้งหมด *******/
+
+                                /******** count cartons ทั้งหมด **********/
                                 allcartons += ctn;
                                 allnw += nw;
                                 allgw += gw;
-                                /******** end count cartons ทั้งหมด *******/
+                            /******* end count cartons ทั้งหมด *******/
+                                } else {
+                                    txt += "[";
+                                    txt += "{text: '',border: [false, false, false, false]},";
+                                    txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                    txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+                                    for (String s : size) {
+                                        txt += "{text: '" + s + "',border: [false, false, false, false]},";
+                                    }
+                                    txt += "{text: '',border: [false, false, false, false]},";
+                                    txt += "{text: '',border: [false, false, false, false]},";
+                                    txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                    txt += "{text: '',border: [false, false, false, false]},";
+                                    txt += "{text: '',border: [false, false, false, false]},";
+                                    txt += "],\n";
+                                }
+
+                               
                             }
 
 
-
                         }
-
-
-
-
 
                     }
 
@@ -720,8 +719,8 @@
                         }
                     }
 
-                  //  System.out.println("+asdxzc" + maptotal);
-                 //   System.out.println("+asd1" + groupedSum);
+                    //  System.out.println("+asdxzc" + maptotal);
+                    //   System.out.println("+asd1" + groupedSum);
 
 
                     int qtyall = 0;

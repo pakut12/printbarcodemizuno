@@ -79,19 +79,18 @@ public class CustomerService {
         List<BCCustomer> list = new ArrayList<BCCustomer>();
         try {
             String sql = "SELECT * FROM";
-            sql += "(select rownum as rnum,c.* from  MIZUNOCUSTOMER  c" +
+            sql += "(select rownum as rnum,c.customer_id  , c.customer_no , c.customer_barcode ,c.customer_color ,c.customer_size  , c.customer_description  ,c.customer_product ,TO_CHAR(c.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,TO_CHAR(c.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') AS DATE_MODIFY  from  MIZUNOCUSTOMER  c" +
                     " where c.customer_id > 99 and (c.customer_id LIKE ? or c.customer_no LIKE ? or c.customer_barcode LIKE ? or c.customer_color LIKE ? or c.customer_size  LIKE ? or c.customer_description  LIKE ? or c.customer_product  LIKE ?) ";
 
-            sql += " ORDER BY customer_no,customer_product";
-            /*
+
             String[] columns = {"customer_id", "customer_no", "customer_barcode", "customer_color", "customer_size", "customer_description", "customer_product"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
-            sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+                sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            } else {
+                sql += " ORDER BY customer_no,customer_product ";
             }
-             */
+
             sql += ") WHERE rnum BETWEEN ? AND ?";
-
-
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -117,6 +116,12 @@ public class CustomerService {
                 cs.setCustomer_size(ds.ChackNull(rs.getString("customer_size")));
                 cs.setCustomer_description(ds.ChackNull(rs.getString("customer_description")));
                 cs.setCustomer_product(ds.ChackNull(rs.getString("customer_product")));
+                cs.setDate_create(Utility.Chacknull(rs.getString("DATE_CREATE")));
+                cs.setDate_modify(Utility.Chacknull(rs.getString("DATE_MODIFY")));
+
+
+                System.out.println(rs.getString("DATE_CREATE"));
+                System.out.println(rs.getString("DATE_MODIFY"));
                 list.add(cs);
             }
 
@@ -445,8 +450,8 @@ public class CustomerService {
         try {
             HashMap<String, BCCustomer> getallmatcustomer = getallmatcustomer();
             int primarykey = getprimarykey() + 1;
-            String sqlin = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description) VALUES (?, ?, ?, ?,?,?,?)";
-            String sqlup = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?,c.customer_product = ?  where c.CUSTOMER_ID = ?";
+            String sqlin = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description,DATE_CREATE) VALUES (?, ?, ?, ?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
+            String sqlup = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?,c.customer_product = ?,c.DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS')  where c.CUSTOMER_ID = ?";
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sqlin);
@@ -470,6 +475,7 @@ public class CustomerService {
                     ps.setString(5, size);
                     ps.setString(6, sap.getMATNR());
                     ps.setString(7, sap.getPOSTX());
+                    ps.setString(8, Utility.GetDateNow());
                     ps.addBatch();
                     primarykey++;
                 } else {
@@ -488,7 +494,8 @@ public class CustomerService {
                     ps1.setString(4, size);
                     ps1.setString(5, sap.getPOSTX());
                     ps1.setString(6, sap.getMATNR());
-                    ps1.setString(7, cm.getCustomer_id());
+                    ps1.setString(7, Utility.GetDateNow());
+                    ps1.setString(8, cm.getCustomer_id());
                     ps1.addBatch();
 
                 }

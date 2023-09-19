@@ -184,6 +184,7 @@ public class Customer extends HttpServlet {
                     CustomerService cs = new CustomerService();
                     List<BCCustomer> rows = cs.getDataFromDatabase(start, length, searchValue, orderColumn, orderDir);
 
+                  
                     Gson gson = new Gson();
 
                     JSONObject obj = new JSONObject();
@@ -329,7 +330,7 @@ public class Customer extends HttpServlet {
                     String LWERKS = request.getParameter("LWERKS").trim();
                     String HWERKS = request.getParameter("HWERKS").trim();
 
-                   
+
 
                     List<BCSap> datasap = SapService.GetCustomerMat(VKORG, VTWEG, LKUNNR, HKUNNR, LKDMAT, HKDMAT, LWERKS, HWERKS);
 

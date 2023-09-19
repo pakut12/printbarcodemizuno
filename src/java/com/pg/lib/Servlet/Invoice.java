@@ -92,6 +92,7 @@ public class Invoice extends HttpServlet {
                     obj.put("recordsFiltered", ivs.getFilteredRecords(start, length, searchValue, orderColumn, orderDir, search_invoiceno, search_invoicedate, search_datestart, search_dateend));
                     obj.put("data", gson.toJsonTree(rows));
 
+                   
                     response.setContentType("application/json");
                     response.getWriter().write(obj.toString());
 
