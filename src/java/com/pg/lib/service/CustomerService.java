@@ -455,22 +455,37 @@ public class CustomerService {
             for (BCSap sap : listsap) {
                 if (getallmatcustomer.get(sap.getKDMAT()) == null) {
 
+                    String size = "";
+                    if (sap.getSIZES().contains(".")) {
+                        String arr[] = sap.getSIZES().split("\\.");
+                        size = arr[2];
+                    } else {
+                        size = sap.getSIZES();
+                    }
+
                     ps.setInt(1, primarykey);
                     ps.setString(2, sap.getKDMAT());
                     ps.setString(3, sap.getUPCCODE());
-                    ps.setString(4, sap.getCOLOR());
-                    ps.setString(5, sap.getSIZES());
+                    ps.setString(4, sap.getCOLOR().replace(".", ""));
+                    ps.setString(5, size);
                     ps.setString(6, sap.getMATNR());
                     ps.setString(7, sap.getPOSTX());
                     ps.addBatch();
                     primarykey++;
                 } else {
                     BCCustomer cm = getallmatcustomer.get(sap.getKDMAT());
+                    String size = "";
+                    if (sap.getSIZES().contains(".")) {
+                        String arr[] = sap.getSIZES().split("\\.");
+                        size = arr[2];
+                    } else {
+                        size = sap.getSIZES();
+                    }
 
                     ps1.setString(1, sap.getKDMAT());
                     ps1.setString(2, sap.getUPCCODE());
-                    ps1.setString(3, sap.getCOLOR());
-                    ps1.setString(4, sap.getSIZES());
+                    ps1.setString(3, sap.getCOLOR().replace(".", ""));
+                    ps1.setString(4, size);
                     ps1.setString(5, sap.getPOSTX());
                     ps1.setString(6, sap.getMATNR());
                     ps1.setString(7, cm.getCustomer_id());

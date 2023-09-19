@@ -35,7 +35,7 @@ public class ReportService {
             sql += " SELECT ROWNUM as rnum, a.* ";
             sql += " FROM ( ";
             sql += " SELECT ";
-            sql += " b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
+            sql += " b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') AS DATE_MODIFY,a.PO, ";
             sql += "  a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
             sql += " FROM MIZUNONEWBARBOXDT a ";
             sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
@@ -92,14 +92,14 @@ public class ReportService {
             }
 
             sql += " GROUP BY ";
-            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
             sql += "  ORDER BY ";
             sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
 
             sql += " ) a  ) ";
 
 
-            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "PO_OLD", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty1, qty2,qty3,qty4 ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+            String[] columns = {"PO", "PO_OLD", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty1, qty2,qty3,qty4 ", "qty_result1, qty_result2,qty_result3,qty_result4 ", "DATE_CREATE", "DATE_MODIFY", "DATE_CREATE", "DATE_MODIFY",};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }
@@ -400,7 +400,7 @@ public class ReportService {
                 sql += "where rnum  between " + Integer.parseInt(start) + " AND " + (Integer.parseInt(start) + Integer.parseInt(end));
             }
 
-            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "PO_OLD", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty1, qty2,qty3,qty4 ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+            String[] columns = {"PO", "PO_OLD", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty1, qty2,qty3,qty4 ", "qty_result1, qty_result2,qty_result3,qty_result4 ", "DATE_CREATE", "DATE_MODIFY", "DATE_CREATE", "DATE_MODIFY",};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }
@@ -644,10 +644,12 @@ public class ReportService {
             sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
             sql += ")x) ";
 
-            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+
+            String[] columns = {"PO", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty_result1, qty_result2,qty_result3,qty_result4 ", "DATE_CREATE", "DATE_CREATE", "DATE_MODIFY",};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }
+
 
             System.out.println(sql);
             conn = ConnectDB.getConnection();
@@ -739,7 +741,7 @@ public class ReportService {
                 sql += " where rnum BETWEEN " + start + " AND " + (start + length);
             }
 
-            String[] columns = {"DATE_CREATE", "DATE_MODIFY", "PO", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty_result1, qty_result2,qty_result3,qty_result4 "};
+            String[] columns = {"PO", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty_result1, qty_result2,qty_result3,qty_result4 ", "DATE_CREATE", "DATE_CREATE", "DATE_MODIFY",};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }

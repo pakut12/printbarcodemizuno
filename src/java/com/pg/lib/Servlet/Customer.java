@@ -262,41 +262,79 @@ public class Customer extends HttpServlet {
                     e.printStackTrace();
                 }
             } else if (type.equals("savedatafromsap")) {
+                /*
                 try {
-                    String datajson = request.getParameter("alllist");
-                    JSONArray jsonArray = new JSONArray(datajson);
+                String datajson = request.getParameter("alllist");
+                JSONArray jsonArray = new JSONArray(datajson);
+                
+                List<BCSap> listsap = new ArrayList<BCSap>();
+                
+                for (int i = 0; i < jsonArray.length(); i++) {
+                String item = jsonArray.getString(i);
+                JSONObject obj = new JSONObject(item);
+                String s = "";
+                if (obj.get("SIZES").toString().contains(".")) {
+                String arr[] = obj.get("SIZES").toString().split("\\.");
+                
+                s = arr[2];
+                } else {
+                s = obj.get("SIZES").toString();
+                }
+                
+                BCSap datasap = new BCSap();
+                datasap.setKDMAT(obj.get("KDMAT").toString());
+                datasap.setCOLOR(obj.get("COLOR").toString().replace(".", ""));
+                datasap.setSIZES(s);
+                datasap.setUPCCODE(obj.get("UPCCODE").toString());
+                datasap.setMATNR(obj.get("MATNR").toString());
+                datasap.setMAKTX(obj.get("MAKTX").toString());
+                datasap.setKUNNR(obj.get("KUNNR").toString());
+                datasap.setNAME1(obj.get("NAME1").toString());
+                datasap.setWERKS(obj.get("WERKS").toString());
+                datasap.setPOSTX(obj.get("POSTX").toString());
+                
+                listsap.add(datasap);
+                
+                }
+                
+                HashMap<String, String> status = CustomerService.savedatafromsap(listsap);
+                
+                JSONObject obj = new JSONObject();
+                if (status.get("true") != null) {
+                obj.put("status", "true");
+                obj.put("msg", status.get("true"));
+                } else if (status.get("false") != null) {
+                obj.put("status", "false");
+                obj.put("msg", status.get("false"));
+                }
+                
+                out.print(obj);
+                
+                
+                
+                } catch (Exception e) {
+                
+                out.print(e.getMessage());
+                e.printStackTrace();
+                }
+                 */
 
-                    List<BCSap> listsap = new ArrayList<BCSap>();
+                try {
+                    String VKORG = request.getParameter("VKORG").trim();
+                    String VTWEG = request.getParameter("VTWEG").trim();
+                    String LKUNNR = request.getParameter("LKUNNR").trim();
+                    String HKUNNR = request.getParameter("HKUNNR").trim();
+                    String LKDMAT = request.getParameter("LKDMAT").trim();
+                    String HKDMAT = request.getParameter("HKDMAT").trim();
+                    String LWERKS = request.getParameter("LWERKS").trim();
+                    String HWERKS = request.getParameter("HWERKS").trim();
 
-                    for (int i = 0; i < jsonArray.length(); i++) {
-                        String item = jsonArray.getString(i);
-                        JSONObject obj = new JSONObject(item);
-                        String s = "";
-                        if (obj.get("SIZES").toString().contains(".")) {
-                            String arr[] = obj.get("SIZES").toString().split("\\.");
+                   
 
-                            s = arr[2];
-                        } else {
-                            s = obj.get("SIZES").toString();
-                        }
+                    List<BCSap> datasap = SapService.GetCustomerMat(VKORG, VTWEG, LKUNNR, HKUNNR, LKDMAT, HKDMAT, LWERKS, HWERKS);
 
-                        BCSap datasap = new BCSap();
-                        datasap.setKDMAT(obj.get("KDMAT").toString());
-                        datasap.setCOLOR(obj.get("COLOR").toString().replace(".", ""));
-                        datasap.setSIZES(s);
-                        datasap.setUPCCODE(obj.get("UPCCODE").toString());
-                        datasap.setMATNR(obj.get("MATNR").toString());
-                        datasap.setMAKTX(obj.get("MAKTX").toString());
-                        datasap.setKUNNR(obj.get("KUNNR").toString());
-                        datasap.setNAME1(obj.get("NAME1").toString());
-                        datasap.setWERKS(obj.get("WERKS").toString());
-                        datasap.setPOSTX(obj.get("POSTX").toString());
 
-                        listsap.add(datasap);
-
-                    }
-
-                    HashMap<String, String> status = CustomerService.savedatafromsap(listsap);
+                    HashMap<String, String> status = CustomerService.savedatafromsap(datasap);
 
                     JSONObject obj = new JSONObject();
                     if (status.get("true") != null) {
@@ -306,14 +344,17 @@ public class Customer extends HttpServlet {
                         obj.put("status", "false");
                         obj.put("msg", status.get("false"));
                     }
-                    
+
                     out.print(obj);
 
 
 
                 } catch (Exception e) {
+
+                    out.print(e.getMessage());
                     e.printStackTrace();
                 }
+
             }
 
         } finally {

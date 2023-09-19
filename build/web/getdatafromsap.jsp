@@ -115,6 +115,9 @@
             
             function savedataformsap(){
                 
+                var form = $("#myformsap").serialize();
+                form += "&type=savedatafromsap";
+        
                 Swal.fire({
                     title: 'คุณต้องการบันทึกหรือไม่',
                     showCancelButton: true,
@@ -137,11 +140,10 @@
                         $.ajax({
                             type:"post",
                             url:"Customer",
-                            data:{
-                                type:'savedatafromsap',
-                                alllist:alllist
-                            },
+                            data:form,
                             success:function(msg){
+                                
+  
                                 Swal.close()
                                 var js = JSON.parse(msg)
                                 if(js.status == 'true'){
