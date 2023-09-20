@@ -164,7 +164,7 @@ public class Utility {
                     result.append(ranges.get(j));
                 }
 
-                System.out.println(result.toString());
+                //System.out.println(result.toString());
 
                 group += "#" + result.toString();
             }

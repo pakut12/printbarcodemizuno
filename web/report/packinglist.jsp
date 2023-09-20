@@ -78,7 +78,7 @@
 
             if (cms.equals("MCJ")) {
                 cms = "MC";
-                fineldeatination += "FINAL DEATINATION : " + inv.get(0).getFinald();
+                fineldeatination += "FINAL DESTINATION : " + inv.get(0).getFinald();
             } else if (cms.equals("MUS")) {
                 address1 = "NORCROSS,GA";
                 address2 = "VIA DOWNEY,CA";
@@ -94,12 +94,12 @@
                 cms = "TMC";
                 address1 = "(IN DIA)";
                 address2 = "";
-                fineldeatination += "FINAL DEATINATION : " + inv.get(0).getFinald();
+                fineldeatination += "FINAL DESTINATION : " + inv.get(0).getFinald();
             } else if (cms.equals("MKL")) {
                 cms = "MKL";
                 address1 = "BUSAN";
                 address2 = "";
-                fineldeatination += "FINAL DEATINATION : " + inv.get(0).getFinald();
+                fineldeatination += "FINAL DESTINATION : " + inv.get(0).getFinald();
             }
 
 
@@ -402,7 +402,7 @@
                         if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
                             txtsize += "{text: '0" + n + "\\n" + res + "', border: [false, true, false, true]},";
                         } else {
-                            txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
+                            txtsize += "{text: '\\n" + res + "', border: [false, true, false, true]},";
                         }
                         n++;
                     }
@@ -463,16 +463,16 @@
                                     sizetxt += "{text: '',border: [false, false, false, false]},";
                                 } else {
 
-                                    if (getsize.getCustomer_size().equals(getsize.getSizen01())) {
+                                    if (getsize.getCustomer_no().equals(getsize.getSku_item1())) {
                                         qty += Integer.parseInt(getsize.getQty_result1());
                                         sizetxt += "{text: '" + getsize.getQty_result1() + "',border: [false, false, false, false]},";
-                                    } else if (getsize.getCustomer_size().equals(getsize.getSizen02())) {
+                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item2())) {
                                         qty += Integer.parseInt(getsize.getQty_result2());
                                         sizetxt += "{text: '" + getsize.getQty_result2() + "',border: [false, false, false, false]},";
-                                    } else if (getsize.getCustomer_size().equals(getsize.getSizen03())) {
+                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item3())) {
                                         qty += Integer.parseInt(getsize.getQty_result3());
                                         sizetxt += "{text: '" + getsize.getQty_result3() + "',border: [false, false, false, false]},";
-                                    } else if (getsize.getCustomer_size().equals(getsize.getSizen04())) {
+                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item4())) {
                                         qty += Integer.parseInt(getsize.getQty_result4());
                                         sizetxt += "{text: '" + getsize.getQty_result4() + "',border: [false, false, false, false]},";
                                     }
@@ -529,9 +529,14 @@
                                 groupid.add(Color);
                             }
 
+                            ArrayList<String> arrayList = new ArrayList<String>(groupid);
+                            // Sort the ArrayList
+                            Collections.sort(arrayList);
 
-                            for (String box : groupid) {
+
+                            for (String box : arrayList) {
                                 BCDetailBox listb = grouplist.get(box);
+                                HashMap<String, String> setsize = new HashMap<String, String>();
 
                                 String sizetxt = "";
 
@@ -542,19 +547,35 @@
                                 String DESTINATION = "";
                                 String Color = "";
 
-                                if (listb.getCustomer_size().equals(listb.getSizen01()) && Utility.subsize(listb.getCustomer_no()).equals(box)) {
+                                System.out.println("List : " + listb.getSku_item1());
+                                System.out.println("List : " + listb.getSku_item2());
+                                System.out.println("List : " + listb.getSku_item3());
+                                System.out.println("List : " + listb.getSku_item4());
+                                System.out.println("List : " + listb.getCustomer_no());
+
+                                if (listb.getCustomer_no().equals(listb.getSku_item1())) {
                                     qty += Integer.parseInt(listb.getQty_result1());
                                     sizetxt += "{text: '" + listb.getQty_result1() + "',border: [false, false, false, false]},";
-                                } else if (listb.getCustomer_size().equals(listb.getSizen02()) && Utility.subsize(listb.getCustomer_no()).equals(box) ) {
+                                    setsize.put(listb.getCustomer_size(), sizetxt);
+                                } else if (listb.getCustomer_no().equals(listb.getSku_item2())) {
                                     qty += Integer.parseInt(listb.getQty_result2());
                                     sizetxt += "{text: '" + listb.getQty_result2() + "',border: [false, false, false, false]},";
-                                } else if (listb.getCustomer_size().equals(listb.getSizen03()) && Utility.subsize(listb.getCustomer_no()).equals(box) ) {
+                                    setsize.put(listb.getCustomer_size(), sizetxt);
+                                } else if (listb.getCustomer_no().equals(listb.getSku_item3())) {
                                     qty += Integer.parseInt(listb.getQty_result3());
                                     sizetxt += "{text: '" + listb.getQty_result3() + "',border: [false, false, false, false]},";
-                                } else if (listb.getCustomer_size().equals(listb.getSizen04()) && Utility.subsize(listb.getCustomer_no()).equals(box)) {
+                                    setsize.put(listb.getCustomer_size(), sizetxt);
+                                } else if (listb.getCustomer_no().equals(listb.getSku_item4())) {
                                     qty += Integer.parseInt(listb.getQty_result4());
                                     sizetxt += "{text: '" + listb.getQty_result4() + "',border: [false, false, false, false]},";
+                                    setsize.put(listb.getCustomer_size(), sizetxt);
                                 }
+                                if (listb.getDestination() == null) {
+                                    DESTINATION = "";
+                                } else {
+                                    DESTINATION = listb.getDestination();
+                                }
+
 
                                 Color = Utility.subsize(listb.getCustomer_no());
                                 ctn = Integer.parseInt(listb.getCountbox());
@@ -567,7 +588,13 @@
                                     txt += "{text: '" + Color + "',border: [false, false, false, false]},";
                                     txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
                                     for (String s : size) {
-                                        txt += "{text: '" + s + "',border: [false, false, false, false]},";
+                                        if (setsize.get(s) != null) {
+                                            txt += setsize.get(s);
+
+                                        } else {
+                                            txt += "{text: '',border: [false, false, false, false]},";
+                                        }
+
                                     }
                                     txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
                                     txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
@@ -576,24 +603,29 @@
                                     txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
                                     txt += "],\n";
                                     status++;
-                                     totalctn += ctn;
-                                totalqty += (ctn * qty);
-                                totalnw += nw;
-                                totalgw += gw;
+                                    totalctn += ctn;
+                                    totalqty += (ctn * qty);
+                                    totalnw += nw;
+                                    totalgw += gw;
 
 
-                                /******** count cartons ทั้งหมด **********/
-                                allcartons += ctn;
-                                allnw += nw;
-                                allgw += gw;
-                            /******* end count cartons ทั้งหมด *******/
+                                    /******** count cartons ทั้งหมด **********/
+                                    allcartons += ctn;
+                                    allnw += nw;
+                                    allgw += gw;
+                                /******* end count cartons ทั้งหมด *******/
                                 } else {
                                     txt += "[";
                                     txt += "{text: '',border: [false, false, false, false]},";
                                     txt += "{text: '" + Color + "',border: [false, false, false, false]},";
                                     txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
                                     for (String s : size) {
-                                        txt += "{text: '" + s + "',border: [false, false, false, false]},";
+                                        if (setsize.get(s) != null) {
+                                            txt += setsize.get(s);
+
+                                        } else {
+                                            txt += "{text: '',border: [false, false, false, false]},";
+                                        }
                                     }
                                     txt += "{text: '',border: [false, false, false, false]},";
                                     txt += "{text: '',border: [false, false, false, false]},";
@@ -603,7 +635,7 @@
                                     txt += "],\n";
                                 }
 
-                               
+
                             }
 
 

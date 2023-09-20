@@ -207,6 +207,10 @@ public class PackingListService {
             sql += " SIZENO2, ";
             sql += " SIZENO3, ";
             sql += " SIZENO4, ";
+            sql += " SKU_ITEM1, ";
+            sql += " SKU_ITEM2, ";
+            sql += " SKU_ITEM3, ";
+            sql += " SKU_ITEM4, ";
             sql += " sum(QTY_RESULT1), ";
             sql += " sum(QTY_RESULT2), ";
             sql += " sum(QTY_RESULT3),  ";
@@ -214,7 +218,7 @@ public class PackingListService {
             sql += " DESTINATION  ";
 
             sql += " FROM (  ";
-            sql += " SELECT  a.PO, a.BOXNO,    b.customer_color,   b.customer_size,   a.SIZENO1,   a.SIZENO2,  a.SIZENO3,  a.SIZENO4,  a.NETWEIGHT,  a.GROSSWEIGHT,  c.QTY_RESULT1,  c.QTY_RESULT2,   c.QTY_RESULT3,   c.QTY_RESULT4,a.DESTINATION FROM   MIZUNONEWBARBOXDT a  ";
+            sql += " SELECT  a.PO, a.BOXNO,    b.customer_color,   b.customer_size,   a.SIZENO1,   a.SIZENO2,  a.SIZENO3,  a.SIZENO4, a.SKU_ITEM1,   a.SKU_ITEM2,  a.SKU_ITEM3,  a.SKU_ITEM4, a.NETWEIGHT,  a.GROSSWEIGHT,  c.QTY_RESULT1,  c.QTY_RESULT2,   c.QTY_RESULT3,   c.QTY_RESULT4,a.DESTINATION FROM   MIZUNONEWBARBOXDT a  ";
             sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4   ";
             sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po  ";
             sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN (  ";
@@ -227,9 +231,9 @@ public class PackingListService {
                 }
             }
             sql += " AND b.customer_color = ? and  " + DESTINATION;
-            sql += " GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
+            sql += " GROUP BY a.po, a.boxno,b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.SKU_ITEM1, a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
             sql += " ) tb   ";
-            sql += " GROUP BY  po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
+            sql += " GROUP BY  po,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,SKU_ITEM1, SKU_ITEM2,SKU_ITEM3,SKU_ITEM4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
             sql += " ORDER BY  customer_size  ";
 
             System.out.println(sql);
@@ -250,6 +254,10 @@ public class PackingListService {
                 detail.setSizen02(rs.getString("SIZENO2"));
                 detail.setSizen03(rs.getString("SIZENO3"));
                 detail.setSizen04(rs.getString("SIZENO4"));
+                detail.setSku_item1(rs.getString("SKU_ITEM1"));
+                detail.setSku_item2(rs.getString("SKU_ITEM2"));
+                detail.setSku_item3(rs.getString("SKU_ITEM3"));
+                detail.setSku_item4(rs.getString("SKU_ITEM4"));
                 detail.setQty_result1(rs.getString("sum(QTY_RESULT1)"));
                 detail.setQty_result2(rs.getString("sum(QTY_RESULT2)"));
                 detail.setQty_result3(rs.getString("sum(QTY_RESULT3)"));
@@ -274,7 +282,7 @@ public class PackingListService {
         String sql = "";
         try {
 
-            sql += " SELECT COUNT(DISTINCT boxno) AS countbox, po,customer_no,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,sum(NETWEIGHT) as totalnw,sum(GROSSWEIGHT) as totalgw , DESTINATION ";
+            sql += " SELECT COUNT(DISTINCT boxno) AS countbox, po,customer_no,customer_color,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,SKU_ITEM1, SKU_ITEM2,SKU_ITEM3,SKU_ITEM4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,sum(NETWEIGHT) as totalnw,sum(GROSSWEIGHT) as totalgw , DESTINATION ";
             sql += " FROM ( ";
             sql += " SELECT ";
             sql += " a.PO,";
@@ -284,8 +292,12 @@ public class PackingListService {
             sql += "  b.customer_size, ";
             sql += "  a.SIZENO1, ";
             sql += "  a.SIZENO2, ";
-            sql += " a.SIZENO3, ";
-            sql += " a.SIZENO4, ";
+            sql += "  a.SIZENO3, ";
+            sql += "  a.SIZENO4, ";
+            sql += "  a.SKU_ITEM1, ";
+            sql += "  a.SKU_ITEM2, ";
+            sql += "  a.SKU_ITEM3, ";
+            sql += "  a.SKU_ITEM4, ";
             sql += " a.NETWEIGHT, ";
             sql += " a.GROSSWEIGHT, ";
             sql += " c.QTY_RESULT1, ";
@@ -310,16 +322,16 @@ public class PackingListService {
                 }
             }
 
-            sql += " GROUP BY a.po, a.boxno, b.customer_no, b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
+            sql += " GROUP BY a.po, a.boxno, b.customer_no, b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
             sql += " ) tb ";
             sql += " GROUP BY ";
-            sql += " po,customer_color,customer_no,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
+            sql += " po,customer_color,customer_no,customer_size,SIZENO1, SIZENO2,SIZENO3,SIZENO4,SKU_ITEM1, SKU_ITEM2,SKU_ITEM3,SKU_ITEM4,QTY_RESULT1,QTY_RESULT2,QTY_RESULT3,QTY_RESULT4,DESTINATION ";
             sql += " ORDER BY ";
             sql += " customer_size ";
 
-            
-            
-            System.out.println(sql);
+
+
+            //System.out.println(sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
@@ -339,6 +351,12 @@ public class PackingListService {
                 detail.setSizen02(rs.getString("SIZENO2"));
                 detail.setSizen03(rs.getString("SIZENO3"));
                 detail.setSizen04(rs.getString("SIZENO4"));
+
+                detail.setSku_item1(rs.getString("SKU_ITEM1"));
+                detail.setSku_item2(rs.getString("SKU_ITEM2"));
+                detail.setSku_item3(rs.getString("SKU_ITEM3"));
+                detail.setSku_item4(rs.getString("SKU_ITEM4"));
+
                 detail.setQty_result1(rs.getString("QTY_RESULT1"));
                 detail.setQty_result2(rs.getString("QTY_RESULT2"));
                 detail.setQty_result3(rs.getString("QTY_RESULT3"));
@@ -435,9 +453,9 @@ public class PackingListService {
 
             sql += "  ORDER BY tb.PO,CAST(REGEXP_SUBSTR(tb.boxno, '\\d+')  as int) ";
 
-System.out.println(sql);
-            
-            
+            System.out.println(sql);
+
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
