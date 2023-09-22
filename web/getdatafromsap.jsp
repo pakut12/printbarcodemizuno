@@ -77,7 +77,7 @@
                                 </div>
                                 <div class="input-group input-group-sm mb-3">
                                     <span class="input-group-text" id="inputGroup-sizing-sm">To Plant</span>
-                                    <input type="text" class="form-control text-center" id="HWERKS" name="HWERKS" required value="9300">
+                                    <input type="text" class="form-control text-center" id="HWERKS" name="HWERKS" required value="9000">
                                 </div>
                                 
                                 

@@ -18,6 +18,36 @@ import java.util.Locale;
  */
 public class Utility {
 
+    public static String splitstringandint(String txt) {
+
+        String input = txt;
+        try {
+
+
+            StringBuilder letters = new StringBuilder();
+            StringBuilder numbers = new StringBuilder();
+
+            for (int i = 0; i < input.length(); i++) {
+                char ch = input.charAt(i);
+                if (Character.isLetter(ch)) {
+                    letters.append(ch);
+                } else if (Character.isDigit(ch)) {
+                    numbers.append(ch);
+                }
+            }
+
+            //String lettersString = letters.toString();
+            String numbersString = numbers.toString();
+            input = letters.toString();
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return input;
+    }
+
     public static String Chacknull(String txt) {
 
         if (txt == null) {
@@ -96,7 +126,7 @@ public class Utility {
                     size.add(z);
                 }
             }
-            
+
             for (String item : s) {
                 if (size.contains(item)) {
                     sortedSize.add(item);
@@ -180,16 +210,16 @@ public class Utility {
     public static String groupnumber(List<BCDetailBox> grouppo) {
         String group = "";
         try {
-            
-       
-            
+
+
+
             List<String> sp = new ArrayList<String>();
 
             for (BCDetailBox zx : grouppo) {
                 String txt = zx.getPo() + "#" + zx.getFirstdigit() + "#" + zx.getBoxno().replace(zx.getFirstdigit(), "");
                 System.out.println(txt);
                 sp.add(txt);
-                
+
             }
 
 
@@ -207,8 +237,8 @@ public class Utility {
                 }
 
                 groupedData.get(key).add(number);
-   
-                
+
+
             }
 
             for (Map.Entry<String, List<Integer>> entry : groupedData.entrySet()) {
@@ -228,8 +258,8 @@ public class Utility {
                         } else {
                             ranges.add(start + "-" + end);
                         }
-                        
-                        
+
+
                         start = end = numbers.get(i);
                     }
                 }
@@ -239,13 +269,13 @@ public class Utility {
                 StringBuilder result = new StringBuilder(key);
                 result.append(" ");
                 for (int j = 0; j < ranges.size(); j++) {
-                    
+
                     if (j > 0) {
-                    result.append(", ");
+                        result.append(", ");
                     }
-                                         
+
                     result.append(ranges.get(j));
-                    
+
                 }
 
                 System.out.println(result.toString());

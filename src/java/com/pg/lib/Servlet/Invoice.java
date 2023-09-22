@@ -51,8 +51,7 @@ public class Invoice extends HttpServlet {
                     String from = request.getParameter("from");
                     String to = request.getParameter("to");
                     String addfinal = request.getParameter("addfinal");
-
-
+                   
                     boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to, addfinal);
 
                     if (status) {
@@ -92,7 +91,7 @@ public class Invoice extends HttpServlet {
                     obj.put("recordsFiltered", ivs.getFilteredRecords(start, length, searchValue, orderColumn, orderDir, search_invoiceno, search_invoicedate, search_datestart, search_dateend));
                     obj.put("data", gson.toJsonTree(rows));
 
-                   
+
                     response.setContentType("application/json");
                     response.getWriter().write(obj.toString());
 
@@ -131,6 +130,9 @@ public class Invoice extends HttpServlet {
                     obj.put("shipfrom", listdata.get(0).getShipfrom());
                     obj.put("shipto", listdata.get(0).getShipto());
                     obj.put("finald", listdata.get(0).getFinald());
+                    obj.put("mfg", listdata.get(0).getMfg());
+
+                    System.out.println(listdata.get(0).getMfg());
                     out.print(obj);
 
                 } catch (Exception e) {
@@ -166,8 +168,8 @@ public class Invoice extends HttpServlet {
                     String from = request.getParameter("from");
                     String to = request.getParameter("to");
                     String finald = request.getParameter("finald");
- 
- 
+
+
                     System.out.println(shipper);
                     System.out.println(from);
                     System.out.println(to);
@@ -176,7 +178,7 @@ public class Invoice extends HttpServlet {
                     boolean delstatus = InvoiceService.delinvoice(delid);
 
                     if (delstatus) {
-                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to,finald);
+                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to, finald);
                         if (status) {
                             out.print("true");
                         } else {

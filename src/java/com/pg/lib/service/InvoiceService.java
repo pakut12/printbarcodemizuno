@@ -57,6 +57,8 @@ public class InvoiceService {
                 invoice.setShipto(rs.getString("SHIPTO"));
                 invoice.setShipper(rs.getString("SHIPPER"));
                 invoice.setFinald(rs.getString("FINAL"));
+                invoice.setMfg(rs.getString("MFG"));
+
 
                 list.add(invoice);
             }
@@ -129,18 +131,21 @@ public class InvoiceService {
                 sql += " and c.INVOICEDATE = TO_DATE('" + Utility.CoverDate(search_invoicedate) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
 
-            System.out.println(search_datestart);
-            System.out.println(search_dateend);
 
             if (!search_datestart.equals("") && !search_dateend.equals("")) {
                 sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
+
+            sql += " and (invoiceno like ? or invoicedate like ? or customer like ?) ";
             sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
             sql += ")tb ";
 
             sql += " order by INVOICEID ";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + searchValue + "%");
+            ps.setString(2, "%" + searchValue + "%");
+            ps.setString(3, "%" + searchValue + "%");
             rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -179,8 +184,11 @@ public class InvoiceService {
             if (!search_datestart.equals("") && !search_dateend.equals("")) {
                 sql += " and c.DATE_CREATE BETWEEN TO_DATE('" + Utility.CoverDate(search_datestart) + "', 'dd/mm/yyyy HH24:MI:SS') and  TO_DATE('" + Utility.CoverDate(search_dateend) + "', 'dd/mm/yyyy HH24:MI:SS') ";
             }
+
+
+            sql += " and (invoiceno like ? or invoicedate like ? or customer like ?) ";
+
             sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
-         
 
             String[] columns = {"INVOICENO", "INVOICEDATE", "CUSTOMER", "DATE_CREATE"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
@@ -189,12 +197,14 @@ public class InvoiceService {
             sql += ")tb) where rnum BETWEEN ? and ? ";
 
             System.out.println(sql);
-
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
+            ps.setString(1, "%" + searchValue + "%");
+            ps.setString(2, "%" + searchValue + "%");
+            ps.setString(3, "%" + searchValue + "%");
+            ps.setInt(4, start);
+            ps.setInt(5, length + start);
 
-            ps.setInt(1, start);
-            ps.setInt(2, length + start);
 
             System.out.println(start);
             System.out.println(length + start);
@@ -277,8 +287,8 @@ public class InvoiceService {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?)";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL,MFG) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -292,7 +302,7 @@ public class InvoiceService {
                 String startbox = obj.getString("startbox");
                 String endbox = obj.getString("endbox");
                 String containerno = obj.getString("containerno");
-
+                String mfg = obj.getString("mfg");
                 System.out.println("-----------------------");
                 System.out.println(shipper);
                 System.out.println(from);
@@ -315,6 +325,7 @@ public class InvoiceService {
                 ps.setString(14, from);
                 ps.setString(15, to);
                 ps.setString(16, finald);
+                ps.setString(17, mfg);
                 ps.addBatch();
 
 
@@ -337,8 +348,8 @@ public class InvoiceService {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?)";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL,MFG) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?)";
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -353,6 +364,7 @@ public class InvoiceService {
                 String startbox = obj.getString("startbox");
                 String endbox = obj.getString("endbox");
                 String containerno = obj.getString("containerno");
+                String mfg = obj.getString("mfg");
 
                 ps.setInt(1, primarykey);
                 ps.setString(2, invoiceno);
@@ -369,11 +381,9 @@ public class InvoiceService {
                 ps.setString(13, from);
                 ps.setString(14, to);
                 ps.setString(15, addfinal);
+                ps.setString(16, mfg);
 
                 ps.addBatch();
-
-
-
 
             }
 

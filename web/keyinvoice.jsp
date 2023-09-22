@@ -56,61 +56,67 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-12 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">SHIPPER</span>
                                             <input type="text" class="form-control text-center" name="edit_shipper" id="edit_shipper" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-6 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">FROM</span>
                                             <input type="text" class="form-control text-center" name="edit_from" id="edit_from" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-6 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">TO</span>
                                             <input type="text" class="form-control text-center" name="edit_to" id="edit_to" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DEATINATION</span>
-                                            <input type="text" class="form-control text-center" name="edit_final" id="edit_final" required>
-                                        </div>
-                                    </div>
-                                    
                                     
                                     <hr>   
+                                    
                                     <div class="col-sm-12 col-md-3 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
                                             <input type="text" class="form-control text-center" name="edit_po" id="edit_po" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-2 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Firstdigit</span>
                                             <input type="text" class="form-control text-center" name="edit_firstdigit" id="edit_firstdigit" maxlength="10">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-2 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Startbox</span>
                                             <input type="text" class="form-control text-center" name="edit_startbox" id="edit_startbox" maxlength="10" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-2 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Endbox</span>
                                             <input type="text" class="form-control text-center" name="edit_endbox" id="edit_endbox" maxlength="10">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-12 ">
+                                    <div class="col-sm-12 col-md-3 ">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DESTINATION</span>
+                                            <input type="text" class="form-control text-center" name="edit_final" id="edit_final" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Container no</span>
                                             <input type="text" class="form-control text-center" name="edit_containerno" id="edit_containerno" maxlength="25">
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 ">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">MANUFACTURING DATE</span>
+                                            <input type="text" class="form-control text-center" name="edit_mfg" id="edit_mfg" >
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 ">
@@ -129,10 +135,13 @@
                         </div>
                         
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ปิด</button>
-                            <button type="button" class="btn btn-danger" onclick="btdelinvoice()" >ลบ PackingList</button>
-                            <button type="button" class="btn btn-success" onclick="btprintinvoice()" >พิมพ์ PackingList</button>
-                            <button type="button" class="btn btn-primary" onclick="bteditinvoice()" >เเก้ไข PackingList</button>
+                            <div class="me-auto">
+                                <button type="button" class="btn btn-danger "  onclick="btdelinvoice()"  id="btn-delete">ลบ PackingList</button>
+                            </div>
+                            
+                            <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">ปิด</button>
+                            <button type="button" class="btn btn-success "  onclick="btprintinvoice()"  id="btn-print">พิมพ์ PackingList</button>
+                            <button type="button" class="btn btn-primary " onclick="bteditinvoice()"  id="btn-edit">แก้ไข PackingList</button>
                             
                         </div>
                     </form>
@@ -179,30 +188,25 @@
                                         </div>
                                     </div>
                                     
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-12">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">SHIP PER</span>
                                             <input type="text" class="form-control text-center" name="add_shipper" id="add_shipper" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-6">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">FROM</span>
                                             <input type="text" class="form-control text-center" name="add_from" id="add_from" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
+                                    <div class="col-sm-12 col-md-6">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">TO</span>
                                             <input type="text" class="form-control text-center" name="add_to" id="add_to" required>
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DEATINTION</span>
-                                            <input type="text" class="form-control text-center" name="add_final" id="add_final" required>
-                                        </div>
-                                    </div>
+                                    
                                     <hr>
                                     
                                     <div class="col-sm-12 col-md-3 ">
@@ -211,46 +215,59 @@
                                             <input type="text" class="form-control text-center" name="add_po" id="add_po" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-2 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Firstdigit</span>
                                             <input type="text" class="form-control text-center" name="add_firstdigit" id="add_firstdigit" maxlength="10">
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-2 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Startbox</span>
                                             <input type="number" class="form-control text-center" name="add_startbox" id="add_startbox" maxlength="10" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-3 ">
+                                    <div class="col-sm-12 col-md-2 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Endbox</span>
                                             <input type="number" class="form-control text-center" name="add_endbox" id="add_endbox" maxlength="10" >
                                         </div>
                                     </div>
-                                    <div class="col-sm-12 col-md-12 ">
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DEATINTION</span>
+                                            <input type="text" class="form-control text-center" name="add_final" id="add_final" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-6 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Container no</span>
                                             <input type="text" class="form-control text-center" name="add_containerno" id="add_containerno" maxlength="25" >
                                         </div>
                                     </div>
+                                    <div class="col-sm-12 col-md-6 ">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">MANUFACTURING DATE</span>
+                                            <input type="text" class="form-control text-center" name="add_mfg" id="add_mfg" >
+                                        </div>
+                                    </div>
                                     <div class="col-sm-12 col-md-12 ">
-                                        <button type="button" class="btn btn-success btn-sm w-100" id="add_addpo" onclick="addpo()" >เพิ่ม PO</button>
+                                        <div class="d-flex justify-content-evenly">
+                                             <button type="button" class="btn btn-success btn-sm  " id="add_addpo" onclick="addpo()" >เพิ่ม PO</button>
+                                             <button type="button" class="btn btn-warning btn-sm " id="add_updatepo" onclick="updatepo()" disabled> เเก้ไข PO</button>
+                                        </div>
+                                       
+                                       
                                     </div>
                                 </div> 
                             </div>
                             
                             <div class="row mt-3 mx-auto mb-3">
                                 <div class="col-sm-12 col-md-12">
-                                    
                                     <table class="table table-sm w-100 table-bordered" id="table_addinvoice">
-                                        
                                     </table>
-                                    
                                 </div>
                             </div> 
-                            
                         </div>
                         
                         <div class="modal-footer">
@@ -334,12 +351,16 @@
                 
             });
              */
-            
+            function updatepo(){
+                listpo
+        
+            }
     
             function btprintinvoice(){
                  
                 var url = "report/packinglist.jsp?id="+$("#edit_invoiceid").val();
                 window.open(url)
+                
             }
            
             function gettableinvoice(){
@@ -354,15 +375,12 @@
                             search_invoicedate:$("#search_invoicedate").val(),
                             search_datestart:$("#search_datestart").val(),
                             search_dateend: $("#search_dateend").val()
-
                         },
                         dataSrc:function(json){
                             var arr = [];
                             var data = JSON.parse(json.data);
-                            console.log(data);
+                          
                             $.each(data,function(k,v){
-                                
-                               
                                 
                                 var containerno = ""
                                 if(v.containerno){
@@ -413,7 +431,7 @@
                         
                     ],
                     
-                    searching: false,
+                    
                     bDestroy: true
                   
                           
@@ -519,13 +537,13 @@
                                 }
             
             
-            
                                 var objpo = {
                                     po: $('#edit_po').val().toUpperCase(),
                                     firstdigit: $('#edit_firstdigit').val().toUpperCase(),
                                     startbox: $('#edit_startbox').val().toUpperCase(),
                                     endbox: $('#edit_endbox').val().toUpperCase(),
                                     containerno: containerno,
+                                    mfg:$("#edit_mfg").val(),
                                     btdel: btndel
                                 }
 
@@ -552,6 +570,7 @@
                                     })
                                 }
                             } 
+                            $("#edit_mfg").val('')
                             $("#edit_po").val('')
                             $("#edit_firstdigit").val('')
                             $("#edit_startbox").val('')
@@ -587,9 +606,8 @@
             
             function updateInvoice(){
                 
-                console.log('SHIP : ' + $("#edit_shipper").val())
-                console.log('FROM : ' + $("#edit_from").val())
-                console.log('TO : ' + $("#edit_to").val())
+                console.log('SHIP : ' + listpo)
+               
                 $.ajax({
                     type:"POST",
                     url:"Invoice",
@@ -661,7 +679,8 @@
                         $("#edit_to").val(js.shipto)
                         
                         $("#edit_final").val(js.finald)
-        
+                     
+                        
                         listpo.length = 0
                         $.each(jsdecode,function(k,v){
                             
@@ -673,19 +692,28 @@
                             }else{
                                 containerno = ""
                             }
-        
+                            
+                            var mfg = "";
+                            if(v.mfg){
+                                mfg = v.mfg
+                            }else{
+                                mfg = ""
+                            }
+                            
                             var objpo = {
                                 po:v.po.toUpperCase(),
                                 firstdigit:v.firstdigit.toUpperCase(),
                                 startbox:v.startbox.toUpperCase(),
                                 endbox:v.endbox.toUpperCase(),
                                 containerno:containerno,
+                                mfg:mfg,
                                 btdel:btndel
                             }
-                           
+        
                             listpo.push(objpo);
         
                         })
+                        
                         gettbeditpo()
                         console.log(listpo)
                         
@@ -733,6 +761,10 @@
                             data: "containerno"
                         },
                         { 
+                            title: 'MFG',
+                            data: "mfg"
+                        },
+                        { 
                             title: 'Del',
                             data: "btdel"
                         },
@@ -751,7 +783,9 @@
    
             /********************************************* ADD Invoice ************************************************/
             
+            
             function btsaveinvoice(){
+               
                 $("#myformaddinvoice").addClass('was-validated');
                 if(listpo.length != 0 && $("#add_invoiceno").val() && $("#add_invoicedate").val() && $("#add_saveingno").val() && $("#add_shipper").val()  && $("#add_from").val()  && $("#add_to").val() ){
                     addInvoice()
@@ -799,6 +833,7 @@
                         from:$("#add_from").val(),
                         to:$("#add_to").val(),
                         addfinal:$("#add_final").val(),
+                        
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){
@@ -838,9 +873,28 @@
                 }
             }
     
+    
+            function getpobyid(po){
+                $("#add_updatepo").attr("disabled",false)
+                for (var i = 0; i < listpo.length; i++) {
+                    console.log(listpo[i].po)
+                    if (listpo[i].po == po) {
+                       console.log(listpo[i])
+                        $("#add_po").val(listpo[i].po)
+                        $("#add_firstdigit").val(listpo[i].firstdigit)
+                        $("#add_startbox").val(listpo[i].startbox)
+                        $("#add_endbox").val(listpo[i].endbox)
+                        $("#add_containerno").val(listpo[i].containerno)
+                        $("#add_mfg").val(listpo[i].mfg)
+                        break;
+                        //i--; // Decrement i to recheck the current index after the splice
+                    }
+                }
+                
+            }
+    
             function addpo(){
                
-
                 if ($('#add_po').val() && $('#add_firstdigit').val() && $('#add_startbox').val() && $('#add_endbox').val() ) {
                     
                     var po = $('#add_po').val().toUpperCase()
@@ -870,21 +924,25 @@
                             } else if (js.status == "true") {
                                 console.log(msg)
                                 var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="delpo(\'' + $('#add_po').val() + '\')">ลบ</button>';
+                                var btnedit = '<button type="button" class="btn btn-warning btn-sm" onclick="getpobyid(\'' + $('#add_po').val() +'\')">เเก้ไข</button>';
+                                
                                 var containerno = ""
                                 if(!$('#add_containerno').val()){
                                     containerno = ""
                                 }else{
                                     containerno = $('#add_containerno').val()
-                
                                 }
             
                                 var objpo = {
+                                   
                                     po:$('#add_po').val().toUpperCase(),
                                     firstdigit:$('#add_firstdigit').val().toUpperCase(),
                                     startbox:$('#add_startbox').val().toUpperCase(),
                                     endbox:$('#add_endbox').val().toUpperCase(),
                                     containerno:containerno,
-                                    btdel:btndel
+                                    mfg:$("#add_mfg").val(),
+                                    btdel:btndel,
+                                    btnedit:btnedit
                                 }
                 
                                 const result = listpo.find((em) => {
@@ -916,7 +974,7 @@
                                 $("#add_startbox").val('')
                                 $("#add_endbox").val('')
                                 $("#add_containerno").val('')
-            
+                                $("#add_mfg").val('')
             
                             }
                         }
@@ -959,19 +1017,25 @@
                             data: "containerno"
                         },
                         { 
+                            title: 'MFG',
+                            data: "mfg"
+                        },
+                        { 
+                            title: 'Edit',
+                            data: "btnedit"
+                        },
+                        { 
                             title: 'Del',
                             data: "btdel"
                         },
                     ]
                 }) 
             }
+            
             /********************************************* END ADD Invoice ************************************************/
             
-            
-            
-            
             $(document).ready(function(){
-               
+                gettableinvoice()
                 
             })
         </script>
