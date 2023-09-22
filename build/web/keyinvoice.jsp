@@ -251,13 +251,12 @@
                                             <input type="text" class="form-control text-center" name="add_mfg" id="add_mfg" >
                                         </div>
                                     </div>
+                                    <input type="hidden" class="form-control text-center" name="add_id" id="add_id" >
                                     <div class="col-sm-12 col-md-12 ">
-                                        <div class="d-flex justify-content-evenly">
-                                             <button type="button" class="btn btn-success btn-sm  " id="add_addpo" onclick="addpo()" >เพิ่ม PO</button>
-                                             <button type="button" class="btn btn-warning btn-sm " id="add_updatepo" onclick="updatepo()" disabled> เเก้ไข PO</button>
+                                        <div class="d-flex justify-content-center">
+                                            <button type="button" class="btn btn-success btn-sm  " id="add_addpo" onclick="addpo()" >เพิ่ม PO</button>
+                                            <button type="button" class="btn btn-warning btn-sm  mx-3" id="add_updatepo" onclick="updatepoadd()" disabled>เเก้ไข PO</button>
                                         </div>
-                                       
-                                       
                                     </div>
                                 </div> 
                             </div>
@@ -324,6 +323,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-end mb-3">
                         <button class="btn btn-sm btn-success" id="addinvoice" onclick="btninvoice()">เพิ่มข้อมูล</button>
+                        
                     </div>
                     <table class="table table-sm w-100 text-center table-bordered" id="table_invoice">
                         
@@ -351,10 +351,7 @@
                 
             });
              */
-            function updatepo(){
-                listpo
-        
-            }
+           
     
             function btprintinvoice(){
                  
@@ -784,6 +781,30 @@
             /********************************************* ADD Invoice ************************************************/
             
             
+    
+            function updatepoadd(){
+            
+            
+                for (var i = 0; i < listpo.length; i++) {
+                    console.log($("#add_id").val())
+                    console.log(listpo[i].id)
+                    if (listpo[i].id == $("#add_id").val()) {
+                        
+                        listpo[i].containerno = $("#add_containerno").val() 
+                        listpo[i].endbox = $("#add_endbox").val() 
+                        listpo[i].firstdigit = $("#add_firstdigit").val() 
+                        listpo[i].mfg = $("#add_mfg").val() 
+                        listpo[i].po = $("#add_po").val() 
+                        listpo[i].startbox = $("#add_startbox").val() 
+                        gettbpo()
+                        break;
+                        
+                    }
+                }
+                
+        
+            }
+    
             function btsaveinvoice(){
                
                 $("#myformaddinvoice").addClass('was-validated');
@@ -876,16 +897,20 @@
     
             function getpobyid(po){
                 $("#add_updatepo").attr("disabled",false)
+               
+                
                 for (var i = 0; i < listpo.length; i++) {
-                    console.log(listpo[i].po)
+                  
                     if (listpo[i].po == po) {
-                       console.log(listpo[i])
+                    
                         $("#add_po").val(listpo[i].po)
                         $("#add_firstdigit").val(listpo[i].firstdigit)
                         $("#add_startbox").val(listpo[i].startbox)
                         $("#add_endbox").val(listpo[i].endbox)
                         $("#add_containerno").val(listpo[i].containerno)
                         $("#add_mfg").val(listpo[i].mfg)
+                        $("#add_id").val(listpo[i].id)
+                        
                         break;
                         //i--; // Decrement i to recheck the current index after the splice
                     }
@@ -932,9 +957,12 @@
                                 }else{
                                     containerno = $('#add_containerno').val()
                                 }
-            
+                                
+                                var uid = (new Date().getTime()).toString(36)
+                                
+                                
                                 var objpo = {
-                                   
+                                    id:uid,
                                     po:$('#add_po').val().toUpperCase(),
                                     firstdigit:$('#add_firstdigit').val().toUpperCase(),
                                     startbox:$('#add_startbox').val().toUpperCase(),
@@ -1036,7 +1064,6 @@
             
             $(document).ready(function(){
                 gettableinvoice()
-                
             })
         </script>
     </body>
