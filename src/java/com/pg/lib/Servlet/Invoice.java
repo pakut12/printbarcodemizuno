@@ -132,7 +132,7 @@ public class Invoice extends HttpServlet {
                     obj.put("finald", listdata.get(0).getFinald());
                     obj.put("mfg", listdata.get(0).getMfg());
 
-                    System.out.println(listdata.get(0).getMfg());
+                    
                     out.print(obj);
 
                 } catch (Exception e) {

@@ -114,23 +114,44 @@ public class Utility {
             s.add("XXXL");
 
 
+            if (listbox.size() > 8) {
 
-            for (BCDetailBox l : listbox) {
-                if (!size.contains(l.getCustomer_size()) && size.size() < 8) {
-                    size.add(l.getCustomer_size());
+                for (BCDetailBox l : listbox) {
+                    if (!size.contains(l.getCustomer_size()) && size.size() < 9) {
+                        size.add(l.getCustomer_size());
+                    }
                 }
-            }
 
-            for (String z : s) {
-                if (!size.contains(z) && size.size() < 8) {
-                    size.add(z);
+                for (String z : s) {
+                    if (!size.contains(z) && size.size() < 9) {
+                        size.add(z);
+                    }
                 }
-            }
 
-            for (String item : s) {
-                if (size.contains(item)) {
-                    sortedSize.add(item);
+                for (String item : s) {
+                    if (size.contains(item)) {
+                        sortedSize.add(item);
+                    }
                 }
+            } else {
+                for (BCDetailBox l : listbox) {
+                    if (!size.contains(l.getCustomer_size()) && size.size() < 8) {
+                        size.add(l.getCustomer_size());
+                    }
+                }
+
+                for (String z : s) {
+                    if (!size.contains(z) && size.size() < 8) {
+                        size.add(z);
+                    }
+                }
+
+                for (String item : s) {
+                    if (size.contains(item)) {
+                        sortedSize.add(item);
+                    }
+                }
+
             }
 
 

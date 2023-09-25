@@ -56,7 +56,7 @@
             String shipfrom = inv.get(0).getShipfrom();
             String shipto = inv.get(0).getShipto();
 
-            DecimalFormat decimalFormat = new DecimalFormat("#,###.00");
+            DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
             DecimalFormat decimalFormat1 = new DecimalFormat("#,###");
 
             String pono = "PO.NO. ";
@@ -102,6 +102,10 @@
                 fineldeatination += "FINAL DESTINATION : " + inv.get(0).getFinald();
             }
 
+
+            if (inv.get(0).getFinald() == null) {
+                fineldeatination = "";
+            }
 
 
             /*****************  end set header **************/
@@ -394,16 +398,26 @@
                     List<BCDetailBox> CheckSize = PackingListService.CheckSize(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
                     List<String> size = Utility.getallsize(i1.getCustomer(), CheckSize); // List Size 
 
+                    String width = "";
                     System.out.println(size);
 
                     String txtsize = "";
                     int n = 2;
+                    
                     for (String res : size) {
-                        if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
+                        if (size.contains("120") || size.contains("130") || size.contains("140") || size.contains("150") || size.contains("160")) {
+                            if(res.contains("120") || res.contains("130") || res.contains("140") || res.contains("150") || res.contains("160")){
+                                 txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
+                            }else{
+                                 txtsize += "{text: '', border: [false, true, false, true]},";
+                            }
+                            
+                        } else if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
                             txtsize += "{text: '0" + n + "\\n" + res + "', border: [false, true, false, true]},";
                         } else {
                             txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
                         }
+                        width += "'auto',";
                         n++;
                     }
 
@@ -675,7 +689,7 @@
                                 String id2 = groupT2[groupT2.length - 1].replace(" ", "");
 
                                 String gtxt = id1 + "-" + id2;
-                                
+
                                 List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
                                 int status = 0;
 
@@ -961,7 +975,7 @@
                     style: 'tbcontent',
                     table: {
                         headerRows: 1,
-                        widths: [ 50, 50,84, 'auto','auto' ,'auto', 'auto','auto','auto', 'auto','auto', 17,'auto', 'auto', 'auto' , 'auto'],
+                        widths: [ 50, 50,84, <%=width%> 17,'auto', 'auto', 'auto' , 'auto'],
                         body: [
                             [
                                 {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
@@ -986,7 +1000,7 @@
                                                 style: 'tbcontent',
                                                 table: {
                                                     headerRows: 1,
-                                                    widths: [ 50, 50,17,58, 'auto', 'auto','auto', 'auto','auto', 'auto', 'auto','auto', 'auto',110 ],
+                                                    widths: [ 50, 50,17,58, <%=width%> 'auto',110 ],
                                                     body: [
                                                         [
                                                             {text: 'DESCRIPTION',border: [false, true, false, true]}, 
@@ -999,7 +1013,7 @@
                                                                                          {text: '', border: [false, false, false, false]},
                                                                                      ],
                         
-<%=datatable2%>
+                                                            <%=datatable2%>
 
                                 
                     ]
@@ -1149,7 +1163,7 @@
                 },
                     
                 tbcontent: {
-                    fontSize: 12,
+                    fontSize: 10,
                     bold: true,
                     margin: [10, 2],
                     alignment:'center'                      

@@ -1176,7 +1176,8 @@
                 bold:true
             }
         };
-        pdfMake.createPdf(docDefinition).open({}, window); 
+        
+pdfMake.createPdf(docDefinition).download('<%=invoiceno%>.pdf');  
         
     
     
