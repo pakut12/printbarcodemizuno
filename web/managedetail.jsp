@@ -61,34 +61,37 @@
                     <div class="card-body">
                         <div class="container">
                             <input id="boxseq" type="hidden">
+                            <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
+                            <hr>
                             <div class="row">
-                                
-                                <div class="col-sm-12 col-md-4">
-                                    <!--
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
-                                        <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno"  disabled>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
+                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="" disabled>
                                     </div>
-                                    -->
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <!--
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
-                                        <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  disabled>
-                                    </div>
-                                    -->
-                                </div>
-                                
-                                <div class="col-sm-12 col-md-4">
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
                                         <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
                                     </div>
                                 </div>
-                                
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
+                                        <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="" disabled>
+                                        <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
+                                        <input type="text" class="form-control text-center" name="date_edit" id="date_edit" disabled>
+                                    </div>
+                                </div>
                             </div>
-                            
+                            <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
+                            <hr>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
@@ -442,6 +445,7 @@
             }
             
             function updatedata(){
+                var user_edit = $("#user_edit").val()
                 var pobefore = $("#posearch").val().toUpperCase();
                 var startboxbefore  = $("#firstdigitbefore").val()+$("#numstart").val().toUpperCase();
                 var po_old = $("#pobefore").val().toUpperCase();
@@ -563,7 +567,8 @@
                             po_old:po_old,
                             customer_address:customer_address,
                             invoiceno:invoiceno,
-                            invoicedate:invoicedate
+                            invoicedate:invoicedate,
+                            user_edit:user_edit
                         },
                         success:function(msg){
                            
@@ -591,7 +596,7 @@
                                 })
                       
                             }
-                            clearinput();
+                            
                         }
                     })
                 }else{
@@ -601,64 +606,14 @@
                         text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
                     })
                 }
-                $("#firstdigitbefore").html('')
-                $("#myformsearch input").val('')
+                clearinput()
             }
             
           
             function clearinput(){
-                $("#customer_text").empty();
-                $("#customer").empty();
-                $("#customer").append("<option value=''></option>");
-                
-                $("#customer_address").empty();
-                $("#customer_address").append("<option value=''></option>");
-                
-                $("#destination").empty();
-                $("#destination").append("<option value=''></option>");
-            
-                $("#quantity_box").val("");
-                $("#boxno").val("");
-                $("#numberbox_start").val("");
-                $("#numberbox_end").val("");
-                $("#boxall").val("");
-                        
-                $("#po").val("");
-                $("#description").val("");
-                $("#gw").val("");
-                $("#nw").val("");
-                $("#country").val("");
-                        
-                $("#customer1_id").val("");
-                $("#customer1_barcode").val("");
-                $("#customer1_color").val("");
-                $("#customer1_size").val("");
-                $("#customer1_number").val("");
-
-                $("#customer2_id").val("");
-                $("#customer2_barcode").val("");
-                $("#customer2_color").val("");
-                $("#customer2_size").val("");
-                $("#customer2_number").val("");
-                        
-                $("#customer3_id").val("");
-                $("#customer3_barcode").val("");
-                $("#customer3_color").val("");
-                $("#customer3_size").val("");
-                $("#customer3_number").val("");
-                        
-                $("#customer4_id").val("");
-                $("#customer4_barcode").val("");
-                $("#customer4_color").val("");
-                $("#customer4_size").val("");
-                $("#customer4_number").val("");
-                
-                $("#firstdigit").val("");
-                $("#pobefore").val("");
-                $("#prodorder").val("");
-                $("#pallet").val("");
+                $("#myform :input").val('');
                 $("#myform :input").attr("disabled", true);
-                
+                $("#myformsearch :input").val('')
                 
             }
             
@@ -780,18 +735,17 @@
                             $("#customer4_color").val(js.colorno4);
                             $("#customer4_size").val(js.sizeno4);
                             $("#customer4_number").val(js.qty4);
-                            $("#myform :input").attr("disabled", false);
-                            $("#pobefore").attr("disabled", true);
-                            $("#nw").attr("disabled", true);
+                            $("#myform :input").not('#pobefore,#date_create,#nw,#user_createview,#user_editview,#date_edit').attr("disabled", false);
                             
                             $("#prodorder").val(js.prod_order);
                             $("#pallet").val(js.pallet);
                             $("#date_create").val(js.date_create);
-                            $("#date_create").attr("disabled", true);
-                            
-                           
+                            $("#date_edit").val(js.date_modify);
+                            $("#user_createview").val(js.user_create);
+                            $("#user_editview").val(js.user_edit);
+                           $("#user_edit").val('<%=userid%>')
                             $("#boxseq").val(js.boxseq);
-                            
+                            console.log(js)
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

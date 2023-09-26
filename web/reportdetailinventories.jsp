@@ -15,7 +15,7 @@
     <body>
         <%@ include file="share/navbar.jsp" %>
         <form action="Report" method="post" id="myformreport">
-            <div class="container mt-5">
+            <div class="mx-5 mt-5">
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
@@ -139,7 +139,7 @@
                         
                         <div id="mytable" class="mt-3">
                             <div class='text-center h3 fw-bold'>รายงานสินค้าคงเหลือ</div>
-                            <table class='table table-hover text-nowrap table-bordered text-center table-sm' id='tablereport'>
+                            <table class='table table-hover text-nowrap table-bordered text-center table-sm w-100' id='tablereport'>
                                 <thead>
                                     <tr>
                                         
@@ -154,8 +154,11 @@
                                         <th scope='col'>จำนวนในกล่อง</th>
                                         <th scope='col'>ต่าง</th>
                                         <th scope='col'>หมายเหตุ</th>
+                                        <th scope='col'>ผู้สร้าง</th>
                                         <th scope='col'>วันที่สร้าง</th>
+                                        <th scope='col'>ผู้เเก้ไข</th>
                                         <th scope='col'>วันที่เเก้ไข</th>
+                                        
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -167,6 +170,8 @@
                                         <th class="text-center" id="sumqty_result"></th>
                                         <th class="text-center" id="sumdiff"></th>
                                         <th class="text-center" id="summark"></th>
+                                        <th class="text-center" ></th>
+                                        <th class="text-center" ></th>
                                         <th class="text-center" ></th>
                                         <th class="text-center" ></th>
                                     </tr>
@@ -318,7 +323,7 @@
                           
                             var arr = [];
                             var data = JSON.parse(json.data);
-                            console.log(json)
+                            console.log(data)
                        
                             $("#sumqty").text(json.sumqty)
                             $("#sumqty_result").text(json.sumqty_result)
@@ -380,6 +385,8 @@
                                     diff :  diff,
                                     mark :  chacknull(mark),
                                     boxno :  chacknull(v.boxno),
+                                    user_create:chacknull(v.user_create),
+                                    user_edit:chacknull(v.user_edit),
                                     test:"test"
                                 }
                                 
@@ -403,7 +410,9 @@
                         { data: 'qty_result' },
                         { data: 'diff' },
                         { data: 'mark' },
+                        { data: 'user_create' },
                         { data: 'date_create' },
+                        { data: 'user_edit' },
                         { data: 'date_modify' }
                     ],
                     bDestroy: true,
@@ -473,6 +482,7 @@
                             .append( '<th class="text-center">'+sumqty_result.toLocaleString('en-US')+'</th>' )
                             .append( '<th class="text-center">'+sumdiff.toLocaleString('en-US')+'</th>' )
                             .append( '<th class="text-center">'+summark.toLocaleString('en-US')+'</th>' )
+                            .append( '<th class="text-center"></th>' )
                             .append( '<th class="text-center"></th>' )
                             .append( '<th class="text-center"></th>' )
                             .append( '<th/>' )

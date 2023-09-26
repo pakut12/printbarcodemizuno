@@ -15,7 +15,8 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
-        <div class="container mt-5">
+        <div class="container mt-4">
+            <div class="text-center h1 mb-3">ยิงบรรจุกล่อง</div>
             <div class="card">
                 <div class="card-header">
                     ค้นหา
@@ -31,8 +32,8 @@
                         <div class="col-sm-12 col-md-3">
                             <div class="input-group input-group-sm ">
                                 <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                 <select class="form-select form-select-sm text-center" id="firstdigitbefore" >
-                                 </select>
+                                <select class="form-select form-select-sm text-center" id="firstdigitbefore" >
+                                </select>
                             </div>
                         </div>
                         <div class="col-sm-12 col-md-2">
@@ -51,20 +52,42 @@
                 </div>
             </div>
             <div id="myform">
+                
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">ยิงบรรจุกล่อง</div>
                     <div class="card-body">
                         <div class="container">
+                            <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
+                            <hr>
                             <div class="row">
-                                <div class="d-flex justify-content-end mb-3">
-                                    <div class="col-sm-12 col-md-3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
-                                            <input type="date" class="form-control text-center" name="date" id="date"  disabled>
-                                        </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
+                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                        <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
+                                        <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="" disabled>
+                                        <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
+                                        <input type="text" class="form-control text-center" name="date_edit" id="date_edit" disabled>
                                     </div>
                                 </div>
                             </div>
+                            <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
+                            <hr>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
@@ -334,7 +357,7 @@
                     var qty_result3 = $("#customer3_number").val();
                     var qty_result4 = $("#customer4_number").val();
                     var date = new Date().format('d-m-Y H:i:s');
-                    
+                    var userid = $("#user_edit").val();
                     $.ajax({
                         type:"post",
                         url:"Detail",
@@ -346,7 +369,8 @@
                             qty_result2:qty_result2,
                             qty_result3:qty_result3,
                             qty_result4:qty_result4,
-                            date:date
+                            date:date,
+                            userid:userid
                         },
                         success:function(msg){
                             if(msg){
@@ -572,7 +596,6 @@
                             var endbox = parseInt(js.boxall.match(/\d+/)[0]);
                             var firstdigit = js.boxall.match(/[a-zA-Z]+/)[0];
                             
-            
                             $("#firstdigit").val(firstdigit);
                             $("#customer_num").empty();
                             $("#customer_num").append("<option value='"+js.shipto+"'>"+js.shipto+"</option>");
@@ -623,6 +646,13 @@
                             $("#customer4_number").attr("disabled", false);
                             $("#bt_sava").attr("disabled", false);
                             $("#bt_reset").attr("disabled", false);
+                            
+                            $("#user_createview").val(js.user_create);
+                            $("#date_create").val(js.date_create);
+                            $("#user_editview").val(js.user_edit);
+                            $("#user_edit").val('<%=userid%>');
+                            $("#date_edit").val(js.date_modify);
+                            
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

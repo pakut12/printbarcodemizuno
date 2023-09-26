@@ -21,7 +21,7 @@
                     <div class="text-center h1">โปรเเกรมพิมพ์บาร์โค้ด TSG</div>
                     <div class="col-12 col-md-6 mx-auto">
                         <div class="card mt-5 shadow">
-                            <div class="card-header">
+                            <div class="card-header fw-bold">
                                 Login
                             </div>
                             <div class="card-body">

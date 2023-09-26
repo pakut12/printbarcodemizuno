@@ -67,7 +67,7 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: "ข้อมูล ณ วันที่ " +getDateNow(),
+                                    text: "ข้อมูล ณ วันที่ " +getDateNow()+"\n ผู้พิมพ์ : <%=(String)session.getAttribute("user")%>",
                                     fontSize: 14,
                                     bold:true,
                                     alignment: 'left',

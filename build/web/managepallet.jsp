@@ -66,31 +66,37 @@
                         <form id="myform">
                             <div class="container">
                                 <input type="hidden" id="boxseq">
+                                <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
+                                <hr>
                                 <div class="row">
-                                    <div class="col-sm-12 col-md-4">
-                                        <!--
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
-                                            <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno"  disabled>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
+                                            <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="" disabled>
                                         </div>
-                                        -->
                                     </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <!--
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
-                                            <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  disabled>
-                                        </div>
-                                        -->
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
+                                    <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
                                             <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
                                         </div>
                                     </div>
-                                    
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
+                                            <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="" disabled>
+                                            <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
+                                            <input type="text" class="form-control text-center" name="date_edit" id="date_edit" disabled>
+                                        </div>
+                                    </div>
                                 </div>
+                                <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
+                                <hr>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
@@ -459,6 +465,7 @@
             
             function updatedata(){
             
+                var user_edit = $("#user_edit").val()
                 var pobefore = $("#posearch").val().toUpperCase();
                 var startboxbefore  = $("#numstart").val().toUpperCase();
                 var endboxbefore =  $("#numend").val().toUpperCase();
@@ -586,10 +593,10 @@
                             firstdigitbefore:firstdigitbefore,
                             invoiceno:invoiceno,
                             invoicedate:invoicedate,
-                            boxseq:boxseq
+                            boxseq:boxseq,
+                            user_edit:user_edit
                         },
                         success:function(msg){
-                            console.log(msg)
                             if(msg == "true"){
                                 Swal.fire({
                                     title:"เเก้ไข",
@@ -597,12 +604,6 @@
                                     text:"เเก้ไขสำเร็จ"
                                 })
                             }else if(msg == "false"){
-                                Swal.fire({
-                                    title:"เเก้ไข",
-                                    icon:"error",
-                                    text:"เเก้ไขไม่สำเร็จ"
-                                })
-                            }else{
                                 Swal.fire({
                                     title:"เเก้ไข",
                                     icon:"error",
@@ -620,7 +621,7 @@
                     })
                 }
                 
-                
+               
                 $("#firstdigit").html('')
                 
             }
@@ -753,12 +754,8 @@
                             $("#pallet").val(js.pallet);
                             $("#date_create").val(js.date_create);
                            
-                            $("#myform :input").attr("disabled", true);
+                            $("#pallet,#gw,#bt_sava").attr("disabled", false);
                             
-                            $("#pallet").attr("disabled", false);
-                            $("#gw").attr("disabled", false);
-                            $("#bt_sava").attr("disabled", false);
-                          
                             $("#numberbox_start").val(numstart);
                             $("#numberbox_end").val(numend);
                             $("#invoiceno").val(js.invoiceno);
@@ -770,8 +767,10 @@
                             }
                             
                             $("#boxseq").val(js.boxseq);
-                            
-                            
+                            $("#user_createview").val(js.user_create)
+                            $("#date_edit").val(js.date_modify)
+                            $("#user_editview").val(js.user_edit)
+                            $("#user_edit").val('<%=userid%>')
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",
@@ -817,7 +816,7 @@
                                         icon:"success",
                                         text:"ลบสำเร็จ"
                                     })
-                                   
+                                    clearinput()
                                 }else if(js.status == "false"){
                                     Swal.fire({
                                         title:"ลบ",

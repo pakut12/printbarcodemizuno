@@ -46,10 +46,7 @@
                     gd.add(DG.getDestination());
                 }
 
-
             }
-
-
 
             /********************** end Custome *******************/
             String shipper = inv.get(0).getShipper();

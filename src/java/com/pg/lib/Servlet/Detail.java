@@ -254,7 +254,7 @@ public class Detail extends HttpServlet {
                     // Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
 
 
-                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, firstdigitbefore, startbox, endbox, boxseq,user_edit);
+                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, firstdigitbefore, startbox, endbox, boxseq, user_edit);
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore, startbox, endbox);
 
                     JSONObject obj = new JSONObject();
@@ -304,6 +304,21 @@ public class Detail extends HttpServlet {
                 List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
                 List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
                 List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
+
+
+                List<BCUser> listuser_create = AuthenticationService.chackuser(Utility.Chacknull(detailbox.get(0).getUser_create()));
+                List<BCUser> listuser_edit = AuthenticationService.chackuser(Utility.Chacknull(detailbox.get(0).getUser_edit()));
+
+                String user_create = "";
+                String user_edit = "";
+
+                if (listuser_create.size() > 0) {
+                    user_create = listuser_create.get(0).getUser_firstname() + listuser_create.get(0).getUser_lastname();
+                }
+
+                if (listuser_edit.size() > 0) {
+                    user_edit = listuser_edit.get(0).getUser_firstname() + listuser_edit.get(0).getUser_lastname();
+                }
 
                 JSONObject obj = new JSONObject();
                 obj.put("po", detailbox.get(0).getPo());
@@ -370,6 +385,9 @@ public class Detail extends HttpServlet {
                 obj.put("invoicedate", detailbox.get(0).getInvoicedate());
                 obj.put("boxseq", detailbox.get(0).getBoxseq());
 
+                obj.put("user_create", user_create);
+                obj.put("user_edit", user_edit);
+
                 out.print(obj);
             } else if (type.equals("updatedetails")) {
                 try {
@@ -421,12 +439,13 @@ public class Detail extends HttpServlet {
 
                     String date = request.getParameter("date").trim();
 
+                    String user_edit = request.getParameter("user_edit").trim();
 
                     DetailService ds = new DetailService();
 
                     JSONObject obj = new JSONObject();
 
-                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date);
+                    Boolean status = ds.UpdateDetailBox(customer_address, po_old, BOXALL, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, SHIPTO, SIZENO1, SIZENO2, SIZENO3, SIZENO4, QTYPERBOX, DESCTXT, GROSSWEIGHT, NETWEIGHT, COUNTRY_ORIGIN, SKU_ITEM1, UPC_CODE1, COLORNO1, SIZENO1, QTY1, SKU_ITEM2, UPC_CODE2, COLORNO2, SIZENO2, QTY2, SKU_ITEM3, UPC_CODE3, COLORNO3, SIZENO3, QTY3, SKU_ITEM4, UPC_CODE4, COLORNO4, SIZENO4, QTY4, pobefore, boxnobefore, boxno, PO, pallet, prodorder, destination, date, user_edit);
 
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTBYID(pobefore, PO, boxno, boxnobefore);
 
@@ -591,19 +610,20 @@ public class Detail extends HttpServlet {
                 try {
                     String po = request.getParameter("posearch").trim();
                     String boxno = request.getParameter("boxno").trim();
+                    String user_id = request.getParameter("userid").trim();
 
                     String qty_result1 = request.getParameter("qty_result1").trim();
                     String qty_result2 = request.getParameter("qty_result2").trim();
                     String qty_result3 = request.getParameter("qty_result3").trim();
                     String qty_result4 = request.getParameter("qty_result4").trim();
-
                     String date = request.getParameter("date").trim();
 
                     DetailService ds = new DetailService();
                     Boolean status = ds.UpdateQtyResultFromBarcode(po, boxno, qty_result1, qty_result2, qty_result3, qty_result4, date);
-
+                    Boolean statususer = ds.UpdateUserResultFromBarcode(user_id, po, boxno);
+                    
                     JSONObject obj = new JSONObject();
-                    if (status) {
+                    if (status && statususer) {
                         obj.put("status", "true");
                     } else {
                         obj.put("status", "false");
@@ -620,11 +640,29 @@ public class Detail extends HttpServlet {
 
                     DetailService ds = new DetailService();
                     List<BCDetailBox> detailbox = ds.GetDetailBoxAllForBarcode(posearch, numstart);
-                    System.out.println(detailbox.size());
+
+                    List<BCUser> listuser_create = AuthenticationService.chackuser(Utility.Chacknull(detailbox.get(0).getUser_create()));
+                    List<BCUser> listuser_edit = AuthenticationService.chackuser(Utility.Chacknull(detailbox.get(0).getUser_edit()));
+
+                    String user_create = "";
+                    String user_edit = "";
+
+                    if (listuser_create.size() > 0) {
+                        user_create = listuser_create.get(0).getUser_firstname() + listuser_create.get(0).getUser_lastname();
+                    }
+
+                    if (listuser_edit.size() > 0) {
+                        user_edit = listuser_edit.get(0).getUser_firstname() + listuser_edit.get(0).getUser_lastname();
+                    }
+
+
+
+
                     List<BCCustomer> listcm1 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item1());
                     List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
                     List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
                     List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
+
 
 
                     JSONObject obj = new JSONObject();
@@ -692,6 +730,8 @@ public class Detail extends HttpServlet {
 
                     obj.put("date_create", detailbox.get(0).getDate_create());
                     obj.put("date_modify", detailbox.get(0).getDate_modify());
+                    obj.put("user_create", user_create);
+                    obj.put("user_edit", user_edit);
 
                     out.print(obj);
                 } catch (Exception e) {
@@ -729,12 +769,13 @@ public class Detail extends HttpServlet {
                     String startboxbefore = request.getParameter("startboxbefore").trim();
                     String endboxbefore = request.getParameter("endboxbefore").trim();
                     String firstdigitbefore = request.getParameter("firstdigitbefore").trim();
+                    String user_edit = request.getParameter("user_edit");
 
                     String pallet = request.getParameter("pallet").trim();
                     String gw = request.getParameter("grossweight").trim();
                     String nw = request.getParameter("netweight").trim();
 
-                    boolean status = DetailService.updatepallet(pobefore, startboxbefore, endboxbefore, firstdigitbefore, pallet, gw, nw);
+                    boolean status = DetailService.updatepallet(pobefore, startboxbefore, endboxbefore, firstdigitbefore, pallet, gw, nw, user_edit);
 
                     if (status) {
                         out.print("true");

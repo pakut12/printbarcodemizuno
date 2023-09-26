@@ -84,7 +84,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ºŸÈ‡‡°È‰¢</span>
-                                        <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="<%=userid%>" disabled>
+                                        <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="" disabled>
                                         <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
                                     </div>
                                 </div>
@@ -783,6 +783,7 @@
                             $("#user_createview").val(js.user_create)
                             $("#date_edit").val(js.date_modify)
                             $("#user_editview").val(js.user_edit)
+                            $("#user_edit").val('<%=userid%>')
                         }else{
                             Swal.fire({
                                 title:"º‘¥æ≈“¥",

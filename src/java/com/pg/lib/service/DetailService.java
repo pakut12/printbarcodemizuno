@@ -308,7 +308,7 @@ public class DetailService {
         List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = "SELECT b.*,qty_result1,qty_result2,qty_result3,qty_result4 FROM MIZUNONEWBARBOXRESULT a  inner join MIZUNONEWBARBOXDT b on a.PO =b. PO and a.BOXNO = b.BOXNO  WHERE  b. PO = ? and b.BOXNO =?";
+            String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec,TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as datem, b.*,qty_result1,qty_result2,qty_result3,qty_result4 FROM MIZUNONEWBARBOXRESULT a  inner join MIZUNONEWBARBOXDT b on a.PO =b. PO and a.BOXNO = b.BOXNO  WHERE  b. PO = ? and b.BOXNO =?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
@@ -360,6 +360,13 @@ public class DetailService {
                 box.setQty_result2(rs.getString("qty_result2"));
                 box.setQty_result3(rs.getString("qty_result3"));
                 box.setQty_result4(rs.getString("qty_result4"));
+
+                box.setUser_create(rs.getString("USER_CREATE"));
+                box.setUser_edit(rs.getString("USER_EDIT"));
+                box.setDate_create(rs.getString("datec"));
+                box.setDate_modify(rs.getString("datem"));
+
+
 
                 listdetail.add(box);
             }
@@ -435,6 +442,33 @@ public class DetailService {
         return sql;
     }
 
+    public Boolean UpdateUserResultFromBarcode(String user_id, String PO, String BOXNO) throws SQLException {
+
+        Boolean status = false;
+        try {
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET USER_EDIT=? WHERE PO = ? AND BOXNO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, user_id);
+            ps.setString(2, PO);
+            ps.setString(3, BOXNO);
+            if (ps.executeUpdate() > 0) {
+                status = true;
+            } else {
+                status = false;
+            }
+
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return status;
+    }
+
     public Boolean UpdateQtyResultFromBarcode(String PO, String BOXNO, String QTY_RESULT1, String QTY_RESULT2, String QTY_RESULT3, String QTY_RESULT4, String Date) throws SQLException {
 
         Boolean status = false;
@@ -454,6 +488,8 @@ public class DetailService {
             } else {
                 status = false;
             }
+
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -611,14 +647,12 @@ public class DetailService {
             String SKU_ITEM2, String UPC_CODE2, String COLORNO2, String SIZENO2, String QTY2,
             String SKU_ITEM3, String UPC_CODE3, String COLORNO3, String SIZENO3, String QTY3,
             String SKU_ITEM4, String UPC_CODE4, String COLORNO4, String SIZENO4, String QTY4,
-            String pobefore, String boxnobefore, String boxno, String PO, String pallet, String prodorder, String destination, String date) throws SQLException {
+            String pobefore, String boxnobefore, String boxno, String PO, String pallet, String prodorder, String destination, String date, String user_edit) throws SQLException {
 
         Boolean status = null;
 
         HashMap<String, String> addresstsg = GetAddress("TSG");
         HashMap<String, String> addresscustomer = GetAddress(SHIPTO);
-
-
 
         try {
             String sql = "UPDATE MIZUNONEWBARBOXDT SET " +
@@ -666,7 +700,8 @@ public class DetailService {
                     "DESTINATION = ?," +
                     "PO_OLD = ?," +
                     "DELIVERY = ?," +
-                    "DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') " +
+                    "DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'), " +
+                    "USER_EDIT = ? " +
                     "WHERE PO = ? AND BOXNO = ?";
 
             conn = ConnectDB.getConnection();
@@ -716,10 +751,10 @@ public class DetailService {
             ps.setString(43, po_old);
             ps.setString(44, customer_address);
             ps.setString(45, date);
+            ps.setString(46, user_edit);
 
-
-            ps.setString(46, pobefore);
-            ps.setString(47, boxnobefore);
+            ps.setString(47, pobefore);
+            ps.setString(48, boxnobefore);
 
 
 
@@ -746,7 +781,7 @@ public class DetailService {
         List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec ,a.* FROM MIZUNONEWBARBOXDT a WHERE a.PO = ? AND a.BOXNO = ?";
+            String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec,TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as datem ,a.* FROM MIZUNONEWBARBOXDT a WHERE a.PO = ? AND a.BOXNO = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, posearch);
@@ -807,7 +842,7 @@ public class DetailService {
 
 
                 box.setDate_create(rs.getString("datec"));
-                box.setDate_modify(rs.getString("date_modify"));
+                box.setDate_modify(rs.getString("datem"));
 
                 box.setPo_old(rs.getString("po_old"));
                 box.setCustomer_address(rs.getString("DELIVERY"));
@@ -815,6 +850,10 @@ public class DetailService {
                 box.setInvoicedate(rs.getString("invoicedate"));
 
                 box.setBoxseq(rs.getString("boxseq"));
+                box.setUser_create(rs.getString("USER_CREATE"));
+                box.setUser_edit(rs.getString("USER_EDIT"));
+
+
                 listdetail.add(box);
 
             }
@@ -1588,12 +1627,12 @@ public class DetailService {
         return coverdate;
     }
 
-    public static boolean updatepallet(String pobefore, String startboxbefore, String endboxbefore, String firstdigitbefore, String pallet, String gw, String nw) throws SQLException {
+    public static boolean updatepallet(String pobefore, String startboxbefore, String endboxbefore, String firstdigitbefore, String pallet, String gw, String nw, String user_edit) throws SQLException {
 
         boolean status = false;
 
         try {
-            String sql = "UPDATE MIZUNONEWBARBOXDT SET PALLET=?,GROSSWEIGHT=?,NETWEIGHT=? WHERE PO=? and BOXNO in (";
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET PALLET=?,GROSSWEIGHT=?,NETWEIGHT=?,USER_EDIT=? WHERE PO=? and BOXNO in (";
             for (int s = Integer.parseInt(startboxbefore); s < Integer.parseInt(endboxbefore) + 1; s++) {
                 if (s < Integer.parseInt(endboxbefore)) {
                     sql += "'" + firstdigitbefore + String.valueOf(s) + "',";
@@ -1607,7 +1646,9 @@ public class DetailService {
             ps.setString(1, pallet);
             ps.setString(2, gw);
             ps.setString(3, nw);
-            ps.setString(4, pobefore);
+            ps.setString(4, user_edit);
+            ps.setString(5, pobefore);
+
 
 
             if (ps.executeUpdate() > 0) {

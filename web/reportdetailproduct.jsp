@@ -15,7 +15,7 @@
     <body>
         <%@ include file="share/navbar.jsp" %>
         <form action="Report" method="post" id="myformreport">
-            <div class="container mt-5">
+            <div class="mx-5 mt-5">
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
@@ -128,7 +128,9 @@
                                             <th scope='col'>กล่องที่</th>
                                             <th scope='col'>จำนวน</th>
                                             <th scope='col'>หมายเหตุ</th>
+                                            <th scope='col'>ผู้สร้าง</th>
                                             <th scope='col'>วันที่สร้าง</th>
+                                            <th scope='col'>ผู้เเก้ไข</th>
                                             <th scope='col'>วันที่เเก้ไข</th>
                                         </tr>
                                     </thead>
@@ -141,7 +143,8 @@
                                             <th class="text-center" id="summark"></th>
                                             <th class="text-center" ></th>
                                             <th class="text-center" ></th>
-                                            
+                                            <th class="text-center" ></th>
+                                            <th class="text-center" ></th>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -327,7 +330,9 @@
                                     diff :  diff,
                                     mark :  chacknull(mark),
                                     boxno :  chacknull(v.boxno),
-                                    test:"test"
+                                    test:"test",
+                                    user_create:chacknull(v.user_create),
+                                    user_edit:chacknull(v.user_edit)
                                 }
                                 arr.push(result);
                             })
@@ -346,8 +351,11 @@
                         { data: 'boxno' },
                         { data: 'qty_result' },
                         { data: 'mark' },
+                        { data: 'user_create' },
                         { data: 'date_create' },
+                        { data: 'user_edit' },
                         { data: 'date_modify' }
+                       
                     ],
                     bDestroy: true,
                     dom: 'Bfrtip',
@@ -400,7 +408,6 @@
                                 console.log(v)
                                 if(v == "*"){
                                     mark++;
-                                    
                                 }
                                 
                             })
@@ -410,6 +417,7 @@
                             .append( '<th colspan="6" class="text-end ">รวม : </th>' )
                             .append( '<th class="text-center">'+sumqty_result.toLocaleString('en-US')+'</td>' )
                             .append( '<th class="text-center">'+mark.toLocaleString('en-US')+'</td>' )
+                            .append( '<th class="text-center"></td>' )
                             .append( '<th class="text-center"></td>' )
                             .append( '<th class="text-center"></td>' )
                             .append( '<th/>' )

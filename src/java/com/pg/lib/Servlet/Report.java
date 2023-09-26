@@ -144,10 +144,6 @@ public class Report extends HttpServlet {
 
                     DecimalFormat df = new DecimalFormat("#,###");
 
-                    System.out.println(df.format(sumqty_result));
-                    System.out.println(df.format(sumqty));
-                    System.out.println(df.format(sumdiff));
-                    System.out.println(df.format(summark));
 
                     obj.put("sumqty_result", df.format(sumqty_result));
                     obj.put("sumqty", df.format(sumqty));

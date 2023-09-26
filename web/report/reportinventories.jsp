@@ -66,11 +66,11 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: "ข้อมูลวันที่ ณ " +getDateNow(),
+                                    text: "ข้อมูล ณ วันที่ " +getDateNow()+"\n ผู้พิมพ์ : <%=(String)session.getAttribute("name")%>",
                                     fontSize: 14,
                                     alignment: 'left',
                                     bold:true,
-                                    margin: [40,25, 0, 0]
+                                    margin: [40,15, 0, 0]
                                              
                                 },
                                 {

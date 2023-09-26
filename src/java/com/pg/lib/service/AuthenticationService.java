@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 public class AuthenticationService {
@@ -16,6 +17,38 @@ public class AuthenticationService {
     private static Connection conn;
     private static PreparedStatement ps;
     private static ResultSet rs;
+
+
+    public static HashMap<String, BCUser> getmapuser() throws SQLException {
+        HashMap<String, BCUser> listuser = new HashMap<String, BCUser>();
+        try {
+            String sql = "select * from MIZUNONEWBARBOXUSER where user_id > 99";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCUser userdetail = new BCUser();
+                userdetail.setUser_id(rs.getString("user_id"));
+                userdetail.setUser_user(rs.getString("user_user"));
+                userdetail.setUser_pass(rs.getString("user_pass"));
+                userdetail.setUser_firstname(rs.getString("user_firstname"));
+                userdetail.setUser_lastname(rs.getString("user_lastname"));
+                userdetail.setUser_status(rs.getString("user_status"));
+                userdetail.setDate_create(rs.getString("date_create"));
+                userdetail.setDate_modify(rs.getString("date_modify"));
+
+                listuser.put(rs.getString("user_user"), userdetail);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+        }
+        return listuser;
+    }
 
     public static String getstatus(String status) {
         String statustext = null;
