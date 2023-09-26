@@ -76,6 +76,24 @@ public class BCDetailBox {
     private String customer_size;
     private String boxseq;
     private String countbox;
+    private String user_create;
+    private String user_edit;
+
+    public String getUser_create() {
+        return user_create;
+    }
+
+    public void setUser_create(String user_create) {
+        this.user_create = user_create;
+    }
+
+    public String getUser_edit() {
+        return user_edit;
+    }
+
+    public void setUser_edit(String user_edit) {
+        this.user_edit = user_edit;
+    }
 
     public String getCountbox() {
         return countbox;

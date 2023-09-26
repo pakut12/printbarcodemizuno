@@ -14,7 +14,10 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
-        <div class="container mt-5" >
+        <div class="container mt-4" >
+            <div class="text-center mb-3 h1">
+                เเก้ไข/ลบ ข้อมูลหลายกล่อง
+            </div>
             <div class="card">
                 <div class="card-header">
                     ค้นหา
@@ -63,31 +66,37 @@
                         <form id="myform">
                             <div class="container">
                                 <input type="hidden" id="boxseq">
-                                <div class="row">
-                                    <div class="col-sm-12 col-md-4">
-                                        <!--
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
-                                            <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno"  disabled>
-                                        </div>
-                                        -->
+                                <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
+                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="" disabled>
                                     </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <!--
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
-                                            <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  disabled>
-                                        </div>
-                                        -->
-                                    </div>
-                                    <div class="col-sm-12 col-md-4">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
-                                            <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
-                                        </div>
-                                    </div>
-                                    
                                 </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                        <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
+                                        <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="<%=userid%>" disabled>
+                                        <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
+                                        <input type="text" class="form-control text-center" name="date_edit" id="date_edit" disabled>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
+                            <hr>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
@@ -456,6 +465,7 @@
             
             function updatedata(){
             
+                var user_edit = $("#user_edit").val()
                 var pobefore = $("#posearch").val().toUpperCase();
                 var startboxbefore  = $("#numstart").val().toUpperCase();
                 var endboxbefore =  $("#numend").val().toUpperCase();
@@ -583,7 +593,8 @@
                             firstdigitbefore:firstdigitbefore,
                             invoiceno:invoiceno,
                             invoicedate:invoicedate,
-                            boxseq:boxseq
+                            boxseq:boxseq,
+                            user_edit:user_edit
                         },
                         success:function(msg){
                             
@@ -623,7 +634,7 @@
                     })
                 }
                 
-                $("#myformsearch input").val('')
+               
                 $("#firstdigit").html('')
                 
             }
@@ -632,6 +643,7 @@
                 $("#customer_text").val("");
                 $("#myform :input").val("");
                 $("#myform :input").attr("disabled", true);
+                $("#myformsearch :input").val('')
             }
             
          
@@ -755,11 +767,8 @@
                             $("#pallet").val(js.pallet);
                             $("#date_create").val(js.date_create);
                            
-                            $("#myform :input").attr("disabled", false);
-                            $("#pobefore").attr("disabled", true);
-                            $("#date_create").attr("disabled", true);
-                            $("#nw").attr("disabled", true);
-                          
+                            $("#myform :input").not('#pobefore,#date_create,#nw,#user_createview,#user_editview,#date_edit').attr("disabled", false);
+                            
                             $("#numberbox_start").val(numstart);
                             $("#numberbox_end").val(numend);
                             $("#invoiceno").val(js.invoiceno);
@@ -771,11 +780,9 @@
                             }
                             
                             $("#boxseq").val(js.boxseq);
-                            
-                            console.log(numstart)
-                            console.log(numend)
-                            
-            
+                            $("#user_createview").val(js.user_create)
+                            $("#date_edit").val(js.date_modify)
+                            $("#user_editview").val(js.user_edit)
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",

@@ -14,7 +14,10 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
-        <div class="container mt-5">
+        <div class="container mt-4">
+            <div class="text-center mb-3 h1">
+                เเก้ไข/ลบ ข้อมูลทีล่ะกล่อง
+            </div>
             <div class="card">
                 <div class="card-header">
                     ค้นหา

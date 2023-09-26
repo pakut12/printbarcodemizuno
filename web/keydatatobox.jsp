@@ -14,39 +14,47 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
-        <div class="container mt-5">
+        <div class="container mt-4">
+            <div class="text-center mb-3 h1 ">
+                คีย์ข้อมูลกล่อง
+            </div>
             <div class="card shadow-lg">
-                <div class="card-header">คีย์ข้อมูล</div>
+                <div class="card-header">คีย์ข้อมูลกล่อง</div>
                 <div class="card-body">
                     <form id="myform">
                         <div class="container">
+                            <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
+                            <hr>
                             <div class="row">
                                 
-                                <div class="col-sm-12 col-md-4">
-                                    <!--
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
-                                        <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno" >
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
+                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="<%=name%>" disabled>
+                                        <input type="hidden" class="form-control text-center" name="user_create" id="user_create" value="<%=userid%>" disabled>
                                     </div>
-                                    -->
                                 </div>
-                                <div class="col-sm-12 col-md-4">
-                                    <!--
+                                <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
-                                        <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  >
-                                    </div>
-                                    -->
-                                </div>
-                                
-                                <div class="col-sm-12 col-md-4">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่</span>
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
                                         <input type="date" class="form-control text-center" name="date" id="date"  disabled>
                                     </div>
                                 </div>
-                                
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
+                                        <input type="text" class="form-control text-center" name="user_edit" id="user_edit" disabled>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
+                                        <input type="date" class="form-control text-center" name="date_edit" id="date_edit" disabled>
+                                    </div>
+                                </div>
                             </div>
+                            <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
+                            <hr>
                             <div class="row mb-3">
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
@@ -250,7 +258,7 @@
                                 <div class="col-sm-12 col-md-12 text-center">
                                     
                                     <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="senddata()">บันทึกข้อมูล</button>
-                                    <button class="btn btn-outline-danger btn-sm mb-3" type="button" id="bt_reset" onclick="location.reload()">ล้างข้อมูล</button>
+                                    <button class="btn btn-outline-danger btn-sm mb-3" type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
                                 </div>
                             </div>
                         </div>
@@ -263,6 +271,12 @@
         </footer>
         <script>
           
+    
+            function clearinput(){
+                $("#myform :input").not('#country,#user_create,#user_createview,#customer,#customer_address,#date').val("");
+            }
+    
+    
             function isNumberKey(evt){
                 var charCode = (evt.which) ? evt.which : evt.keyCode
                 if (charCode > 31 && (charCode < 48 || charCode > 57))
@@ -420,6 +434,10 @@
     
             function senddata(){
             
+        
+                var user_create = $("#user_create").val();
+                var user_edit = $("#user_edit").val();
+                var date_edit = $("#date_edit").val();
                 var invoiceno = $("#invoiceno").val();
                 var invoicedate = $("#invoicedate").val();
                 var customer = $("#customer").val().toUpperCase();
@@ -492,7 +510,10 @@
                                 destination:destination,
                                 date:date,
                                 invoiceno:invoiceno,
-                                invoicedate:invoicedate
+                                invoicedate:invoicedate,
+                                user_create:user_create,
+                                user_edit:user_edit,
+                                date_edit:date_edit
                             },
                             success:function(msg){
                             
@@ -528,7 +549,8 @@
                         text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
                     })
                 }
-                $("#myform input").val('')
+               
+                clearinput()
             }
 
             $(document).ready(function () {

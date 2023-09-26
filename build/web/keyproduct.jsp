@@ -61,7 +61,10 @@
                 </div>
             </div>
         </div>
-        <div class="container mt-5">
+        <div class="container mt-4">
+            <div class="text-center mb-3 h1">
+                ข้อมูลสินค้า
+            </div>
             <div class="card shadow-lg">
                 <div class="card-header">จัดการข้อมูลสินค้า</div>
                 <div class="card-body">

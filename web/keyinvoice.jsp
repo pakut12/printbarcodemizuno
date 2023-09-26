@@ -286,7 +286,10 @@
         </div>
         
         
-        <div class="container mt-5 ">
+        <div class="container mt-4 ">
+            <div class="text-center h1">
+                ข้อมูล PackingList
+            </div>
             <div class="card shadow-lg mt-3">
                 <div class="card-header">ค้นหาข้อมูล PackingList</div>
                 <div class="card-body">

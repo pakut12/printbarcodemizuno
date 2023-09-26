@@ -8,9 +8,14 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
 <%
+            String name = "";
+            String status = "";
+            String userid = "";
             try {
-                String name = (String) session.getAttribute("name");
-                String status = (String) session.getAttribute("status");
+                name = (String) session.getAttribute("name");
+                status = (String) session.getAttribute("status");
+                userid = (String) session.getAttribute("user");
+                
                 if (name == null || status == null) {
                     getServletContext().getRequestDispatcher("/login.jsp").forward(request, response);
                 }
@@ -59,8 +64,10 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="keydatatobox.jsp">คีย์ข้อมูลกล่อง</a></li>
-                        <li><a class="dropdown-item" href="managedetailall.jsp">เเก้ไข/ลบ ข้อมูล หลายกล่อง</a></li>
-                        <li><a class="dropdown-item" href="managedetail.jsp">เเก้ไข/ลบ ข้อมูล ทีล่ะกล่อง</a></li>
+                        <li><a class="dropdown-item" href="managedetailall.jsp">เเก้ไข/ลบ ข้อมูลหลายกล่อง</a></li>
+                        <li><a class="dropdown-item" href="managedetail.jsp">เเก้ไข/ลบ ข้อมูลทีล่ะกล่อง</a></li>
+                        <hr>
+                        <li><a class="dropdown-item" href="managepallet.jsp">เเก้ไข/ลบ ข้อมูลพาเลทเเละน้ำหนัก</a></li>    
                     </ul>
                 </li>
                 <li class="nav-item dropdown">
@@ -118,7 +125,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a class="dropdown-item" href="reportdetailproduct.jsp">
-                                   รายงานสต๊อกการ์ด
+                                รายงานสต๊อกการ์ด
                             </a>
                         </li>
                         <li>
@@ -188,7 +195,7 @@
                     <ul class="dropdown-menu">
                         <li>
                             <a class="dropdown-item" href="reportdetailproduct.jsp">
-                                  รายงานสต๊อกการ์ด
+                                รายงานสต๊อกการ์ด
                             </a>
                         </li>
                     </ul>
@@ -233,6 +240,8 @@
                         <li><a class="dropdown-item" href="keyproduct.jsp">ข้อมูลสินค้า</a></li>
                         <li><a class="dropdown-item" href="keyaddresscustomer.jsp">ข้อมูลที่อยู่ลูกค้า</a></li>
                         <li><a class="dropdown-item" href="manageuser.jsp">ข้อมูลผู้ใช้</a></li>
+                        <hr>
+                        <li><a class="dropdown-item" href="manageuser.jsp">ข้อมูลผู้ใช้</a></li>   
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

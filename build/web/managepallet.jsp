@@ -16,7 +16,7 @@
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-4" >
             <div class="text-center mb-3 h1">
-                เเก้ไข/ลบ ข้อมูลหลายกล่อง
+                เเก้ไข/ลบ ข้อมูลพาเลทเเละน้ำหนัก
             </div>
             <div class="card">
                 <div class="card-header">
@@ -66,37 +66,31 @@
                         <form id="myform">
                             <div class="container">
                                 <input type="hidden" id="boxseq">
-                                <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
-                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="" disabled>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-4">
+                                        <!--
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Invoice No :</span>
+                                            <input type="text" class="form-control text-center" name="invoiceno" id="invoiceno"  disabled>
+                                        </div>
+                                        -->
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
-                                        <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                    <div class="col-sm-12 col-md-4">
+                                        <!--
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่ Invoice :</span>
+                                            <input type="date" class="form-control text-center" name="invoicedate" id="invoicedate"  disabled>
+                                        </div>
+                                        -->
                                     </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
-                                        <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="<%=userid%>" disabled>
-                                        <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
+                                    <div class="col-sm-12 col-md-4">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                            <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                        </div>
                                     </div>
+                                    
                                 </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
-                                        <input type="text" class="form-control text-center" name="date_edit" id="date_edit" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
-                            <hr>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
@@ -298,7 +292,7 @@
                                 <div class="row">
                                     <div class="col-sm-12 col-md-12 text-center">
                                         <button class="btn btn-outline-success btn-sm mx-3 mb-3" type="button" id="bt_sava" onclick="updatedata()">เเก้ไขข้อมูล</button>
-                                        <button class="btn btn-outline-danger btn-sm  mb-3" type="button" id="bt_del" onclick="deletedata()">ลบข้อมูล</button>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -465,7 +459,6 @@
             
             function updatedata(){
             
-                var user_edit = $("#user_edit").val()
                 var pobefore = $("#posearch").val().toUpperCase();
                 var startboxbefore  = $("#numstart").val().toUpperCase();
                 var endboxbefore =  $("#numend").val().toUpperCase();
@@ -549,7 +542,7 @@
                         type:"post",
                         url:"Detail",
                         data:{
-                            type:"updatedetailsall",
+                            type:"updatepallet",
                             customer_address:customer_address,
                             pobefore:pobefore,
                             startboxbefore:startboxbefore,
@@ -593,35 +586,28 @@
                             firstdigitbefore:firstdigitbefore,
                             invoiceno:invoiceno,
                             invoicedate:invoicedate,
-                            boxseq:boxseq,
-                            user_edit:user_edit
+                            boxseq:boxseq
                         },
                         success:function(msg){
-                            
-                            if(msg){
-                                var js = JSON.parse(msg);
-                                if(js.status == "true"){
-                                    Swal.fire({
-                                        title:"เเก้ไข",
-                                        icon:"success",
-                                        text:"เเก้ไขสำเร็จ"
-                                    })
-                                 
-                                }else if(js.status == "false"){
-                                    Swal.fire({
-                                        title:"เเก้ไข",
-                                        icon:"error",
-                                        text:"เเก้ไขไม่สำเร็จ"
-                                    })
-                                }
-                          
+                            console.log(msg)
+                            if(msg == "true"){
+                                Swal.fire({
+                                    title:"เเก้ไข",
+                                    icon:"success",
+                                    text:"เเก้ไขสำเร็จ"
+                                })
+                            }else if(msg == "false"){
+                                Swal.fire({
+                                    title:"เเก้ไข",
+                                    icon:"error",
+                                    text:"เเก้ไขไม่สำเร็จ"
+                                })
                             }else{
                                 Swal.fire({
                                     title:"เเก้ไข",
                                     icon:"error",
                                     text:"เเก้ไขไม่สำเร็จ"
                                 })
-                           
                             }
                             clearinput(); 
                         }
@@ -634,7 +620,7 @@
                     })
                 }
                 
-               
+                
                 $("#firstdigit").html('')
                 
             }
@@ -767,8 +753,12 @@
                             $("#pallet").val(js.pallet);
                             $("#date_create").val(js.date_create);
                            
-                            $("#myform :input").not('#pobefore,#date_create,#nw,#user_createview,#user_editview,#date_edit').attr("disabled", false);
+                            $("#myform :input").attr("disabled", true);
                             
+                            $("#pallet").attr("disabled", false);
+                            $("#gw").attr("disabled", false);
+                            $("#bt_sava").attr("disabled", false);
+                          
                             $("#numberbox_start").val(numstart);
                             $("#numberbox_end").val(numend);
                             $("#invoiceno").val(js.invoiceno);
@@ -780,9 +770,8 @@
                             }
                             
                             $("#boxseq").val(js.boxseq);
-                            $("#user_createview").val(js.user_create)
-                            $("#date_edit").val(js.date_modify)
-                            $("#user_editview").val(js.user_edit)
+                            
+                            
                         }else{
                             Swal.fire({
                                 title:"ผิดพลาด",
@@ -828,7 +817,7 @@
                                         icon:"success",
                                         text:"ลบสำเร็จ"
                                     })
-                                    clearinput()
+                                   
                                 }else if(js.status == "false"){
                                     Swal.fire({
                                         title:"ลบ",

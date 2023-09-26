@@ -6,8 +6,11 @@ package com.pg.lib.Servlet;
 
 import com.pg.lib.model.BCCustomer;
 import com.pg.lib.model.BCDetailBox;
+import com.pg.lib.model.BCUser;
+import com.pg.lib.service.AuthenticationService;
 import com.pg.lib.service.CustomerService;
 import com.pg.lib.service.DetailService;
+import com.pg.lib.utility.Utility;
 import java.io.*;
 import java.net.*;
 import java.sql.SQLException;
@@ -61,9 +64,12 @@ public class Detail extends HttpServlet {
                     String customer_address = request.getParameter("customer_address").trim();
 
                     String date = request.getParameter("date").trim();
+                    String user_create = request.getParameter("user_create").trim();
+                    String user_edit = request.getParameter("user_edit").trim();
+                    String date_edit = request.getParameter("date_edit").trim();
 
                     DetailService ds = new DetailService();
-                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
+                    Boolean statusdt = ds.AddDataToMIZUNONEWBARBOXDT(customer_address, "", "", customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date, user_create);
                     //Boolean statushd = ds.AddDataToMIZUNONEWBARBOXHD(customer_address, customer, quantity_box, initial, numberbox_start, numberbox_end, po, gw, nw, country, quantitytotal_box, description, customer1_id, customer2_id, customer3_id, customer4_id, pallet, prodorder, destination, date);
 
                     JSONObject obj = new JSONObject();
@@ -96,6 +102,21 @@ public class Detail extends HttpServlet {
                     List<BCCustomer> listcm2 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item2());
                     List<BCCustomer> listcm3 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item3());
                     List<BCCustomer> listcm4 = CustomerService.ChackDetailCustomerAll(detailbox.get(0).getSku_item4());
+
+                    List<BCUser> listuser_create = AuthenticationService.chackuser(Utility.Chacknull(detailbox.get(0).getUser_create()));
+                    List<BCUser> listuser_edit = AuthenticationService.chackuser(Utility.Chacknull(detailbox.get(0).getUser_edit()));
+
+                    String user_create = "";
+                    String user_edit = "";
+
+                    if (listuser_create.size() > 0) {
+                        user_create = listuser_create.get(0).getUser_firstname() + listuser_create.get(0).getUser_lastname();
+                    }
+
+                    if (listuser_edit.size() > 0) {
+                        user_edit = listuser_edit.get(0).getUser_firstname() + listuser_edit.get(0).getUser_lastname();
+                    }
+
 
                     JSONObject obj = new JSONObject();
                     obj.put("po_old", detailbox.get(0).getPo_old());
@@ -151,6 +172,8 @@ public class Detail extends HttpServlet {
 
                     obj.put("invoiceno", detailbox.get(0).getInvoiceno());
                     obj.put("invoicedate", detailbox.get(0).getInvoicedate());
+                    obj.put("user_create", user_create);
+                    obj.put("user_edit", user_edit);
 
                     out.print(obj);
                 } catch (Exception e) {
@@ -163,6 +186,7 @@ public class Detail extends HttpServlet {
                     String pobefore = request.getParameter("pobefore").trim();
                     String startboxbefore = request.getParameter("startboxbefore").trim();
                     String endboxbefore = request.getParameter("endboxbefore").trim();
+
                     String po_old = request.getParameter("po_old").trim();
 
 
@@ -218,6 +242,7 @@ public class Detail extends HttpServlet {
                     String endbox = request.getParameter("endbox").trim();
 
                     String boxseq = request.getParameter("boxseq").trim();
+                    String user_edit = request.getParameter("user_edit").trim();
                     DetailService ds = new DetailService();
 
                     // List<BCDetailBox> listresult = ds.GetListMIZUNONEWBARBOXRESULTOLD(po, startboxbefore, endboxbefore, firstdigitbefore);
@@ -229,7 +254,7 @@ public class Detail extends HttpServlet {
                     // Boolean statusDT = ds.DeleteDetailBoxMIZUNONEWBARBOXDTAll(pobefore, firstdigitbefore, startboxbefore, endboxbefore);
 
 
-                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, firstdigitbefore, startbox, endbox, boxseq);
+                    Boolean statusdt = ds.UpdateDataToMIZUNONEWBARBOXDT(customer_address, po_old, pobefore, shipto, qtyperbox, firstdigit, startboxbefore, endboxbefore, po, grossweight, netweight, country_origin, allbox, desctxt, listinput1, listinput2, listinput3, listinput4, pallet, prodorder, destination, date, firstdigitbefore, startbox, endbox, boxseq,user_edit);
                     Boolean statusresult = ds.UpdateMIZUNONEWBARBOXRESULTTEST(pobefore, po, firstdigit, startboxbefore, endboxbefore, firstdigitbefore, startbox, endbox);
 
                     JSONObject obj = new JSONObject();
@@ -685,7 +710,7 @@ public class Detail extends HttpServlet {
 
             } else if (type.equals("getfirstdigit")) {
                 try {
-                    
+
                     String po = request.getParameter("po").toUpperCase();
                     List<String> listfirstdigit = DetailService.getfirstdigit(po);
 
@@ -697,6 +722,31 @@ public class Detail extends HttpServlet {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+            } else if (type.equals("updatepallet")) {
+                try {
+                    String pobefore = request.getParameter("pobefore").trim();
+                    String startboxbefore = request.getParameter("startboxbefore").trim();
+                    String endboxbefore = request.getParameter("endboxbefore").trim();
+                    String firstdigitbefore = request.getParameter("firstdigitbefore").trim();
+
+                    String pallet = request.getParameter("pallet").trim();
+                    String gw = request.getParameter("grossweight").trim();
+                    String nw = request.getParameter("netweight").trim();
+
+                    boolean status = DetailService.updatepallet(pobefore, startboxbefore, endboxbefore, firstdigitbefore, pallet, gw, nw);
+
+                    if (status) {
+                        out.print("true");
+                    } else {
+                        out.print("false");
+                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
             }
 

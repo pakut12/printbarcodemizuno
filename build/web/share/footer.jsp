@@ -13,10 +13,7 @@
         this.value = this.value.toUpperCase();
     });
     
-    $('.dataTables_filter').keyup(function(){
-        console.log($(this).val())
     
-    })
     
 </script>
 <div id="footer-style">
