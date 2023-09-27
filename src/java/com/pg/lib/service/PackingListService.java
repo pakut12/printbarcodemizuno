@@ -333,7 +333,7 @@ public class PackingListService {
 
 
 
-            //System.out.println(sql);
+            System.out.println("TEST = "+sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
@@ -409,6 +409,7 @@ public class PackingListService {
                 iv.setShipfrom(rs.getString("shipfrom"));
                 iv.setShipto(rs.getString("shipto"));
                 iv.setFinald(rs.getString("FINAL"));
+                iv.setMfg(rs.getString("MFG"));
 
                 listbox.add(iv);
             }

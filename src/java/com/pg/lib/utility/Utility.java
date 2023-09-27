@@ -170,7 +170,6 @@ public class Utility {
                 sp.add(txt);
             }
 
-
             Map<String, List<Integer>> groupedData = new HashMap<String, List<Integer>>();
 
             for (String item : sp) {
@@ -231,8 +230,6 @@ public class Utility {
     public static String groupnumber(List<BCDetailBox> grouppo) {
         String group = "";
         try {
-
-
 
             List<String> sp = new ArrayList<String>();
 

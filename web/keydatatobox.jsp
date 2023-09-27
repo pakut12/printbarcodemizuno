@@ -21,7 +21,7 @@
             <div class="card shadow-lg">
                 <div class="card-header">คีย์ข้อมูลกล่อง</div>
                 <div class="card-body">
-                    <form id="myform">
+                    <form id="myform" novalidate>
                         <div class="container">
                             <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
                             <hr>
@@ -30,14 +30,14 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
-                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="<%=name%>" disabled>
-                                        <input type="hidden" class="form-control text-center" name="user_create" id="user_create" value="<%=userid%>" disabled>
+                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="<%=name%>" disabled >
+                                        <input type="hidden" class="form-control text-center" name="user_create" id="user_create" value="<%=userid%>" disabled > 
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
-                                        <input type="date" class="form-control text-center" name="date" id="date"  disabled>
+                                        <input type="date" class="form-control text-center" name="date" id="date"  disabled >
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -59,7 +59,7 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                        <select class="form-select form-select-sm text-center" id="customer">
+                                        <select class="form-select form-select-sm text-center" id="customer" required>
                                             
                                         </select>
                                     </div>
@@ -67,7 +67,7 @@
                                 <div class="col-sm-12 col-md-4 align-items-md-center">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">สถานที่ส่ง</span>
-                                        <select class="form-select form-select-sm text-center" id="customer_address">
+                                        <select class="form-select form-select-sm text-center" id="customer_address" required>
                                             
                                         </select>
                                     </div>
@@ -75,7 +75,7 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
-                                        <select class="form-select form-select-sm text-center" id="destination">
+                                        <select class="form-select form-select-sm text-center" id="destination" >
                                             <option value=""></option>
                                             <option value="ADC">ADC</option>
                                             <option value="ODC">ODC</option>
@@ -88,27 +88,27 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
-                                        <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="">
+                                        <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="2">
+                                        <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="3" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่กล่องจาก</span>
-                                        <input type="number" class="form-control text-center" name="numberbox_start" id="numberbox_start" >
+                                        <input type="number" class="form-control text-center" name="numberbox_start" id="numberbox_start" required>
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                        <input type="number" class="form-control text-center" name="numberbox_end" id="numberbox_end" >
+                                        <input type="number" class="form-control text-center" name="numberbox_end" id="numberbox_end" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนกล่องทั้งหมด</span>
-                                        <input type="number" class="form-control text-center" name="quantitytotal_box" id="quantitytotal_box" >
+                                        <input type="number" class="form-control text-center" name="quantitytotal_box" id="quantitytotal_box" required>
                                     </div>
                                 </div>
                             </div>
@@ -116,7 +116,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                        <input type="text" class="form-control text-center" name="po" id="po" >
+                                        <input type="text" class="form-control text-center" name="po" id="po" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -128,13 +128,13 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PROD.ORDER</span>
-                                        <input type="text" class="form-control text-center" name="prodorder" id="prodorder" >
+                                        <input type="text" class="form-control text-center" name="prodorder" id="prodorder" required >
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
-                                        <input type="text" class="form-control text-center" name="pallet" id="pallet" >
+                                        <input type="text" class="form-control text-center" name="pallet" id="pallet" required>
                                     </div>
                                 </div>
                             </div>
@@ -142,27 +142,27 @@
                                 <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
-                                        <input type="text" class="form-control text-center" name="gw" id="gw" >
+                                        <input type="text" class="form-control text-center" name="gw" id="gw" required>
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
-                                        <input type="text" class="form-control text-center" name="nw" id="nw" disabled >
+                                        <input type="text" class="form-control text-center" name="nw" id="nw" disabled required>
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-5">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Description</span>
-                                        <input type="text" class="form-control text-center" name="description" id="description" >
+                                        <input type="text" class="form-control text-center" name="description" id="description" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
+                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND" disabled required>
                                     </div>
                                 </div>
                             </div>
@@ -434,7 +434,8 @@
     
             function senddata(){
             
-        
+                
+                
                 var user_create = $("#user_create").val();
                 var user_edit = $("#user_edit").val();
                 var date_edit = $("#date_edit").val();
@@ -482,7 +483,7 @@
                 var date = new Date().format('d-m-Y H:i:s');
                 
         
-                if(initial && numberbox_start && numberbox_end){
+                if(initial && numberbox_start && numberbox_end && country && gw && nw){
                     if(sumqty_result <= parseInt($("#quantity_box").val()) ){
                         $.ajax({
                             type:"post",
@@ -532,7 +533,7 @@
                                         text: 'บันทึกไม่สำเร็จ'
                                     })
                                 }
-                              
+                              $("#myform").removeClass('was-validated')
                             }
                         })
                     }else{
@@ -548,6 +549,7 @@
                         title: 'ผิดพลาด',
                         text: 'กรุณากรอกข้อมูลให้ถูกต้อง'
                     })
+                    $("#myform").addClass('was-validated')
                 }
                
                 clearinput()

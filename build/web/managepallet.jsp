@@ -16,7 +16,7 @@
         <%@ include file="share/navbar.jsp" %>
         <div class="container mt-4" >
             <div class="text-center mb-3 h1">
-                เเก้ไข/ลบ ข้อมูลพาเลทเเละน้ำหนัก
+                เเก้ไข ข้อมูลพาเลทเเละน้ำหนัก
             </div>
             <div class="card">
                 <div class="card-header">
