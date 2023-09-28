@@ -484,7 +484,7 @@
                 var desctxt = $("#description").val().toUpperCase();
                 var grossweight = $("#gw").val().toUpperCase();
                 var netweight  = $("#nw").val().toUpperCase();
-                var country_origin  = $("#country").val().toUpperCase();
+                var country_origin  = "THAILAND";
                         
                 var sku_item1  = $("#customer1_id").val().toUpperCase();
                 var upc_code1  =  $("#customer1_barcode").val().toUpperCase();

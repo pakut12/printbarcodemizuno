@@ -46,7 +46,10 @@
                     gd.add(DG.getDestination());
                 }
 
+
             }
+
+
 
             /********************** end Custome *******************/
             String shipper = inv.get(0).getShipper();
@@ -1160,7 +1163,7 @@
                 },
                     
                 tbcontent: {
-                    fontSize: 10,
+                    fontSize: 12,
                     bold: true,
                     margin: [10, 2],
                     alignment:'center'                      
@@ -1174,7 +1177,7 @@
             }
         };
         
-pdfMake.createPdf(docDefinition).download('<%=invoiceno%>.pdf');  
+       pdfMake.createPdf(docDefinition).download('<%=invoiceno%>.pdf');  
         
     
     

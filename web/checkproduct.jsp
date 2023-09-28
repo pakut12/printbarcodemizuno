@@ -669,8 +669,6 @@
             $(document).ready(function () {
                 var x = "";
                 
-              
-            
                 $("#bt_search").click(function(){
                     searchpo()
                 });

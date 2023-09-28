@@ -459,7 +459,7 @@
                 var desctxt = $("#description").val().toUpperCase();
                 var grossweight = $("#gw").val().toUpperCase();
                 var netweight  = $("#nw").val().toUpperCase();
-                var country_origin  = $("#country").val().toUpperCase();
+                var country_origin  = "THAILAND";
                         
                 var sku_item1  = $("#customer1_id").val().toUpperCase();
                 var upc_code1  =  $("#customer1_barcode").val().toUpperCase();
@@ -527,7 +527,7 @@
         
         
         
-                if(sumqty_result <= parseInt($("#quantity_box").val())  && grossweight && country_origin){
+                if(sumqty_result <= parseInt($("#quantity_box").val())  && $("#gw").val() && country_origin){
                     $.ajax({
                         type:"post",
                         url:"Detail",

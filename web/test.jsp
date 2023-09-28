@@ -4,6 +4,7 @@
     Author     : pakutsing
 --%>
 <%@page import="java.util.*" %>
+<%@page import="com.pg.lib.utility.*" %>
 <%@page import="java.text.*" %>
 <%@page contentType="text/html" pageEncoding="TIS-620"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -16,11 +17,7 @@
     </head>
     <body>
         <%
-            double allnw = 132132132 ;
-            DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
-            String formattedNw = decimalFormat.format(allnw);
-            
-            out.print(formattedNw);
+            out.print(Utility.GetDateNow());
 
         %>
     </body>

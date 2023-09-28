@@ -308,7 +308,7 @@ public class DetailService {
         List<BCDetailBox> listdetail = new ArrayList<BCDetailBox>();
 
         try {
-            String sql = "SELECT TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec,TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as datem, b.*,qty_result1,qty_result2,qty_result3,qty_result4 FROM MIZUNONEWBARBOXRESULT a  inner join MIZUNONEWBARBOXDT b on a.PO =b. PO and a.BOXNO = b.BOXNO  WHERE  b. PO = ? and b.BOXNO =?";
+            String sql = "SELECT TO_CHAR(b.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') as datec,TO_CHAR(b.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') as datem, b.*,qty_result1,qty_result2,qty_result3,qty_result4 FROM MIZUNONEWBARBOXRESULT a  inner join MIZUNONEWBARBOXDT b on a.PO =b. PO and a.BOXNO = b.BOXNO  WHERE  b. PO = ? and b.BOXNO =?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
@@ -446,12 +446,13 @@ public class DetailService {
 
         Boolean status = false;
         try {
-            String sql = "UPDATE MIZUNONEWBARBOXDT SET USER_EDIT=? WHERE PO = ? AND BOXNO = ?";
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET USER_EDIT=?,DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO = ? AND BOXNO = ?";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, user_id);
-            ps.setString(2, PO);
-            ps.setString(3, BOXNO);
+            ps.setString(2, Utility.GetDateNow());
+            ps.setString(3, PO);
+            ps.setString(4, BOXNO);
             if (ps.executeUpdate() > 0) {
                 status = true;
             } else {
@@ -1632,7 +1633,7 @@ public class DetailService {
         boolean status = false;
 
         try {
-            String sql = "UPDATE MIZUNONEWBARBOXDT SET PALLET=?,GROSSWEIGHT=?,NETWEIGHT=?,USER_EDIT=? WHERE PO=? and BOXNO in (";
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET PALLET=?,GROSSWEIGHT=?,NETWEIGHT=?,USER_EDIT=?,DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO=? and BOXNO in (";
             for (int s = Integer.parseInt(startboxbefore); s < Integer.parseInt(endboxbefore) + 1; s++) {
                 if (s < Integer.parseInt(endboxbefore)) {
                     sql += "'" + firstdigitbefore + String.valueOf(s) + "',";
@@ -1647,7 +1648,8 @@ public class DetailService {
             ps.setString(2, gw);
             ps.setString(3, nw);
             ps.setString(4, user_edit);
-            ps.setString(5, pobefore);
+            ps.setString(5, Utility.GetDateNow());
+            ps.setString(6, pobefore);
 
 
 
