@@ -67,7 +67,7 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: "ข้อมูล ณ วันที่ " +getDateNow()+"\n ผู้พิมพ์ : <%=(String)session.getAttribute("name")%>",
+                                    text: "ข้อมูล ณ วันที่ " +getDateNow()+"\n ผู้พิมพ์ : <%=(String)session.getAttribute("user")%>",
                                     fontSize: 14,
                                     bold:true,
                                     alignment: 'left',
@@ -84,26 +84,13 @@
                                 },
                                 {
                                     width: '*',
-                                    text: 'หน้า : '+currentPage+"/"+pageCount,
-                                    fontSize: 14,
-                                    bold:true,
+                                    text: [{text: 'หน้า : '+currentPage+"/"+pageCount, fontSize: 14,bold:true},{text:'\nพาเลท : ',bold:true,fontSize: 14},{text:'<%=pallet%>',fontSize: 14,bold:true}],
                                     alignment: 'right',
                                     margin: [0,25, 40, 0]
                                 }
                             
                             ]
-                        },
-                        {
-                            columns: [
-                                {
-                                    width: '*',
-                                    text: [{text:'พาเลท : ',bold:true},{text:'<%=pallet%>'}],
-                                            fontSize: 14,
-                                            alignment: 'right',
-                                            margin: [0,0, 45,0]   
-                                        }
-                                    ]
-                                },
+                        }
                         
                             ]
                         },
@@ -253,11 +240,12 @@
                                         }
                                     }
             
+            
                                     const date = new Date();
                                     const options = { day: 'numeric', month: 'numeric', year: 'numeric' };
                                     const formattedDate = date.toLocaleDateString('th-TH', options);
                                     
-                                    pdfMake.createPdf(dd).download('รายละเอียดสินค้า'+formattedDate+'.pdf');  
+                                    pdfMake.createPdf(dd).download('รายละเอียดสินค้า'+formattedDate+'.pdf'); 
             
         </script>
     </body>

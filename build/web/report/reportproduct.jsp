@@ -84,26 +84,13 @@
                                 },
                                 {
                                     width: '*',
-                                    text: 'หน้า : '+currentPage+"/"+pageCount,
-                                    fontSize: 14,
-                                    bold:true,
+                                    text: [{text: 'หน้า : '+currentPage+"/"+pageCount, fontSize: 14,bold:true},{text:'\nพาเลท : ',bold:true,fontSize: 14},{text:'<%=pallet%>',fontSize: 14,bold:true}],
                                     alignment: 'right',
                                     margin: [0,25, 40, 0]
                                 }
                             
                             ]
-                        },
-                        {
-                            columns: [
-                                {
-                                    width: '*',
-                                    text: [{text:'พาเลท : ',bold:true},{text:'<%=pallet%>'}],
-                                            fontSize: 14,
-                                            alignment: 'right',
-                                            margin: [0,0, 45,0]   
-                                        }
-                                    ]
-                                },
+                        }
                         
                             ]
                         },

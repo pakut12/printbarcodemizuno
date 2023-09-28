@@ -16,6 +16,9 @@
         <%@ include file="share/navbar.jsp" %>
         <form action="Report" method="post" id="myformreport">
             <div class="mx-5 mt-5">
+                <div class='row mb-3 text-center fs-4'>
+                    <div class='text-center h1 '>รายงานสต๊อกการ์ด</div>
+                </div>
                 <div class="row">
                     <div class="col-12 col-md-12">
                         <div class="card">
@@ -112,10 +115,7 @@
                         
                         <div class="table-responsive">
                             <div id="mytable" class="mt-3">
-                                <div class='row mb-3 text-center fs-4'>
-                                    <div class='text-center h3 fw-bold'>รายงานสต๊อกการ์ด</div>
-                                    
-                                </div>
+                                
                                 <table class='table table-hover table-bordered text-nowrap text-center table-sm' id='tablereport'>
                                     <thead>
                                         <tr>

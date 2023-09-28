@@ -567,7 +567,7 @@
                                 const result = listpo.find((em) => {
                                     let chk = null;
 
-                                    if ($('#edit_po').val().toUpperCase() == em.po && $('#edit_firstdigit').val().toUpperCase() == em.firstdigit && $('#edit_startbox').val().toUpperCase() == em.startbox && $('#edit_endbox').val().toUpperCase() == em.endbox) {
+                                    if ($('#edit_po').val().toUpperCase() == em.po && $('#edit_firstdigit').val().toUpperCase() == em.firstdigit && $('#edit_startbox').val().toUpperCase() == em.startbox && $('#edit_endbox').val().toUpperCase() == em.endbox && $('#edit_containerno').val().toUpperCase() == em.containerno && $('#edit_mfg').val().toUpperCase() == em.mfg) {
                                         chk = true;
                                     } else {
                                         chk = false;
@@ -1006,7 +1006,7 @@
                                 const result = listpo.find((em) => {
                                     let chk = null; 
                     
-                                    if($('#add_po').val().toUpperCase() == em.po && $('#add_firstdigit').val().toUpperCase() == em. firstdigit && $('#add_startbox').val().toUpperCase() == em.startbox && $('#add_endbox').val().toUpperCase() == em.endbox){
+                                    if($('#add_po').val().toUpperCase() == em.po && $('#add_firstdigit').val().toUpperCase() == em. firstdigit && $('#add_startbox').val().toUpperCase() == em.startbox && $('#add_endbox').val().toUpperCase() == em.endbox && $('#add_containerno').val().toUpperCase() == em.containerno && $('#add_mfg').val().toUpperCase() == em.mfg){
                                         chk = true;
                                     }else{
                                         chk = false;
@@ -1028,6 +1028,12 @@
                                             listpo[i].startbox = $("#add_startbox").val() 
                                             gettbpo()
                                             break;
+                                            
+                                            Swal.fire({
+                                                title:"บันทึก",
+                                                icon:"success",
+                                                text:"บันทึกสำเร็จ"
+                                            })
                         
                                         }
                                     }
