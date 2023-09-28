@@ -59,7 +59,7 @@
                     </form>
                 </div>
             </div>
-            <div id="myform">
+             <div id="myform" novalidate>
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">คีย์ข้อมูล</div>
                     <div class="card-body">
@@ -173,7 +173,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
-                                            <input type="text" class="form-control text-center" name="pallet" id="pallet" >
+                                            <input type="text" class="form-control text-center" name="pallet" id="pallet" required>
                                         </div>
                                     </div>
                                 </div>
@@ -181,7 +181,7 @@
                                     <div class="col-sm-12 col-md-2">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
-                                            <input type="text" class="form-control text-center" name="gw" id="gw" >
+                                            <input type="text" class="form-control text-center" name="gw" id="gw" required>
                                             <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                         </div>
                                     </div>
@@ -544,7 +544,7 @@
                 console.log(sumqty_result) 
                 console.log($("#quantity_box").val())
                 
-                if(sumqty_result <= parseInt($("#quantity_box").val())){
+                if(sumqty_result <= parseInt($("#quantity_box").val()) && grossweight && country_origin){
                     $.ajax({
                         type:"post",
                         url:"Detail",
@@ -611,18 +611,24 @@
                                 })
                             }
                             clearinput(); 
+                            $("#myform").removeClass('was-validated')
+                            
                         }
                     })
                 }else{
+                
                     Swal.fire({
                         icon: 'error',
                         title: 'ผิดพลาด',
-                        text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
+                        html: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง<br>หรือกรองข้อมูลไม่ถูกต้องกรุณาตรวจสอบอีกครั้ง'
                     })
+                    
+                    $("#myform").addClass('was-validated')
+                    
                 }
                 
                
-                $("#firstdigit").html('')
+                
                 
             }
             

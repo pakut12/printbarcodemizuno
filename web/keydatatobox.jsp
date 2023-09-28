@@ -88,13 +88,13 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
-                                        <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="" required>
+                                        <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box"  required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="3" required>
+                                        <input type="text" class="form-control text-center" name="initial" id="initial"  maxlength="3" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -128,7 +128,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">PROD.ORDER</span>
-                                        <input type="text" class="form-control text-center" name="prodorder" id="prodorder" required >
+                                        <input type="text" class="form-control text-center" name="prodorder" id="prodorder"  >
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
@@ -274,6 +274,7 @@
     
             function clearinput(){
                 $("#myform :input").not('#country,#user_create,#user_createview,#customer,#customer_address,#date').val("");
+                 $("#myform").removeClass('was-validated')
             }
     
     
@@ -534,6 +535,7 @@
                                     })
                                 }
                               $("#myform").removeClass('was-validated')
+                              clearinput()
                             }
                         })
                     }else{
@@ -552,7 +554,7 @@
                     $("#myform").addClass('was-validated')
                 }
                
-                clearinput()
+                
             }
 
             $(document).ready(function () {

@@ -209,8 +209,8 @@ public class Report extends HttpServlet {
                     String orderDir = request.getParameter("order[0][dir]").trim();
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop,orderColumn,orderDir);
-                    List<BCDetailBox> listsum = rs.getsumdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop,orderColumn,orderDir);
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop, orderColumn, orderDir);
+                    List<BCDetailBox> listsum = rs.getsumdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop, orderColumn, orderDir);
 
                     int sumqty = 0;
                     int sumqty_result = 0;
@@ -227,33 +227,47 @@ public class Report extends HttpServlet {
 
                             qty_result = li.getQty_result1();
                             qty = li.getQty1();
-                            if (Integer.parseInt(li.getQty_result1()) < Integer.parseInt(li.getQty1())) {
+                            if (Integer.parseInt(li.getQty_result1()) != Integer.parseInt(li.getQty1())) {
                                 mark++;
                                 diff = Integer.parseInt(li.getQty1()) - Integer.parseInt(li.getQty_result1());
                             }
                         } else if (li.getSku_item2().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result2();
                             qty = li.getQty2();
-                            if (Integer.parseInt(li.getQty_result2()) < Integer.parseInt(li.getQty1())) {
+                            if (Integer.parseInt(li.getQty_result2()) != Integer.parseInt(li.getQty2())) {
                                 mark++;
                                 diff = Integer.parseInt(li.getQty2()) - Integer.parseInt(li.getQty_result2());
                             }
                         } else if (li.getSku_item3().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result3();
                             qty = li.getQty3();
-                            if (Integer.parseInt(li.getQty_result3()) < Integer.parseInt(li.getQty1())) {
+                            if (Integer.parseInt(li.getQty_result3()) != Integer.parseInt(li.getQty3())) {
                                 mark++;
                                 diff = Integer.parseInt(li.getQty3()) - Integer.parseInt(li.getQty_result3());
                             }
                         } else if (li.getSku_item4().equals(li.getCustomer_no())) {
                             qty_result = li.getQty_result4();
                             qty = li.getQty4();
-                            if (Integer.parseInt(li.getQty_result4()) < Integer.parseInt(li.getQty1())) {
+                            if (Integer.parseInt(li.getQty_result4()) != Integer.parseInt(li.getQty4())) {
                                 mark++;
                                 diff = Integer.parseInt(li.getQty4()) - Integer.parseInt(li.getQty_result4());
                             }
-                        }
 
+                        }
+                        
+                        System.out.println("------------------------------------------------------------------------------");
+                        
+                        System.out.println("Sku_item1 : " + li.getSku_item1());
+                        System.out.println("Sku_item2 : " + li.getSku_item2());
+                        System.out.println("Sku_item3 : " + li.getSku_item3());
+                        System.out.println("Sku_item4 : " + li.getSku_item4());
+                        System.out.println("Customer_no : " + li.getCustomer_no());
+                        System.out.println("Qty : " + qty);
+                        System.out.println("Qty_result : " + qty_result);
+                        System.out.println("Mark : " + mark);
+                        System.out.println("------------------------------------------------------------------------------");
+                        
+                        
                         sumqty_result += Integer.parseInt(qty_result);
                         sumqty += Integer.parseInt(qty);
                         sumdiff += diff;
@@ -275,7 +289,7 @@ public class Report extends HttpServlet {
 
                     obj.put("sumqty_result", String.valueOf(df.format(sumqty_result)));
                     obj.put("sumqty", String.valueOf(df.format(sumqty)));
-                    obj.put("sumdiff", String.valueOf(df.format(sumdiff)));
+                    obj.put("sumdiff", String.valueOf(df.format(sumqty-sumqty_result)));
                     obj.put("summark", String.valueOf(df.format(summark)));
 
                     response.setContentType("application/json");
@@ -303,7 +317,7 @@ public class Report extends HttpServlet {
 
                     ReportService rs = new ReportService();
 
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop,"","");
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop, "", "");
                     request.setAttribute("listproduct", list);
 
                     request.setAttribute("po", po);
@@ -332,7 +346,7 @@ public class Report extends HttpServlet {
                     String datestop = request.getParameter("datestop").trim();
 
                     ReportService rs = new ReportService();
-                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop,"","");
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, start, end, firstdigit, "", "", "", datestart, datestop, "", "");
                     request.setAttribute("listproduct", list);
 
 

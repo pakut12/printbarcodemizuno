@@ -26,7 +26,6 @@
             String id = request.getParameter("id").trim();
             List<BCInvoice> inv = PackingListService.getPackingListByid(id);
 
-          
             /*****************  set header **************/
             String invoiceno = inv.get(0).getInvoiceno();
             String invoicedate = Utility.CoverDate(inv.get(0).getInvoicedate().replace(" 00:00:00.0", ""));
@@ -46,20 +45,16 @@
                 for (BCDetailBox DG : GroupDESCRIPTION) {
                     gd.add(DG.getDestination());
                 }
+
+
             }
+
+
 
             /********************** end Custome *******************/
             String shipper = inv.get(0).getShipper();
             String shipfrom = inv.get(0).getShipfrom();
             String shipto = inv.get(0).getShipto();
-            String mfg = "";
-            
-            if (inv.get(0).getMfg() != null) {
-                mfg = "("+inv.get(0).getMfg()+")";
-            }
-
-
-            System.out.println(mfg);
 
             DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
             DecimalFormat decimalFormat1 = new DecimalFormat("#,###");
@@ -386,9 +381,9 @@
             double allgw = 0;
             try {
 
+
+
                 for (BCInvoice i1 : inv) {
-                    
-                    
                     /******************************  set table1 ********************************************/
                     String data[];
                     int totalqty = 0;
@@ -408,15 +403,15 @@
 
                     String txtsize = "";
                     int n = 2;
-
+                    
                     for (String res : size) {
                         if (size.contains("120") || size.contains("130") || size.contains("140") || size.contains("150") || size.contains("160")) {
-                            if (res.contains("120") || res.contains("130") || res.contains("140") || res.contains("150") || res.contains("160")) {
-                                txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
-                            } else {
-                                txtsize += "{text: '', border: [false, true, false, true]},";
+                            if(res.contains("120") || res.contains("130") || res.contains("140") || res.contains("150") || res.contains("160")){
+                                 txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
+                            }else{
+                                 txtsize += "{text: '', border: [false, true, false, true]},";
                             }
-
+                            
                         } else if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
                             txtsize += "{text: '0" + n + "\\n" + res + "', border: [false, true, false, true]},";
                         } else {
@@ -460,112 +455,82 @@
                         }
 
                         if (!group.contains(",")) {
-                            int num = 0;
+
                             List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
-                            HashSet<String> cut = new HashSet<String>();
-                            for (BCDetailBox c : listsizebypo) {
-                                if (!cut.contains(c.getCustomer_no().replace(c.getCustomer_size(), ""))) {
-                                    HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
 
-                                    for (BCDetailBox z : listsizebypo) {
-                                        arrsize.put(c.getCustomer_no() + z.getCustomer_size(), z);
+                            HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
+
+                            for (BCDetailBox z : listsizebypo) {
+                                arrsize.put(z.getCustomer_size(), z);
+                            }
+
+                            String sizetxt = "";
+
+                            int qty = 0;
+                            int ctn = 0;
+                            double nw = 0;
+                            double gw = 0;
+                            String DESTINATION = "";
+                            String Color = "";
+
+                            for (String s : size) {
+                                BCDetailBox getsize = arrsize.get(s);
+                                if (getsize == null) {
+                                    sizetxt += "{text: '',border: [false, false, false, false]},";
+                                } else {
+
+                                    if (getsize.getCustomer_no().equals(getsize.getSku_item1())) {
+                                        qty += Integer.parseInt(getsize.getQty_result1());
+                                        sizetxt += "{text: '" + getsize.getQty_result1() + "',border: [false, false, false, false]},";
+                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item2())) {
+                                        qty += Integer.parseInt(getsize.getQty_result2());
+                                        sizetxt += "{text: '" + getsize.getQty_result2() + "',border: [false, false, false, false]},";
+                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item3())) {
+                                        qty += Integer.parseInt(getsize.getQty_result3());
+                                        sizetxt += "{text: '" + getsize.getQty_result3() + "',border: [false, false, false, false]},";
+                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item4())) {
+                                        qty += Integer.parseInt(getsize.getQty_result4());
+                                        sizetxt += "{text: '" + getsize.getQty_result4() + "',border: [false, false, false, false]},";
                                     }
 
-                                    String sizetxt = "";
-
-                                    int qty = 0;
-                                    int ctn = 0;
-                                    double nw = 0;
-                                    double gw = 0;
-                                    String DESTINATION = "";
-                                    String Color = "";
-
-                                    for (String s : size) {
-                                        BCDetailBox getsize = arrsize.get(c.getCustomer_no() + s);
-                                        if (getsize == null) {
-                                            sizetxt += "{text: '',border: [false, false, false, false]},";
-                                        } else {
-
-                                            if (getsize.getCustomer_no().equals(getsize.getSku_item1())) {
-                                                qty += Integer.parseInt(getsize.getQty_result1());
-                                                sizetxt += "{text: '" + getsize.getQty_result1() + "',border: [false, false, false, false]},";
-                                            } else if (getsize.getCustomer_no().equals(getsize.getSku_item2())) {
-                                                qty += Integer.parseInt(getsize.getQty_result2());
-                                                sizetxt += "{text: '" + getsize.getQty_result2() + "',border: [false, false, false, false]},";
-                                            } else if (getsize.getCustomer_no().equals(getsize.getSku_item3())) {
-                                                qty += Integer.parseInt(getsize.getQty_result3());
-                                                sizetxt += "{text: '" + getsize.getQty_result3() + "',border: [false, false, false, false]},";
-                                            } else if (getsize.getCustomer_no().equals(getsize.getSku_item4())) {
-                                                qty += Integer.parseInt(getsize.getQty_result4());
-                                                sizetxt += "{text: '" + getsize.getQty_result4() + "',border: [false, false, false, false]},";
-                                            }
-
-                                            Color = Utility.subsize(c.getCustomer_no().replace(c.getCustomer_size(), ""));
-                                            ctn = Integer.parseInt(getsize.getCountbox());
-                                            nw = Double.parseDouble(getsize.getSumnw());
-                                            gw = Double.parseDouble(getsize.getSumgw());
-
-                                            if (getsize.getDestination() == null) {
-                                                DESTINATION = "";
-                                            } else {
-                                                DESTINATION = getsize.getDestination();
-                                            }
-
-                                        }
-                                    }
-
-
-
-                                    if (num == 0) {
-
-                                        txt += "[";
-                                        txt += "{text: '" + group + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-                                        txt += sizetxt;
-                                        txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
-                                        txt += "],\n";
-
-
-                                        totalctn += ctn;
-                                        totalqty += (ctn * qty);
-                                        totalnw += nw;
-                                        totalgw += gw;
-
-
-                                        /******** count cartons ทั้งหมด **********/
-                                        allcartons += ctn;
-                                        allnw += nw;
-                                        allgw += gw;
-                                        /******* end count cartons ทั้งหมด *******/
-                                        num++;
+                                    Color = Utility.subsize(getsize.getCustomer_no());
+                                    ctn = Integer.parseInt(getsize.getCountbox());
+                                    nw = Double.parseDouble(getsize.getSumnw());
+                                    gw = Double.parseDouble(getsize.getSumgw());
+                                    if (getsize.getDestination() == null) {
+                                        DESTINATION = "";
                                     } else {
-
-                                        txt += "[";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-                                        txt += sizetxt;
-                                        txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "],\n";
-
-                                        totalqty += (ctn * qty);
-
-                                        num++;
-
+                                        DESTINATION = getsize.getDestination();
                                     }
 
-                                    cut.add(c.getCustomer_no().replace(c.getCustomer_size(), ""));
                                 }
                             }
+
+
+                            txt += "[";
+                            txt += "{text: '" + group + "',border: [false, false, false, false]},";
+                            txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                            txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+                            txt += sizetxt;
+                            txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
+                            txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
+                            txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                            txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
+                            txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
+                            txt += "],\n";
+
+
+                            totalctn += ctn;
+                            totalqty += (ctn * qty);
+                            totalnw += nw;
+                            totalgw += gw;
+
+
+                            /******** count cartons ทั้งหมด **********/
+                            allcartons += ctn;
+                            allnw += nw;
+                            allgw += gw;
+                        /******* end count cartons ทั้งหมด *******/
                         } else {
 
                             String[] groupT2 = group.split(",");
@@ -888,9 +853,7 @@
                     List<String> maptotal = new ArrayList<String>();
                     List<String> alltotal = new ArrayList<String>();
                     String data1 = "";
-                    
-                    System.out.println("S : "+listgroupcolor.size());
-                    
+
                     for (BCDetailBox g : listgroupcolor) {
 
                         String desc1 = Utility.Chacknull(g.getDestination());
@@ -920,36 +883,35 @@
                                 }
 
 
-                                data1 = map.get(g.getCustomer_no() + "#" + s + "#" + desc1);
+
+
+                                data1 = map.get(g.getCustomer_color() + "#" + s + "#" + desc1);
                                 int qt = 0;
                                 if (data1 == null) {
-                                    map.put(g.getCustomer_no() + "#" + s + "#" + desc1, q);
+                                    map.put(g.getCustomer_color() + "#" + s + "#" + desc1, q);
 
                                 } else {
                                     qt = Integer.parseInt(q) + Integer.parseInt(data1);
-                                    map.put(g.getCustomer_no() + "#" + s + "#" + desc1, String.valueOf(qt));
+                                    map.put(g.getCustomer_color() + "#" + s + "#" + desc1, String.valueOf(qt));
 
                                 }
-                                
-                                maptotal.add(g.getCustomer_no()+"#"+s + "#" + q);
-                                
+                                maptotal.add(s + "#" + q);
                             }
 
-                            System.out.println(map);
                             txt1 += "[";
                             txt1 += "{text: '" + grouptxt.replace(desc1, "") + "',border: [false, false, false, false]},";
-                            txt1 += "{text: '" + g.getPo() + mfg +   "',border: [false, false, false, false]},";
+                            txt1 += "{text: '" + g.getPo() + "',border: [false, false, false, false]},";
                             txt1 += "{text: '" + Utility.Chacknull(desc1) + "',border: [false, false, false, false]},";
                             txt1 += "{text: '',border: [false, false, false, false]},";
                             int qtytotal = 0;
                             for (String s1 : size) {
                                 for (String k1 : kl) {
-                                    if (map.get(g.getCustomer_no() + "#" + s1 + "#" + desc1) == null) {
+                                    if (map.get(g.getCustomer_color() + "#" + s1 + "#" + desc1) == null) {
                                         txt1 += "{text: '',border: [false, false, false, false]},";
 
                                     } else {
-                                        txt1 += "{text: '" + map.get(g.getCustomer_no() + "#" + s1 + "#" + desc1) + "',border: [false, false, false, false]},";
-                                        qtytotal += Integer.parseInt(map.get(g.getCustomer_no() + "#" + s1 + "#" + desc1));
+                                        txt1 += "{text: '" + map.get(g.getCustomer_color() + "#" + s1 + "#" + desc1) + "',border: [false, false, false, false]},";
+                                        qtytotal += Integer.parseInt(map.get(g.getCustomer_color() + "#" + s1 + "#" + desc1));
 
                                     }
 
@@ -976,8 +938,8 @@
 
                     for (String item : maptotal) {
                         String[] parts = item.split("#");
-                        String key = parts[1];
-                        int value = Integer.parseInt(parts[2]);
+                        String key = parts[0];
+                        int value = Integer.parseInt(parts[1]);
 
                         if (groupedSum.containsKey(key)) {
                             groupedSum.put(key, groupedSum.get(key) + value);
@@ -985,6 +947,10 @@
                             groupedSum.put(key, value);
                         }
                     }
+
+                    //  System.out.println("+asdxzc" + maptotal);
+                    //  System.out.println("+asd1" + groupedSum);
+
 
                     int qtyall = 0;
                     for (String s : size) {
@@ -1010,50 +976,50 @@
                     table: {
                         headerRows: 1,
                         widths: [ 50, 50,84, <%=width%> 17,'auto', 'auto', 'auto' , 'auto'],
-                            body: [
-                                [
-                                    {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
-                                    {text: 'DESCRIPTION', border: [false, true, false, true]}, 
-                                    {text: 'PO', border: [false, true, false, true]},
+                        body: [
+                            [
+                                {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
+                                {text: 'DESCRIPTION', border: [false, true, false, true]}, 
+                                {text: 'PO', border: [false, true, false, true]},
                                  
                                 <%=txtsize%>
-                                                                {text: '', border: [false, true, false, true]},
-                                                                {text: 'TOTAL\nCTN.', border: [false, true, false, true]},
-                                                                {text: '\nQTY', border: [false, true, false, true]},
-                                                                {text: 'WEIGHT\nN.W.', border: [false, true, false, true]},
-                                                                {text: '\nG.W.', border: [false, true, false, true]},
-                                                            ],
+                                                            {text: '', border: [false, true, false, true]},
+                                                            {text: 'TOTAL\nCTN.', border: [false, true, false, true]},
+                                                            {text: '\nQTY', border: [false, true, false, true]},
+                                                            {text: 'WEIGHT\nN.W.', border: [false, true, false, true]},
+                                                            {text: '\nG.W.', border: [false, true, false, true]},
+                                                        ],
                                 <%=datatable1%>
                                 
-                                                        ]
-                                                    }
+                                                    ]
+                                                }
                         
-                                                },
-                                                {
+                                            },
+                                            {
                                             
-                                                    style: 'tbcontent',
-                                                    table: {
-                                                        headerRows: 1,
-                                                        widths: [ 50,50,17,58, <%=width%> 'auto',110 ],
-                                                            body: [
-                                                                [
-                                                                    {text: 'DESCRIPTION',border: [false, true, false, true]}, 
-                                                                    {text: '', border: [false, true, false, true]}, 
-                                                                    {text: '', border: [false, true, false, true]}, 
-                                                                    {text: 'SIZE', border: [false, true, false, true]},
+                                                style: 'tbcontent',
+                                                table: {
+                                                    headerRows: 1,
+                                                    widths: [ 50, 50,17,58, <%=width%> 'auto',110 ],
+                                                    body: [
+                                                        [
+                                                            {text: 'DESCRIPTION',border: [false, true, false, true]}, 
+                                                            {text: '', border: [false, true, false, true]}, 
+                                                            {text: '', border: [false, true, false, true]}, 
+                                                            {text: 'SIZE', border: [false, true, false, true]},
                                                              <%=txtsize%>
                                                                      
-                                                                                                 {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
-                                                                                                 {text: '', border: [false, false, false, false]},
-                                                                                             ],
+                                                                                         {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
+                                                                                         {text: '', border: [false, false, false, false]},
+                                                                                     ],
                         
                                                             <%=datatable2%>
 
                                 
-                                                                                        ]
-                                                                                    }
+                    ]
+                }
                         
-                                                                                },
+            },
             
     
     
@@ -1071,146 +1037,146 @@
 
     %>
                 
+                {
+                    columns: [
                         {
-                            columns: [
-                                {
-                                    // auto-sized columns have their widths based on their content
-                                    width: 'auto',
-                                    text: 'TOTAL',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // star-sized columns fill the remaining space
-                                    // if there's more than one star-column, available width is divided equally
-                                    width: '*',
-                                    text: '\t <%=decimalFormat1.format(allpc)%>   PC',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // fixed width
-                                    width: 100,
-                                    text: ''
-                                },
-                                {
-                                    // % width
-                                    width: '20%',
-                                    text: ''
-                                }
-                            ],
-                            // optional space between columns
-                            columnGap: 20
+                            // auto-sized columns have their widths based on their content
+                            width: 'auto',
+                            text: 'TOTAL',
+                            margin: [9, 2] 
                         },
                         {
-                            columns: [
-                                {
-                                    // auto-sized columns have their widths based on their content
-                                    width: 'auto',
-                                    text: '',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // star-sized columns fill the remaining space
-                                    // if there's more than one star-column, available width is divided equally
-                                    width: '*',
-                                    text: '\t:\t    <%=decimalFormat1.format(allcartons)%>  CARTONS',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // fixed width
-                                    width: 100,
-                                    text: ''
-                                },
-                                {
-                                    // % width
-                                    width: '20%',
-                                    text: ''
-                                }
-                            ],
-                            // optional space between columns
-                            columnGap: 20
+                            // star-sized columns fill the remaining space
+                            // if there's more than one star-column, available width is divided equally
+                            width: '*',
+                            text: '\t <%=decimalFormat1.format(allpc)%>   PC',
+                            margin: [9, 2] 
                         },
                         {
-                            columns: [
-                                {
-                                    // auto-sized columns have their widths based on their content
-                                    width: 'auto',
-                                    text: '',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // star-sized columns fill the remaining space
-                                    // if there's more than one star-column, available width is divided equally
-                                    width: '*',
-                                    text: '\t:\t   <%=decimalFormat.format(allnw)%>  KGS.(NET WEIGHT)',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // fixed width
-                                    width: 100,
-                                    text: ''
-                                },
-                                {
-                                    // % width
-                                    width: '20%',
-                                    text: ''
-                                }
-                            ],
-                            // optional space between columns
-                            columnGap: 20
+                            // fixed width
+                            width: 100,
+                            text: ''
                         },
                         {
-                            columns: [
-                                {
-                                    // auto-sized columns have their widths based on their content
-                                    width: 'auto',
-                                    text: '',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // star-sized columns fill the remaining space
-                                    // if there's more than one star-column, available width is divided equally
-                                    width: '*',
-                                    text: '\t:\t   <%=decimalFormat.format(allgw)%>  KGS.(GROSS WEIGHT)',
-                                    margin: [9, 2] 
-                                },
-                                {
-                                    // fixed width
-                                    width: 100,
-                                    text: ''
-                                },
-                                {
-                                    // % width
-                                    width: '20%',
-                                    text: ''
-                                }
-                            ],
-                            // optional space between columns
-                            columnGap: 20
-                        },
-                
-                    ],
-                    styles: {
-                        headercontent: {
-                            fontSize: 12,
-                            bold: true,
-                            margin: [45, 2] 
-                        },
-                    
-                        tbcontent: {
-                            fontSize: 11,
-                            bold: true,
-                            margin: [10, 2],
-                            alignment:'center'                      
+                            // % width
+                            width: '20%',
+                            text: ''
                         }
+                    ],
+                    // optional space between columns
+                    columnGap: 20
+                },
+                {
+                    columns: [
+                        {
+                            // auto-sized columns have their widths based on their content
+                            width: 'auto',
+                            text: '',
+                            margin: [9, 2] 
+                        },
+                        {
+                            // star-sized columns fill the remaining space
+                            // if there's more than one star-column, available width is divided equally
+                            width: '*',
+                            text: '\t:\t    <%=decimalFormat1.format(allcartons)%>  CARTONS',
+                            margin: [9, 2] 
+                        },
+                        {
+                            // fixed width
+                            width: 100,
+                            text: ''
+                        },
+                        {
+                            // % width
+                            width: '20%',
+                            text: ''
+                        }
+                    ],
+                    // optional space between columns
+                    columnGap: 20
+                },
+                {
+                    columns: [
+                        {
+                            // auto-sized columns have their widths based on their content
+                            width: 'auto',
+                            text: '',
+                            margin: [9, 2] 
+                        },
+                        {
+                            // star-sized columns fill the remaining space
+                            // if there's more than one star-column, available width is divided equally
+                            width: '*',
+                            text: '\t:\t   <%=decimalFormat.format(allnw)%>  KGS.(NET WEIGHT)',
+                            margin: [9, 2] 
+                        },
+                        {
+                            // fixed width
+                            width: 100,
+                            text: ''
+                        },
+                        {
+                            // % width
+                            width: '20%',
+                            text: ''
+                        }
+                    ],
+                    // optional space between columns
+                    columnGap: 20
+                },
+                {
+                    columns: [
+                        {
+                            // auto-sized columns have their widths based on their content
+                            width: 'auto',
+                            text: '',
+                            margin: [9, 2] 
+                        },
+                        {
+                            // star-sized columns fill the remaining space
+                            // if there's more than one star-column, available width is divided equally
+                            width: '*',
+                            text: '\t:\t   <%=decimalFormat.format(allgw)%>  KGS.(GROSS WEIGHT)',
+                            margin: [9, 2] 
+                        },
+                        {
+                            // fixed width
+                            width: 100,
+                            text: ''
+                        },
+                        {
+                            // % width
+                            width: '20%',
+                            text: ''
+                        }
+                    ],
+                    // optional space between columns
+                    columnGap: 20
+                },
+                
+            ],
+            styles: {
+                headercontent: {
+                    fontSize: 13,
+                    bold: true,
+                    margin: [45, 2] 
+                },
                     
-                    },
-                    defaultStyle: {
-                        font: 'THSarabunNew',
-                        fontSize: 15,
-                        bold:true
-                    }
-                };
-                pdfMake.createPdf(docDefinition).open({}, window); 
+                tbcontent: {
+                    fontSize: 12,
+                    bold: true,
+                    margin: [10, 2],
+                    alignment:'center'                      
+                }
+                    
+            },
+            defaultStyle: {
+                font: 'THSarabunNew',
+                fontSize: 15,
+                bold:true
+            }
+        };
+        pdfMake.createPdf(docDefinition).open({}, window); 
         
     
     

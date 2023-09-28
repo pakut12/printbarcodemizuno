@@ -59,7 +59,7 @@
                     </form>
                 </div>
             </div>
-            <div id="myform">
+            <div id="myform" novalidate>
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">คีย์ข้อมูล</div>
                     <div class="card-body">
@@ -67,36 +67,36 @@
                             <div class="container">
                                 <input type="hidden" id="boxseq">
                                 <div class="text-start h5 fw-bold">ข้อมูลผู้สร้างเเละเเก้ไขกล่อง</div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
-                                        <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="" disabled>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ผู้สร้าง</span>
+                                            <input type="text" class="form-control text-center" name="user_createview" id="user_createview" value="" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
+                                            <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
+                                            <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="" disabled>
+                                            <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12 col-md-3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
+                                            <input type="text" class="form-control text-center" name="date_edit" id="date_edit" disabled>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่สร้าง</span>
-                                        <input type="text" class="form-control text-center" name="date_create" id="date_create"  disabled>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">ผู้เเก้ไข</span>
-                                        <input type="hidden" class="form-control text-center" name="user_edit" id="user_edit" value="" disabled>
-                                        <input type="text" class="form-control text-center" name="user_editview" id="user_editview" disabled>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 col-md-3">
-                                    <div class="input-group input-group-sm mb-3">
-                                        <span class="input-group-text" id="inputGroup-sizing-sm">วันที่เเก้ไข</span>
-                                        <input type="text" class="form-control text-center" name="date_edit" id="date_edit" disabled>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
-                            <hr>
+                                <div class="text-start h5 fw-bold">ข้อมูลกล่อง</div>
+                                <hr>
                                 <div class="row mb-3">
                                     <div class="col-sm-12 col-md-4">
                                         <div class="input-group input-group-sm mb-3">
@@ -127,21 +127,21 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
-                                            <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="">
+                                            <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" required>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                            <input type="text" class="form-control text-center" name="initial" id="initial" pattern="" maxlength="2">
+                                            <input type="text" class="form-control text-center" name="initial" id="initial"  maxlength="3" required>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm ">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                            <input type="number" class="form-control text-center" name="numberbox_start" id="numberbox_start" >
+                                            <input type="number" class="form-control text-center" name="numberbox_start" id="numberbox_start" required>
                                             <span class="input-group-text" id="inputGroup-sizing-sm">ถึง</span>
-                                            <input type="number" class="form-control text-center" name="numberbox_end" id="numberbox_end" >
+                                            <input type="number" class="form-control text-center" name="numberbox_end" id="numberbox_end" required>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
@@ -155,7 +155,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">PO</span>
-                                            <input type="text" class="form-control text-center" name="po" id="po" >
+                                            <input type="text" class="form-control text-center" name="po" id="po" required>
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-3">
@@ -173,7 +173,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>
-                                            <input type="text" class="form-control text-center" name="pallet" id="pallet" >
+                                            <input type="text" class="form-control text-center" name="pallet" id="pallet" required>
                                         </div>
                                     </div>
                                 </div>
@@ -181,7 +181,7 @@
                                     <div class="col-sm-12 col-md-2">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">G.W</span>
-                                            <input type="text" class="form-control text-center" name="gw" id="gw" >
+                                            <input type="text" class="form-control text-center" name="gw" id="gw" required>
                                             <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                         </div>
                                     </div>
@@ -201,7 +201,7 @@
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                            <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND">
+                                            <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND" required disabled>
                                         </div>
                                     </div>
                                 </div>
@@ -544,7 +544,7 @@
                 console.log(sumqty_result) 
                 console.log($("#quantity_box").val())
                 
-                if(sumqty_result <= parseInt($("#quantity_box").val())){
+                if(sumqty_result <= parseInt($("#quantity_box").val()) && startbox && endbox && po && grossweight && country_origin){
                     $.ajax({
                         type:"post",
                         url:"Detail",
@@ -624,18 +624,23 @@
                            
                             }
                             clearinput(); 
+                            $("#myform").removeClass('was-validated')
                         }
                     })
                 }else{
+                
                     Swal.fire({
                         icon: 'error',
                         title: 'ผิดพลาด',
-                        text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
+                        html: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง<br>หรือกรองข้อมูลไม่ถูกต้องกรุณาตรวจสอบอีกครั้ง'
                     })
+                    
+                    $("#myform").addClass('was-validated')
+                    
                 }
                 
                
-                $("#firstdigit").html('')
+                // $("#firstdigit").html('')
                 
             }
             
@@ -767,7 +772,7 @@
                             $("#pallet").val(js.pallet);
                             $("#date_create").val(js.date_create);
                            
-                            $("#myform :input").not('#pobefore,#date_create,#nw,#user_createview,#user_editview,#date_edit').attr("disabled", false);
+                            $("#myform :input").not('#pobefore,#date_create,#nw,#user_createview,#user_editview,#date_edit,#country').attr("disabled", false);
                             
                             $("#numberbox_start").val(numstart);
                             $("#numberbox_end").val(numend);

@@ -55,7 +55,7 @@
                     </form>
                 </div>
             </div>
-            <div id="myform "  novalidate>
+            <div id="myform"  novalidate>
                 <div class="card shadow-lg mt-3">
                     <div class="card-header">คีย์ข้อมูล</div>
                     <div class="card-body">
@@ -96,7 +96,7 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ลูกค้า</span>
-                                        <select class="form-select form-select-sm text-center" id="customer" required>
+                                        <select class="form-select form-select-sm text-center" id="customer" >
                                             
                                         </select>
                                     </div>
@@ -104,7 +104,7 @@
                                 <div class="col-sm-12 col-md-4 align-items-md-center">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">สถานที่ส่ง</span>
-                                        <select class="form-select form-select-sm text-center" id="customer_address" required>
+                                        <select class="form-select form-select-sm text-center" id="customer_address" >
                                             
                                         </select>
                                     </div>
@@ -112,7 +112,7 @@
                                 <div class="col-sm-12 col-md-4">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">ปลายทาง</span>
-                                        <select class="form-select form-select-sm text-center" id="destination" required>
+                                        <select class="form-select form-select-sm text-center" id="destination" >
                                             
                                         </select>
                                     </div>
@@ -123,25 +123,25 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">จำนวนตัวต่อกล่อง</span>
-                                        <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box" pattern="" required>
+                                        <input type="number" class="form-control text-center" name="quantity_box" id="quantity_box"  required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">อักษรขึ้นต้น</span>
-                                        <input type="text" class="form-control text-center" name="firstdigit" id="firstdigit" maxlength="2" pattern="" required>
+                                        <input type="text" class="form-control text-center" name="firstdigit" id="firstdigit" maxlength="3"  required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่เริ่ม</span>
-                                        <input type="text" class="form-control text-center" name="boxno" id="boxno" pattern="" required>
+                                        <input type="text" class="form-control text-center" name="boxno" id="boxno" required>
                                     </div>
                                 </div>
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">เลขที่สุดท้าย</span>
-                                        <input type="text" class="form-control text-center" name="boxall" id="boxall" pattern="" required>
+                                        <input type="text" class="form-control text-center" name="boxall" id="boxall"  required>
                                     </div>
                                 </div>
                             </div>
@@ -182,7 +182,7 @@
                                 <div class="col-sm-12 col-md-2">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">N.W</span>
-                                        <input type="text" class="form-control text-center" name="nw" id="nw" required>
+                                        <input type="text" class="form-control text-center" name="nw" id="nw" disabled required>
                                         <span class="input-group-text" id="inputGroup-sizing-sm">KGS.</span>
                                     </div>
                                 </div>
@@ -195,7 +195,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <span class="input-group-text" id="inputGroup-sizing-sm">Country of Origin</span>
-                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND" required>
+                                        <input type="text" class="form-control text-center" name="country" id="country" value="THAILAND" disabled required>
                                     </div>
                                 </div>
                             </div>
@@ -523,7 +523,11 @@
                 var invoicedate = $("#invoicedate").val();
                 var boxseq = $("#boxseq").val();
                 
-                if(sumqty_result <= parseInt($("#quantity_box").val())){
+        
+        
+        
+        
+                if(sumqty_result <= parseInt($("#quantity_box").val())  && grossweight && country_origin){
                     $.ajax({
                         type:"post",
                         url:"Detail",
@@ -596,17 +600,20 @@
                                 })
                       
                             }
-                            
+                            $("#myform").removeClass('was-validated')
                         }
                     })
+                     clearinput()
                 }else{
                     Swal.fire({
                         icon: 'error',
                         title: 'ผิดพลาด',
-                        text: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง'
+                        html: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง<br>หรือกรองข้อมูลไม่ถูกต้องกรุณาตรวจสอบอีกครั้ง'
                     })
+                    
+                   $("#myform").addClass('was-validated')
                 }
-                clearinput()
+               
             }
             
           
@@ -735,7 +742,7 @@
                             $("#customer4_color").val(js.colorno4);
                             $("#customer4_size").val(js.sizeno4);
                             $("#customer4_number").val(js.qty4);
-                            $("#myform :input").not('#pobefore,#date_create,#nw,#user_createview,#user_editview,#date_edit').attr("disabled", false);
+                            $("#myform :input").not('#pobefore,#date_create,#nw,#user_createview,#user_editview,#date_edit,#country').attr("disabled", false);
                             
                             $("#prodorder").val(js.prod_order);
                             $("#pallet").val(js.pallet);
