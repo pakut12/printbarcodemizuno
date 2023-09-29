@@ -544,7 +544,7 @@
                 console.log(sumqty_result) 
                 console.log($("#quantity_box").val())
                 
-                if(sumqty_result <= parseInt($("#quantity_box").val()) && startbox && endbox && po && grossweight && country_origin){
+                if(sumqty_result <= parseInt($("#quantity_box").val()) && startbox && endbox && po && country_origin){
                     $.ajax({
                         type:"post",
                         url:"Detail",

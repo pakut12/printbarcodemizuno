@@ -527,7 +527,7 @@
         
         
         
-                if(sumqty_result <= parseInt($("#quantity_box").val())  && $("#gw").val() && country_origin){
+                if(sumqty_result <= parseInt($("#quantity_box").val()) &&  po && boxno && country_origin){
                     $.ajax({
                         type:"post",
                         url:"Detail",

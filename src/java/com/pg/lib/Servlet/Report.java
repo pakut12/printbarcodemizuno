@@ -254,20 +254,28 @@ public class Report extends HttpServlet {
                             }
 
                         }
-                        
+
                         System.out.println("------------------------------------------------------------------------------");
-                        
+                        System.out.println("BoxNo : " + li.getBoxno());
                         System.out.println("Sku_item1 : " + li.getSku_item1());
                         System.out.println("Sku_item2 : " + li.getSku_item2());
                         System.out.println("Sku_item3 : " + li.getSku_item3());
                         System.out.println("Sku_item4 : " + li.getSku_item4());
+                        System.out.println("Qty1 : " + li.getQty1());
+                        System.out.println("Qty2 : " + li.getQty2());
+                        System.out.println("Qty3 : " + li.getQty3());
+                        System.out.println("Qty4 : " + li.getQty4());
+                        System.out.println("Qty_result1 : " + li.getQty_result1());
+                        System.out.println("Qty_result2 : " + li.getQty_result2());
+                        System.out.println("Qty_result3 : " + li.getQty_result3());
+                        System.out.println("Qty_result4 : " + li.getQty_result4());
                         System.out.println("Customer_no : " + li.getCustomer_no());
                         System.out.println("Qty : " + qty);
                         System.out.println("Qty_result : " + qty_result);
                         System.out.println("Mark : " + mark);
                         System.out.println("------------------------------------------------------------------------------");
-                        
-                        
+
+
                         sumqty_result += Integer.parseInt(qty_result);
                         sumqty += Integer.parseInt(qty);
                         sumdiff += diff;
@@ -289,7 +297,7 @@ public class Report extends HttpServlet {
 
                     obj.put("sumqty_result", String.valueOf(df.format(sumqty_result)));
                     obj.put("sumqty", String.valueOf(df.format(sumqty)));
-                    obj.put("sumdiff", String.valueOf(df.format(sumqty-sumqty_result)));
+                    obj.put("sumdiff", String.valueOf(df.format(sumqty - sumqty_result)));
                     obj.put("summark", String.valueOf(df.format(summark)));
 
                     response.setContentType("application/json");

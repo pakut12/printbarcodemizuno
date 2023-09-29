@@ -385,7 +385,7 @@ public class PackingListService {
         String sql = "";
         try {
 
-            sql = "select * from MIZUNONEWBARBOXINVOICE where INVOICEID = ? ";
+            sql = "select * from MIZUNONEWBARBOXINVOICE where INVOICEID = ? order by INVOICENO,PO,FIRSTDIGIT";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, id);

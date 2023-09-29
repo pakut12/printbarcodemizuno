@@ -453,7 +453,7 @@
                 var description = $("#description").val().toUpperCase();
                 var gw = $("#gw").val().toUpperCase();
                 var nw = $("#nw").val().toUpperCase();
-                var country = $("#country").val().toUpperCase();
+                var country = "THAILAND";
                 var customer1_id = [$("#customer1_id").val().toUpperCase(),$("#customer1_barcode").val().toUpperCase(),$("#customer1_color").val().toUpperCase(),$("#customer1_size").val().toUpperCase(),$("#customer1_number").val().toUpperCase()];
                 var customer2_id = [$("#customer2_id").val().toUpperCase(),$("#customer2_barcode").val().toUpperCase(),$("#customer2_color").val().toUpperCase(),$("#customer2_size").val().toUpperCase(),$("#customer2_number").val().toUpperCase()];
                 var customer3_id = [$("#customer3_id").val().toUpperCase(),$("#customer3_barcode").val().toUpperCase(),$("#customer3_color").val().toUpperCase(),$("#customer3_size").val().toUpperCase(),$("#customer3_number").val().toUpperCase()];
@@ -484,7 +484,7 @@
                 var date = new Date().format('d-m-Y H:i:s');
                 
         
-                if(initial && numberbox_start && numberbox_end && country && gw && nw){
+                if(initial && numberbox_start && numberbox_end && country ){
                     if(sumqty_result <= parseInt($("#quantity_box").val()) ){
                         $.ajax({
                             type:"post",

@@ -43,7 +43,7 @@ public class ReportService {
             sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
             sql += " INNER JOIN MIZUNOCUSTOMER b ON (b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4) ";
             sql += "  WHERE  ";
-            sql += " (a.boxno  LIKE '%" + searchValue + "%' or a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%' or TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' ) ";
+            sql += " (a.boxno  LIKE upper('%" + searchValue + "%') or a.PROD_ORDER  LIKE upper('%" + searchValue + "%') or a.PO LIKE upper('%" + searchValue + "%') or a.SHIPTO LIKE upper('%" + searchValue + "%')  or  a.DESTINATION  LIKE upper('%" + searchValue + "%') or a.PO_OLD LIKE upper('%" + searchValue + "%')  or a.PALLET LIKE upper('%" + searchValue + "%') or b.customer_no  LIKE upper('%" + searchValue + "%')  or b.customer_product  LIKE  upper('%" + searchValue + "%') or TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') ) ";
 
             if (!firstdigit.equals("") || !startbox.equals("") || !endbox.equals("")) {
                 sql += " and a.boxno in (";
@@ -161,7 +161,7 @@ public class ReportService {
             sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
             sql += " INNER JOIN MIZUNOCUSTOMER b ON (b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4) ";
             sql += "  WHERE  ";
-            sql += " (a.boxno  LIKE '%" + searchValue + "%' or a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%' or TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' ) ";
+            sql += " (a.boxno  LIKE upper('%" + searchValue + "%') or a.PROD_ORDER  LIKE upper('%" + searchValue + "%') or a.PO LIKE upper('%" + searchValue + "%') or a.SHIPTO LIKE upper('%" + searchValue + "%')  or  a.DESTINATION  LIKE upper('%" + searchValue + "%') or a.PO_OLD LIKE upper('%" + searchValue + "%')  or a.PALLET LIKE upper('%" + searchValue + "%') or b.customer_no  LIKE upper('%" + searchValue + "%')  or b.customer_product  LIKE  upper('%" + searchValue + "%') or TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') ) ";
 
             if (!firstdigit.equals("") || !startbox.equals("") || !endbox.equals("")) {
                 sql += " and a.boxno in (";
@@ -340,7 +340,7 @@ public class ReportService {
             sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
             sql += " INNER JOIN MIZUNOCUSTOMER b ON (b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4) ";
             sql += "  WHERE  ";
-            sql += " (a.boxno  LIKE '%" + searchValue + "%' or a.PROD_ORDER  LIKE '%" + searchValue + "%' or a.PO LIKE '%" + searchValue + "%' or a.SHIPTO LIKE '%" + searchValue + "%'  or  a.DESTINATION  LIKE '%" + searchValue + "%' or a.PO_OLD LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%' or TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' ) ";
+            sql += " (a.boxno  LIKE upper('%" + searchValue + "%') or a.PROD_ORDER  LIKE upper('%" + searchValue + "%') or a.PO LIKE upper('%" + searchValue + "%') or a.SHIPTO LIKE upper('%" + searchValue + "%')  or  a.DESTINATION  LIKE upper('%" + searchValue + "%') or a.PO_OLD LIKE upper('%" + searchValue + "%')  or a.PALLET LIKE upper('%" + searchValue + "%') or b.customer_no  LIKE upper('%" + searchValue + "%') or b.customer_product  LIKE  upper('%" + searchValue + "%') or TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') ) ";
 
             if (firstdigit != null && startbox != null && endbox != null) {
                 if (!firstdigit.equals("") || !startbox.equals("") || !endbox.equals("")) {
@@ -523,7 +523,7 @@ public class ReportService {
                     }
                 }
             }
-            sql += "(a.PO LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%' or a.PROD_ORDER LIKE  '%" + searchValue + "%' or a.BOXNO LIKE '%" + searchValue + "%' or a.BOXNO LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' )";
+            sql += "(a.PO LIKE upper('%" + searchValue + "%')  or a.PALLET LIKE upper('%" + searchValue + "%') or b.customer_no  LIKE upper('%" + searchValue + "%')  or b.customer_product  LIKE  upper('%" + searchValue + "%') or a.PROD_ORDER LIKE  upper('%" + searchValue + "%') or a.BOXNO LIKE upper('%" + searchValue + "%') or a.BOXNO LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') )";
 
             sql += " GROUP BY a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 ";
 
@@ -660,7 +660,7 @@ public class ReportService {
                     }
                 }
             }
-            sql += "(a.PO LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%' or a.PROD_ORDER LIKE  '%" + searchValue + "%' or a.BOXNO LIKE '%" + searchValue + "%' or a.BOXNO LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' )";
+            sql += "(a.PO LIKE upper('%" + searchValue + "%')  or a.PALLET LIKE upper('%" + searchValue + "%') or b.customer_no  LIKE upper('%" + searchValue + "%')  or b.customer_product  LIKE  upper('%" + searchValue + "%') or a.PROD_ORDER LIKE  upper('%" + searchValue + "%') or a.BOXNO LIKE upper('%" + searchValue + "%') or a.BOXNO LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') )";
 
             sql += " GROUP BY a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(c.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 ";
 
@@ -755,7 +755,7 @@ public class ReportService {
                     }
                 }
             }
-            sql += "(a.PO LIKE '%" + searchValue + "%'  or a.PALLET LIKE '%" + searchValue + "%' or b.customer_no  LIKE '%" + searchValue + "%'  or b.customer_product  LIKE  '%" + searchValue + "%' or a.PROD_ORDER LIKE  '%" + searchValue + "%' or a.BOXNO LIKE '%" + searchValue + "%' or a.BOXNO LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' or TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') LIKE '%" + searchValue + "%' )";
+            sql += "(a.PO LIKE upper('%" + searchValue + "%')  or a.PALLET LIKE upper('%" + searchValue + "%') or b.customer_no  LIKE upper('%" + searchValue + "%')  or b.customer_product  LIKE  upper('%" + searchValue + "%') or a.PROD_ORDER LIKE  upper('%" + searchValue + "%') or a.BOXNO LIKE upper('%" + searchValue + "%') or a.BOXNO LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') )";
             sql += " GROUP BY a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1,a.QTY2,a.QTY3,a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS'),TO_CHAR(a.DATE_MODIFY,'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1,c.qty_result2,c.qty_result3,c.qty_result4 ";
 
             sql += " order by a.po,b.customer_no, CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+')  as int)";
@@ -1042,7 +1042,7 @@ public class ReportService {
             if (!datestart.equals("") || !dateend.equals("")) {
                 sql += " a.DATE_CREATE BETWEEN TO_DATE(?, 'yyyy/mm/dd') AND TO_DATE(?, 'yyyy/mm/dd') and ";
             }
-            sql += " (PO like  ?  or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like ? ) " +
+            sql += " (PO like upper(?)  or  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') like upper(?) ) " +
                     "GROUP BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'),REGEXP_SUBSTR(a.BOXALL, '[[:digit:]]+'), TO_CHAR(a.DATE_CREATE,'DD/MM/YYYY HH24:MI:SS') " +
                     "ORDER BY a.PO, REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+'), max(CAST(REGEXP_SUBSTR(a.BOXNO, '[[:digit:]]+')  as int)) " +
                     ")x )where rnum BETWEEN ? AND ? ";

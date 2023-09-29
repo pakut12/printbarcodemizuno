@@ -407,29 +407,17 @@ public class CustomerService {
         return primarykey;
     }
 
-    private static HashMap<String, BCCustomer> getallmatcustomer() throws ClassNotFoundException, SQLException, NamingException {
-        HashMap<String, BCCustomer> allmat = new HashMap<String, BCCustomer>();
+    private static HashMap<String, String> getallmatcustomer() throws ClassNotFoundException, SQLException, NamingException {
+        HashMap<String, String> allmat = new HashMap<String, String>();
         try {
 
-            String sql = "select * from MIZUNOCUSTOMER";
+            String sql = "SELECT DISTINCT CUSTOMER_NO  from MIZUNOCUSTOMER";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             rs = ps.executeQuery();
 
             while (rs.next()) {
-                BCCustomer customerdetail = new BCCustomer();
-                customerdetail.setCustomer_id(rs.getString("customer_id"));
-                customerdetail.setCustomer_no(rs.getString("customer_no"));
-                customerdetail.setCustomer_barcode(rs.getString("customer_barcode"));
-                customerdetail.setCustomer_color(rs.getString("customer_color"));
-                customerdetail.setCustomer_size(rs.getString("customer_size"));
-                customerdetail.setCustomer_description(rs.getString("customer_description"));
-                customerdetail.setCustomer_product(rs.getString("customer_product"));
-
-                if (!allmat.containsKey(rs.getString("customer_no"))) {
-                    allmat.put(rs.getString("customer_no"), customerdetail);
-                }
-
+                allmat.put(rs.getString("customer_no"), rs.getString("customer_no"));
             }
 
 
@@ -448,10 +436,10 @@ public class CustomerService {
     public static HashMap<String, String> savedatafromsap(List<BCSap> listsap) throws ClassNotFoundException, SQLException, NamingException {
         HashMap<String, String> status = new HashMap<String, String>();
         try {
-            HashMap<String, BCCustomer> getallmatcustomer = getallmatcustomer();
+            HashMap<String, String> getallmatcustomer = getallmatcustomer();
             int primarykey = getprimarykey() + 1;
             String sqlin = "INSERT INTO MIZUNOCUSTOMER (customer_id, customer_no, customer_barcode, customer_color,customer_size,customer_product,customer_description,DATE_CREATE) VALUES (?, ?, ?, ?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'))";
-            String sqlup = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?,c.customer_product = ?,c.DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS')  where c.CUSTOMER_ID = ?";
+            String sqlup = "update mizunocustomer c set c.CUSTOMER_NO = ?,c.CUSTOMER_BARCODE=?,c.CUSTOMER_COLOR=?,c.CUSTOMER_SIZE = ?,c.customer_description = ?,c.customer_product = ?,c.DATE_MODIFY = TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS')  where c.CUSTOMER_NO = ?";
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sqlin);
@@ -479,7 +467,7 @@ public class CustomerService {
                     ps.addBatch();
                     primarykey++;
                 } else {
-                    BCCustomer cm = getallmatcustomer.get(sap.getKDMAT());
+                    String cm = getallmatcustomer.get(sap.getKDMAT());
                     String size = "";
                     if (sap.getSIZES().contains(".")) {
                         String arr[] = sap.getSIZES().split("\\.");
@@ -495,7 +483,7 @@ public class CustomerService {
                     ps1.setString(5, sap.getPOSTX());
                     ps1.setString(6, sap.getMATNR());
                     ps1.setString(7, Utility.GetDateNow());
-                    ps1.setString(8, cm.getCustomer_id());
+                    ps1.setString(8, cm);
                     ps1.addBatch();
 
                 }
@@ -505,6 +493,7 @@ public class CustomerService {
             int[] in = ps.executeBatch();
             int[] up = ps1.executeBatch();
 
+            System.out.println(getallmatcustomer.size());
             System.out.println(in.length);
             System.out.println(up.length);
 

@@ -186,7 +186,7 @@ public class InvoiceService {
             }
 
 
-            sql += " and (invoiceno like ? or invoicedate like ? or customer like ?) ";
+            sql += " and (invoiceno like upper(?) or invoicedate like upper(?) or customer like upper(?)) ";
 
             sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
 
