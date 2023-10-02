@@ -8,6 +8,7 @@ import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.utility.ConnectDB;
 
 import com.pg.lib.utility.Utility;
+import java.lang.reflect.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +19,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.naming.NamingException;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -1628,47 +1630,80 @@ public class DetailService {
         return coverdate;
     }
 
-    public static boolean updatepallet(String pobefore, String startboxbefore, String endboxbefore, String firstdigitbefore, String pallet, String gw, String nw, String user_edit) throws SQLException {
-
-        boolean status = false;
-
+    private static List<BCDetailBox> getlistupdatepallet(String alldata) {
+        List<BCDetailBox> list = new ArrayList<BCDetailBox>();
         try {
-            String sql = "UPDATE MIZUNONEWBARBOXDT SET PALLET=?,GROSSWEIGHT=?,NETWEIGHT=?,USER_EDIT=?,DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO=? and BOXNO in (";
-            for (int s = Integer.parseInt(startboxbefore); s < Integer.parseInt(endboxbefore) + 1; s++) {
-                if (s < Integer.parseInt(endboxbefore)) {
-                    sql += "'" + firstdigitbefore + String.valueOf(s) + "',";
-                } else {
-                    sql += "'" + firstdigitbefore + String.valueOf(s) + "') ";
-                }
-            }
+            String[] all = alldata.split(",");
 
-            conn = ConnectDB.getConnection();
-            ps = conn.prepareStatement(sql);
-            ps.setString(1, pallet);
-            ps.setString(2, gw);
-            ps.setString(3, nw);
-            ps.setString(4, user_edit);
-            ps.setString(5, Utility.GetDateNow());
-            ps.setString(6, pobefore);
+            for (String d : all) {
+                String[] x = d.split("#");
 
-
-
-            if (ps.executeUpdate() > 0) {
-                status = true;
-            } else {
-                status = false;
+                BCDetailBox box = new BCDetailBox();
+                box.setPo(x[0]);
+                box.setBoxno(x[1]);
+                box.setPallet(x[2]);
+                box.setGrossweight(x[3]);
+                box.setNetweight(x[4]);
+                list.add(box);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    public static boolean updatepallet(String alldata, String user) throws SQLException {
+
+        boolean status = false;
+
+        try {
+
+            List<BCDetailBox> allbox = getlistupdatepallet(alldata);
+
+            String sql = "UPDATE MIZUNONEWBARBOXDT SET PALLET=?,GROSSWEIGHT=?,NETWEIGHT=?,USER_EDIT=?,DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO=? and BOXNO = ?";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+
+            for (BCDetailBox b : allbox) {
+                ps.setString(1, b.getPallet());
+                ps.setString(2, b.getGrossweight());
+                ps.setString(3, b.getNetweight());
+                ps.setString(4, user);
+                ps.setString(5, Utility.GetDateNow());
+                ps.setString(6, b.getPo());
+                ps.setString(7, b.getBoxno());
+                ps.addBatch();
+
+                System.out.println("------------------------------------------------------------------");
+                System.out.println("Pallet : " + b.getPallet());
+                System.out.println("Grossweight : " + b.getGrossweight());
+                System.out.println("Netweight : " + b.getNetweight());
+                System.out.println("User : " + user);
+                System.out.println("DateNow : " + Utility.GetDateNow());
+                System.out.println("Po : " + b.getPo());
+                System.out.println("Boxno : " + b.getBoxno());
+                System.out.println("------------------------------------------------------------------");
+
+
+
+
+            }
+
+            ps.executeBatch();
+            status = true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            status = false;
         } finally {
             ConnectDB.closeConnection(conn);
             ps.close();
-            rs.close();
+            
         }
+
 
         return status;
     }
-
-  
 }

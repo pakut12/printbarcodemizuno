@@ -4,16 +4,19 @@
  */
 package com.pg.lib.Servlet;
 
+import com.google.gson.Gson;
 import com.pg.lib.model.BCCustomer;
 import com.pg.lib.model.BCDetailBox;
 import com.pg.lib.model.BCUser;
 import com.pg.lib.service.AuthenticationService;
 import com.pg.lib.service.CustomerService;
 import com.pg.lib.service.DetailService;
+import com.pg.lib.service.ReportService;
 import com.pg.lib.utility.Utility;
 import java.io.*;
 import java.net.*;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -765,17 +768,12 @@ public class Detail extends HttpServlet {
 
             } else if (type.equals("updatepallet")) {
                 try {
-                    String pobefore = request.getParameter("pobefore").trim();
-                    String startboxbefore = request.getParameter("startboxbefore").trim();
-                    String endboxbefore = request.getParameter("endboxbefore").trim();
-                    String firstdigitbefore = request.getParameter("firstdigitbefore").trim();
-                    String user_edit = request.getParameter("user_edit");
+                    HttpSession session = request.getSession();
+                    String alldata = request.getParameter("alldata");
+                    String user = (String) session.getAttribute("user");
+                   
 
-                    String pallet = request.getParameter("pallet").trim();
-                    String gw = request.getParameter("grossweight").trim();
-                    String nw = request.getParameter("netweight").trim();
-
-                    boolean status = DetailService.updatepallet(pobefore, startboxbefore, endboxbefore, firstdigitbefore, pallet, gw, nw, user_edit);
+                    boolean status = DetailService.updatepallet(alldata,user);
 
                     if (status) {
                         out.print("true");
@@ -784,135 +782,132 @@ public class Detail extends HttpServlet {
                     }
 
 
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
 
-            } else if (type.equals("getdetailpallet")) {
+            } else if (type.equals("gettablepallet")) {
+
                 try {
-
-                    String po = request.getParameter("posearch").trim();
-                    String boxstart = request.getParameter("numstart").trim();
-                    String boxend = request.getParameter("numend").trim();
+                    String customer = request.getParameter("customer").trim();
+                    String destination = request.getParameter("destination").trim();
+                    String pallet = request.getParameter("pallet").trim();
                     String firstdigit = request.getParameter("firstdigit").trim();
+                    String startbox = request.getParameter("startbox").trim();
+                    String endbox = request.getParameter("endbox").trim();
+                    String po = request.getParameter("po").trim();
+                    String po_old = request.getParameter("po_old").trim();
+                    String customer_no = request.getParameter("customer_no").trim();
+                    String customer_product = request.getParameter("customer_product").trim();
+                    String prodorder = request.getParameter("prodorder").trim();
+                    String datestart = request.getParameter("datestart").trim();
+                    String datestop = request.getParameter("datestop").trim();
 
 
-                    DetailService ds = new DetailService();
-                    List<BCDetailBox> listbox = ds.GetDetailBoxForPrint(po, boxstart, boxend, firstdigit);
-                    int n = 1;
-                    String html = "";
-                    html += "<table class='table table-striped  table-sm text-center text-nowrap' id='table_boxdetail'>";
-                    html += "<thead>";
-                    html += "<tr>";
-                    html += "<th>NO</th>";
-                    html += "<th>PO</th>";
-                    html += "<th>BOXNO</th>";
-                    html += "<th>BOXALL</th>";
-                    html += "<th>SKU_ITEM1</th>";
-                    html += "<th>UPC_CODE1</th>";
-                    html += "<th>QTY1</th>";
-                    html += "<th>SIZENO1</th>";
-                    html += "<th>COLORNO1</th>";
+                    int draw = Integer.parseInt(request.getParameter("draw").trim());
+                    int start = Integer.parseInt(request.getParameter("start").trim());
+                    int length = Integer.parseInt(request.getParameter("length").trim());
+                    String searchValue = request.getParameter("search[value]").trim();
+                    String orderColumn = request.getParameter("order[0][column]");
+                    String orderDir = request.getParameter("order[0][dir]");
 
-                    html += "<th>SKU_ITEM2</th>";
-                    html += "<th>UPC_CODE2</th>";
-                    html += "<th>QTY2</th>";
-                    html += "<th>SIZENO2</th>";
-                    html += "<th>COLORNO2</th>";
+                    ReportService rs = new ReportService();
+                    List<BCDetailBox> list = rs.listreportdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop, orderColumn, orderDir);
+                    List<BCDetailBox> listsum = rs.getsumdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, String.valueOf(start), String.valueOf(length), searchValue, datestart, datestop, orderColumn, orderDir);
 
-                    html += "<th>SKU_ITEM3</th>";
-                    html += "<th>UPC_CODE3</th>";
-                    html += "<th>QTY3</th>";
-                    html += "<th>SIZENO3</th>";
-                    html += "<th>COLORNO3</th>";
+                    int sumqty = 0;
+                    int sumqty_result = 0;
+                    int sumdiff = 0;
+                    int diff = 0;
+                    int summark = 0;
+                    String qty_result = "";
+                    String qty = "";
 
-                    html += "<th>SKU_ITEM4</th>";
-                    html += "<th>UPC_CODE4</th>";
-                    html += "<th>QTY4</th>";
-                    html += "<th>SIZENO4</th>";
-                    html += "<th>COLORNO4</th>";
+                    for (BCDetailBox li : listsum) {
+                        int mark = 0;
 
-                    html += "<th>SHIPFROM</th>";
-                    html += "<th>SFADDRESS1</th>";
-                    html += "<th>SFADDRESS2</th>";
-                    html += "<th>SFADDRESS3</th>";
-                    html += "<th>SFADDRESS4</th>";
-                    html += "<th>SHIPTO</th>";
-                    html += "<th>STADDRESS1</th>";
-                    html += "<th>STADDRESS2</th>";
-                    html += "<th>STADDRESS3</th>";
-                    html += "<th>STADDRESS4</th>";
-                    html += "<th>QTYPERBOX</th>";
-                    html += "<th>DESCTXT</th>";
-                    html += "<th>GROSSWEIGHT</th>";
-                    html += "<th>NETWEIGHT</th>";
-                    html += "<th>COUNTRY_ORIGIN</th>";
+                        if (li.getSku_item1().equals(li.getCustomer_no())) {
 
+                            qty_result = li.getQty_result1();
+                            qty = li.getQty1();
+                            if (Integer.parseInt(li.getQty_result1()) != Integer.parseInt(li.getQty1())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty1()) - Integer.parseInt(li.getQty_result1());
+                            }
+                        } else if (li.getSku_item2().equals(li.getCustomer_no())) {
+                            qty_result = li.getQty_result2();
+                            qty = li.getQty2();
+                            if (Integer.parseInt(li.getQty_result2()) != Integer.parseInt(li.getQty2())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty2()) - Integer.parseInt(li.getQty_result2());
+                            }
+                        } else if (li.getSku_item3().equals(li.getCustomer_no())) {
+                            qty_result = li.getQty_result3();
+                            qty = li.getQty3();
+                            if (Integer.parseInt(li.getQty_result3()) != Integer.parseInt(li.getQty3())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty3()) - Integer.parseInt(li.getQty_result3());
+                            }
+                        } else if (li.getSku_item4().equals(li.getCustomer_no())) {
+                            qty_result = li.getQty_result4();
+                            qty = li.getQty4();
+                            if (Integer.parseInt(li.getQty_result4()) != Integer.parseInt(li.getQty4())) {
+                                mark++;
+                                diff = Integer.parseInt(li.getQty4()) - Integer.parseInt(li.getQty_result4());
+                            }
 
-                    html += "<th>STATUSSHOOT</th>";
+                        }
 
-                    html += "</tr>";
-                    html += "</thead>";
-                    html += "<tbody>";
-                    for (int i = 0; i < listbox.size(); i++) {
-                        html += "<tr>";
-                        html += "<td>" + n + "</td>";
-                        html += "<td>" + listbox.get(i).getPo() + "</td>";
-                        html += "<td>" + listbox.get(i).getBoxno() + "</td>";
-                        html += "<td>" + listbox.get(i).getAllbox() + "</td>";
-
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item1()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code1()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty1()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen01()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn01()) + "</td>";
-
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item2()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code2()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty2()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen02()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn02()) + "</td>";
-
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item3()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code3()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty3()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen03()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn03()) + "</td>";
-
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSku_item4()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getUpc_code4()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getQty4()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getSizen04()) + "</td>";
-                        html += "<td>" + ds.ChackNull(listbox.get(i).getColorn04()) + "</td>";
-
-                        html += "<td>" + listbox.get(i).getShipfrom() + "</td>";
-                        html += "<td>" + listbox.get(i).getSfaddress1() + "</td>";
-                        html += "<td>" + listbox.get(i).getSfaddress2() + "</td>";
-                        html += "<td>" + listbox.get(i).getSfaddress3() + "</td>";
-                        html += "<td>" + listbox.get(i).getSfaddress4() + "</td>";
-                        html += "<td>" + listbox.get(i).getShipto() + "</td>";
-                        html += "<td>" + listbox.get(i).getStaddress1() + "</td>";
-                        html += "<td>" + listbox.get(i).getStaddress2() + "</td>";
-                        html += "<td>" + listbox.get(i).getStaddress3() + "</td>";
-                        html += "<td>" + listbox.get(i).getStaddress4() + "</td>";
-                        html += "<td>" + listbox.get(i).getQtyperbox() + "</td>";
-                        html += "<td>" + listbox.get(i).getDesctxt() + "</td>";
-                        html += "<td>" + listbox.get(i).getGrossweight() + "</td>";
-                        html += "<td>" + listbox.get(i).getNetweight() + "</td>";
-                        html += "<td>" + listbox.get(i).getCountry_origin() + "</td>";
+                        System.out.println("------------------------------------------------------------------------------");
+                        System.out.println("BoxNo : " + li.getBoxno());
+                        System.out.println("Sku_item1 : " + li.getSku_item1());
+                        System.out.println("Sku_item2 : " + li.getSku_item2());
+                        System.out.println("Sku_item3 : " + li.getSku_item3());
+                        System.out.println("Sku_item4 : " + li.getSku_item4());
+                        System.out.println("Qty1 : " + li.getQty1());
+                        System.out.println("Qty2 : " + li.getQty2());
+                        System.out.println("Qty3 : " + li.getQty3());
+                        System.out.println("Qty4 : " + li.getQty4());
+                        System.out.println("Qty_result1 : " + li.getQty_result1());
+                        System.out.println("Qty_result2 : " + li.getQty_result2());
+                        System.out.println("Qty_result3 : " + li.getQty_result3());
+                        System.out.println("Qty_result4 : " + li.getQty_result4());
+                        System.out.println("Customer_no : " + li.getCustomer_no());
+                        System.out.println("Qty : " + qty);
+                        System.out.println("Qty_result : " + qty_result);
+                        System.out.println("Mark : " + mark);
+                        System.out.println("------------------------------------------------------------------------------");
 
 
+                        sumqty_result += Integer.parseInt(qty_result);
+                        sumqty += Integer.parseInt(qty);
+                        sumdiff += diff;
+                        summark += mark;
 
-                        html += "<td>" + listbox.get(i).getStatusshoot() + "</td>";
-
-                        html += "</tr>";
-                        n++;
                     }
-                    html += "</tbody>";
-                    html += "</table>";
 
-                    out.print(html);
+
+
+                    Gson gson = new Gson();
+
+                    JSONObject obj = new JSONObject();
+                    obj.put("draw", draw);
+                    obj.put("recordsTotal", rs.getTotalRecordsdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, datestart, datestop));
+                    obj.put("recordsFiltered", rs.getFilteredRecordsdetailinventories(prodorder, customer, destination, po, po_old, customer_no, customer_product, pallet, startbox, endbox, firstdigit, start, length, searchValue, datestart, datestop));
+                    obj.put("data", gson.toJsonTree(list));
+                    DecimalFormat df = new DecimalFormat("#,###");
+
+
+                    obj.put("sumqty_result", String.valueOf(df.format(sumqty_result)));
+                    obj.put("sumqty", String.valueOf(df.format(sumqty)));
+                    obj.put("sumdiff", String.valueOf(df.format(sumqty - sumqty_result)));
+                    obj.put("summark", String.valueOf(df.format(summark)));
+
+                    response.setContentType("application/json");
+                    response.getWriter().write(obj.toString());
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

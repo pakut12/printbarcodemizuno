@@ -155,7 +155,7 @@ public class ReportService {
             sql += " SELECT ROWNUM, a.* ";
             sql += " FROM ( ";
             sql += " SELECT ";
-            sql += " a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
+            sql += " a.GROSSWEIGHT,a.NETWEIGHT,a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
             sql += " a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
             sql += " FROM MIZUNONEWBARBOXDT a ";
             sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
@@ -213,7 +213,7 @@ public class ReportService {
 
 
             sql += " GROUP BY ";
-            sql += "  a.USER_CREATE,a.USER_EDIT,b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  a.GROSSWEIGHT,a.NETWEIGHT,a.USER_CREATE,a.USER_EDIT,b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
             sql += "  ORDER BY ";
             sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
 
@@ -246,7 +246,7 @@ public class ReportService {
             sql += " SELECT count(*) ";
             sql += " FROM ( ";
             sql += " SELECT ";
-            sql += "  a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
+            sql += "  a.GROSSWEIGHT,a.NETWEIGHT,a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,a.PO, ";
             sql += "  a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
             sql += " FROM MIZUNONEWBARBOXDT a ";
             sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
@@ -303,7 +303,7 @@ public class ReportService {
             }
 
             sql += " GROUP BY ";
-            sql += "  b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  a.GROSSWEIGHT,a.NETWEIGHT,b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
             sql += "  ORDER BY ";
             sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
             sql += " ) a ";
@@ -334,10 +334,10 @@ public class ReportService {
             sql += " SELECT ROWNUM as rnum, a.* ";
             sql += " FROM ( ";
             sql += " SELECT ";
-            sql += " a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') AS DATE_MODIFY,a.PO, ";
-            sql += "  a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
+            sql += " a.GROSSWEIGHT,a.NETWEIGHT,a.USER_CREATE,a.USER_EDIT,b.customer_no,a.QTY1, a.QTY2,a.QTY3,a.QTY4, b.CUSTOMER_PRODUCT, a.PALLET, TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') AS DATE_MODIFY,a.PO, ";
+            sql += " a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO,c.qty_result1, c.qty_result2, c.qty_result3,c.qty_result4 ";
             sql += " FROM MIZUNONEWBARBOXDT a ";
-            sql += "  INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
+            sql += " INNER JOIN MIZUNONEWBARBOXRESULT c ON (c.po = a.po AND c.boxno = a.boxno) ";
             sql += " INNER JOIN MIZUNOCUSTOMER b ON (b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4) ";
             sql += "  WHERE  ";
             sql += " (a.boxno  LIKE upper('%" + searchValue + "%') or a.PROD_ORDER  LIKE upper('%" + searchValue + "%') or a.PO LIKE upper('%" + searchValue + "%') or a.SHIPTO LIKE upper('%" + searchValue + "%')  or  a.DESTINATION  LIKE upper('%" + searchValue + "%') or a.PO_OLD LIKE upper('%" + searchValue + "%')  or a.PALLET LIKE upper('%" + searchValue + "%') or b.customer_no  LIKE upper('%" + searchValue + "%') or b.customer_product  LIKE  upper('%" + searchValue + "%') or TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') or TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') LIKE upper('%" + searchValue + "%') ) ";
@@ -393,7 +393,7 @@ public class ReportService {
             }
 
             sql += " GROUP BY ";
-            sql += "  a.USER_CREATE,a.USER_EDIT,b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
+            sql += "  a.GROSSWEIGHT,a.NETWEIGHT,a.USER_CREATE,a.USER_EDIT,b.customer_no, a.QTY1,a.QTY2,a.QTY3, a.QTY4,b.CUSTOMER_PRODUCT,a.PALLET,TO_CHAR(a.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS'),TO_CHAR(a.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS'),a.PO,a.PO_OLD,a.PROD_ORDER,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.BOXNO, c.qty_result1, c.qty_result2,c.qty_result3,c.qty_result4 ";
             sql += "  ORDER BY ";
             sql += "  a.PO, b.customer_no,CAST(REGEXP_SUBSTR(a.BOXNO, '\\d+') AS INT) ";
 
@@ -405,6 +405,8 @@ public class ReportService {
             String[] columns = {"PO", "PO_OLD", "SKU_ITEM1,SKU_ITEM2,SKU_ITEM3,SKU_ITEM4", "CUSTOMER_PRODUCT", "PROD_ORDER", "PALLET", "REGEXP_SUBSTR(BOXNO, '[[:alpha:]]+') ,CAST(REGEXP_SUBSTR(BOXNO, '\\d+') AS INT) ", "qty1, qty2,qty3,qty4 ", "qty_result1, qty_result2,qty_result3,qty_result4 ", "DATE_CREATE", "DATE_MODIFY", "DATE_CREATE", "DATE_MODIFY",};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
+            }else{
+                sql += " ORDER BY " + columns[6] ;
             }
 
 
@@ -466,7 +468,9 @@ public class ReportService {
                 } else {
                     report.setUser_edit("");
                 }
-
+                
+                report.setNetweight(rs.getString("NETWEIGHT"));
+                report.setGrossweight(rs.getString("GROSSWEIGHT"));
 
 
                 list.add(report);

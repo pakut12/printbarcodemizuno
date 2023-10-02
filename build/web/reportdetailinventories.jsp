@@ -501,54 +501,7 @@
                 });      
                 
                                        
-                /*/
-                        var groupColumn = 3;
-                        var table = $('#tablereport').DataTable({
-                            dom: 'Bfrtip',
-                            buttons: [
-                                'pageLength',
-                                {
-                                    extend: 'excelHtml5',
-                                    title: 'รายละเอียดสินค้า PO : '+ po + ' วันที่ : ' + today()
-                                },
-                                {
-                                    text: 'PDF',
-                                    action: function ( dt ) {
-                                        var form = $("#myformreport").serialize()
-                                        window.open('Report?type=getreportdetailinventoriespdf&'+form, '_blank','height=400,width=800,left=200,top=200');  
-                                    }
-                                },
-                                {
-                                    text: 'Print',
-                                    action: function ( dt ) {
-                                        var form = $("#myformreport").serialize()
-                                        window.open('Report?type=getreportdetailinventories&'+form, '_blank','height=400,width=800,left=200,top=200');  
-                                    }
-                                }
-                            ],
-                            order: [[2, 'asc']],
-                            scrollX: true,
-                            rowGroup: {
-                                startRender: function ( rows, group ) {
-                                    return "รหัสสินค้า : "+group ;
-                                },
-                                endRender: function ( rows, group ) {
-                                    
-                                    var listdata = rows.data().pluck(9);
-                                    var sum = 0;
-                                    $.each(listdata,function(k,v){
-                                        sum += parseInt(v)
-                                    })
-                                    return "<div style='padding-left: 80%;'>รวม : " + sum +"</div>"
-                                },
-                                dataSrc: 3
-                            }
-                            
-                        });
-                        
-                    }
-                })
-                 */
+               
             } 
                               
             function getpallet(){

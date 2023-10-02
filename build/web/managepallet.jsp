@@ -14,7 +14,7 @@
     </head>
     <body>
         <%@ include file="share/navbar.jsp" %>
-        <div class="container mt-4" >
+        <div class="mx-5 mt-5" >
             <div class="text-center mb-3 h1">
                 เเก้ไข ข้อมูลพาเลทเเละน้ำหนัก
             </div>
@@ -50,7 +50,7 @@
                             </div>
                             <div class="col-sm-12 col-md-4 ">
                                 <div class="d-flex justify-content-center justify-content-md-start">
-                                    <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search">ค้นหา</button>
+                                    <button type="button" class="btn btn-outline-primary btn-sm w-25 " id="bt_search" onclick=" getdata()">ค้นหา</button>
                                     <button class="btn btn-outline-danger btn-sm w-25  mx-3 " type="button" id="bt_reset" onclick="clearinput()">ล้างข้อมูล</button>
                                 </div>
                             </div>
@@ -59,24 +59,136 @@
                     </form>
                 </div>
             </div>
-            
-            <div class="card shadow-lg mt-3">
-                <div class="card-header">คีย์ข้อมูล</div>
-                <div class="card-body">
-                    <form id="myform" novalidate>
-                        <div id="mytable">
-                        </div> 
-                    </form>
+            <div class="row">
+                <div class="col-10">
+                    <div class="card shadow-lg mt-3">
+                        <div class="card-header">คีย์ข้อมูล</div>
+                        <div class="card-body">
+                            <form id="myformtable">
+                                <div id="mytable" class="mt-3">
+                                    
+                                    <table class='table table-hover text-nowrap table-bordered text-center table-sm w-100' id='tablereport'>
+                                        <thead>
+                                            <tr>
+                                                <th scope='col'>PO</th>
+                                                <th scope='col'>PO เดิม</th>
+                                                <th scope='col'>รหัสลูกค้า</th>
+                                                <th scope='col'>รหัสสินค้า</th>
+                                                <th scope='col'>Production Order</th>
+                                                
+                                                <th scope='col'>กล่องที่</th>
+                                                <th scope='col'>จำนวนเต็ม</th>
+                                                <th scope='col'>จำนวนในกล่อง</th>
+                                                <th scope='col'>ต่าง</th>
+                                                <th scope='col'>หมายเหตุ</th>
+                                                <th scope='col'>ผู้สร้าง</th>
+                                                <th scope='col'>วันที่สร้าง</th>
+                                                <th scope='col'>ผู้เเก้ไข</th>
+                                                <th scope='col'>วันที่เเก้ไข</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                        
+                                    </table>
+                                    
+                                    
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2 mt-3  ms-auto  my-3" id="bt_save">
+                    <button class='btn btn-success btn-lg  w-100 me-3' onclick="senddata()" id="btsave" disabled>บันทึก</button>
                 </div>
             </div>
-            
         </div>
         <footer>
             <%@ include file="share/footer.jsp" %>
         </footer>
         <script>
             
+    
+            function clearinput(){
+                $("#btsave").attr('disabled',true)
+                $("#tablereport").DataTable().destroy();
+                $("#tablereport tbody").html('')
+            }
+    
+    
+            function getem(){
+               
+                $( "#tablereport" ).on( "input", function( event ) {
+                    var id = event.target.id
+                    if(id){
+                        $('#'+id).keyup(function(){
+                            var sp = id.split("_")
+                            var idtext = sp[0]+"_"+sp[1]
+                            console.log(sp)
+                            if(idtext){
+                                var pl = $('#'+ idtext+"_PL").val()
+                                var gw = $('#'+ idtext+"_GW").val()
+                                var nw = (gw - 1.3).toFixed(2)
+                                console.log()
+                                if(nw=='NaN' || nw <= 0){
+                                    $('#'+ idtext+"_NW").val(0)     
+                                }else{
+                                    $('#'+ idtext+"_NW").val(nw)
+                                }
+                                var data = pl + '#' +gw+'#'+nw
+                                $('#'+ idtext).val(data)
+                                
+                            }
+                       
+                        });
+                    }
+                });
+             
+                
+            }
             
+            function senddata(){
+                var alldata = '';
+                
+                for(var i = $('#numstart').val(); i<=$('#numend').val(); i++){
+                    var key = $('#posearch').val()+"#"+$('#firstdigit').val()+i+"#"
+                    var s =  $('#'+$('#posearch').val()+'_'+$('#firstdigit').val()+i).val()
+                    
+                    if(key && s){
+                        alldata += key+s+',';
+                    }
+                }
+                
+   
+                
+                $.ajax({
+                    type:"post",
+                    url:"Detail",
+                    data:{
+                        type:"updatepallet",
+                        alldata:alldata
+                    },
+                    success:function(msg){
+                        if(msg == 'true'){
+                            Swal.fire({
+                                 title:'บันทึก',
+                                 icon:'success',
+                                 text:'บันทึกสำเร็จ'
+                            })
+                        }else{
+                           Swal.fire({
+                                 title:'บันทึก',
+                                 icon:'error',
+                                 text:'บันทึกไม่สำเร็จ'
+                            })
+                        }
+                        clearinput()
+                    }
+                })
+              
+             
+            }
+    
             function getfirstdigit(){
                 $.ajax({
                     type:"post",
@@ -92,472 +204,240 @@
                 
             }
             
-            function isNumberKey(evt){
-                var charCode = (evt.which) ? evt.which : evt.keyCode
-                if (charCode > 31 && (charCode < 48 || charCode > 57))
-                    return false;
-                return true;
+            function chacknull(txt){
+                if(!txt){
+                    txt = ""
+                }
+                return txt
             }
-            
-            function getcustomer(){
-                $.ajax({
-                    type:"post",
-                    url:"CustomerAddress",
-                    data:{
-                        type:"getlistcustomer"
-                    },
-                    success:function(msg){
-                        $("#customer").empty();
-                        $("#customer").append("<option value=''></option>");
-                        $("#customer").append(msg);
-                        //getcustomeraddress($("#customer").val())
-                    }
-                })
-            }
-            
-            function chack_customer1(customer_id){
-                $.ajax({
-                    type:'post',
-                    url:'Customer',
-                    data:{
-                        type:"chack_customer",
-                        customer_id:customer_id.toUpperCase()
-                    },
-                    success:function(msg){
-                        
-                        if(msg){
-                            var js = JSON.parse(msg)
-                            console.log(js)
-                            $("#customer1_barcode").val(js.customer_barcode)
-                            $("#customer1_color").val(js.customer_color)
-                            $("#customer1_size").val(js.customer_size)
-                            $("#description").val("");
-                            $("#description").val(js.customer_description)
-                            $("#customer1_number").val($("#quantity_box").val())
-                        }else{
-                            
-                            $("#description").val("")
-                            $("#customer1_barcode").val("")
-                            $("#customer1_color").val("")
-                            $("#customer1_size").val("")
-                            $("#customer1_number").val("")
-                        }
-                    }
-                })
-            }
-            function chack_customer2(customer_id){
-                $.ajax({
-                    type:'post',
-                    url:'Customer',
-                    data:{
-                        type:"chack_customer",
-                        customer_id:customer_id.toUpperCase()
-                    },
-                    success:function(msg){
-                        if(msg){
-                            var js = JSON.parse(msg)
-                            console.log(js)
-                            $("#customer2_barcode").val(js.customer_barcode)
-                            $("#customer2_color").val(js.customer_color)
-                            $("#customer2_size").val(js.customer_size)
-                            $("#customer2_description").val(js.customer_description)
-                            $("#customer2_number").val($("#quantity_box").val())
-                        }else{
-                            $("#customer2_description").val("")
-                            $("#customer2_barcode").val("")
-                            $("#customer2_color").val("")
-                            $("#customer2_size").val("")
-                            $("#customer2_number").val("")
-                        }
-                    }
-                })
-            }
-            function chack_customer3(customer_id){
-                $.ajax({
-                    type:'post',
-                    url:'Customer',
-                    data:{
-                        type:"chack_customer",
-                        customer_id:customer_id.toUpperCase()
-                    },
-                    success:function(msg){
-                        if(msg){
-                            var js = JSON.parse(msg)
-                            console.log(js)
-                            $("#customer3_barcode").val(js.customer_barcode)
-                            $("#customer3_color").val(js.customer_color)
-                            $("#customer3_size").val(js.customer_size)
-                            $("#customer3_description").val(js.customer_description)
-                            $("#customer3_number").val($("#quantity_box").val())
-                        }else{
-                            $("#customer3_description").val("")
-                            $("#customer3_barcode").val("")
-                            $("#customer3_color").val("")
-                            $("#customer3_size").val("")
-                            $("#customer3_number").val("")
-                        }
-                    }
-                })
-            }
-            function chack_customer4(customer_id){
-                $.ajax({
-                    type:'post',
-                    url:'Customer',
-                    data:{
-                        type:"chack_customer",
-                        customer_id:customer_id.toUpperCase()
-                    },
-                    success:function(msg){
-                        if(msg){
-                            var js = JSON.parse(msg)
-                            console.log(js)
-                            $("#customer4_barcode").val(js.customer_barcode)
-                            $("#customer4_color").val(js.customer_color)
-                            $("#customer4_size").val(js.customer_size)
-                            $("#customer4_description").val(js.customer_description)
-                            $("#customer4_number").val($("#quantity_box").val())
-                        }else{
-                            $("#customer4_description").val("")
-                            $("#customer4_barcode").val("")
-                            $("#customer4_color").val("")
-                            $("#customer4_size").val("")
-                            $("#customer4_number").val("")
-                        }
-                    }
-                })
-            }
-            
-            function updatedata(){
-            
-                var user_edit = $("#user_edit").val()
-                var pobefore = $("#posearch").val().toUpperCase();
-                var startboxbefore  = $("#numstart").val().toUpperCase();
-                var endboxbefore =  $("#numend").val().toUpperCase();
-                var firstdigitbefore = $("#firstdigit").val().toUpperCase();
-                var po_old = $("#pobefore").val().toUpperCase();
-        
-                var shipto = $("#customer").val().toUpperCase();
-                var customer_address = $("#customer_address").val().toUpperCase();
-                var qtyperbox  = $("#quantity_box").val().toUpperCase();
-                var firstdigit =  $("#initial").val().toUpperCase();
-                var startbox  = $("#numberbox_start").val();
-                var endbox  =  $("#numberbox_end").val();
-                var allbox  =   $("#quantitytotal_box").val().toUpperCase();    
-                var po =  $("#po").val().toUpperCase();
-                
-                var desctxt = $("#description").val().toUpperCase();
-                var grossweight = $("#gw").val().toUpperCase();
-                var netweight  = $("#nw").val().toUpperCase();
-                var country_origin  = "THAILAND";
-                        
-                var sku_item1  = $("#customer1_id").val().toUpperCase();
-                var upc_code1  =  $("#customer1_barcode").val().toUpperCase();
-                var colorno1  =  $("#customer1_color").val().toUpperCase();
-                var sizeno1  =  $("#customer1_size").val().toUpperCase();
-                var qty1  =  $("#customer1_number").val().toUpperCase();
+    
 
-                var sku_item2 =  $("#customer2_id").val().toUpperCase();
-                var upc_code2  = $("#customer2_barcode").val().toUpperCase();
-                var colorno2  =  $("#customer2_color").val().toUpperCase();
-                var sizeno2   =  $("#customer2_size").val().toUpperCase();
-                var qty2  =  $("#customer2_number").val().toUpperCase();
-                        
-                var sku_item3  =  $("#customer3_id").val().toUpperCase();
-                var upc_code3 =  $("#customer3_barcode").val().toUpperCase();
-                var colorno3 =  $("#customer3_color").val().toUpperCase();
-                var sizeno3  =  $("#customer3_size").val().toUpperCase();
-                var qty3   =  $("#customer3_number").val().toUpperCase();
-                        
-                var sku_item4  = $("#customer4_id").val().toUpperCase();
-                var upc_code4  = $("#customer4_barcode").val().toUpperCase();
-                var colorno4 =  $("#customer4_color").val().toUpperCase();
-                var sizeno4  =  $("#customer4_size").val().toUpperCase();
-                var qty4  = $("#customer4_number").val().toUpperCase();
-                var destination  = $("#destination").val().toUpperCase();
-               
-                if(po != pobefore ){
-                    po_old = pobefore
-                }
-                var date = $("#date_create").val();
-                var pallet = $("#pallet").val().toUpperCase();
-                var prodorder = $("#prodorder").val().toUpperCase();
-              
-                var num1 = $("#customer1_number").val().toUpperCase()
-                var num2 = $("#customer2_number").val().toUpperCase()
-                var num3 = $("#customer3_number").val().toUpperCase()
-                var num4 = $("#customer4_number").val().toUpperCase()
-                if(!num1){
-                    num1=0;
-                }
-                if(!num2){
-                    num2=0;
-                }
-                if(!num3){
-                    num3=0;
-                }
-                if(!num4){
-                    num4=0;
-                }
-                var sumqty_result = parseInt(num1)+parseInt(num2)+parseInt(num3)+parseInt(num4)
-              
-                var invoiceno = $("#invoiceno").val();
-                var invoicedate = $("#invoicedate").val();
-                
-                var boxseq = $("#boxseq").val();
-                
-                console.log(sumqty_result) 
-                console.log($("#quantity_box").val())
-                
-                if(sumqty_result <= parseInt($("#quantity_box").val()) && $("#gw").val() && country_origin && $("#pallet").val()){
-                    $.ajax({
+            function getdata(){
+               $("#btsave").attr('disabled',false)
+                var customer = "";
+                var destination = "";
+                var pallet = "";
+                var firstdigit = $("#firstdigit").val();
+                var start = $("#numstart").val();
+                var end = $("#numend").val();
+                var po = $("#posearch").val();
+                var po_old = "";
+                var customer_no = "";
+                var customer_product = "";
+                var prodorder = "";
+                var datestart = "";
+                var datestop = "";
+        
+                var table =   $("#tablereport").DataTable({
+                    lengthMenu: [[10, 25, 50,100,9999999], [10, 25, 50,100 ,"All"]],
+                    pageLength: 9999999,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
                         type:"post",
                         url:"Detail",
                         data:{
-                            type:"updatepallet",
-                            customer_address:customer_address,
-                            pobefore:pobefore,
-                            startboxbefore:startboxbefore,
-                            endboxbefore:endboxbefore,
-                            shipto:shipto,
-                            qtyperbox:qtyperbox,
-                            firstdigit:firstdigit,
-                            startbox:startbox,
-                            endbox:endbox,
-                            allbox:allbox,
-                            po:po,
-                            desctxt:desctxt,
-                            grossweight:grossweight,
-                            netweight:netweight,
-                            country_origin:country_origin,
-                            sku_item1:sku_item1,
-                            upc_code1:upc_code1,
-                            colorno1:colorno1,
-                            sizeno1:sizeno1,
-                            qty1:qty1,
-                            sku_item2:sku_item2,
-                            upc_code2:upc_code2,
-                            colorno2:colorno2,
-                            sizeno2:sizeno2,
-                            qty2:qty2,
-                            sku_item3:sku_item3,
-                            upc_code3: upc_code3,
-                            colorno3:colorno3,
-                            sizeno3:sizeno3,
-                            qty3: qty3,
-                            sku_item4:sku_item4,
-                            upc_code4:upc_code4,
-                            colorno4:colorno4,
-                            sizeno4:sizeno4,
-                            qty4:qty4,
-                            pallet:pallet,
-                            prodorder:prodorder,
+                            type:"gettablepallet",
+                            customer:customer,
                             destination:destination,
-                            date:date,
+                            pallet:pallet,
+                            firstdigit:firstdigit,
+                            startbox:start,
+                            endbox:end,
+                            po:po,
                             po_old:po_old,
-                            firstdigitbefore:firstdigitbefore,
-                            invoiceno:invoiceno,
-                            invoicedate:invoicedate,
-                            boxseq:boxseq,
-                            user_edit:user_edit
+                            customer_no:customer_no,
+                            customer_product:customer_product,
+                            prodorder:prodorder,
+                            datestart:datestart,
+                            datestop:datestop
                         },
-                        success:function(msg){
-                            if(msg == "true"){
-                                Swal.fire({
-                                    title:"เเก้ไข",
-                                    icon:"success",
-                                    text:"เเก้ไขสำเร็จ"
-                                })
-                            }else if(msg == "false"){
-                                Swal.fire({
-                                    title:"เเก้ไข",
-                                    icon:"error",
-                                    text:"เเก้ไขไม่สำเร็จ"
-                                })
-                            }
-                            clearinput(); 
-                            $("#myform").removeClass('was-validated')
+                        dataSrc:function(json){
+                          
+                            var arr = [];
+                            var data = JSON.parse(json.data);
                             
-                        }
-                    })
-                }else{
-                
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'ผิดพลาด',
-                        html: 'จำนวนตัวรวมไม่เท่ากับจำนวนตัวต่อกล่อง<br>หรือกรองข้อมูลไม่ถูกต้องกรุณาตรวจสอบอีกครั้ง'
-                    })
-                    
-                    $("#myform").addClass('was-validated')
-                    
-                }
-                
-               
-                
-                
-            }
-            
-            function clearinput(){
-                $("#customer_text").val("");
-                $("#myform :input").val("");
-                $("#myform :input").attr("disabled", true);
-                $("#myformsearch :input").val('')
-            }
-            
-         
-            function getcustomer(){
-                $.ajax({
-                    type:"post",
-                    url:"CustomerAddress",
-                    data:{
-                        type:"getlistcustomer"
-                    },
-                    success:function(msg){
-                        //$("#customer").empty();
-                        $("#customer").append(msg);
-                        getcustomeraddress($("#customer").val())
-                    }
-                })
-            }
-            
-            function getcustomeraddress(address_customer){
-                $.ajax({
-                    type:"post",
-                    url:"CustomerAddress",
-                    data:{
-                        type:"getdelivery",
-                        address_customer:address_customer
-                    },
-                    success:function(msg){
-                  
-                        //  $("#customer_address").empty();
-                        $("#customer_address").append(msg);
-                    }
-                })
-            }
-            
-            function searchpo(){
-                var posearch = $("#posearch").val().toUpperCase();
-                var numstart = $("#numstart").val().toUpperCase();
-                var numend = $("#numend").val().toUpperCase();
-                var firstdigit = $("#firstdigit").val().toUpperCase();
-                
-                $.ajax({
-                    type:"post",
-                    url:"Detail",
-                    data:{
-                        type:"getdetailpallet",
-                        posearch:posearch,
-                        numstart:numstart,
-                        numend:numend,
-                        firstdigit:firstdigit
-                    },
-                    success:function(msg){
-                        if(msg){  
-                            $("#mytable").html(msg)
-                            $("#table_boxpallet").DataTable({
-                                scrollX: true
-                            })
-                        }else{
-                            Swal.fire({
-                                title:"ผิดพลาด",
-                                icon:"error",
-                                text:"ไม่พบข้อมูล"
-                            })
-                            clearinput()
-                        }
-                    }
-                }) 
-            }
-              
-            function deletedata(){
-                var posearch = $("#posearch").val().toUpperCase();
-                var numstart = $("#numstart").val().toUpperCase();
-                var numend = $("#numend").val().toUpperCase();
-                var firstdigit = $("#firstdigit").val().toUpperCase();
-                Swal.fire({
-                    title: 'คุณต้องการลบใช่หรือไม่',
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'ใช่',
-                    cancelButtonText: 'ไม่ใช่'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $.ajax({
-                            type:"post",
-                            url:"Detail",
-                            data:{
-                                type:"deletedetailsall",
-                                posearch:posearch,
-                                startbox:numstart,
-                                endbox:numend,
-                                firstdigit:firstdigit
-                            },
-                            success:function(msg){
-                                var js = JSON.parse(msg);
-                                if(js.status == "true"){
-                                    Swal.fire({
-                                        title:"ลบ",
-                                        icon:"success",
-                                        text:"ลบสำเร็จ"
-                                    })
-                                    clearinput()
-                                }else if(js.status == "false"){
-                                    Swal.fire({
-                                        title:"ลบ",
-                                        icon:"error",
-                                        text:"ลบไม่สำเร็จ"
-                                    })
+                            
+                            $.each(data,function(k,v){
+                                
+                                var palletnew = "<input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' name='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' class='form-control form-control-sm  border border-primary text-center '>";
+                                var gwnew = "<input type='text' id='gwnew[]' name='gwnew[]' class='form-control form-control-sm  border border-primary text-center ' value='"+v.grossweight+"'>";
+                                 
+                                var date = "";
+                                
+                                if(v.date_create){
+                                    date = v.date_create
                                 }
-                                clearinput()
+                                
+                                var qty = "";
+                                var qty_result = "";
+                                
+                                var mark = "";
+                                var diff = 0;
+                                if(v.customer_no == v.sku_item1){
+                                    qty = v.qty1
+                                    qty_result=v.qty_result1 
+                                    if(parseInt(v.qty_result1) < parseInt(qty)){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result1;
+                                }else if(v.customer_no == v.sku_item2){
+                                    qty = v.qty2
+                                    qty_result=v.qty_result2
+                                    if(parseInt(v.qty_result2) < parseInt(qty)){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result2;
+                                }else if(v.customer_no == v.sku_item3){
+                                    qty = v.qty3
+                                    qty_result=v.qty_result3
+                                    if(parseInt(v.qty_result3) < parseInt(qty)){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result3;
+                                }else if(v.customer_no == v.sku_item4){
+                                    qty = v.qty3
+                                    qty_result=v.qty_result4
+                                    if(parseInt(v.qty_result3) < parseInt(qty)){
+                                        mark = "*"
+                                    }
+                                    diff =  qty - v.qty_result3;
+                                }
+                                
+                                var result = {
+                                    date_create : chacknull(v.date_create),
+                                    date_modify : chacknull(v.date_modify),
+                                    po : chacknull(v.po),
+                                    palletnew:palletnew,
+                                    po_old : chacknull(v.po_old),
+                                    customer_no : chacknull( v.customer_no),
+                                    customer_product :  chacknull(v.customer_product),
+                                    prodorder :  chacknull(v.prodorder),
+                                    pallet :  chacknull(v.pallet),
+                                    qty :  chacknull(qty),
+                                    qty_result :  chacknull(qty_result),
+                                    diff :  diff,
+                                    mark :  chacknull(mark),
+                                    boxno :  chacknull(v.boxno),
+                                    user_create:chacknull(v.user_create),
+                                    user_edit:chacknull(v.user_edit),
+                                    test:"test",
+                                    gw:chacknull(v.grossweight),
+                                    nw:chacknull(v.netweight),
+                                    gwnew:gwnew
+                                }
+                                
+                                arr.push(result);
+                            })
+                            
+                            //console.log(data)
+                            
+                            return arr
+                        }
+                        
+                    },
+                    columns: [
+                        
+                        { data: 'po' },
+                        { data: 'po_old' },
+                        { data: 'customer_no' },
+                        { data: 'customer_product' },
+                        { data: 'prodorder' },
+                        { data: 'boxno' },
+                        { data: 'qty' },
+                        { data: 'qty_result' },
+                        { data: 'diff' },
+                        { data: 'mark' },
+                        { data: 'user_create' },
+                        { data: 'date_create' },
+                        { data: 'user_edit' },
+                        { data: 'date_modify' }
+                    ],
+                    bDestroy: true,
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'pageLength'
+                    ],
+                    ordering: false,
+                    
+                    order: [[6, 'asc']],
+                    scrollX: true,
+                    rowGroup: {
+                        startRender: function ( rows, group ) {
+                            var pallet = rows.data().pluck("pallet");
+                            var gw = rows.data().pluck("gw");
+                            var nw = '' ;
+                            if(gw[0]){
+                               nw = (gw[0] - 1.3).toFixed(2) ; 
                             }
-                        })
+                            
+                            var po = rows.data().pluck("po") ;
+                            var boxno = rows.data().pluck("boxno") ;
+                            
+                            
+      
+                            var html = ''
+                            html +=  '<div class="d-flex justify-content-between mx-3 mt-3 mb-3">'
+                            html +=  '<div class="h2 fw-bold">เลขที่กล่อง : '+group+' </div>'
+                            html +=  '<div class="">'
+                            html +=  '<input type="hidden" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'" onclick="getem()" value="'+pallet[0]+'#'+gw[0]+'#'+nw+'">'
+                            html +=  '<div class="input-group input-group-sm ">'
+                            html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>'
+                            html +=  '<input type="text" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'_PL" onclick="getem()" value="'+pallet[0]+'">'
+                            html +=  '</div>'
+                            html +=  '<div class="input-group input-group-sm ">'
+                            html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">GROSSWEIGHT</span>'
+                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_GW" onclick="getem()" value="'+gw[0]+'">'
+                            html +=  '</div>'
+                            html +=  '<div class="input-group input-group-sm ">'
+                            html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">NETWEIGHT</span>'
+                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_NW" disabled value="'+nw+'">'
+                            html +=  '</div>'
+                            html +=  '</div>'
+                            html +=  '</div>'
+                           
+                            return html ;
+                        },
+                        dataSrc: function(row) {
+                            return row.boxno;
+                        }
+                    
                     }
-                })
+
+
+
+                });      
+                
+
+                
             }
             
+            $(window).scroll(function() {
+                var scrollPosition = $(this).scrollTop();
+               
+                var button = $("#bt_save");
+
+                // ตรวจสอบความสูงของ div ที่มีคลาส "row" และปรับตำแหน่งของปุ่มตามต้องการ
+                var rowHeight = $(".row").height();
+               
+
+                if (scrollPosition > rowHeight) {
+                    button.addClass("fixed-bottom");
+                    // เพิ่มการปรับแต่งอื่น ๆ ตามต้องการ
+                } else {
+                    button.removeClass("fixed-bottom");
+                    // นำออกการปรับแต่งอื่น ๆ ตามต้องการ
+                }
+            });
+
             $(document).ready(function () {
-                $("#customer").change(function() {
-                    $("#customer_address").empty()
-                    getcustomeraddress($(this).val())
-                });
-                $("#bt_search").click(function(){
-                    searchpo()
-                });
-                $("#customer1_id").on('input', function() {
-                    chack_customer1($(this).val())
-                });
-                $("#customer2_id").on('input', function() {
-                    chack_customer2($(this).val())
-                });
-                $("#customer3_id").on('input', function() {
-                    chack_customer3($(this).val())
-                });
-                $("#customer4_id").on('input', function() {
-                    chack_customer4($(this).val())
-                });
-                
                 $("#posearch").on('input', function() {
                     getfirstdigit()
                 });
                 
-    
-                $("#gw").on('input', function() {
-                    var gw = $(this).val()
-                    
-                    if(gw && gw.length > 0){
-                        var nw = $(this).val() - 1.3
-                        if(nw <= 0 || isNaN(nw)){
-                            nw = 0
-                        }
-                        $("#nw").val(nw.toFixed(1))
-                    }else{
-                        $("#nw").val("")
-                    }  
-                });
                 
-                $("#myform :input").attr("disabled", true);
+    
+    
             });
         </script>
     </body>
