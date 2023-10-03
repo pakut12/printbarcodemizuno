@@ -26,7 +26,7 @@
             String id = request.getParameter("id").trim();
             List<BCInvoice> inv = PackingListService.getPackingListByid(id);
 
-          
+
             /*****************  set header **************/
             String invoiceno = inv.get(0).getInvoiceno();
             String invoicedate = Utility.CoverDate(inv.get(0).getInvoicedate().replace(" 00:00:00.0", ""));
@@ -53,27 +53,29 @@
             String shipfrom = inv.get(0).getShipfrom();
             String shipto = inv.get(0).getShipto();
             String mfg = "";
-            
+
             if (inv.get(0).getMfg() != null) {
-                mfg = "("+inv.get(0).getMfg()+")";
+                mfg = "(" + inv.get(0).getMfg() + ")";
             }
 
 
-            System.out.println(mfg);
 
             DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
             DecimalFormat decimalFormat1 = new DecimalFormat("#,###");
 
             String pono = "PO.NO. ";
             String ctnno = "";
-            HashSet<String> getpo = new HashSet<String>();
+            List<String> getpo = new ArrayList<String>();
 
             for (BCInvoice i : inv) {
-                getpo.add(i.getPo());
+               if(!getpo.contains(i.getPo())){
+                   getpo.add(i.getPo());
+               }
                 ctnno += i.getFirstdigit() + i.getStartbox() + "-" + i.getFirstdigit() + i.getEndbox() + ",";
             }
 
             for (String p : getpo) {
+                 System.out.println("TEST 11 : "+p);
                 pono += p + ",";
             }
 
@@ -387,8 +389,8 @@
             try {
 
                 for (BCInvoice i1 : inv) {
-                    
-                    
+
+
                     /******************************  set table1 ********************************************/
                     String data[];
                     int totalqty = 0;
@@ -406,26 +408,58 @@
                     String width = "";
                     System.out.println(size);
 
+
+
+
+
                     String txtsize = "";
                     int n = 2;
 
+
+
                     for (String res : size) {
                         if (size.contains("120") || size.contains("130") || size.contains("140") || size.contains("150") || size.contains("160")) {
+                            /*
                             if (res.contains("120") || res.contains("130") || res.contains("140") || res.contains("150") || res.contains("160")) {
-                                txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
+                            txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
                             } else {
-                                txtsize += "{text: '', border: [false, true, false, true]},";
+                            txtsize += "{text: '', border: [false, true, false, true]},";
                             }
+                             */
+                            txtsize += "{text: '', border: [false, true, false, true]},";
+                            txtsize += "{text: '', border: [false, true, false, true]},";
+                            txtsize += "{text: '', border: [false, true, false, true]},";
+                            txtsize += "{text: '120', border: [false, true, false, true]},";
+                            txtsize += "{text: '130', border: [false, true, false, true]},";
+                            txtsize += "{text: '140', border: [false, true, false, true]},";
+                            txtsize += "{text: '150', border: [false, true, false, true]},";
+                            txtsize += "{text: '160', border: [false, true, false, true]},";
+                           
+
+                            width += "'auto',";
+                            width += "'auto',";
+                            width += "'auto',";
+                            width += "'auto',";
+                            width += "'auto',";
+                            width += "'auto',";
+                            width += "'auto',";
+                            width += "'auto',";
+                            
+                            break;
 
                         } else if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
                             txtsize += "{text: '0" + n + "\\n" + res + "', border: [false, true, false, true]},";
                         } else {
                             txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
                         }
+                        
                         width += "'auto',";
                         n++;
+                        
                     }
 
+                    
+                    
                     /*
                     int n1 = size.size();
                     while(n1 != 8){
@@ -460,15 +494,15 @@
                         }
 
                         if (!group.contains(",")) {
-                            
+
                             int num = 0;
                             List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
                             HashSet<String> cut = new HashSet<String>();
-                            
-                            System.out.println("P : "+listsizebypo.size());
-                            
+
+                            System.out.println("P : " + listsizebypo.size());
+
                             for (BCDetailBox c : listsizebypo) {
-                                
+
                                 if (!cut.contains(c.getCustomer_no().replace(c.getCustomer_size(), ""))) {
                                     HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
 
@@ -893,9 +927,9 @@
                     List<String> maptotal = new ArrayList<String>();
                     List<String> alltotal = new ArrayList<String>();
                     String data1 = "";
-                    
-                    System.out.println("S : "+listgroupcolor.size());
-                    
+
+                    System.out.println("S : " + listgroupcolor.size());
+
                     for (BCDetailBox g : listgroupcolor) {
 
                         String desc1 = Utility.Chacknull(g.getDestination());
@@ -935,15 +969,15 @@
                                     map.put(g.getCustomer_no() + "#" + s + "#" + desc1, String.valueOf(qt));
 
                                 }
-                                
-                                maptotal.add(g.getCustomer_no()+"#"+s + "#" + q);
-                                
+
+                                maptotal.add(g.getCustomer_no() + "#" + s + "#" + q);
+
                             }
 
                             System.out.println(map);
                             txt1 += "[";
                             txt1 += "{text: '" + grouptxt.replace(desc1, "") + "',border: [false, false, false, false]},";
-                            txt1 += "{text: '" + g.getPo() + mfg +   "',border: [false, false, false, false]},";
+                            txt1 += "{text: '" + g.getPo() + mfg + "',border: [false, false, false, false]},";
                             txt1 += "{text: '" + Utility.Chacknull(desc1) + "',border: [false, false, false, false]},";
                             txt1 += "{text: '',border: [false, false, false, false]},";
                             int qtytotal = 0;
@@ -1196,13 +1230,13 @@
                     ],
                     styles: {
                         headercontent: {
-                            fontSize: 12,
+                            fontSize: 13,
                             bold: true,
                             margin: [45, 2] 
                         },
                     
                         tbcontent: {
-                            fontSize: 11,
+                            fontSize: 12,
                             bold: true,
                             margin: [10, 2],
                             alignment:'center'                      

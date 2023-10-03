@@ -41,6 +41,7 @@ public class Invoice extends HttpServlet {
             String type = request.getParameter("type").trim();
             if (type.equals("addinvoice")) {
                 try {
+                    HttpSession session = request.getSession();
 
                     String invoiceno = request.getParameter("invoiceno");
                     String invoicedate = request.getParameter("invoicedate");
@@ -51,8 +52,10 @@ public class Invoice extends HttpServlet {
                     String from = request.getParameter("from");
                     String to = request.getParameter("to");
                     String addfinal = request.getParameter("addfinal");
-                   
-                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to, addfinal);
+                    String user_create = session.getAttribute("user").toString();
+
+
+                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to, addfinal, user_create);
 
                     if (status) {
                         out.print("true");
@@ -131,7 +134,8 @@ public class Invoice extends HttpServlet {
                     obj.put("shipto", listdata.get(0).getShipto());
                     obj.put("finald", listdata.get(0).getFinald());
                     obj.put("mfg", listdata.get(0).getMfg());
-
+                    obj.put("user_create", listdata.get(0).getUser_create());
+                    obj.put("user_edit", listdata.get(0).getUser_edit());
                     
                     out.print(obj);
 
@@ -157,6 +161,9 @@ public class Invoice extends HttpServlet {
 
             } else if (type.equals("updateinvoice")) {
                 try {
+                    HttpSession session = request.getSession();
+
+
                     String delid = request.getParameter("id").trim();
                     String invoiceno = request.getParameter("invoiceno");
                     String invoicedate = request.getParameter("invoicedate");
@@ -168,17 +175,15 @@ public class Invoice extends HttpServlet {
                     String from = request.getParameter("from");
                     String to = request.getParameter("to");
                     String finald = request.getParameter("finald");
+                    String user_edit = session.getAttribute("user").toString();
+                    String user_create = request.getParameter("user_create");
 
-
-                    System.out.println(shipper);
-                    System.out.println(from);
-                    System.out.println(to);
 
 
                     boolean delstatus = InvoiceService.delinvoice(delid);
 
                     if (delstatus) {
-                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to, finald);
+                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to, finald, user_edit,user_create);
                         if (status) {
                             out.print("true");
                         } else {

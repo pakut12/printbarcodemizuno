@@ -1639,11 +1639,39 @@ public class DetailService {
                 String[] x = d.split("#");
 
                 BCDetailBox box = new BCDetailBox();
-                box.setPo(x[0]);
-                box.setBoxno(x[1]);
-                box.setPallet(x[2]);
-                box.setGrossweight(x[3]);
-                box.setNetweight(x[4]);
+
+                if (x.length == 1) {
+                    box.setPo(x[0]);
+                    box.setBoxno(null);
+                    box.setPallet(null);
+                    box.setGrossweight(null);
+                    box.setNetweight(null);
+                } else if (x.length == 2) {
+                    box.setPo(x[0]);
+                    box.setBoxno(x[1]);
+                    box.setPallet(null);
+                    box.setGrossweight(null);
+                    box.setNetweight(null);
+                } else if (x.length == 3) {
+                    box.setPo(x[0]);
+                    box.setBoxno(x[1]);
+                    box.setPallet(x[2]);
+                    box.setGrossweight(null);
+                    box.setNetweight(null);
+                } else if (x.length == 4) {
+                    box.setPo(x[0]);
+                    box.setBoxno(x[1]);
+                    box.setPallet(x[2]);
+                    box.setGrossweight(x[3]);
+                    box.setNetweight(null);
+                } else if (x.length == 5) {
+                    box.setPo(x[0]);
+                    box.setBoxno(x[1]);
+                    box.setPallet(x[2]);
+                    box.setGrossweight(x[3]);
+                    box.setNetweight(x[4]);
+                }
+                
                 list.add(box);
             }
 
@@ -1700,7 +1728,7 @@ public class DetailService {
         } finally {
             ConnectDB.closeConnection(conn);
             ps.close();
-            
+
         }
 
 

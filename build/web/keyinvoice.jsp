@@ -29,6 +29,7 @@
                             <div class="d-flex justify-content-center">
                                 <div class="row mt-3 mx-auto ">
                                     <div class="col-sm-12 col-md-3">
+                                        <input id="edit_user_create" name="edit_user_create" type="hidden">
                                         <input id="edit_invoiceid" name="edit_invoiceid" type="hidden">
                                         <input id="edit_datecreate" name="edit_datecreate" type="hidden">
                                         <div class="input-group input-group-sm mb-3">
@@ -144,11 +145,11 @@
                             <div class="me-auto">
                                 <button type="button" class="btn btn-danger "  onclick="btdelinvoice()"  id="btn-delete">ลบ PackingList</button>
                             </div>
-                            
-                            <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">ปิด</button>
                             <button type="button" class="btn btn-dark"  onclick="btloadinvoice()"  id="btn-loadpdf">PackingList PDF</button>
                             <button type="button" class="btn btn-success "  onclick="btprintinvoice()"  id="btn-print">พิมพ์ PackingList</button>
                             <button type="button" class="btn btn-primary " onclick="bteditinvoice()"  id="btn-edit">แก้ไข PackingList</button>
+                            <div class="vr"></div>
+                            <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">ปิด</button>
                             
                         </div>
                     </form>
@@ -170,7 +171,7 @@
                                 <div class="row mt-3 mx-auto ">
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
+                                          <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
                                             <input type="text" class="form-control text-center" name="add_invoiceno" id="add_invoiceno" maxlength="10" required>
                                         </div> 
                                     </div>
@@ -395,7 +396,7 @@
                             var data = JSON.parse(json.data);
                           
                             $.each(data,function(k,v){
-                                
+                              console.log(v)
                                 var containerno = ""
                                 if(v.containerno){
                                     containerno = v.containerno
@@ -410,6 +411,9 @@
                                     invoiceno : v.invoiceno.toUpperCase(),
                                     invoicedate :  v.invoicedate.toUpperCase(),
                                     date_create : v.date_create.toUpperCase(),
+                                    date_modified: v.date_modified.toUpperCase(),
+                                    user_create:v.user_create,
+                                    user_edit:v.user_edit,
                                     btn_edit : '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase()+')" id="bt_edit">ดูรายละเอียด</button>'
                                    
                                 }
@@ -433,9 +437,22 @@
                             title:'customer',
                             data : 'customer' 
                         },
+                       
                         {
+                            title:'user_create',
+                            data : 'user_create' 
+                        },
+                         {
                             title:'date_create',
                             data : 'date_create' 
+                        },
+                        {
+                            title:'user_edit',
+                            data : 'user_edit' 
+                        },
+                        {
+                            title:'date_modified',
+                            data : 'date_modified' 
                         },
                         {
                             title:'view',
@@ -760,6 +777,7 @@
                     url:"Invoice",
                     data:{
                         type:"updateinvoice",
+                        user_create:$("#edit_user_create").val(),
                         invoiceno:$("#edit_invoiceno").val().toUpperCase(),
                         invoicedate:$("#edit_invoicedate").val().toUpperCase(),
                         saveingno:$("#edit_saveingno").val().toUpperCase(),
@@ -834,6 +852,7 @@
                         console.log(js)
                         var jsdecode = JSON.parse(js.data)
            
+                        $("#edit_user_create").val(js.user_create)
                         $("#edit_invoiceid").val(js.invoiceid.toUpperCase())
                         $("#edit_invoiceno").val(js.invoiceno.toUpperCase())
                         $("#edit_invoicedate").val(js.invoicedate.toUpperCase())

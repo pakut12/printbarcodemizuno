@@ -385,7 +385,7 @@
                             }
                         }
                     ],
-                    order: [[2, 'asc']],
+                   
                     rowGroup: {
                         startRender: function ( rows, group ) {
                             return "รหัสลูกค้า : "+group ;

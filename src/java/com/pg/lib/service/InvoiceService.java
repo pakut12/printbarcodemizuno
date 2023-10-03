@@ -6,11 +6,13 @@ package com.pg.lib.service;
 
 import com.pg.lib.model.BCCustomer;
 import com.pg.lib.model.BCInvoice;
+import com.pg.lib.model.BCUser;
 import com.pg.lib.utility.ConnectDB;
 import com.pg.lib.utility.Utility;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.naming.NamingException;
 import org.json.JSONArray;
@@ -58,6 +60,9 @@ public class InvoiceService {
                 invoice.setShipper(rs.getString("SHIPPER"));
                 invoice.setFinald(rs.getString("FINAL"));
                 invoice.setMfg(rs.getString("MFG"));
+                invoice.setUser_create(rs.getString("USER_CREATE"));
+                invoice.setUser_edit(rs.getString("USER_EDIT"));
+
 
 
                 list.add(invoice);
@@ -168,7 +173,7 @@ public class InvoiceService {
         try {
             sql += "SELECT * FROM ( ";
             sql += "SELECT rownum as rnum,tb.*  FROM ( ";
-            sql += " SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE   ";
+            sql += " SELECT INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE,DATE_MODIFIED,USER_CREATE,USER_EDIT ";
             sql += "  FROM MIZUNONEWBARBOXINVOICE c ";
             sql += "  WHERE c.INVOICEID > 99 ";
 
@@ -188,9 +193,9 @@ public class InvoiceService {
 
             sql += " and (invoiceno like upper(?) or invoicedate like upper(?) or customer like upper(?)) ";
 
-            sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE ";
+            sql += " group by INVOICEID,INVOICENO,INVOICEDATE,CUSTOMER,DATE_CREATE,DATE_MODIFIED,USER_CREATE,USER_EDIT ";
 
-            String[] columns = {"INVOICENO", "INVOICEDATE", "CUSTOMER", "DATE_CREATE"};
+            String[] columns = {"INVOICENO", "INVOICEDATE", "CUSTOMER", "DATE_CREATE", "DATE_MODIFIED", "USER_CREATE", "USER_EDIT"};
             if (orderColumn != null && !orderColumn.isEmpty()) {
                 sql += " ORDER BY " + columns[Integer.parseInt(orderColumn)] + " " + orderDir;
             }
@@ -211,15 +216,33 @@ public class InvoiceService {
 
             rs = ps.executeQuery();
 
-
+            HashMap<String, BCUser> listuser = AuthenticationService.getmapuser();
             while (rs.next()) {
+
+                BCUser userc = listuser.get(rs.getString("USER_CREATE"));
+                BCUser userm = listuser.get(rs.getString("USER_EDIT"));
+
                 BCInvoice invoice = new BCInvoice();
 
                 invoice.setInvoiceid(rs.getString("invoiceid"));
                 invoice.setInvoiceno(rs.getString("invoiceno"));
                 invoice.setInvoicedate(Utility.CoverDateFromSql(rs.getDate("invoicedate"), 1));
                 invoice.setDate_create(Utility.CoverDateFromSql(rs.getTimestamp("date_create"), 2));
+                invoice.setDate_modified(Utility.CoverDateFromSql(rs.getTimestamp("DATE_MODIFIED"), 2));
                 invoice.setCustomer(rs.getString("customer"));
+
+                if (userc != null) {
+                    invoice.setUser_create(userc.getUser_firstname() + " " + userc.getUser_lastname());
+                } else {
+                    invoice.setUser_create("");
+                }
+
+                if (userm != null) {
+                    invoice.setUser_edit(userm.getUser_firstname() + " " + userm.getUser_lastname());
+                } else {
+                    invoice.setUser_edit("");
+                }
+
 
                 list.add(invoice);
             }
@@ -283,12 +306,12 @@ public class InvoiceService {
 
     }
 
-    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate, String customer, String shipper, String from, String to, String finald) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean updateinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String datecreate, String customer, String shipper, String from, String to, String finald, String user_edit, String user_create) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL,MFG) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?)";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,DATE_MODIFIED,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL,MFG,USER_EDIT,USER_CREATE) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,?,?)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
 
@@ -326,6 +349,9 @@ public class InvoiceService {
                 ps.setString(15, to);
                 ps.setString(16, finald);
                 ps.setString(17, mfg);
+                ps.setString(18, user_edit);
+                ps.setString(19, user_create);
+
                 ps.addBatch();
 
 
@@ -344,12 +370,12 @@ public class InvoiceService {
         return status;
     }
 
-    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String customer, String shipper, String from, String to, String addfinal) throws ClassNotFoundException, SQLException, NamingException, JSONException {
+    public static boolean addinvoice(String invoiceno, String invoicedate, String saveingno, String listpo, String customer, String shipper, String from, String to, String addfinal, String user_create) throws ClassNotFoundException, SQLException, NamingException, JSONException {
         boolean status = false;
         int primarykey = getprimarykey() + 1;
         try {
-            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL,MFG) " +
-                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?)";
+            String sql = "INSERT INTO TSG.MIZUNONEWBARBOXINVOICE (INVOICEID, INVOICENO, INVOICEDATE, SAVEINGNO, PO, FIRSTDIGIT, STARTBOX, ENDBOX, CONTAINERNO, DATE_CREATE,CUSTOMER,SHIPPER,SHIPFROM,SHIPTO,FINAL,MFG,USER_CREATE) " +
+                    "VALUES ( ?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS'),?,?,?,?,?,?,?)";
 
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
@@ -382,6 +408,7 @@ public class InvoiceService {
                 ps.setString(14, to);
                 ps.setString(15, addfinal);
                 ps.setString(16, mfg);
+                ps.setString(17, user_create);
 
                 ps.addBatch();
 

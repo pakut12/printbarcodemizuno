@@ -113,6 +113,7 @@
                 $("#btsave").attr('disabled',true)
                 $("#tablereport").DataTable().destroy();
                 $("#tablereport tbody").html('')
+                $("#myformsearch :input").val('')
             }
     
     
@@ -151,16 +152,22 @@
                 var alldata = '';
                 
                 for(var i = $('#numstart').val(); i<=$('#numend').val(); i++){
-                    var key = $('#posearch').val()+"#"+$('#firstdigit').val()+i+"#"
+                    var po = $('#posearch').val()+"#"
+                    var numbox = $('#firstdigit').val()+i+'#'
                     var s =  $('#'+$('#posearch').val()+'_'+$('#firstdigit').val()+i).val()
                     
-                    if(key && s){
-                        alldata += key+s+',';
+                    console.log('--------------------------------------------------------')
+                    console.log('PO : ' + po)
+                    console.log('NUMBOX : ' + numbox)
+                    console.log('S : ' + s)
+                    console.log('--------------------------------------------------------')
+             
+                    if(po && s && numbox){
+                        alldata += po+numbox+s+',';
                     }
+            
                 }
-                
-   
-                
+               
                 $.ajax({
                     type:"post",
                     url:"Detail",
@@ -185,6 +192,7 @@
                         clearinput()
                     }
                 })
+                
               
              
             }
@@ -366,32 +374,31 @@
                         startRender: function ( rows, group ) {
                             var pallet = rows.data().pluck("pallet");
                             var gw = rows.data().pluck("gw");
-                            var nw = '' ;
-                            if(gw[0]){
-                               nw = (gw[0] - 1.3).toFixed(2) ; 
-                            }
+                           
                             
                             var po = rows.data().pluck("po") ;
                             var boxno = rows.data().pluck("boxno") ;
                             
-                            
+                            var pallet = !pallet[0]?'':pallet[0]
+                            var gwinput = !gw[0]?'':gw[0]
+                            var nwinput = !gw[0]?'':(gw[0] - 1.3).toFixed(2)
       
                             var html = ''
                             html +=  '<div class="d-flex justify-content-between mx-3 mt-3 mb-3">'
                             html +=  '<div class="h2 fw-bold">เลขที่กล่อง : '+group+' </div>'
                             html +=  '<div class="">'
-                            html +=  '<input type="hidden" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'" onclick="getem()" value="'+pallet[0]+'#'+gw[0]+'#'+nw+'">'
+                            html +=  '<input type="hidden" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'" onclick="getem()" value="'+pallet+'#'+gwinput+'#'+nwinput+'">'
                             html +=  '<div class="input-group input-group-sm ">'
                             html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>'
-                            html +=  '<input type="text" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'_PL" onclick="getem()" value="'+pallet[0]+'">'
+                            html +=  '<input type="text" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'_PL" onclick="getem()" value="'+pallet+'">'
                             html +=  '</div>'
                             html +=  '<div class="input-group input-group-sm ">'
                             html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">GROSSWEIGHT</span>'
-                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_GW" onclick="getem()" value="'+gw[0]+'">'
+                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_GW" onclick="getem()" value="'+gwinput+'">'
                             html +=  '</div>'
                             html +=  '<div class="input-group input-group-sm ">'
                             html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">NETWEIGHT</span>'
-                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_NW" disabled value="'+nw+'">'
+                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_NW" disabled value="'+nwinput+'">'
                             html +=  '</div>'
                             html +=  '</div>'
                             html +=  '</div>'
@@ -435,9 +442,6 @@
                     getfirstdigit()
                 });
                 
-                
-    
-    
             });
         </script>
     </body>

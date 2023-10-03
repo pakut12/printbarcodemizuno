@@ -444,7 +444,7 @@
                             }
                         }
                     ],
-                    order: [[2, 'asc']],
+                    
                     scrollX: true,
                     rowGroup: {
                         startRender: function ( rows, group ) {
@@ -491,6 +491,7 @@
                             .append( '<th/>' )
                         },
                         dataSrc: function(row) {
+                            console.log(row)
                             return row.customer_no;
                         }
                     

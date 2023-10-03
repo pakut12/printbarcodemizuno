@@ -6,6 +6,7 @@
 <%@page import="com.pg.lib.model.BCDetailBox"%>
 <%@page import="java.util.*"%>
 <%@page import="com.pg.lib.service.DetailService"%>
+<%@page import="com.pg.lib.utility.*"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -25,6 +26,7 @@
             String customer_product = (String) request.getAttribute("customer_product");
             String pallet = (String) request.getAttribute("pallet");
 
+            String datenow = Utility.GetDateNow();
         %>
         <script>
             function getDateNow() {
@@ -66,7 +68,7 @@
                             columns: [
                                 {
                                     width: '*',
-                                    text: "ข้อมูล ณ วันที่ " +getDateNow()+"\n ผู้พิมพ์ : <%=(String)session.getAttribute("name")%>",
+                                    text: "ข้อมูล ณ วันที่ : <%=datenow %>\n ผู้พิมพ์ : <%=(String)session.getAttribute("name")%>",
                                     fontSize: 14,
                                     alignment: 'left',
                                     bold:true,
