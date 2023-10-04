@@ -235,7 +235,7 @@ public class Utility {
 
             for (BCDetailBox zx : grouppo) {
                 String txt = zx.getPo() + "#" + zx.getFirstdigit() + "#" + zx.getBoxno().replace(zx.getFirstdigit(), "");
-                System.out.println(txt);
+                //System.out.println(txt);
                 sp.add(txt);
 
             }
@@ -296,7 +296,7 @@ public class Utility {
 
                 }
 
-                System.out.println(result.toString());
+                //System.out.println(result.toString());
 
                 group = result.toString().replace(grouppo.get(0).getPo() + " " + grouppo.get(0).getFirstdigit(), "");
             }

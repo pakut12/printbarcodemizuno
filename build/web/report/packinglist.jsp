@@ -68,14 +68,14 @@
             List<String> getpo = new ArrayList<String>();
 
             for (BCInvoice i : inv) {
-               if(!getpo.contains(i.getPo())){
-                   getpo.add(i.getPo());
-               }
+                if (!getpo.contains(i.getPo())) {
+                    getpo.add(i.getPo());
+                }
                 ctnno += i.getFirstdigit() + i.getStartbox() + "-" + i.getFirstdigit() + i.getEndbox() + ",";
             }
 
             for (String p : getpo) {
-                 System.out.println("TEST 11 : "+p);
+
                 pono += p + ",";
             }
 
@@ -405,17 +405,11 @@
                     List<BCDetailBox> CheckSize = PackingListService.CheckSize(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
                     List<String> size = Utility.getallsize(i1.getCustomer(), CheckSize); // List Size 
 
+                    // System.out.println(size);
+
                     String width = "";
-                    System.out.println(size);
-
-
-
-
-
                     String txtsize = "";
                     int n = 2;
-
-
 
                     for (String res : size) {
                         if (size.contains("120") || size.contains("130") || size.contains("140") || size.contains("150") || size.contains("160")) {
@@ -434,7 +428,7 @@
                             txtsize += "{text: '140', border: [false, true, false, true]},";
                             txtsize += "{text: '150', border: [false, true, false, true]},";
                             txtsize += "{text: '160', border: [false, true, false, true]},";
-                           
+
 
                             width += "'auto',";
                             width += "'auto',";
@@ -444,7 +438,7 @@
                             width += "'auto',";
                             width += "'auto',";
                             width += "'auto',";
-                            
+
                             break;
 
                         } else if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
@@ -452,14 +446,14 @@
                         } else {
                             txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
                         }
-                        
+
                         width += "'auto',";
                         n++;
-                        
+
                     }
 
-                    
-                    
+
+
                     /*
                     int n1 = size.size();
                     while(n1 != 8){
@@ -485,7 +479,7 @@
 
                         String group = Utility.groupnumber(x);
 
-                        System.out.println(group);
+
 
                         List<String> grouppo = new ArrayList<String>();
                         for (BCDetailBox ae : x) {
@@ -499,11 +493,14 @@
                             List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
                             HashSet<String> cut = new HashSet<String>();
 
-                            System.out.println("P : " + listsizebypo.size());
+
 
                             for (BCDetailBox c : listsizebypo) {
+                                String c1 = c.getCustomer_no().replace(c.getCustomer_size(), "");
+                                String c2 = (c1.contains(".") ? c1.substring(0, c1.length() - 4) : c1);
 
-                                if (!cut.contains(c.getCustomer_no().replace(c.getCustomer_size(), ""))) {
+
+                                if (!cut.contains(c2)) {
                                     HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
 
                                     for (BCDetailBox z : listsizebypo) {
@@ -597,14 +594,17 @@
                                         txt += "],\n";
 
                                         totalqty += (ctn * qty);
-
                                         num++;
 
                                     }
 
-                                    cut.add(c.getCustomer_no().replace(c.getCustomer_size(), ""));
+                                    cut.add(c2);
                                 }
                             }
+
+
+
+
                         } else {
 
                             String[] groupT2 = group.split(",");
@@ -685,6 +685,7 @@
                                                 gw = Double.parseDouble(listb.getSumgw());
 
 
+
                                                 if (status == 0) {
                                                     txt += "[";
                                                     txt += "{text: '" + group.replace(",", "") + "',border: [false, false, false, false]},";
@@ -743,6 +744,8 @@
                                                     txt += "],\n";
                                                     totalqty += (ctn * qty);
                                                 }
+
+
 
 
                                                 status++;
@@ -921,61 +924,18 @@
                     String txt1 = "";
                     String conn = i1.getContainerno() == null ? "" : "Container no." + i1.getContainerno();
 
-                    List<BCDetailBox> listgroupcolor = PackingListService.GroupCustomeColor(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
+                    
                     HashMap<String, String> map = new HashMap<String, String>();
-                    //HashMap<String, String> maptotal = new HashMap<String, String>();
-                    List<String> maptotal = new ArrayList<String>();
-                    List<String> alltotal = new ArrayList<String>();
-                    String data1 = "";
-
-                    System.out.println("S : " + listgroupcolor.size());
-
-                    for (BCDetailBox g : listgroupcolor) {
-
-                        String desc1 = Utility.Chacknull(g.getDestination());
-                        HashSet<String> kl = new HashSet<String>();
-                        kl.add(desc1);
-
-                        String grouptxt = Utility.subsize(g.getCustomer_no()) + desc1;
-                        if (!alltotal.contains(grouptxt)) {
-                            List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), g.getCustomer_color(), desc1);
-
-                            for (BCDetailBox x : listtotalgroup) {
-                                String q = "";
-                                String s = "";
-
-                                if (x.getCustomer_no().equals(x.getSku_item1())) {
-                                    s = x.getSizen01();
-                                    q = x.getQty_result1();
-                                } else if (x.getCustomer_no().equals(x.getSku_item2())) {
-                                    s = x.getSizen02();
-                                    q = x.getQty_result2();
-                                } else if (x.getCustomer_no().equals(x.getSku_item3())) {
-                                    s = x.getSizen03();
-                                    q = x.getQty_result3();
-                                } else if (x.getCustomer_no().equals(x.getSku_item4())) {
-                                    s = x.getSizen04();
-                                    q = x.getQty_result4();
-                                }
-
-
-                                data1 = map.get(g.getCustomer_no() + "#" + s + "#" + desc1);
-                                int qt = 0;
-                                if (data1 == null) {
-                                    map.put(g.getCustomer_no() + "#" + s + "#" + desc1, q);
-
-                                } else {
-                                    qt = Integer.parseInt(q) + Integer.parseInt(data1);
-                                    map.put(g.getCustomer_no() + "#" + s + "#" + desc1, String.valueOf(qt));
-
-                                }
-
-                                maptotal.add(g.getCustomer_no() + "#" + s + "#" + q);
-
-                            }
-
-                            System.out.println(map);
-                            txt1 += "[";
+                    List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
+                    HashSet<String> descgroup = new HashSet<String>();
+                    HashSet<String> sendgroup = new HashSet<String>();
+                    
+                    for(BCDetailBox b :listtotalgroup){
+                    
+                    }
+                    
+                    
+                    txt1 += "[";
                             txt1 += "{text: '" + grouptxt.replace(desc1, "") + "',border: [false, false, false, false]},";
                             txt1 += "{text: '" + g.getPo() + mfg + "',border: [false, false, false, false]},";
                             txt1 += "{text: '" + Utility.Chacknull(desc1) + "',border: [false, false, false, false]},";
@@ -1000,12 +960,7 @@
                             txt1 += "{text: '',border: [false, false, false, false]},";
                             txt1 += "],";
 
-                            alltotal.add(grouptxt);
-                        }
-
-                    }
-
-
+/*
                     txt1 += "[";
                     txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
@@ -1037,9 +992,9 @@
                     txt1 += "{text: '" + decimalFormat1.format(qtyall) + "',border: [false, true, false, true]},";
                     txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left' },";
                     txt1 += "],";
-
+*/
                     datatable2 = txt1;
-                    allpc += qtyall;
+                   // allpc += qtyall;
 
                     /***************************** End table2 ***************************************/
 
@@ -1054,7 +1009,6 @@
                                     {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
                                     {text: 'DESCRIPTION', border: [false, true, false, true]}, 
                                     {text: 'PO', border: [false, true, false, true]},
-                                 
                                 <%=txtsize%>
                                                                 {text: '', border: [false, true, false, true]},
                                                                 {text: 'TOTAL\nCTN.', border: [false, true, false, true]},

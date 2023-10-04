@@ -417,6 +417,7 @@
                                     btn_edit : '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase()+')" id="bt_edit">ดูรายละเอียด</button>'
                                    
                                 }
+                                
                                 arr.push(result);
                              
                             })

@@ -9,11 +9,16 @@
 "http://www.w3.org/TR/html4/loose.dtd">
 <script>
    
-    $('input:not(#formlogin input, #formadduser input, #formedituser input,input[type=date])').keyup(function() {
-        this.value = this.value.toUpperCase();
+    $('input:not(#formlogin input, #formadduser input, #formedituser input,input[type=date])').keyup(function(e) {
+        var regex = /[ก-๙]/;
+       
+        if(regex.test(this.value)){
+            this.value = this.value.replace(regex,"");
+        }else{
+            this.value = this.value.toUpperCase();
+        }
+        
     });
-    
-    
     
 </script>
 <div id="footer-style">

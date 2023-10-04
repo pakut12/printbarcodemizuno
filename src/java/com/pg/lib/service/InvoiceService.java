@@ -201,7 +201,7 @@ public class InvoiceService {
             }
             sql += ")tb) where rnum BETWEEN ? and ? ";
 
-            System.out.println(sql);
+            
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + searchValue + "%");

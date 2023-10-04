@@ -78,6 +78,16 @@ public class BCDetailBox {
     private String countbox;
     private String user_create;
     private String user_edit;
+    private String sumqty;
+
+    public String getSumqty() {
+        return sumqty;
+    }
+
+    public void setSumqty(String sumqty) {
+        this.sumqty = sumqty;
+    }
+    
 
     public String getUser_create() {
         return user_create;
