@@ -195,7 +195,7 @@ public class PackingListService {
         String sql = "";
         try {
 
-            sql += " select customer_no,po,customer_size,QTY_RESULT,DESTINATION    from ( ";
+            sql += " select REPLACE(tb.customer_no,tb.customer_size) as customer_no,po,customer_size,QTY_RESULT,DESTINATION    from ( ";
             sql += " SELECT  a.PO, a.BOXNO,   b.customer_color,   b.customer_size,b.customer_no,   ";
             sql += " CASE ";
             sql += "  WHEN customer_no = SKU_ITEM1 THEN SIZENO1 ";
@@ -245,7 +245,7 @@ public class PackingListService {
 
             while (rs.next()) {
                 BCDetailBox detail = new BCDetailBox();
-                detail.setDestination(rs.getString("customer_no"));
+                detail.setCustomer_no(rs.getString("customer_no"));
                 detail.setPo(rs.getString("po"));
                 detail.setCustomer_size(rs.getString("customer_size"));
                 detail.setSumqty(rs.getString("QTY_RESULT"));
@@ -265,6 +265,81 @@ public class PackingListService {
         return listbox;
     }
 
+    public static List<BCDetailBox> GroupCustomeSizeAllTotal(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+        List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
+        String sql = "";
+        try {
+
+            sql += " select customer_size,sum(QTY_RESULT) as sumqty   from ( ";
+            sql += " SELECT  a.PO, a.BOXNO,   b.customer_color,   b.customer_size,b.customer_no,   ";
+            sql += " CASE ";
+            sql += "  WHEN customer_no = SKU_ITEM1 THEN SIZENO1 ";
+            sql += "  WHEN customer_no = SKU_ITEM2 THEN SIZENO2 ";
+            sql += "  WHEN customer_no = SKU_ITEM3 THEN SIZENO3 ";
+            sql += "  WHEN customer_no = SKU_ITEM4 THEN SIZENO4 ";
+            sql += " END as sizen, ";
+            sql += " CASE ";
+            sql += "  WHEN customer_no = SKU_ITEM1 THEN QTY_RESULT1 ";
+            sql += " WHEN customer_no = SKU_ITEM2 THEN QTY_RESULT2 ";
+            sql += "  WHEN customer_no = SKU_ITEM3 THEN QTY_RESULT3 ";
+            sql += "  WHEN customer_no = SKU_ITEM4 THEN QTY_RESULT3 ";
+            sql += " END as QTY_RESULT, ";
+            sql += " a.DESTINATION  ";
+            sql += " FROM   MIZUNONEWBARBOXDT a   ";
+            sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  ";
+            sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po  ";
+            sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN (   ";
+            for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
+                if (s < Integer.parseInt(ENDBOX)) {
+                    sql += "'" + firstdigit + String.valueOf(s) + "',";
+                } else {
+                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
+                }
+            }
+
+            sql += " group by a.PO, a.BOXNO,    b.customer_color,   b.customer_size,b.customer_no,CASE ";
+            sql += "  WHEN customer_no = SKU_ITEM1 THEN SIZENO1 ";
+            sql += "  WHEN customer_no = SKU_ITEM2 THEN SIZENO2 ";
+            sql += "  WHEN customer_no = SKU_ITEM3 THEN SIZENO3 ";
+            sql += "  WHEN customer_no = SKU_ITEM4 THEN SIZENO4 ";
+            sql += "  END,CASE ";
+            sql += "  WHEN customer_no = SKU_ITEM1 THEN QTY_RESULT1 ";
+            sql += "  WHEN customer_no = SKU_ITEM2 THEN QTY_RESULT2 ";
+            sql += "  WHEN customer_no = SKU_ITEM3 THEN QTY_RESULT3 ";
+            sql += "  WHEN customer_no = SKU_ITEM4 THEN QTY_RESULT3 ";
+            sql += "  END,a.DESTINATION ) tb ";
+          
+            sql += " group by customer_size ";
+            sql += " order by customer_size ";
+
+            System.out.println(sql);
+
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, firstdigit);
+            ps.setString(2, po);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                BCDetailBox detail = new BCDetailBox();
+                detail.setCustomer_size(rs.getString("customer_size"));
+                detail.setSumqty(rs.getString("sumqty"));
+              
+                listbox.add(detail);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            ConnectDB.closeConnection(conn);
+            ps.close();
+            rs.close();
+        }
+
+        return listbox;
+    }
+    
+    
     public static List<BCDetailBox> GroupCustomerSizeByPO(String po, String firstdigit, String STARTBOX, String ENDBOX, String BOXSEQ) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";

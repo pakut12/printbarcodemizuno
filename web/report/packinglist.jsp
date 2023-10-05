@@ -923,78 +923,94 @@
                     /***************************** set table2 ***************************************/
                     String txt1 = "";
                     String conn = i1.getContainerno() == null ? "" : "Container no." + i1.getContainerno();
-
-                    
-                    HashMap<String, String> map = new HashMap<String, String>();
                     List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
-                    HashSet<String> descgroup = new HashSet<String>();
-                    HashSet<String> sendgroup = new HashSet<String>();
-                    
-                    for(BCDetailBox b :listtotalgroup){
-                    
-                    }
-                    
-                    
-                    txt1 += "[";
-                            txt1 += "{text: '" + grouptxt.replace(desc1, "") + "',border: [false, false, false, false]},";
-                            txt1 += "{text: '" + g.getPo() + mfg + "',border: [false, false, false, false]},";
-                            txt1 += "{text: '" + Utility.Chacknull(desc1) + "',border: [false, false, false, false]},";
-                            txt1 += "{text: '',border: [false, false, false, false]},";
-                            int qtytotal = 0;
-                            for (String s1 : size) {
-                                for (String k1 : kl) {
-                                    if (map.get(g.getCustomer_no() + "#" + s1 + "#" + desc1) == null) {
-                                        txt1 += "{text: '',border: [false, false, false, false]},";
+                    HashMap<String, String> sumqty = new HashMap<String, String>();
+                    HashSet<String> dese = new HashSet<String>();
+                    HashSet<String> allid = new HashSet<String>();
+                    String data1 = "";
+                    for (BCDetailBox l1 : listtotalgroup) {
+                        String myid1 = Utility.subsize(l1.getCustomer_no());
+                        String getdata = sumqty.get(myid1);
 
+                        data1 = sumqty.get(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination());
+                        int qt = 0;
+                        if (data1 == null) {
+                            sumqty.put(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination(), l1.getSumqty());
+
+                        } else {
+                            qt = Integer.parseInt(l1.getSumqty()) + Integer.parseInt(data1);
+                            sumqty.put(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination(), String.valueOf(qt));
+
+                        }
+                        dese.add(l1.getDestination());
+
+                    }
+                    List<String> list = new ArrayList<String>(dese);
+                    Collections.sort(list);
+                    System.out.println(sumqty);
+
+                    for (String d : list) {
+                        for (BCDetailBox l : listtotalgroup) {
+
+                            String myid2 = Utility.subsize(l.getCustomer_no());
+
+                            if (!allid.contains(myid2 + d)) {
+                                txt1 += "[";
+                                txt1 += "{text: '" + myid2 + "',border: [false, false, false, false]},";
+                                txt1 += "{text: '" + l.getPo() + mfg + "',border: [false, false, false, false]},";
+                                txt1 += "{text: '" + Utility.Chacknull(d) + "',border: [false, false, false, false]},";
+                                txt1 += "{text: '',border: [false, false, false, false]},";
+                                int qtytotal = 0;
+                                for (String s1 : size) {
+                                    if (sumqty.get(myid2 + "#" + s1 + "#" + d) == null) {
+                                        txt1 += "{text: '',border: [false, false, false, false]},";
                                     } else {
-                                        txt1 += "{text: '" + map.get(g.getCustomer_no() + "#" + s1 + "#" + desc1) + "',border: [false, false, false, false]},";
-                                        qtytotal += Integer.parseInt(map.get(g.getCustomer_no() + "#" + s1 + "#" + desc1));
+                                        txt1 += "{text: '" + sumqty.get(myid2 + "#" + s1 + "#" + d) + "',border: [false, false, false, false]},";
+                                        qtytotal += Integer.parseInt(sumqty.get(myid2 + "#" + s1 + "#" + d));
 
                                     }
 
                                 }
 
+                                txt1 += "{text: '" + decimalFormat1.format(qtytotal) + "',border: [false, false, false, false]},";
+                                txt1 += "{text: '',border: [false, false, false, false]},";
+                                txt1 += "],";
+
+                                allid.add(myid2 + d);
                             }
+                        }
+                    }
 
-                            txt1 += "{text: '" + decimalFormat1.format(qtytotal) + "',border: [false, false, false, false]},";
-                            txt1 += "{text: '',border: [false, false, false, false]},";
-                            txt1 += "],";
 
-/*
+                    List<BCDetailBox> listtotalgroupall = PackingListService.GroupCustomeSizeAllTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
+                    HashMap<String, String> sumsize = new HashMap<String, String>();
+
+                    for (BCDetailBox k : listtotalgroupall) {
+                        sumsize.put(k.getCustomer_size(), k.getSumqty());
+                    }
+                    System.out.println(sumsize);
+
                     txt1 += "[";
                     txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
-                    Map<String, Integer> groupedSum = new HashMap<String, Integer>();
-
-                    for (String item : maptotal) {
-                        String[] parts = item.split("#");
-                        String key = parts[1];
-                        int value = Integer.parseInt(parts[2]);
-
-                        if (groupedSum.containsKey(key)) {
-                            groupedSum.put(key, groupedSum.get(key) + value);
-                        } else {
-                            groupedSum.put(key, value);
-                        }
-                    }
-
                     int qtyall = 0;
                     for (String s : size) {
-                        if (groupedSum.get(s) == null) {
+                        String sz = sumsize.get(s);
+                        if (sz == null) {
                             txt1 += "{text: '',border: [false, true, false, true]},";
                         } else {
-                            txt1 += "{text: '" + decimalFormat1.format(groupedSum.get(s)) + "',border: [false, true, false, true]},";
-                            qtyall += groupedSum.get(s);
+                            txt1 += "{text: '" + decimalFormat1.format(Integer.parseInt(sz)) + "',border: [false, true, false, true]},";
+                            qtyall += Integer.parseInt(sz);
                         }
                     }
                     txt1 += "{text: '" + decimalFormat1.format(qtyall) + "',border: [false, true, false, true]},";
                     txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left' },";
                     txt1 += "],";
-*/
+
                     datatable2 = txt1;
-                   // allpc += qtyall;
+                    allpc += qtyall;
 
                     /***************************** End table2 ***************************************/
 
@@ -1009,6 +1025,7 @@
                                     {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
                                     {text: 'DESCRIPTION', border: [false, true, false, true]}, 
                                     {text: 'PO', border: [false, true, false, true]},
+                                 
                                 <%=txtsize%>
                                                                 {text: '', border: [false, true, false, true]},
                                                                 {text: 'TOTAL\nCTN.', border: [false, true, false, true]},
@@ -1047,6 +1064,7 @@
                                                                                     }
                         
                                                                                 },
+                                                
             
     
     
