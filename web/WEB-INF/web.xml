@@ -39,7 +39,7 @@
         <servlet-name>Invoice</servlet-name>
         <servlet-class>com.pg.lib.Servlet.Invoice</servlet-class>
     </servlet>
-    <servlet-mapping>
+    <servlet><servlet-name>Excel</servlet-name><servlet-class>com.pg.lib.Servlet.Excel</servlet-class></servlet><servlet-mapping>
         <servlet-name>Chklogin</servlet-name>
         <url-pattern>/Chklogin</url-pattern>
     </servlet-mapping>
@@ -82,6 +82,10 @@
     <servlet-mapping>
         <servlet-name>Invoice</servlet-name>
         <url-pattern>/Invoice</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Excel</servlet-name>
+        <url-pattern>/Excel</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

@@ -1630,49 +1630,39 @@ public class DetailService {
         return coverdate;
     }
 
-    private static List<BCDetailBox> getlistupdatepallet(String alldata) {
+    private static List<BCDetailBox> getlistupdatepallet(String alldata, String user, String po, String firstdigit, String numstart, String numend) {
         List<BCDetailBox> list = new ArrayList<BCDetailBox>();
         try {
-            String[] all = alldata.split(",");
+            String data[] = alldata.split(",");
+            
+            int num = 0;
+            for (int i = Integer.parseInt(numstart); i < Integer.parseInt(numend); i++) {
 
-            for (String d : all) {
-                String[] x = d.split("#");
+                String[] mydata = data[num].split("#");
 
-                BCDetailBox box = new BCDetailBox();
+                String boxno = (mydata[0].equals(" ") ? mydata[0].trim() : mydata[0]);
+                String pl = (mydata[1].equals(" ") ? mydata[1].trim() : mydata[1]);
+                String gw = (mydata[2].equals(" ") ? mydata[2].trim() : mydata[2]);
+                String nw = (mydata[3].equals(" ") ? mydata[3].trim() : mydata[3]);
 
-                if (x.length == 1) {
-                    box.setPo(x[0]);
-                    box.setBoxno(null);
-                    box.setPallet(null);
-                    box.setGrossweight(null);
-                    box.setNetweight(null);
-                } else if (x.length == 2) {
-                    box.setPo(x[0]);
-                    box.setBoxno(x[1]);
-                    box.setPallet(null);
-                    box.setGrossweight(null);
-                    box.setNetweight(null);
-                } else if (x.length == 3) {
-                    box.setPo(x[0]);
-                    box.setBoxno(x[1]);
-                    box.setPallet(x[2]);
-                    box.setGrossweight(null);
-                    box.setNetweight(null);
-                } else if (x.length == 4) {
-                    box.setPo(x[0]);
-                    box.setBoxno(x[1]);
-                    box.setPallet(x[2]);
-                    box.setGrossweight(x[3]);
-                    box.setNetweight(null);
-                } else if (x.length == 5) {
-                    box.setPo(x[0]);
-                    box.setBoxno(x[1]);
-                    box.setPallet(x[2]);
-                    box.setGrossweight(x[3]);
-                    box.setNetweight(x[4]);
-                }
+                System.out.println("-----------------------------------------------");
+                System.out.println(po);
+                System.out.println(boxno);
+                System.out.println(pl);
+                System.out.println(gw);
+                System.out.println(nw);
+                System.out.println("-----------------------------------------------");
+                num++;
                 
+                BCDetailBox box = new BCDetailBox();
+                box.setBoxno(boxno);
+                box.setPallet(pl);
+                box.setGrossweight(gw);
+                box.setNetweight(nw);
+                box.setPo(po);
                 list.add(box);
+                
+                
             }
 
         } catch (Exception e) {
@@ -1682,13 +1672,13 @@ public class DetailService {
         return list;
     }
 
-    public static boolean updatepallet(String alldata, String user) throws SQLException {
+    public static boolean updatepallet(String alldata, String user, String po, String firstdigit, String numstart, String numend) throws SQLException {
 
         boolean status = false;
 
         try {
 
-            List<BCDetailBox> allbox = getlistupdatepallet(alldata);
+            List<BCDetailBox> allbox = getlistupdatepallet(alldata, user, po, firstdigit, numstart, numend);
 
             String sql = "UPDATE MIZUNONEWBARBOXDT SET PALLET=?,GROSSWEIGHT=?,NETWEIGHT=?,USER_EDIT=?,DATE_MODIFY=TO_DATE(?, 'dd/mm/yyyy HH24:MI:SS') WHERE PO=? and BOXNO = ?";
             conn = ConnectDB.getConnection();

@@ -75,8 +75,10 @@
                                                 <th scope='col'>รหัสลูกค้า</th>
                                                 <th scope='col'>รหัสสินค้า</th>
                                                 <th scope='col'>Production Order</th>
-                                                
                                                 <th scope='col'>กล่องที่</th>
+                                                <th scope='col'>พาเลท</th>
+                                                <th scope='col'>GROSSWEIGHT</th>
+                                                <th scope='col'>NETWEIGHT</th>
                                                 <th scope='col'>จำนวนเต็ม</th>
                                                 <th scope='col'>จำนวนในกล่อง</th>
                                                 <th scope='col'>ต่าง</th>
@@ -117,82 +119,80 @@
             }
     
     
-            function getem(){
-               
+            function getem() {
                 $( "#tablereport" ).on( "input", function( event ) {
-                    var id = event.target.id
-                    if(id){
-                        $('#'+id).keyup(function(){
-                            var sp = id.split("_")
-                            var idtext = sp[0]+"_"+sp[1]
-                            console.log(sp)
-                            if(idtext){
-                                var pl = $('#'+ idtext+"_PL").val()
-                                var gw = $('#'+ idtext+"_GW").val()
-                                var nw = (gw - 1.3).toFixed(2)
-                                console.log()
-                                if(nw=='NaN' || nw <= 0){
-                                    $('#'+ idtext+"_NW").val(0)     
-                                }else{
-                                    $('#'+ idtext+"_NW").val(nw)
-                                }
-                                var data = pl + '#' +gw+'#'+nw
-                                $('#'+ idtext).val(data)
-                                
-                            }
-                       
-                        });
+                    var id = event.target.id;
+        
+                    if (id) {
+                        
+                        var sp = id.split("_");
+                        var pl = $("#" + sp[0] + "_" + sp[1] + "_PL").val();
+                        var gw = $("#" + sp[0] + "_" + sp[1] + "_GW").val();
+                        var nw = (gw - 1.3).toFixed(2);
+                        
+                        if(nw == 'NaN' || nw <= 0){
+                            nw = 0
+                        }
+                        
+                        var txt = sp[1]+"#"+ pl + "#" + gw + "#" + nw;
+                        
+                        $("#" + sp[0] + "_" + sp[1] + "_NW").val(nw); 
+                        $("#" + sp[0] + "_" + sp[1]).val(txt);
                     }
                 });
-             
-                
             }
             
             function senddata(){
                 var alldata = '';
                 
                 for(var i = $('#numstart').val(); i<=$('#numend').val(); i++){
-                    var po = $('#posearch').val()+"#"
-                    var numbox = $('#firstdigit').val()+i+'#'
-                    var s =  $('#'+$('#posearch').val()+'_'+$('#firstdigit').val()+i).val()
-                    
-                    console.log('--------------------------------------------------------')
-                    console.log('PO : ' + po)
-                    console.log('NUMBOX : ' + numbox)
-                    console.log('S : ' + s)
-                    console.log('--------------------------------------------------------')
-             
-                    if(po && s && numbox){
-                        alldata += po+numbox+s+',';
+                    var po = $("#posearch").val()
+                    var numbox = $('#firstdigit').val()+i
+                    var txt = po+numbox
+                   
+                    if(po && numbox){
+                        var data = $('#'+po+'_'+numbox).val()
+                        if(data === undefined){
+                            continue;
+                        }else{
+                            alldata += data+',';
+                        }
+                        
                     }
-            
+                    
                 }
-               
+                
+                console.log(alldata)
+        
                 $.ajax({
                     type:"post",
                     url:"Detail",
                     data:{
                         type:"updatepallet",
-                        alldata:alldata
+                        alldata:alldata,
+                        po:$("#posearch").val(),
+                        numstart:$('#numstart').val(),
+                        numend:$('#numend').val(),
+                        firstdigit:$('#firstdigit').val()
                     },
                     success:function(msg){
                         if(msg == 'true'){
                             Swal.fire({
-                                 title:'บันทึก',
-                                 icon:'success',
-                                 text:'บันทึกสำเร็จ'
+                                title:'บันทึก',
+                                icon:'success',
+                                text:'บันทึกสำเร็จ'
                             })
                         }else{
-                           Swal.fire({
-                                 title:'บันทึก',
-                                 icon:'error',
-                                 text:'บันทึกไม่สำเร็จ'
+                            Swal.fire({
+                                title:'บันทึก',
+                                icon:'error',
+                                text:'บันทึกไม่สำเร็จ'
                             })
                         }
                         clearinput()
                     }
                 })
-                
+                 
               
              
             }
@@ -214,14 +214,14 @@
             
             function chacknull(txt){
                 if(!txt){
-                    txt = ""
+                    txt = " "
                 }
                 return txt
             }
     
 
             function getdata(){
-               $("#btsave").attr('disabled',false)
+                $("#btsave").attr('disabled',false)
                 var customer = "";
                 var destination = "";
                 var pallet = "";
@@ -236,7 +236,7 @@
                 var datestart = "";
                 var datestop = "";
         
-                var table =   $("#tablereport").DataTable({
+                var table = $("#tablereport").DataTable({
                     lengthMenu: [[10, 25, 50,100,9999999], [10, 25, 50,100 ,"All"]],
                     pageLength: 9999999,
                     processing: true,
@@ -265,12 +265,26 @@
                             var arr = [];
                             var data = JSON.parse(json.data);
                             
-                            
+                            var boxno = []
                             $.each(data,function(k,v){
-                                
-                                var palletnew = "<input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' name='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' class='form-control form-control-sm  border border-primary text-center '>";
-                                var gwnew = "<input type='text' id='gwnew[]' name='gwnew[]' class='form-control form-control-sm  border border-primary text-center ' value='"+v.grossweight+"'>";
+                                var palletnew = "";
+                                var gwnew = "";
+                                var nwnew = "";
+                                var boxno1 = "";
                                  
+                                if(!boxno.includes(v.boxno)){
+                                    palletnew = "<input type='hidden' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' name='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' value='"+chacknull(v.boxno)+"#"+chacknull(v.pallet)+"#"+chacknull(v.grossweight)+"#"+chacknull(v.netweight)+"' ><input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_PL' name='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_PL' class='form-control form-control-sm  border border-primary text-center palletnew' value='"+chacknull(v.pallet)+"'>";
+                                    gwnew = "<input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_GW' name='"+chacknull(v.po)+"#"+chacknull(v.boxno)+"_GW' class='form-control form-control-sm  border border-primary text-center gwnew' value='"+chacknull(v.grossweight)+"'>";
+                                    nwnew = "<input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_NW' name='"+chacknull(v.po)+"#"+chacknull(v.boxno)+"_NW' class='form-control form-control-sm  border border-primary text-center nwnew' value='"+chacknull(v.netweight)+"'>"; 
+                              
+                                    boxno1 = chacknull(v.boxno)
+                                    boxno.push(v.boxno)
+                                }else{
+                                    nwnew = "";
+                                    gwnew = "";
+                                    palletnew = "";
+                                }
+                                
                                 var date = "";
                                 
                                 if(v.date_create){
@@ -279,9 +293,9 @@
                                 
                                 var qty = "";
                                 var qty_result = "";
-                                
                                 var mark = "";
                                 var diff = 0;
+                                
                                 if(v.customer_no == v.sku_item1){
                                     qty = v.qty1
                                     qty_result=v.qty_result1 
@@ -332,11 +346,15 @@
                                     test:"test",
                                     gw:chacknull(v.grossweight),
                                     nw:chacknull(v.netweight),
-                                    gwnew:gwnew
+                                    gwnew:gwnew,
+                                    nwnew:nwnew
                                 }
                                 
                                 arr.push(result);
+                                
                             })
+                                
+                                
                             
                             //console.log(data)
                             
@@ -345,13 +363,15 @@
                         
                     },
                     columns: [
-                        
                         { data: 'po' },
                         { data: 'po_old' },
                         { data: 'customer_no' },
                         { data: 'customer_product' },
                         { data: 'prodorder' },
                         { data: 'boxno' },
+                        { data: 'palletnew' },
+                        { data: 'gwnew' },
+                        { data: 'nwnew' },
                         { data: 'qty' },
                         { data: 'qty_result' },
                         { data: 'diff' },
@@ -367,49 +387,9 @@
                         'pageLength'
                     ],
                     ordering: false,
-                    
                     order: [[6, 'asc']],
-                    scrollX: true,
-                    rowGroup: {
-                        startRender: function ( rows, group ) {
-                            var pallet = rows.data().pluck("pallet");
-                            var gw = rows.data().pluck("gw");
-                           
-                            
-                            var po = rows.data().pluck("po") ;
-                            var boxno = rows.data().pluck("boxno") ;
-                            
-                            var pallet = !pallet[0]?'':pallet[0]
-                            var gwinput = !gw[0]?'':gw[0]
-                            var nwinput = !gw[0]?'':(gw[0] - 1.3).toFixed(2)
-      
-                            var html = ''
-                            html +=  '<div class="d-flex justify-content-between mx-3 mt-3 mb-3">'
-                            html +=  '<div class="h2 fw-bold">เลขที่กล่อง : '+group+' </div>'
-                            html +=  '<div class="">'
-                            html +=  '<input type="hidden" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'" onclick="getem()" value="'+pallet+'#'+gwinput+'#'+nwinput+'">'
-                            html +=  '<div class="input-group input-group-sm ">'
-                            html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">พาเลท</span>'
-                            html +=  '<input type="text" class="form-control text-center" id="'+po[0]+'_'+boxno[0]+'_PL" onclick="getem()" value="'+pallet+'">'
-                            html +=  '</div>'
-                            html +=  '<div class="input-group input-group-sm ">'
-                            html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">GROSSWEIGHT</span>'
-                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_GW" onclick="getem()" value="'+gwinput+'">'
-                            html +=  '</div>'
-                            html +=  '<div class="input-group input-group-sm ">'
-                            html +=  '<span class="input-group-text" id="inputGroup-sizing-sm">NETWEIGHT</span>'
-                            html +=  '<input type="text" class="form-control text-center " id="'+po[0]+'_'+boxno[0]+'_NW" disabled value="'+nwinput+'">'
-                            html +=  '</div>'
-                            html +=  '</div>'
-                            html +=  '</div>'
-                           
-                            return html ;
-                        },
-                        dataSrc: function(row) {
-                            return row.boxno;
-                        }
-                    
-                    }
+                    scrollX: true
+                   
 
 
 
@@ -441,7 +421,7 @@
                 $("#posearch").on('input', function() {
                     getfirstdigit()
                 });
-                
+                getem()
             });
         </script>
     </body>

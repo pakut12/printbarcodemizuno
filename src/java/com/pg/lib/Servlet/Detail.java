@@ -769,18 +769,22 @@ public class Detail extends HttpServlet {
             } else if (type.equals("updatepallet")) {
                 try {
                     HttpSession session = request.getSession();
+
                     String alldata = request.getParameter("alldata");
                     String user = (String) session.getAttribute("user");
-                   
+                    String po = request.getParameter("po");
+                    String firstdigit = request.getParameter("firstdigit");
+                    String numstart = request.getParameter("numstart");
+                    String numend = request.getParameter("numend");
 
-                    boolean status = DetailService.updatepallet(alldata,user);
+
+                    boolean status = DetailService.updatepallet(alldata, user, po, firstdigit, numstart, numend);
 
                     if (status) {
                         out.print("true");
                     } else {
                         out.print("false");
                     }
-
 
 
                 } catch (Exception e) {

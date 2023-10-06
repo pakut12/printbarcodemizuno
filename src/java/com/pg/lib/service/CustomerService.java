@@ -51,7 +51,7 @@ public class CustomerService {
         int filteredRecords = 0;
         try {
 
-            String sql = "SELECT COUNT(*) FROM MIZUNOCUSTOMER c where c.customer_id > 99 and c.customer_id LIKE ? or c.customer_no LIKE ? or c.customer_barcode LIKE ? or c.customer_color LIKE ? or c.customer_size  LIKE ? or c.customer_description  LIKE ? or c.customer_product  LIKE ?";
+            String sql = "SELECT COUNT(*) FROM MIZUNOCUSTOMER c where c.customer_id > 99 and c.customer_id LIKE UPPER(?) or c.customer_no LIKE UPPER(?) or c.customer_barcode LIKE UPPER(?) or c.customer_color LIKE UPPER(?) or c.customer_size  LIKE UPPER(?) or c.customer_description  LIKE UPPER(?) or c.customer_product  LIKE UPPER(?)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + searchValue + "%");
@@ -80,7 +80,7 @@ public class CustomerService {
         try {
             String sql = "SELECT * FROM";
             sql += "(select rownum as rnum,c.customer_id  , c.customer_no , c.customer_barcode ,c.customer_color ,c.customer_size  , c.customer_description  ,c.customer_product ,TO_CHAR(c.DATE_CREATE, 'DD/MM/YYYY HH24:MI:SS') AS DATE_CREATE,TO_CHAR(c.DATE_MODIFY, 'DD/MM/YYYY HH24:MI:SS') AS DATE_MODIFY  from  MIZUNOCUSTOMER  c" +
-                    " where c.customer_id > 99 and (c.customer_id LIKE ? or c.customer_no LIKE ? or c.customer_barcode LIKE ? or c.customer_color LIKE ? or c.customer_size  LIKE ? or c.customer_description  LIKE ? or c.customer_product  LIKE ?) ";
+                    " where c.customer_id > 99 and (c.customer_id LIKE UPPER(?) or c.customer_no LIKE UPPER(?) or c.customer_barcode LIKE UPPER(?) or c.customer_color LIKE UPPER(?) or c.customer_size  LIKE UPPER(?) or c.customer_description  LIKE UPPER(?) or c.customer_product  LIKE UPPER(?)) ";
 
 
             String[] columns = {"customer_id", "customer_no", "customer_barcode", "customer_color", "customer_size", "customer_description", "customer_product"};

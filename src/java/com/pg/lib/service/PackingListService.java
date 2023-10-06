@@ -370,7 +370,7 @@ public class PackingListService {
             sql += "  a.DESTINATION ";
             sql += "  FROM ";
             sql += "  MIZUNONEWBARBOXDT a ";
-            sql += "INNER JOIN ";
+            sql += " INNER JOIN ";
             sql += "  MIZUNOCUSTOMER b ON ";
             sql += "  b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
             sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po ";
@@ -446,7 +446,7 @@ public class PackingListService {
         String sql = "";
         try {
 
-            sql = "select * from MIZUNONEWBARBOXINVOICE where INVOICEID = ? order by INVOICENO,PO,FIRSTDIGIT";
+            sql = "select * from MIZUNONEWBARBOXINVOICE where INVOICEID = ? order by INVOICENO,PO,FIRSTDIGIT,CAST(STARTBOX as int)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, id);

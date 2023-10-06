@@ -52,12 +52,9 @@
             String shipper = inv.get(0).getShipper();
             String shipfrom = inv.get(0).getShipfrom();
             String shipto = inv.get(0).getShipto();
-            String mfg = "";
 
-            if (inv.get(0).getMfg() != null) {
-                mfg = "(" + inv.get(0).getMfg() + ")";
-            }
 
+            System.out.println("TEST : " + inv.get(0).getMfg());
 
 
             DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
@@ -387,7 +384,7 @@
             double allnw = 0;
             double allgw = 0;
             try {
-
+                
                 for (BCInvoice i1 : inv) {
 
 
@@ -953,13 +950,17 @@
                         for (BCDetailBox l : listtotalgroup) {
 
                             String myid2 = Utility.subsize(l.getCustomer_no());
+                            String mfg = "";
 
+                            if (i1.getMfg() != null) {
+                                mfg = "(" + i1.getMfg() + ")";
+                            }
                             if (!allid.contains(myid2 + d)) {
                                 txt1 += "[";
                                 txt1 += "{text: '" + myid2 + "',border: [false, false, false, false]},";
-                                txt1 += "{text: '" + l.getPo() + mfg + "',border: [false, false, false, false]},";
-                                txt1 += "{text: '" + Utility.Chacknull(d) + "',border: [false, false, false, false]},";
+                                txt1 += "{text: '" + l.getPo() + " "+ mfg + "\t\t\t " + Utility.Chacknull(d) + "',border: [false, false, false, false]},";
                                 txt1 += "{text: '',border: [false, false, false, false]},";
+                                
                                 int qtytotal = 0;
                                 for (String s1 : size) {
                                     if (sumqty.get(myid2 + "#" + s1 + "#" + d) == null) {
@@ -973,6 +974,9 @@
                                 }
 
                                 txt1 += "{text: '" + decimalFormat1.format(qtytotal) + "',border: [false, false, false, false]},";
+                                txt1 += "{text: '',border: [false, false, false, false]},";
+                                txt1 += "{text: '',border: [false, false, false, false]},";
+                                txt1 += "{text: '',border: [false, false, false, false]},";
                                 txt1 += "{text: '',border: [false, false, false, false]},";
                                 txt1 += "],";
 
@@ -993,7 +997,7 @@
                     txt1 += "[";
                     txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
                     txt1 += "{text: '',border: [false, true, false, true]},";
-                    txt1 += "{text: '',border: [false, true, false, true]},";
+
                     txt1 += "{text: '',border: [false, true, false, true]},";
                     int qtyall = 0;
                     for (String s : size) {
@@ -1006,7 +1010,12 @@
                         }
                     }
                     txt1 += "{text: '" + decimalFormat1.format(qtyall) + "',border: [false, true, false, true]},";
-                    txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left' },";
+                    txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left', },";
+
+                    txt1 += "{text: '',border: [false, false, false, false]},";
+                    txt1 += "{text: '',border: [false, false, false, false]},";
+                    txt1 += "{text: '',border: [false, false, false, false]},";
+
                     txt1 += "],";
 
                     datatable2 = txt1;
@@ -1019,7 +1028,7 @@
                     style: 'tbcontent',
                     table: {
                         headerRows: 1,
-                        widths: [ 50, 50,84, <%=width%> 17,'auto', 'auto', 'auto' , 'auto'],
+                        widths: [ 50, 58,84, <%=width%> 17,'auto', 'auto', 'auto' , 'auto'],
                             body: [
                                 [
                                     {text: 'CTN.\nNO.',border: [false, true, false, true]}, 
@@ -1044,16 +1053,19 @@
                                                     style: 'tbcontent',
                                                     table: {
                                                         headerRows: 1,
-                                                        widths: [ 50,50,17,58, <%=width%> 'auto',110 ],
+                                                        widths: [ 50, 100,43, <%=width%> 'auto','auto', 'auto', 'auto' , 'auto'],
                                                             body: [
                                                                 [
                                                                     {text: 'DESCRIPTION',border: [false, true, false, true]}, 
                                                                     {text: '', border: [false, true, false, true]}, 
-                                                                    {text: '', border: [false, true, false, true]}, 
+                                                                    
                                                                     {text: 'SIZE', border: [false, true, false, true]},
                                                              <%=txtsize%>
                                                                      
                                                                                                  {text: 'TOTAL\n(PC)', border: [false, true, false, true]},
+                                                                                                 {text: '', border: [false, false, false, false]},
+                                                                                                 {text: '', border: [false, false, false, false]},
+                                                                                                 {text: '', border: [false, false, false, false]},
                                                                                                  {text: '', border: [false, false, false, false]},
                                                                                              ],
                         
@@ -1208,7 +1220,7 @@
                         },
                     
                         tbcontent: {
-                            fontSize: 12,
+                            fontSize: 11,
                             bold: true,
                             margin: [10, 2],
                             alignment:'center'                      

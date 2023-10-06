@@ -117,7 +117,7 @@
                                     <div class="col-sm-12 col-md-6 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">MANUFACTURING DATE</span>
-                                            <input type="text" class="form-control text-center" name="edit_mfg" id="edit_mfg" >
+                                            <input type="text" class="form-control text-center" name="edit_mfg" id="edit_mfg" maxlength="25">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-12 ">
@@ -226,7 +226,7 @@
                                     <div class="col-sm-12 col-md-2 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">Firstdigit</span>
-                                            <input type="text" class="form-control text-center" name="add_firstdigit" id="add_firstdigit" maxlength="10">
+                                            <input type="text" class="form-control text-center" name="add_firstdigit" id="add_firstdigit" maxlength="3">
                                         </div>
                                     </div>
                                     <div class="col-sm-12 col-md-2 ">
@@ -256,7 +256,7 @@
                                     <div class="col-sm-12 col-md-6 ">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">MANUFACTURING DATE</span>
-                                            <input type="text" class="form-control text-center" name="add_mfg" id="add_mfg" >
+                                            <input type="text" class="form-control text-center" name="add_mfg" id="add_mfg" maxlength="25">
                                         </div>
                                     </div>
                                     <input type="hidden" class="form-control text-center" name="add_id" id="add_id" >
@@ -944,6 +944,7 @@
                 console.log(listpo)
                 $("#table_editinvoice").DataTable({
                     destroy: true,
+                    order: [[ 0, 'asc' ], [ 1, 'asc' ], [ 2, 'asc' ]],
                     data:listpo,
                     columns: [
                         { 
