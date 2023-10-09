@@ -13,9 +13,9 @@
         var regex = /[ก-๙]/;
        
         if(regex.test(this.value)){
-            this.value = this.value.replace(regex,"");
+            this.value = this.value.replace(regex,"").trim();
         }else{
-            this.value = this.value.toUpperCase();
+            this.value = this.value.toUpperCase().trim();
         }
         
     });

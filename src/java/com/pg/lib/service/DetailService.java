@@ -1636,7 +1636,7 @@ public class DetailService {
             String data[] = alldata.split(",");
             
             int num = 0;
-            for (int i = Integer.parseInt(numstart); i < Integer.parseInt(numend); i++) {
+            for (int i = Integer.parseInt(numstart); i <= Integer.parseInt(numend); i++) {
 
                 String[] mydata = data[num].split("#");
 

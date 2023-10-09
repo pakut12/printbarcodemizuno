@@ -114,6 +114,7 @@ public class Utility {
             s.add("XXXL");
 
 
+           
             if (listbox.size() > 8) {
 
                 for (BCDetailBox l : listbox) {

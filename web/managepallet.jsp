@@ -123,30 +123,41 @@
                 $( "#tablereport" ).on( "input", function( event ) {
                     var id = event.target.id;
         
+                
+        
                     if (id) {
                         
                         var sp = id.split("_");
-                        var pl = $("#" + sp[0] + "_" + sp[1] + "_PL").val();
-                        var gw = $("#" + sp[0] + "_" + sp[1] + "_GW").val();
-                        var nw = (gw - 1.3).toFixed(2);
+                        var po = (sp[0].includes('.') ? sp[0].replace(".","\\.") : sp[0])
+                        var boxno = (sp[1].includes('.') ? sp[1].replace(".","\\.") : sp[1])
+            
+                        var pl = $("#" + po + "_" + boxno + "_PL").val().toUpperCase();
+                        var gw = $("#" + po + "_" + boxno + "_GW").val().toUpperCase();
+                        var nw = (gw - 1.3).toFixed(1);
                         
                         if(nw == 'NaN' || nw <= 0){
                             nw = 0
                         }
                         
-                        var txt = sp[1]+"#"+ pl + "#" + gw + "#" + nw;
+                        var txt = boxno+"#"+pl + "#" + gw + "#" + nw;
+                        console.log(txt)
                         
-                        $("#" + sp[0] + "_" + sp[1] + "_NW").val(nw); 
-                        $("#" + sp[0] + "_" + sp[1]).val(txt);
+                        $("#" + po + "_" + boxno + "_PL").val($("#" + po + "_" + boxno + "_PL").val().toUpperCase())
+                        $("#" + po + "_" + boxno + "_GW").val($("#" + po + "_" + boxno + "_GW").val().toUpperCase())
+                        $("#" + po + "_" + boxno + "_NW").val(nw); 
+                        $("#" + po + "_" + boxno).val(txt.toUpperCase());
+                        
                     }
                 });
+                
+                
             }
             
             function senddata(){
                 var alldata = '';
                 
                 for(var i = $('#numstart').val(); i<=$('#numend').val(); i++){
-                    var po = $("#posearch").val()
+                    var po = ($("#posearch").val().includes('.') ? $("#posearch").val().replace(".","\\.") : $("#posearch").val())
                     var numbox = $('#firstdigit').val()+i
                     var txt = po+numbox
                    
@@ -275,7 +286,7 @@
                                 if(!boxno.includes(v.boxno)){
                                     palletnew = "<input type='hidden' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' name='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"' value='"+chacknull(v.boxno)+"#"+chacknull(v.pallet)+"#"+chacknull(v.grossweight)+"#"+chacknull(v.netweight)+"' ><input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_PL' name='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_PL' class='form-control form-control-sm  border border-primary text-center palletnew' value='"+chacknull(v.pallet)+"'>";
                                     gwnew = "<input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_GW' name='"+chacknull(v.po)+"#"+chacknull(v.boxno)+"_GW' class='form-control form-control-sm  border border-primary text-center gwnew' value='"+chacknull(v.grossweight)+"'>";
-                                    nwnew = "<input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_NW' name='"+chacknull(v.po)+"#"+chacknull(v.boxno)+"_NW' class='form-control form-control-sm  border border-primary text-center nwnew' value='"+chacknull(v.netweight)+"'>"; 
+                                    nwnew = "<input type='text' id='"+chacknull(v.po)+"_"+chacknull(v.boxno)+"_NW' name='"+chacknull(v.po)+"#"+chacknull(v.boxno)+"_NW' class='form-control form-control-sm  border border-primary text-center nwnew' value='"+chacknull(v.netweight)+"' disabled>"; 
                               
                                     boxno1 = chacknull(v.boxno)
                                     boxno.push(v.boxno)
@@ -390,9 +401,6 @@
                     order: [[6, 'asc']],
                     scrollX: true
                    
-
-
-
                 });      
                 
 

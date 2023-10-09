@@ -243,7 +243,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DEATINTION</span>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DESTINTION</span>
                                             <input type="text" class="form-control text-center" name="add_final" id="add_final" required>
                                         </div>
                                     </div>
@@ -407,14 +407,14 @@
                                 var result = {
                                     
                                     customer:v.customer,
-                                    invoiceid : v.invoiceid.toUpperCase(),
-                                    invoiceno : v.invoiceno.toUpperCase(),
-                                    invoicedate :  v.invoicedate.toUpperCase(),
-                                    date_create : v.date_create.toUpperCase(),
-                                    date_modified: v.date_modified.toUpperCase(),
+                                    invoiceid : v.invoiceid.toUpperCase().trim(),
+                                    invoiceno : v.invoiceno.toUpperCase().trim(),
+                                    invoicedate :  v.invoicedate.toUpperCase().trim(),
+                                    date_create : v.date_create.toUpperCase().trim(),
+                                    date_modified: v.date_modified.toUpperCase().trim(),
                                     user_create:v.user_create,
                                     user_edit:v.user_edit,
-                                    btn_edit : '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase()+')" id="bt_edit">ดูรายละเอียด</button>'
+                                    btn_edit : '<button class="btn btn-warning btn-sm text-end" type="button" onclick="viewInvoice('+v.invoiceid.toUpperCase().trim()+')" id="bt_edit">ดูรายละเอียด</button>'
                                    
                                 }
                                 
@@ -490,7 +490,7 @@
             }
             
             function delinvoice(){
-                var idinvoice = $("#edit_invoiceid").val().toUpperCase()
+                var idinvoice = $("#edit_invoiceid").val().toUpperCase().trim()
            
                 $.ajax({
                     type:"POST",
@@ -534,19 +534,19 @@
             function updatepoedit(){
                 if ($('#edit_po').val() && $('#edit_firstdigit').val() && $('#edit_startbox').val() && $('#edit_endbox').val() ) {
                    
-                    var po = $('#edit_po').val().toUpperCase()
-                    var startbox = $('#edit_firstdigit').val().toUpperCase() + $('#edit_startbox').val().toUpperCase()
-                    var endbox = $('#edit_firstdigit').val().toUpperCase() + $('#edit_endbox').val().toUpperCase()
+                    var po = $('#edit_po').val().toUpperCase().trim()
+                    var startbox = $('#edit_firstdigit').val().toUpperCase().trim() + $('#edit_startbox').val().toUpperCase().trim()
+                    var endbox = $('#edit_firstdigit').val().toUpperCase().trim() + $('#edit_endbox').val().toUpperCase().trim()
                     
                     $.ajax({
                         type: 'post',
                         url: 'PackingList',
                         data: {
                             type: "checkqty",
-                            po: $('#edit_po').val().toUpperCase(),
-                            firstdigit: $('#edit_firstdigit').val().toUpperCase(),
-                            startbox: $('#edit_startbox').val().toUpperCase(),
-                            endbox: $('#edit_endbox').val().toUpperCase()
+                            po: $('#edit_po').val().toUpperCase().trim(),
+                            firstdigit: $('#edit_firstdigit').val().toUpperCase().trim(),
+                            startbox: $('#edit_startbox').val().toUpperCase().trim(),
+                            endbox: $('#edit_endbox').val().toUpperCase().trim()
                         },
                         success: function (msg) {
                             var js = JSON.parse(msg)
@@ -558,7 +558,7 @@
                                     html: "บันทึกไม่สำเร็จ : PO "+ po+ " "+startbox +" - "+endbox +"<br>มีกล่องที่ยิงไม่ครบ คือ" + js.boxno
                                 })
                             } else if (js.status == "true") {
-                                var uid = $('#edit_po').val().toUpperCase()+$('#edit_firstdigit').val().toUpperCase()+$('#edit_endbox').val().toUpperCase()
+                                var uid = $('#edit_po').val().toUpperCase().trim()+$('#edit_firstdigit').val().toUpperCase().trim()+$('#edit_endbox').val().toUpperCase().trim()
                                 var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="deleditpo(\'' + uid + '\')">ลบ</button>';
                                 var btedit = '<button type="button" class="btn btn-warning btn-sm" onclick="editgetpobyid(\'' + uid + '\')">เลือก</button>';
 
@@ -572,10 +572,10 @@
            
                                 var objpo = {
                                     id:uid,
-                                    po: $('#edit_po').val().toUpperCase(),
-                                    firstdigit: $('#edit_firstdigit').val().toUpperCase(),
-                                    startbox: $('#edit_startbox').val().toUpperCase(),
-                                    endbox: $('#edit_endbox').val().toUpperCase(),
+                                    po: $('#edit_po').val().toUpperCase().trim(),
+                                    firstdigit: $('#edit_firstdigit').val().toUpperCase().trim(),
+                                    startbox: $('#edit_startbox').val().toUpperCase().trim(),
+                                    endbox: $('#edit_endbox').val().toUpperCase().trim(),
                                     containerno: containerno,
                                     mfg:$("#edit_mfg").val(),
                                     btedit:btedit,
@@ -585,7 +585,7 @@
                                 const result = listpo.find((em) => {
                                     let chk = null;
 
-                                    if ($('#edit_po').val().toUpperCase() == em.po && $('#edit_firstdigit').val().toUpperCase() == em.firstdigit && $('#edit_startbox').val().toUpperCase() == em.startbox && $('#edit_endbox').val().toUpperCase() == em.endbox && $('#edit_containerno').val().toUpperCase() == em.containerno && $('#edit_mfg').val().toUpperCase() == em.mfg) {
+                                    if ($('#edit_po').val().toUpperCase().trim() == em.po && $('#edit_firstdigit').val().toUpperCase().trim() == em.firstdigit && $('#edit_startbox').val().toUpperCase().trim() == em.startbox && $('#edit_endbox').val().toUpperCase().trim() == em.endbox && $('#edit_containerno').val().toUpperCase().trim() == em.containerno && $('#edit_mfg').val().toUpperCase().trim() == em.mfg) {
                                         chk = true;
                                     } else {
                                         chk = false;
@@ -660,19 +660,19 @@
             function addeditpo() {
                 if ($('#edit_po').val() && $('#edit_firstdigit').val() && $('#edit_startbox').val() && $('#edit_endbox').val() ) {
                    
-                    var po = $('#edit_po').val().toUpperCase()
-                    var startbox = $('#edit_firstdigit').val().toUpperCase() + $('#edit_startbox').val().toUpperCase()
-                    var endbox = $('#edit_firstdigit').val().toUpperCase() + $('#edit_endbox').val().toUpperCase()
+                    var po = $('#edit_po').val().toUpperCase().trim()
+                    var startbox = $('#edit_firstdigit').val().toUpperCase().trim() + $('#edit_startbox').val().toUpperCase().trim()
+                    var endbox = $('#edit_firstdigit').val().toUpperCase().trim() + $('#edit_endbox').val().toUpperCase().trim()
                     
                     $.ajax({
                         type: 'post',
                         url: 'PackingList',
                         data: {
                             type: "checkqty",
-                            po: $('#edit_po').val().toUpperCase(),
-                            firstdigit: $('#edit_firstdigit').val().toUpperCase(),
-                            startbox: $('#edit_startbox').val().toUpperCase(),
-                            endbox: $('#edit_endbox').val().toUpperCase()
+                            po: $('#edit_po').val().toUpperCase().trim(),
+                            firstdigit: $('#edit_firstdigit').val().toUpperCase().trim(),
+                            startbox: $('#edit_startbox').val().toUpperCase().trim(),
+                            endbox: $('#edit_endbox').val().toUpperCase().trim()
                         },
                         success: function (msg) {
                             var js = JSON.parse(msg)
@@ -684,7 +684,7 @@
                                     html: "บันทึกไม่สำเร็จ : PO "+ po+ " "+startbox +" - "+endbox +"<br>มีกล่องที่ยิงไม่ครบ คือ" + js.boxno
                                 })
                             } else if (js.status == "true") {
-                                var uid = $('#edit_po').val().toUpperCase()+$('#edit_firstdigit').val().toUpperCase()+$('#edit_endbox').val().toUpperCase()
+                                var uid = $('#edit_po').val().toUpperCase().trim()+$('#edit_firstdigit').val().toUpperCase().trim()+$('#edit_endbox').val().toUpperCase().trim()
                                 var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="deleditpo(\'' + uid + '\')">ลบ</button>';
                                 var btedit = '<button type="button" class="btn btn-warning btn-sm" onclick="editgetpobyid(\'' + uid + '\')">เลือก</button>';
 
@@ -698,10 +698,10 @@
            
                                 var objpo = {
                                     id:uid,
-                                    po: $('#edit_po').val().toUpperCase(),
-                                    firstdigit: $('#edit_firstdigit').val().toUpperCase(),
-                                    startbox: $('#edit_startbox').val().toUpperCase(),
-                                    endbox: $('#edit_endbox').val().toUpperCase(),
+                                    po: $('#edit_po').val().toUpperCase().trim(),
+                                    firstdigit: $('#edit_firstdigit').val().toUpperCase().trim(),
+                                    startbox: $('#edit_startbox').val().toUpperCase().trim(),
+                                    endbox: $('#edit_endbox').val().toUpperCase().trim(),
                                     containerno: containerno,
                                     mfg:$("#edit_mfg").val(),
                                     btedit:btedit,
@@ -711,7 +711,7 @@
                                 const result = listpo.find((em) => {
                                     let chk = null;
 
-                                    if ($('#edit_po').val().toUpperCase() == em.po && $('#edit_firstdigit').val().toUpperCase() == em.firstdigit && $('#edit_startbox').val().toUpperCase() == em.startbox && $('#edit_endbox').val().toUpperCase() == em.endbox) {
+                                    if ($('#edit_po').val().toUpperCase().trim() == em.po && $('#edit_firstdigit').val().toUpperCase().trim() == em.firstdigit && $('#edit_startbox').val().toUpperCase().trim() == em.startbox && $('#edit_endbox').val().toUpperCase().trim() == em.endbox) {
                                         chk = true;
                                     } else {
                                         chk = false;
@@ -757,7 +757,7 @@
 
             function bteditinvoice(){
                 $("#myformeditinvoice").addClass('was-validated');
-                if(listpo.length != 0 && $("#edit_invoiceno").val().toUpperCase() && $("#edit_invoicedate").val().toUpperCase() && $("#edit_saveingno").val().toUpperCase() && $("#edit_shipper").val().toUpperCase() && $("#edit_from").val().toUpperCase() && $("#edit_to").val().toUpperCase()){
+                if(listpo.length != 0 && $("#edit_invoiceno").val().toUpperCase().trim() && $("#edit_invoicedate").val().toUpperCase().trim() && $("#edit_saveingno").val().toUpperCase().trim() && $("#edit_shipper").val().toUpperCase().trim() && $("#edit_from").val().toUpperCase().trim() && $("#edit_to").val().toUpperCase().trim()){
                     updateInvoice()
                    
                 }else{
@@ -779,11 +779,11 @@
                     data:{
                         type:"updateinvoice",
                         user_create:$("#edit_user_create").val(),
-                        invoiceno:$("#edit_invoiceno").val().toUpperCase(),
-                        invoicedate:$("#edit_invoicedate").val().toUpperCase(),
-                        saveingno:$("#edit_saveingno").val().toUpperCase(),
-                        datecreate:$("#edit_datecreate").val().toUpperCase(),
-                        id : $("#edit_invoiceid").val().toUpperCase(),
+                        invoiceno:$("#edit_invoiceno").val().toUpperCase().trim(),
+                        invoicedate:$("#edit_invoicedate").val().toUpperCase().trim(),
+                        saveingno:$("#edit_saveingno").val().toUpperCase().trim(),
+                        datecreate:$("#edit_datecreate").val().toUpperCase().trim(),
+                        id : $("#edit_invoiceid").val().toUpperCase().trim(),
                         customer :$("#edit_customer").val(),
                         shipper:$("#edit_shipper").val(),
                         from:$("#edit_from").val(),
@@ -854,12 +854,12 @@
                         var jsdecode = JSON.parse(js.data)
            
                         $("#edit_user_create").val(js.user_create)
-                        $("#edit_invoiceid").val(js.invoiceid.toUpperCase())
-                        $("#edit_invoiceno").val(js.invoiceno.toUpperCase())
-                        $("#edit_invoicedate").val(js.invoicedate.toUpperCase())
-                        $("#edit_saveingno").val(js.saveingno.toUpperCase())
-                        $("#edit_datecreate").val(js.datecreate.toUpperCase())
-                        $("#edit_customer").html(js.customer.toUpperCase())
+                        $("#edit_invoiceid").val(js.invoiceid.toUpperCase().trim())
+                        $("#edit_invoiceno").val(js.invoiceno.toUpperCase().trim())
+                        $("#edit_invoicedate").val(js.invoicedate.toUpperCase().trim())
+                        $("#edit_saveingno").val(js.saveingno.toUpperCase().trim())
+                        $("#edit_datecreate").val(js.datecreate.toUpperCase().trim())
+                        $("#edit_customer").html(js.customer.toUpperCase().trim())
                         
                         $("#edit_shipper").val(js.shipper)
                         $("#edit_from").val(js.shipfrom)
@@ -871,7 +871,7 @@
                         listpo.length = 0
                        
                         $.each(jsdecode,function(k,v){
-                            var uid = v.po.toUpperCase()+v.firstdigit.toUpperCase()+v.startbox.toUpperCase()+v.endbox.toUpperCase()
+                            var uid = v.po.toUpperCase().trim()+v.firstdigit.toUpperCase().trim()+v.startbox.toUpperCase().trim()+v.endbox.toUpperCase().trim()
                             
                             var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="deleditpo(\'' + uid + '\')">ลบ</button>';
                             var btedit = '<button type="button" class="btn btn-warning btn-sm" onclick="editgetpobyid(\'' + uid + '\')">เลือก</button>';
@@ -894,10 +894,10 @@
                             
                             var objpo = {
                                 id:uid,
-                                po:v.po.toUpperCase(),
-                                firstdigit:v.firstdigit.toUpperCase(),
-                                startbox:v.startbox.toUpperCase(),
-                                endbox:v.endbox.toUpperCase(),
+                                po:v.po.toUpperCase().trim(),
+                                firstdigit:v.firstdigit.toUpperCase().trim(),
+                                startbox:v.startbox.toUpperCase().trim(),
+                                endbox:v.endbox.toUpperCase().trim(),
                                 containerno:containerno,
                                 mfg:mfg,
                                 btdel:btndel,
@@ -997,19 +997,19 @@
                 
                 if ($('#add_po').val() && $('#add_firstdigit').val() && $('#add_startbox').val() && $('#add_endbox').val() ) {
                     
-                    var po = $('#add_po').val().toUpperCase()
-                    var startbox = $('#add_firstdigit').val().toUpperCase() + $('#add_startbox').val().toUpperCase()
-                    var endbox = $('#add_firstdigit').val().toUpperCase() + $('#add_endbox').val().toUpperCase()
+                    var po = $('#add_po').val().toUpperCase().trim()
+                    var startbox = $('#add_firstdigit').val().toUpperCase().trim() + $('#add_startbox').val().toUpperCase().trim()
+                    var endbox = $('#add_firstdigit').val().toUpperCase().trim() + $('#add_endbox').val().toUpperCase().trim()
                     
                     $.ajax({
                         type: 'post',
                         url: 'PackingList',
                         data: {
                             type: "checkqty",
-                            po: $('#add_po').val().toUpperCase(),
-                            firstdigit: $('#add_firstdigit').val().toUpperCase(),
-                            startbox: $('#add_startbox').val().toUpperCase(),
-                            endbox: $('#add_endbox').val().toUpperCase()
+                            po: $('#add_po').val().toUpperCase().trim(),
+                            firstdigit: $('#add_firstdigit').val().toUpperCase().trim(),
+                            startbox: $('#add_startbox').val().toUpperCase().trim(),
+                            endbox: $('#add_endbox').val().toUpperCase().trim()
                         },
                         success: function (msg) {
                            
@@ -1027,7 +1027,7 @@
                                 const result = listpo.find((em) => {
                                     let chk = null; 
                     
-                                    if($('#add_po').val().toUpperCase() == em.po && $('#add_firstdigit').val().toUpperCase() == em. firstdigit && $('#add_startbox').val().toUpperCase() == em.startbox && $('#add_endbox').val().toUpperCase() == em.endbox && $('#add_containerno').val().toUpperCase() == em.containerno && $('#add_mfg').val().toUpperCase() == em.mfg){
+                                    if($('#add_po').val().toUpperCase().trim() == em.po && $('#add_firstdigit').val().toUpperCase().trim() == em. firstdigit && $('#add_startbox').val().toUpperCase().trim() == em.startbox && $('#add_endbox').val().toUpperCase().trim() == em.endbox && $('#add_containerno').val().toUpperCase().trim() == em.containerno && $('#add_mfg').val().toUpperCase().trim() == em.mfg){
                                         chk = true;
                                     }else{
                                         chk = false;
@@ -1210,19 +1210,19 @@
                
                 if ($('#add_po').val() && $('#add_firstdigit').val() && $('#add_startbox').val() && $('#add_endbox').val() ) {
                     
-                    var po = $('#add_po').val().toUpperCase()
-                    var startbox = $('#add_firstdigit').val().toUpperCase() + $('#add_startbox').val().toUpperCase()
-                    var endbox = $('#add_firstdigit').val().toUpperCase() + $('#add_endbox').val().toUpperCase()
+                    var po = $('#add_po').val().toUpperCase().trim()
+                    var startbox = $('#add_firstdigit').val().toUpperCase().trim() + $('#add_startbox').val().toUpperCase().trim()
+                    var endbox = $('#add_firstdigit').val().toUpperCase().trim() + $('#add_endbox').val().toUpperCase().trim()
                     
                     $.ajax({
                         type: 'post',
                         url: 'PackingList',
                         data: {
                             type: "checkqty",
-                            po: $('#add_po').val().toUpperCase(),
-                            firstdigit: $('#add_firstdigit').val().toUpperCase(),
-                            startbox: $('#add_startbox').val().toUpperCase(),
-                            endbox: $('#add_endbox').val().toUpperCase()
+                            po: $('#add_po').val().toUpperCase().trim(),
+                            firstdigit: $('#add_firstdigit').val().toUpperCase().trim(),
+                            startbox: $('#add_startbox').val().toUpperCase().trim(),
+                            endbox: $('#add_endbox').val().toUpperCase().trim()
                         },
                         success: function (msg) {
                            
@@ -1236,7 +1236,7 @@
                                 })
                             } else if (js.status == "true") {
                                 console.log(msg)
-                                var uid = $('#add_po').val().toUpperCase()+$('#add_firstdigit').val().toUpperCase()+$('#add_endbox').val().toUpperCase()
+                                var uid = $('#add_po').val().toUpperCase().trim()+$('#add_firstdigit').val().toUpperCase().trim()+$('#add_endbox').val().toUpperCase().trim()
                                 var btndel = '<button type="button" class="btn btn-danger btn-sm" onclick="delpo(\'' + uid + '\')">ลบ</button>';
                                 var btnedit = '<button type="button" class="btn btn-warning btn-sm" onclick="getpobyid(\'' + uid + '\')">เลือก</button>';
                                 
@@ -1250,10 +1250,10 @@
                                
                                 var objpo = {
                                     id:uid,
-                                    po:$('#add_po').val().toUpperCase(),
-                                    firstdigit:$('#add_firstdigit').val().toUpperCase(),
-                                    startbox:$('#add_startbox').val().toUpperCase(),
-                                    endbox:$('#add_endbox').val().toUpperCase(),
+                                    po:$('#add_po').val().toUpperCase().trim(),
+                                    firstdigit:$('#add_firstdigit').val().toUpperCase().trim(),
+                                    startbox:$('#add_startbox').val().toUpperCase().trim(),
+                                    endbox:$('#add_endbox').val().toUpperCase().trim(),
                                     containerno:containerno,
                                     mfg:$("#add_mfg").val(),
                                     btdel:btndel,
@@ -1263,7 +1263,7 @@
                                 const result = listpo.find((em) => {
                                     let chk = null; 
                     
-                                    if($('#add_po').val().toUpperCase() == em.po && $('#add_firstdigit').val().toUpperCase() == em. firstdigit && $('#add_startbox').val().toUpperCase() == em.startbox && $('#add_endbox').val().toUpperCase() == em.endbox){
+                                    if($('#add_po').val().toUpperCase().trim() == em.po && $('#add_firstdigit').val().toUpperCase().trim() == em. firstdigit && $('#add_startbox').val().toUpperCase().trim() == em.startbox && $('#add_endbox').val().toUpperCase().trim() == em.endbox){
                                         chk = true;
                                     }else{
                                         chk = false;
