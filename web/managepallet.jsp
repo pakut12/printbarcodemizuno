@@ -131,8 +131,8 @@
                         var po = (sp[0].includes('.') ? sp[0].replace(".","\\.") : sp[0])
                         var boxno = (sp[1].includes('.') ? sp[1].replace(".","\\.") : sp[1])
             
-                        var pl = $("#" + po + "_" + boxno + "_PL").val().toUpperCase();
-                        var gw = $("#" + po + "_" + boxno + "_GW").val().toUpperCase();
+                        var pl = $("#" + po + "_" + boxno + "_PL").val().toUpperCase().trim();
+                        var gw = $("#" + po + "_" + boxno + "_GW").val().toUpperCase().trim();
                         var nw = (gw - 1.3).toFixed(1);
                         
                         if(nw == 'NaN' || nw <= 0){
@@ -142,10 +142,10 @@
                         var txt = boxno+"#"+pl + "#" + gw + "#" + nw;
                         console.log(txt)
                         
-                        $("#" + po + "_" + boxno + "_PL").val($("#" + po + "_" + boxno + "_PL").val().toUpperCase())
-                        $("#" + po + "_" + boxno + "_GW").val($("#" + po + "_" + boxno + "_GW").val().toUpperCase())
+                        $("#" + po + "_" + boxno + "_PL").val($("#" + po + "_" + boxno + "_PL").val().toUpperCase().trim())
+                        $("#" + po + "_" + boxno + "_GW").val($("#" + po + "_" + boxno + "_GW").val().toUpperCase().trim())
                         $("#" + po + "_" + boxno + "_NW").val(nw); 
-                        $("#" + po + "_" + boxno).val(txt.toUpperCase());
+                        $("#" + po + "_" + boxno).val(txt.toUpperCase().trim());
                         
                     }
                 });

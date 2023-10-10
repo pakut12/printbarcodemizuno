@@ -118,13 +118,14 @@ public class Utility {
             if (listbox.size() > 8) {
 
                 for (BCDetailBox l : listbox) {
-                    if (!size.contains(l.getCustomer_size()) && size.size() < 9) {
+                    System.out.println(l.getCustomer_size());
+                    if (!size.contains(l.getCustomer_size()) && size.size() < 12) {
                         size.add(l.getCustomer_size());
                     }
                 }
 
                 for (String z : s) {
-                    if (!size.contains(z) && size.size() < 9) {
+                    if (!size.contains(z) && size.size() < 12) {
                         size.add(z);
                     }
                 }

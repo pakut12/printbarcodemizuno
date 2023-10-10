@@ -1571,7 +1571,7 @@ public class DetailService {
         List<String> listdetail = new ArrayList<String>();
 
         try {
-            String sql = "select a.PALLET from MIZUNONEWBARBOXDT a where a.PO = ? group by  a.PALLET";
+            String sql = "select trim(a.PALLET) as pallet from MIZUNONEWBARBOXDT a where a.PO = ? group by  trim(a.PALLET)";
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, PO);
