@@ -145,6 +145,7 @@
                             <div class="me-auto">
                                 <button type="button" class="btn btn-danger "  onclick="btdelinvoice()"  id="btn-delete">ลบ PackingList</button>
                             </div>
+                            <button type="button" class="btn btn-dark"  onclick="btloadexcel()"  id="btn-loadpdf">PackingList Excel</button>
                             <button type="button" class="btn btn-dark"  onclick="btloadinvoice()"  id="btn-loadpdf">PackingList PDF</button>
                             <button type="button" class="btn btn-success "  onclick="btprintinvoice()"  id="btn-print">พิมพ์ PackingList</button>
                             <button type="button" class="btn btn-primary " onclick="bteditinvoice()"  id="btn-edit">แก้ไข PackingList</button>
@@ -171,7 +172,7 @@
                                 <div class="row mt-3 mx-auto ">
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                          <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
                                             <input type="text" class="form-control text-center" name="add_invoiceno" id="add_invoiceno" maxlength="10" required>
                                         </div> 
                                     </div>
@@ -362,6 +363,24 @@
                 
             });
              */
+            function btloadexcel(){
+                var idinvoice = $("#edit_invoiceid").val().toUpperCase().trim()
+                
+                $.ajax({
+                    type:"POST",
+                    url:"Excel",
+                    data:{
+                        type:"ExcelExport",
+                        id:idinvoice
+                    },
+                    success:function(msg){
+                        console.log(msg)
+                    }
+                })
+                
+                console.log(idinvoice)
+                
+            }
            
             function btloadinvoice(){
                  
@@ -396,7 +415,7 @@
                             var data = JSON.parse(json.data);
                           
                             $.each(data,function(k,v){
-                              console.log(v)
+                                console.log(v)
                                 var containerno = ""
                                 if(v.containerno){
                                     containerno = v.containerno
@@ -443,7 +462,7 @@
                             title:'user_create',
                             data : 'user_create' 
                         },
-                         {
+                        {
                             title:'date_create',
                             data : 'date_create' 
                         },

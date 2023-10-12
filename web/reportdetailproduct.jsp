@@ -427,7 +427,8 @@
                             return row.customer_no;
                         }
                    
-                    }
+                    },
+                     order: [[ 0, 'asc' ], [ 1, 'asc' ], [ 5, 'asc' ]]
                     
                 });
               

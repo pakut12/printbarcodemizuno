@@ -495,7 +495,8 @@
                             return row.customer_no;
                         }
                     
-                    }
+                    },
+                     order: [[ 0, 'asc' ], [ 2, 'asc' ], [ 6, 'asc' ]]
                     
                     
                     

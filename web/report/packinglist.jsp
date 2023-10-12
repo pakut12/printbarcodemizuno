@@ -33,7 +33,7 @@
                     allpoandfg.add(pode);
                 }
             }
-           
+
 
             HashMap<String, String> allmap = new HashMap<String, String>();
 
@@ -56,7 +56,7 @@
                                 if (s < Integer.parseInt(end)) {
                                     alltxt += "'" + firstdigit + String.valueOf(s) + "',";
                                 } else {
-                                    alltxt += "'" + firstdigit + String.valueOf(s) + "' ";
+                                    alltxt += "'" + firstdigit + String.valueOf(s) + "',";
                                 }
                             }
 
@@ -76,7 +76,7 @@
                                 if (s < Integer.parseInt(end)) {
                                     alltxt += "'" + firstdigit + String.valueOf(s) + "',";
                                 } else {
-                                    alltxt += "'" + firstdigit + String.valueOf(s) + "' ";
+                                    alltxt += "'" + firstdigit + String.valueOf(s) + "',";
                                 }
                             }
 
@@ -94,12 +94,12 @@
                 allmap.putAll(allpogetmap);
 
             }
-            
+
             System.out.println("-------------------------------------------");
             System.out.println("TEST BY GG");
             System.out.println(allmap);
             System.out.println("-------------------------------------------");
-            
+
             /*****************  set header **************/
             String invoiceno = inv.get(0).getInvoiceno();
             String invoicedate = Utility.CoverDate(inv.get(0).getInvoicedate().replace(" 00:00:00.0", ""));
@@ -454,670 +454,680 @@
             double allnw = 0;
             double allgw = 0;
             try {
-
+                HashSet<String> hssetall = new HashSet<String>();
                 for (BCInvoice i1 : inv) {
 
+                    if (!hssetall.contains(i1.getPo() + "#" + i1.getFirstdigit())) {
+                        if (allmap.get(i1.getPo() + "#" + i1.getFirstdigit()) != null) {
 
-                    /******************************  set table1 ********************************************/
-                    String data[];
-                    int totalqty = 0;
-                    int totalctn = 0;
-                    double totalnw = 0;
-                    double totalgw = 0;
+                            String boxnoallbypo = allmap.get(i1.getPo() + "#" + i1.getFirstdigit()).substring(0, allmap.get(i1.getPo() + "#" + i1.getFirstdigit()).length() - 1);
+                            
+                            System.out.println("/*********************************************/");
+                            System.out.println(boxnoallbypo);
+                            System.out.println("/*********************************************/");
+                            
+                            
+                            
+                            /******************************  set table1 ********************************************/
+                            String data[];
+                            int totalqty = 0;
+                            int totalctn = 0;
+                            double totalnw = 0;
+                            double totalgw = 0;
 
-                    List<String> listseq = new ArrayList<String>();
-                    List<BCDetailBox> inva = PackingListService.GroupCustomerNoByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
+                            List<String> listseq = new ArrayList<String>();
+                            List<BCDetailBox> inva = PackingListService.GroupCustomerNoByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), boxnoallbypo);
 
-                    /***************************** set size ******************************/
-                    List<BCDetailBox> CheckSize = PackingListService.CheckSize(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
-                    List<String> size = Utility.getallsize(i1.getCustomer(), CheckSize); // List Size 
+                            /***************************** set size ******************************/
+                            List<BCDetailBox> CheckSize = PackingListService.CheckSize(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), boxnoallbypo);
+                            List<String> size = Utility.getallsize(i1.getCustomer(), CheckSize); // List Size 
 
-                    System.out.println(size);
-                    String width = "";
-                    String txtsize = "";
-                    int n = 2;
+                            System.out.println(size);
+                            String width = "";
+                            String txtsize = "";
+                            int n = 2;
 
-                    for (String res : size) {
-                        if (size.contains("120") || size.contains("130") || size.contains("140") || size.contains("150") || size.contains("160")) {
+                            for (String res : size) {
+                                if (size.contains("120") || size.contains("130") || size.contains("140") || size.contains("150") || size.contains("160")) {
+                                    /*
+                                    if (res.contains("120") || res.contains("130") || res.contains("140") || res.contains("150") || res.contains("160")) {
+                                    txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
+                                    } else {
+                                    txtsize += "{text: '', border: [false, true, false, true]},";
+                                    }
+                                     */
+                                    txtsize += "{text: '', border: [false, true, false, true]},";
+                                    txtsize += "{text: '', border: [false, true, false, true]},";
+                                    txtsize += "{text: '', border: [false, true, false, true]},";
+                                    txtsize += "{text: '120', border: [false, true, false, true]},";
+                                    txtsize += "{text: '130', border: [false, true, false, true]},";
+                                    txtsize += "{text: '140', border: [false, true, false, true]},";
+                                    txtsize += "{text: '150', border: [false, true, false, true]},";
+                                    txtsize += "{text: '160', border: [false, true, false, true]},";
+
+
+                                    width += "'auto',";
+                                    width += "'auto',";
+                                    width += "'auto',";
+                                    width += "'auto',";
+                                    width += "'auto',";
+                                    width += "'auto',";
+                                    width += "'auto',";
+                                    width += "'auto',";
+
+                                    break;
+
+                                } else if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
+                                    txtsize += "{text: '0" + n + "\\n" + res + "', border: [false, true, false, true]},\n";
+                                } else {
+                                    txtsize += "{text: '" + res + "', border: [false, true, false, true]},\n";
+                                }
+
+                                width += "'auto',\n";
+                                n++;
+
+                            }
+
+
+
                             /*
-                            if (res.contains("120") || res.contains("130") || res.contains("140") || res.contains("150") || res.contains("160")) {
-                            txtsize += "{text: '" + res + "', border: [false, true, false, true]},";
-                            } else {
-                            txtsize += "{text: '', border: [false, true, false, true]},";
+                            int n1 = size.size();
+                            while(n1 != 8){
+                            txtsize += "{text: '\\t', border: [false, true, false, true]},";
+                            n1++;
+                            System.out.println(txtsize);
                             }
                              */
-                            txtsize += "{text: '', border: [false, true, false, true]},";
-                            txtsize += "{text: '', border: [false, true, false, true]},";
-                            txtsize += "{text: '', border: [false, true, false, true]},";
-                            txtsize += "{text: '120', border: [false, true, false, true]},";
-                            txtsize += "{text: '130', border: [false, true, false, true]},";
-                            txtsize += "{text: '140', border: [false, true, false, true]},";
-                            txtsize += "{text: '150', border: [false, true, false, true]},";
-                            txtsize += "{text: '160', border: [false, true, false, true]},";
 
 
-                            width += "'auto',";
-                            width += "'auto',";
-                            width += "'auto',";
-                            width += "'auto',";
-                            width += "'auto',";
-                            width += "'auto',";
-                            width += "'auto',";
-                            width += "'auto',";
-
-                            break;
-
-                        } else if (i1.getCustomer().equals("MUS") || i1.getCustomer().equals("MCL") || i1.getCustomer().equals("MOC")) {
-                            txtsize += "{text: '0" + n + "\\n" + res + "', border: [false, true, false, true]},\n";
-                        } else {
-                            txtsize += "{text: '" + res + "', border: [false, true, false, true]},\n";
-                        }
-
-                        width += "'auto',\n";
-                        n++;
-
-                    }
+                            /***************************** end size ******************************/
+                            HashMap<String, BCDetailBox> listtotal = new HashMap<String, BCDetailBox>();
 
 
+                            for (BCDetailBox ae : inva) {
+                                if (!listseq.contains(ae.getBoxseq())) {
+                                    listseq.add(ae.getBoxseq());
+                                }
+                            }
+                            String txt = "";
+                            for (String seq : listseq) {
+                                List<BCDetailBox> x = PackingListService.GroupCustomerNoBySEQ(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq, boxnoallbypo);
 
-                    /*
-                    int n1 = size.size();
-                    while(n1 != 8){
-                    txtsize += "{text: '\\t', border: [false, true, false, true]},";
-                    n1++;
-                    System.out.println(txtsize);
-                    }
-                     */
+                                String group = Utility.groupnumber(x);
 
+                                List<String> grouppo = new ArrayList<String>();
+                                for (BCDetailBox ae : x) {
+                                    String rt = ae.getPo() + "#" + ae.getFirstdigit() + "#" + ae.getBoxno();
+                                    grouppo.add(rt);
+                                }
 
-                    /***************************** end size ******************************/
-                    HashMap<String, BCDetailBox> listtotal = new HashMap<String, BCDetailBox>();
+                                if (!group.contains(",")) {
 
+                                    int num = 0;
+                                    List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq, boxnoallbypo);
+                                    HashSet<String> cut = new HashSet<String>();
 
-                    for (BCDetailBox ae : inva) {
-                        if (!listseq.contains(ae.getBoxseq())) {
-                            listseq.add(ae.getBoxseq());
-                        }
-                    }
-                    String txt = "";
-                    for (String seq : listseq) {
-                        List<BCDetailBox> x = PackingListService.GroupCustomerNoBySEQ(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
-
-                        String group = Utility.groupnumber(x);
-
-                        List<String> grouppo = new ArrayList<String>();
-                        for (BCDetailBox ae : x) {
-                            String rt = ae.getPo() + "#" + ae.getFirstdigit() + "#" + ae.getBoxno();
-                            grouppo.add(rt);
-                        }
-
-                        if (!group.contains(",")) {
-
-                            int num = 0;
-                            List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
-                            HashSet<String> cut = new HashSet<String>();
-
-                            for (BCDetailBox c : listsizebypo) {
-                                String c1 = c.getCustomer_no().replace(c.getCustomer_size(), "");
-                                String c2 = (c1.contains(".") ? c1.substring(0, c1.length() - 4) : c1);
+                                    for (BCDetailBox c : listsizebypo) {
+                                        String c1 = c.getCustomer_no().replace(c.getCustomer_size(), "");
+                                        String c2 = (c1.contains(".") ? c1.substring(0, c1.length() - 4) : c1);
 
 
-                                if (!cut.contains(c2)) {
-                                    HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
+                                        if (!cut.contains(c2)) {
+                                            HashMap<String, BCDetailBox> arrsize = new HashMap<String, BCDetailBox>();
 
-                                    for (BCDetailBox z : listsizebypo) {
-                                        arrsize.put(c.getCustomer_no() + z.getCustomer_size(), z);
-                                    }
-
-                                    String sizetxt = "";
-
-                                    int qty = 0;
-                                    int ctn = 0;
-                                    double nw = 0;
-                                    double gw = 0;
-                                    String DESTINATION = "";
-                                    String Color = "";
-
-                                    for (String s : size) {
-                                        BCDetailBox getsize = arrsize.get(c.getCustomer_no() + s);
-                                        if (getsize == null) {
-                                            sizetxt += "{text: '',border: [false, false, false, false]},";
-                                        } else {
-
-                                            if (getsize.getCustomer_no().equals(getsize.getSku_item1())) {
-                                                qty += Integer.parseInt(getsize.getQty_result1());
-                                                sizetxt += "{text: '" + getsize.getQty_result1() + "',border: [false, false, false, false]},";
-                                            } else if (getsize.getCustomer_no().equals(getsize.getSku_item2())) {
-                                                qty += Integer.parseInt(getsize.getQty_result2());
-                                                sizetxt += "{text: '" + getsize.getQty_result2() + "',border: [false, false, false, false]},";
-                                            } else if (getsize.getCustomer_no().equals(getsize.getSku_item3())) {
-                                                qty += Integer.parseInt(getsize.getQty_result3());
-                                                sizetxt += "{text: '" + getsize.getQty_result3() + "',border: [false, false, false, false]},";
-                                            } else if (getsize.getCustomer_no().equals(getsize.getSku_item4())) {
-                                                qty += Integer.parseInt(getsize.getQty_result4());
-                                                sizetxt += "{text: '" + getsize.getQty_result4() + "',border: [false, false, false, false]},";
+                                            for (BCDetailBox z : listsizebypo) {
+                                                arrsize.put(c.getCustomer_no() + z.getCustomer_size(), z);
                                             }
 
-                                            Color = Utility.subsize(c.getCustomer_no().replace(c.getCustomer_size(), ""));
-                                            ctn = Integer.parseInt(getsize.getCountbox());
-                                            nw = Double.parseDouble(getsize.getSumnw());
-                                            gw = Double.parseDouble(getsize.getSumgw());
+                                            String sizetxt = "";
 
-                                            if (getsize.getDestination() == null) {
-                                                DESTINATION = "";
+                                            int qty = 0;
+                                            int ctn = 0;
+                                            double nw = 0;
+                                            double gw = 0;
+                                            String DESTINATION = "";
+                                            String Color = "";
+
+                                            for (String s : size) {
+                                                BCDetailBox getsize = arrsize.get(c.getCustomer_no() + s);
+                                                if (getsize == null) {
+                                                    sizetxt += "{text: '',border: [false, false, false, false]},";
+                                                } else {
+
+                                                    if (getsize.getCustomer_no().equals(getsize.getSku_item1())) {
+                                                        qty += Integer.parseInt(getsize.getQty_result1());
+                                                        sizetxt += "{text: '" + getsize.getQty_result1() + "',border: [false, false, false, false]},";
+                                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item2())) {
+                                                        qty += Integer.parseInt(getsize.getQty_result2());
+                                                        sizetxt += "{text: '" + getsize.getQty_result2() + "',border: [false, false, false, false]},";
+                                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item3())) {
+                                                        qty += Integer.parseInt(getsize.getQty_result3());
+                                                        sizetxt += "{text: '" + getsize.getQty_result3() + "',border: [false, false, false, false]},";
+                                                    } else if (getsize.getCustomer_no().equals(getsize.getSku_item4())) {
+                                                        qty += Integer.parseInt(getsize.getQty_result4());
+                                                        sizetxt += "{text: '" + getsize.getQty_result4() + "',border: [false, false, false, false]},";
+                                                    }
+
+                                                    Color = Utility.subsize(c.getCustomer_no().replace(c.getCustomer_size(), ""));
+                                                    ctn = Integer.parseInt(getsize.getCountbox());
+                                                    nw = Double.parseDouble(getsize.getSumnw());
+                                                    gw = Double.parseDouble(getsize.getSumgw());
+
+                                                    if (getsize.getDestination() == null) {
+                                                        DESTINATION = "";
+                                                    } else {
+                                                        DESTINATION = getsize.getDestination();
+                                                    }
+
+                                                }
+                                            }
+
+
+
+                                            if (num == 0) {
+
+                                                txt += "[";
+                                                txt += "{text: '" + group + "',border: [false, false, false, false]},";
+                                                txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                                txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+                                                txt += sizetxt;
+                                                txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
+                                                txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
+                                                txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                                txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
+                                                txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
+                                                txt += "],\n";
+
+
+                                                totalctn += ctn;
+                                                totalqty += (ctn * qty);
+                                                totalnw += nw;
+                                                totalgw += gw;
+
+
+                                                /******** count cartons ทั้งหมด **********/
+                                                allcartons += ctn;
+                                                allnw += nw;
+                                                allgw += gw;
+                                                /******* end count cartons ทั้งหมด *******/
+                                                num++;
                                             } else {
-                                                DESTINATION = getsize.getDestination();
+
+                                                txt += "[";
+                                                txt += "{text: '',border: [false, false, false, false]},";
+                                                txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                                txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+                                                txt += sizetxt;
+                                                txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
+                                                txt += "{text: '',border: [false, false, false, false]},";
+                                                txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                                txt += "{text: '',border: [false, false, false, false]},";
+                                                txt += "{text: '',border: [false, false, false, false]},";
+                                                txt += "],\n";
+
+                                                totalqty += (ctn * qty);
+                                                num++;
+
                                             }
 
+                                            cut.add(c2);
                                         }
                                     }
 
 
 
-                                    if (num == 0) {
 
-                                        txt += "[";
-                                        txt += "{text: '" + group + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-                                        txt += sizetxt;
-                                        txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
-                                        txt += "],\n";
+                                } else {
+
+                                    String[] groupT2 = group.split(",");
+
+                                    if (groupT2.length - 1 == 1) {
+
+                                        List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq, boxnoallbypo);
+                                        int status = 0;
+
+                                        HashMap<String, BCDetailBox> grouplist = new HashMap<String, BCDetailBox>();
+                                        HashSet<String> groupid = new HashSet<String>();
+
+                                        for (BCDetailBox box : listsizebypo) {
+                                            String Color = Utility.subsize(box.getCustomer_no());
+                                            grouplist.put(Color, box);
+                                            groupid.add(Color);
+                                        }
+
+                                        ArrayList<String> arrayList = new ArrayList<String>(groupid);
+                                        // Sort the ArrayList
+                                        Collections.sort(arrayList);
+                                        HashMap<String, String> setsize = new HashMap<String, String>();
+                                        for (BCDetailBox box1 : listsizebypo) {
+
+                                            BCDetailBox listb = box1;
+
+                                            int qty = 0;
+
+                                            String key = "";
+                                            if (listb.getCustomer_no().equals(listb.getSku_item1())) {
+                                                qty += Integer.parseInt(listb.getQty_result1());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
+                                            } else if (listb.getCustomer_no().equals(listb.getSku_item2())) {
+                                                qty += Integer.parseInt(listb.getQty_result2());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
+                                            } else if (listb.getCustomer_no().equals(listb.getSku_item3())) {
+                                                qty += Integer.parseInt(listb.getQty_result3());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
+                                            } else if (listb.getCustomer_no().equals(listb.getSku_item4())) {
+                                                qty += Integer.parseInt(listb.getQty_result4());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
+                                            }
+
+                                        }
+
+                                        HashSet<String> htset = new HashSet<String>();
+                                        for (String atxt : arrayList) {
+
+                                            for (BCDetailBox box : listsizebypo) {
+                                                String xz = Utility.subsize(box.getCustomer_no());
+
+                                                if (!htset.contains(xz)) {
+                                                    if (atxt.equals(xz)) {
+
+                                                        BCDetailBox listb = box;
+                                                        String sizetxt = "";
+                                                        int qty = 0;
+                                                        int ctn = 0;
+                                                        double nw = 0;
+                                                        double gw = 0;
+                                                        String DESTINATION = "";
+                                                        String Color = "";
 
 
-                                        totalctn += ctn;
-                                        totalqty += (ctn * qty);
-                                        totalnw += nw;
-                                        totalgw += gw;
+                                                        if (listb.getDestination() == null) {
+                                                            DESTINATION = "";
+                                                        } else {
+                                                            DESTINATION = listb.getDestination();
+                                                        }
+
+                                                        Color = Utility.subsize(listb.getCustomer_no());
+                                                        ctn = Integer.parseInt(listb.getCountbox());
+                                                        nw = Double.parseDouble(listb.getSumnw());
+                                                        gw = Double.parseDouble(listb.getSumgw());
 
 
-                                        /******** count cartons ทั้งหมด **********/
-                                        allcartons += ctn;
-                                        allnw += nw;
-                                        allgw += gw;
-                                        /******* end count cartons ทั้งหมด *******/
-                                        num++;
+
+                                                        if (status == 0) {
+                                                            txt += "[";
+                                                            txt += "{text: '" + group.replace(",", "") + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+
+                                                            for (String s : size) {
+                                                                String key = s + "#" + xz + s;
+                                                                if (setsize.get(key) != null) {
+                                                                    txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
+                                                                    qty += Integer.parseInt(setsize.get(key));
+                                                                } else {
+                                                                    txt += "{text: '',border: [false, false, false, false]},";
+                                                                }
+                                                            }
+
+                                                            txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
+                                                            txt += "],\n";
+
+                                                            totalctn += ctn;
+                                                            totalqty += (ctn * qty);
+                                                            totalnw += nw;
+                                                            totalgw += gw;
+
+                                                            allcartons += ctn;
+                                                            allnw += nw;
+                                                            allgw += gw;
+
+
+                                                        } else {
+                                                            txt += "[";
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+
+                                                            for (String s : size) {
+                                                                String key = s + "#" + xz + s;
+                                                                if (setsize.get(key) != null) {
+                                                                    txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
+                                                                    qty += Integer.parseInt(setsize.get(key));
+                                                                } else {
+                                                                    txt += "{text: '',border: [false, false, false, false]},";
+                                                                }
+
+                                                            }
+
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "],\n";
+                                                            totalqty += (ctn * qty);
+                                                        }
+
+
+
+
+                                                        status++;
+                                                        htset.add(xz);
+
+
+                                                    }
+
+                                                }
+                                            }
+                                        }
+
+
                                     } else {
 
-                                        txt += "[";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                        txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-                                        txt += sizetxt;
-                                        txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "{text: '',border: [false, false, false, false]},";
-                                        txt += "],\n";
+                                        String spid[] = groupT2[1].split("-");
+                                        String id1 = Utility.splitstringandint(groupT2[groupT2.length - 1]) + spid[0].replace(" ", "");
+                                        String id2 = groupT2[groupT2.length - 1].replace(" ", "");
 
-                                        totalqty += (ctn * qty);
-                                        num++;
+                                        String gtxt = id1 + "-" + id2;
 
-                                    }
+                                        List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq, boxnoallbypo);
+                                        int status = 0;
 
-                                    cut.add(c2);
-                                }
-                            }
+                                        HashMap<String, BCDetailBox> grouplist = new HashMap<String, BCDetailBox>();
+                                        HashSet<String> groupid = new HashSet<String>();
 
+                                        for (BCDetailBox box : listsizebypo) {
+                                            String Color = Utility.subsize(box.getCustomer_no());
+                                            grouplist.put(Color, box);
+                                            groupid.add(Color);
+                                        }
 
+                                        ArrayList<String> arrayList = new ArrayList<String>(groupid);
+                                        // Sort the ArrayList
+                                        Collections.sort(arrayList);
+                                        HashMap<String, String> setsize = new HashMap<String, String>();
+                                        for (BCDetailBox box1 : listsizebypo) {
 
+                                            BCDetailBox listb = box1;
 
-                        } else {
+                                            int qty = 0;
 
-                            String[] groupT2 = group.split(",");
-
-                            if (groupT2.length - 1 == 1) {
-
-                                List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
-                                int status = 0;
-
-                                HashMap<String, BCDetailBox> grouplist = new HashMap<String, BCDetailBox>();
-                                HashSet<String> groupid = new HashSet<String>();
-
-                                for (BCDetailBox box : listsizebypo) {
-                                    String Color = Utility.subsize(box.getCustomer_no());
-                                    grouplist.put(Color, box);
-                                    groupid.add(Color);
-                                }
-
-                                ArrayList<String> arrayList = new ArrayList<String>(groupid);
-                                // Sort the ArrayList
-                                Collections.sort(arrayList);
-                                HashMap<String, String> setsize = new HashMap<String, String>();
-                                for (BCDetailBox box1 : listsizebypo) {
-
-                                    BCDetailBox listb = box1;
-
-                                    int qty = 0;
-
-                                    String key = "";
-                                    if (listb.getCustomer_no().equals(listb.getSku_item1())) {
-                                        qty += Integer.parseInt(listb.getQty_result1());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    } else if (listb.getCustomer_no().equals(listb.getSku_item2())) {
-                                        qty += Integer.parseInt(listb.getQty_result2());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    } else if (listb.getCustomer_no().equals(listb.getSku_item3())) {
-                                        qty += Integer.parseInt(listb.getQty_result3());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    } else if (listb.getCustomer_no().equals(listb.getSku_item4())) {
-                                        qty += Integer.parseInt(listb.getQty_result4());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    }
-
-                                }
-
-                                HashSet<String> htset = new HashSet<String>();
-                                for (String atxt : arrayList) {
-
-                                    for (BCDetailBox box : listsizebypo) {
-                                        String xz = Utility.subsize(box.getCustomer_no());
-
-                                        if (!htset.contains(xz)) {
-                                            if (atxt.equals(xz)) {
-
-                                                BCDetailBox listb = box;
-                                                String sizetxt = "";
-                                                int qty = 0;
-                                                int ctn = 0;
-                                                double nw = 0;
-                                                double gw = 0;
-                                                String DESTINATION = "";
-                                                String Color = "";
-
-
-                                                if (listb.getDestination() == null) {
-                                                    DESTINATION = "";
-                                                } else {
-                                                    DESTINATION = listb.getDestination();
-                                                }
-
-                                                Color = Utility.subsize(listb.getCustomer_no());
-                                                ctn = Integer.parseInt(listb.getCountbox());
-                                                nw = Double.parseDouble(listb.getSumnw());
-                                                gw = Double.parseDouble(listb.getSumgw());
-
-
-
-                                                if (status == 0) {
-                                                    txt += "[";
-                                                    txt += "{text: '" + group.replace(",", "") + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-
-                                                    for (String s : size) {
-                                                        String key = s + "#" + xz + s;
-                                                        if (setsize.get(key) != null) {
-                                                            txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
-                                                            qty += Integer.parseInt(setsize.get(key));
-                                                        } else {
-                                                            txt += "{text: '',border: [false, false, false, false]},";
-                                                        }
-                                                    }
-
-                                                    txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
-                                                    txt += "],\n";
-
-                                                    totalctn += ctn;
-                                                    totalqty += (ctn * qty);
-                                                    totalnw += nw;
-                                                    totalgw += gw;
-
-                                                    allcartons += ctn;
-                                                    allnw += nw;
-                                                    allgw += gw;
-
-
-                                                } else {
-                                                    txt += "[";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-
-                                                    for (String s : size) {
-                                                        String key = s + "#" + xz + s;
-                                                        if (setsize.get(key) != null) {
-                                                            txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
-                                                            qty += Integer.parseInt(setsize.get(key));
-                                                        } else {
-                                                            txt += "{text: '',border: [false, false, false, false]},";
-                                                        }
-
-                                                    }
-
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "],\n";
-                                                    totalqty += (ctn * qty);
-                                                }
-
-
-
-
-                                                status++;
-                                                htset.add(xz);
-
-
+                                            String key = "";
+                                            if (listb.getCustomer_no().equals(listb.getSku_item1())) {
+                                                qty += Integer.parseInt(listb.getQty_result1());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
+                                            } else if (listb.getCustomer_no().equals(listb.getSku_item2())) {
+                                                qty += Integer.parseInt(listb.getQty_result2());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
+                                            } else if (listb.getCustomer_no().equals(listb.getSku_item3())) {
+                                                qty += Integer.parseInt(listb.getQty_result3());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
+                                            } else if (listb.getCustomer_no().equals(listb.getSku_item4())) {
+                                                qty += Integer.parseInt(listb.getQty_result4());
+                                                key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
+                                                setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
                                             }
 
                                         }
-                                    }
-                                }
+
+                                        HashSet<String> htset = new HashSet<String>();
+                                        for (String atxt : arrayList) {
+
+                                            for (BCDetailBox box : listsizebypo) {
+                                                String xz = Utility.subsize(box.getCustomer_no());
+
+                                                if (!htset.contains(xz)) {
+                                                    if (atxt.equals(xz)) {
+
+                                                        BCDetailBox listb = box;
+                                                        String sizetxt = "";
+                                                        int qty = 0;
+                                                        int ctn = 0;
+                                                        double nw = 0;
+                                                        double gw = 0;
+                                                        String DESTINATION = "";
+                                                        String Color = "";
 
 
-                            } else {
-
-                                String spid[] = groupT2[1].split("-");
-                                String id1 = Utility.splitstringandint(groupT2[groupT2.length - 1]) + spid[0].replace(" ", "");
-                                String id2 = groupT2[groupT2.length - 1].replace(" ", "");
-
-                                String gtxt = id1 + "-" + id2;
-
-                                List<BCDetailBox> listsizebypo = PackingListService.GroupCustomerSizeByPO(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), seq);
-                                int status = 0;
-
-                                HashMap<String, BCDetailBox> grouplist = new HashMap<String, BCDetailBox>();
-                                HashSet<String> groupid = new HashSet<String>();
-
-                                for (BCDetailBox box : listsizebypo) {
-                                    String Color = Utility.subsize(box.getCustomer_no());
-                                    grouplist.put(Color, box);
-                                    groupid.add(Color);
-                                }
-
-                                ArrayList<String> arrayList = new ArrayList<String>(groupid);
-                                // Sort the ArrayList
-                                Collections.sort(arrayList);
-                                HashMap<String, String> setsize = new HashMap<String, String>();
-                                for (BCDetailBox box1 : listsizebypo) {
-
-                                    BCDetailBox listb = box1;
-
-                                    int qty = 0;
-
-                                    String key = "";
-                                    if (listb.getCustomer_no().equals(listb.getSku_item1())) {
-                                        qty += Integer.parseInt(listb.getQty_result1());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    } else if (listb.getCustomer_no().equals(listb.getSku_item2())) {
-                                        qty += Integer.parseInt(listb.getQty_result2());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    } else if (listb.getCustomer_no().equals(listb.getSku_item3())) {
-                                        qty += Integer.parseInt(listb.getQty_result3());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    } else if (listb.getCustomer_no().equals(listb.getSku_item4())) {
-                                        qty += Integer.parseInt(listb.getQty_result4());
-                                        key = listb.getCustomer_size() + "#" + listb.getCustomer_no();
-                                        setsize.put(listb.getCustomer_size() + "#" + listb.getCustomer_no(), String.valueOf(qty));
-                                    }
-
-                                }
-
-                                HashSet<String> htset = new HashSet<String>();
-                                for (String atxt : arrayList) {
-
-                                    for (BCDetailBox box : listsizebypo) {
-                                        String xz = Utility.subsize(box.getCustomer_no());
-
-                                        if (!htset.contains(xz)) {
-                                            if (atxt.equals(xz)) {
-
-                                                BCDetailBox listb = box;
-                                                String sizetxt = "";
-                                                int qty = 0;
-                                                int ctn = 0;
-                                                double nw = 0;
-                                                double gw = 0;
-                                                String DESTINATION = "";
-                                                String Color = "";
-
-
-                                                if (listb.getDestination() == null) {
-                                                    DESTINATION = "";
-                                                } else {
-                                                    DESTINATION = listb.getDestination();
-                                                }
-
-                                                Color = Utility.subsize(listb.getCustomer_no());
-                                                ctn = Integer.parseInt(listb.getCountbox());
-                                                nw = Double.parseDouble(listb.getSumnw());
-                                                gw = Double.parseDouble(listb.getSumgw());
-
-
-                                                if (status == 0) {
-                                                    txt += "[";
-                                                    txt += "{text: '" + gtxt + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
-
-                                                    for (String s : size) {
-                                                        String key = s + "#" + xz + s;
-                                                        if (setsize.get(key) != null) {
-                                                            txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
-                                                            qty += Integer.parseInt(setsize.get(key));
+                                                        if (listb.getDestination() == null) {
+                                                            DESTINATION = "";
                                                         } else {
-                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            DESTINATION = listb.getDestination();
                                                         }
-                                                    }
 
-                                                    txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
-                                                    txt += "],\n";
-
-                                                    totalctn += ctn;
-                                                    totalqty += (ctn * qty);
-                                                    totalnw += nw;
-                                                    totalgw += gw;
-
-                                                    allcartons += ctn;
-                                                    allnw += nw;
-                                                    allgw += gw;
+                                                        Color = Utility.subsize(listb.getCustomer_no());
+                                                        ctn = Integer.parseInt(listb.getCountbox());
+                                                        nw = Double.parseDouble(listb.getSumnw());
+                                                        gw = Double.parseDouble(listb.getSumgw());
 
 
-                                                } else {
-                                                    txt += "[";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + Color + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+                                                        if (status == 0) {
+                                                            txt += "[";
+                                                            txt += "{text: '" + gtxt + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
 
-                                                    for (String s : size) {
-                                                        String key = s + "#" + xz + s;
-                                                        if (setsize.get(key) != null) {
-                                                            txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
-                                                            qty += Integer.parseInt(setsize.get(key));
+                                                            for (String s : size) {
+                                                                String key = s + "#" + xz + s;
+                                                                if (setsize.get(key) != null) {
+                                                                    txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
+                                                                    qty += Integer.parseInt(setsize.get(key));
+                                                                } else {
+                                                                    txt += "{text: '',border: [false, false, false, false]},";
+                                                                }
+                                                            }
+
+                                                            txt += "{text: '" + DESTINATION + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + ctn + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + decimalFormat.format(nw) + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + decimalFormat.format(gw) + "',border: [false, false, false, false]},";
+                                                            txt += "],\n";
+
+                                                            totalctn += ctn;
+                                                            totalqty += (ctn * qty);
+                                                            totalnw += nw;
+                                                            totalgw += gw;
+
+                                                            allcartons += ctn;
+                                                            allnw += nw;
+                                                            allgw += gw;
+
+
                                                         } else {
+                                                            txt += "[";
                                                             txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + Color + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + i1.getPo() + "',border: [false, false, false, false]},";
+
+                                                            for (String s : size) {
+                                                                String key = s + "#" + xz + s;
+                                                                if (setsize.get(key) != null) {
+                                                                    txt += "{text: '" + setsize.get(key) + "',border: [false, false, false, false]},";
+                                                                    qty += Integer.parseInt(setsize.get(key));
+                                                                } else {
+                                                                    txt += "{text: '',border: [false, false, false, false]},";
+                                                                }
+
+                                                            }
+
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "{text: '',border: [false, false, false, false]},";
+                                                            txt += "],\n";
+                                                            totalqty += (ctn * qty);
                                                         }
+
+
+                                                        status++;
+                                                        htset.add(xz);
+
 
                                                     }
 
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '" + (ctn * qty) + "',border: [false, false, false, false]},";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "{text: '',border: [false, false, false, false]},";
-                                                    txt += "],\n";
-                                                    totalqty += (ctn * qty);
                                                 }
-
-
-                                                status++;
-                                                htset.add(xz);
-
-
                                             }
-
                                         }
+
+
+
                                     }
                                 }
+                            }
+
+                            txt += " [ ";
+                            txt += " {text: 'TOTAL',border: [false, true, false, true]}, ";
+                            txt += " {text: '', border: [false, true, false, true]}, ";
+                            txt += " {text: '', border: [false, true, false, true]}, ";
+
+                            for (String s : size) {
+                                txt += " {text: '', border: [false, true, false, true]}, ";
+                            }
+
+                            txt += " {text: '', border: [false, true, false, true]}, ";
+                            txt += " {text: '" + decimalFormat1.format(totalctn) + "',border: [false, true, false, true]}, ";
+                            txt += " {text: '" + decimalFormat1.format(totalqty) + "',border: [false, true, false, true]}, ";
+                            txt += " {text: '" + decimalFormat.format(totalnw) + "',border: [false, true, false, true]}, ";
+                            txt += " {text: '" + decimalFormat.format(totalgw) + "',border: [false, true, false, true]}, ";
+                            txt += " ], ";
+
+                            // txt += "[{text: 'TOTAL',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '" + decimalFormat1.format(totalctn) + "',border: [false, true, false, true]},{text: '" + decimalFormat1.format(totalqty) + "',border: [false, true, false, true]},{text: '" + decimalFormat.format(totalnw) + "',border: [false, true, false, true]},{text: '" + decimalFormat.format(totalgw) + "',border: [false, true, false, true]}],";
 
 
+
+                            datatable1 += txt;
+                            /******************************  End table1 ********************************************/
+                            /***************************** set table2 ***************************************/
+                            String txt1 = "";
+                            String conn = i1.getContainerno() == null ? "" : "Container no." + i1.getContainerno();
+                            List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), boxnoallbypo);
+                            HashMap<String, String> sumqty = new HashMap<String, String>();
+                            HashSet<String> dese = new HashSet<String>();
+                            HashSet<String> allid = new HashSet<String>();
+                            String data1 = "";
+                            for (BCDetailBox l1 : listtotalgroup) {
+                                String myid1 = Utility.subsize(l1.getCustomer_no());
+                                String getdata = sumqty.get(myid1);
+
+                                data1 = sumqty.get(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination());
+                                int qt = 0;
+                                if (data1 == null) {
+                                    sumqty.put(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination(), l1.getSumqty());
+
+                                } else {
+                                    qt = Integer.parseInt(l1.getSumqty()) + Integer.parseInt(data1);
+                                    sumqty.put(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination(), String.valueOf(qt));
+
+                                }
+                                dese.add(l1.getDestination());
 
                             }
-                        }
-                    }
+                            List<String> list = new ArrayList<String>(dese);
+                            Collections.sort(list);
+                            System.out.println(sumqty);
 
-                    txt += " [ ";
-                    txt += " {text: 'TOTAL',border: [false, true, false, true]}, ";
-                    txt += " {text: '', border: [false, true, false, true]}, ";
-                    txt += " {text: '', border: [false, true, false, true]}, ";
+                            for (String d : list) {
+                                for (BCDetailBox l : listtotalgroup) {
 
-                    for (String s : size) {
-                        txt += " {text: '', border: [false, true, false, true]}, ";
-                    }
+                                    String myid2 = Utility.subsize(l.getCustomer_no());
+                                    String mfg = "";
 
-                    txt += " {text: '', border: [false, true, false, true]}, ";
-                    txt += " {text: '" + decimalFormat1.format(totalctn) + "',border: [false, true, false, true]}, ";
-                    txt += " {text: '" + decimalFormat1.format(totalqty) + "',border: [false, true, false, true]}, ";
-                    txt += " {text: '" + decimalFormat.format(totalnw) + "',border: [false, true, false, true]}, ";
-                    txt += " {text: '" + decimalFormat.format(totalgw) + "',border: [false, true, false, true]}, ";
-                    txt += " ], ";
-
-                    // txt += "[{text: 'TOTAL',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '',border: [false, true, false, true]},{text: '" + decimalFormat1.format(totalctn) + "',border: [false, true, false, true]},{text: '" + decimalFormat1.format(totalqty) + "',border: [false, true, false, true]},{text: '" + decimalFormat.format(totalnw) + "',border: [false, true, false, true]},{text: '" + decimalFormat.format(totalgw) + "',border: [false, true, false, true]}],";
-
-
-
-                    datatable1 += txt;
-                    /******************************  End table1 ********************************************/
-                    /***************************** set table2 ***************************************/
-                    String txt1 = "";
-                    String conn = i1.getContainerno() == null ? "" : "Container no." + i1.getContainerno();
-                    List<BCDetailBox> listtotalgroup = PackingListService.GroupCustomeSizeTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
-                    HashMap<String, String> sumqty = new HashMap<String, String>();
-                    HashSet<String> dese = new HashSet<String>();
-                    HashSet<String> allid = new HashSet<String>();
-                    String data1 = "";
-                    for (BCDetailBox l1 : listtotalgroup) {
-                        String myid1 = Utility.subsize(l1.getCustomer_no());
-                        String getdata = sumqty.get(myid1);
-
-                        data1 = sumqty.get(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination());
-                        int qt = 0;
-                        if (data1 == null) {
-                            sumqty.put(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination(), l1.getSumqty());
-
-                        } else {
-                            qt = Integer.parseInt(l1.getSumqty()) + Integer.parseInt(data1);
-                            sumqty.put(myid1 + "#" + l1.getCustomer_size() + "#" + l1.getDestination(), String.valueOf(qt));
-
-                        }
-                        dese.add(l1.getDestination());
-
-                    }
-                    List<String> list = new ArrayList<String>(dese);
-                    Collections.sort(list);
-                    System.out.println(sumqty);
-
-                    for (String d : list) {
-                        for (BCDetailBox l : listtotalgroup) {
-
-                            String myid2 = Utility.subsize(l.getCustomer_no());
-                            String mfg = "";
-
-                            if (i1.getMfg() != null) {
-                                mfg = "(" + i1.getMfg() + ")";
-                            }
-                            if (!allid.contains(myid2 + d)) {
-                                txt1 += "[";
-                                txt1 += "{text: '" + myid2 + "',border: [false, false, false, false]},";
-                                txt1 += "{text: '" + l.getPo() + " " + mfg + "\t\t\t " + Utility.Chacknull(d) + "',border: [false, false, false, false]},";
-                                txt1 += "{text: '',border: [false, false, false, false]},";
-
-                                int qtytotal = 0;
-                                for (String s1 : size) {
-                                    if (sumqty.get(myid2 + "#" + s1 + "#" + d) == null) {
+                                    if (i1.getMfg() != null) {
+                                        mfg = "(" + i1.getMfg() + ")";
+                                    }
+                                    if (!allid.contains(myid2 + d)) {
+                                        txt1 += "[";
+                                        txt1 += "{text: '" + myid2 + "',border: [false, false, false, false]},";
+                                        txt1 += "{text: '" + l.getPo() + " " + mfg + "\t\t\t " + Utility.Chacknull(d) + "',border: [false, false, false, false]},";
                                         txt1 += "{text: '',border: [false, false, false, false]},";
-                                    } else {
-                                        txt1 += "{text: '" + sumqty.get(myid2 + "#" + s1 + "#" + d) + "',border: [false, false, false, false]},";
-                                        qtytotal += Integer.parseInt(sumqty.get(myid2 + "#" + s1 + "#" + d));
 
+                                        int qtytotal = 0;
+                                        for (String s1 : size) {
+                                            if (sumqty.get(myid2 + "#" + s1 + "#" + d) == null) {
+                                                txt1 += "{text: '',border: [false, false, false, false]},";
+                                            } else {
+                                                txt1 += "{text: '" + sumqty.get(myid2 + "#" + s1 + "#" + d) + "',border: [false, false, false, false]},";
+                                                qtytotal += Integer.parseInt(sumqty.get(myid2 + "#" + s1 + "#" + d));
+
+                                            }
+
+                                        }
+
+                                        txt1 += "{text: '" + decimalFormat1.format(qtytotal) + "',border: [false, false, false, false]},";
+                                        txt1 += "{text: '',border: [false, false, false, false]},";
+                                        txt1 += "{text: '',border: [false, false, false, false]},";
+                                        txt1 += "{text: '',border: [false, false, false, false]},";
+                                        txt1 += "{text: '',border: [false, false, false, false]},";
+                                        txt1 += "],";
+
+                                        allid.add(myid2 + d);
                                     }
-
                                 }
-
-                                txt1 += "{text: '" + decimalFormat1.format(qtytotal) + "',border: [false, false, false, false]},";
-                                txt1 += "{text: '',border: [false, false, false, false]},";
-                                txt1 += "{text: '',border: [false, false, false, false]},";
-                                txt1 += "{text: '',border: [false, false, false, false]},";
-                                txt1 += "{text: '',border: [false, false, false, false]},";
-                                txt1 += "],";
-
-                                allid.add(myid2 + d);
                             }
-                        }
-                    }
 
 
-                    List<BCDetailBox> listtotalgroupall = PackingListService.GroupCustomeSizeAllTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox());
-                    HashMap<String, String> sumsize = new HashMap<String, String>();
+                            List<BCDetailBox> listtotalgroupall = PackingListService.GroupCustomeSizeAllTotal(i1.getPo(), i1.getFirstdigit(), i1.getStartbox(), i1.getEndbox(), boxnoallbypo);
+                            HashMap<String, String> sumsize = new HashMap<String, String>();
 
-                    for (BCDetailBox k : listtotalgroupall) {
-                        sumsize.put(k.getCustomer_size(), k.getSumqty());
-                    }
-                    System.out.println(sumsize);
+                            for (BCDetailBox k : listtotalgroupall) {
+                                sumsize.put(k.getCustomer_size(), k.getSumqty());
+                            }
+                            System.out.println(sumsize);
 
-                    txt1 += "[";
-                    txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
-                    txt1 += "{text: '',border: [false, true, false, true]},";
-
-                    txt1 += "{text: '',border: [false, true, false, true]},";
-                    int qtyall = 0;
-                    for (String s : size) {
-                        String sz = sumsize.get(s);
-                        if (sz == null) {
+                            txt1 += "[";
+                            txt1 += "{text: 'TOTAL',border: [false, true, false, true]},";
                             txt1 += "{text: '',border: [false, true, false, true]},";
-                        } else {
-                            txt1 += "{text: '" + decimalFormat1.format(Integer.parseInt(sz)) + "',border: [false, true, false, true]},";
-                            qtyall += Integer.parseInt(sz);
-                        }
-                    }
-                    txt1 += "{text: '" + decimalFormat1.format(qtyall) + "',border: [false, true, false, true]},";
-                    txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left', },";
 
-                    txt1 += "{text: '',border: [false, false, false, false]},";
-                    txt1 += "{text: '',border: [false, false, false, false]},";
-                    txt1 += "{text: '',border: [false, false, false, false]},";
+                            txt1 += "{text: '',border: [false, true, false, true]},";
+                            int qtyall = 0;
+                            for (String s : size) {
+                                String sz = sumsize.get(s);
+                                if (sz == null) {
+                                    txt1 += "{text: '',border: [false, true, false, true]},";
+                                } else {
+                                    txt1 += "{text: '" + decimalFormat1.format(Integer.parseInt(sz)) + "',border: [false, true, false, true]},";
+                                    qtyall += Integer.parseInt(sz);
+                                }
+                            }
+                            txt1 += "{text: '" + decimalFormat1.format(qtyall) + "',border: [false, true, false, true]},";
+                            txt1 += "{text: ' " + conn + "',border: [false, false, false, false],alignment:'left', },";
 
-                    txt1 += "],";
+                            txt1 += "{text: '',border: [false, false, false, false]},";
+                            txt1 += "{text: '',border: [false, false, false, false]},";
+                            txt1 += "{text: '',border: [false, false, false, false]},";
 
-                    datatable2 = txt1;
-                    allpc += qtyall;
+                            txt1 += "],";
 
-                    /***************************** End table2 ***************************************/
-                    String style = "";
-                    String woversize1 = "";
-                    String woversize2 = "";
-                    if (size.size() > 8) {
-                        style = "tbcontentoversize";
-                        woversize1 = "'auto','auto','auto'";
-                        woversize2 = "'auto','auto','auto'";
-                    } else {
-                        style = "tbcontent";
-                        woversize1 = "50,58,84";
-                        woversize2 = "50,100,43";
-                    }
+                            datatable2 = txt1;
+                            allpc += qtyall;
+
+                            /***************************** End table2 ***************************************/
+                            String style = "";
+                            String woversize1 = "";
+                            String woversize2 = "";
+                            if (size.size() > 8) {
+                                style = "tbcontentoversize";
+                                woversize1 = "'auto','auto','auto'";
+                                woversize2 = "'auto','auto','auto'";
+                            } else {
+                                style = "tbcontent";
+                                woversize1 = "50,58,84";
+                                woversize2 = "50,100,43";
+                            }
     %>
                 {
                     style: '<%=style%>',
@@ -1176,9 +1186,11 @@
     
     
     <%
-                    datatable1 = "";
-                    datatable2 = "";
-
+                            datatable1 = "";
+                            datatable2 = "";
+                        }
+                        hssetall.add(i1.getPo() + "#" + i1.getFirstdigit());
+                    }
 
                 }
 
@@ -1315,7 +1327,7 @@
                             margin: [45, 2] 
                         },
                         tbcontent: {
-                            fontSize:11,
+                            fontSize:10,
                             bold: true,
                             margin: [10, 2],
                             alignment:'center'                      

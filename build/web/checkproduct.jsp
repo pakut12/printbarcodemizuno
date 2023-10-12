@@ -322,88 +322,117 @@
             function updatedata(){
                 var sumqty_result = parseInt($("#customer1_number").val())+parseInt($("#customer2_number").val())+parseInt($("#customer3_number").val())+parseInt($("#customer4_number").val())
                 
-                if(parseInt($("#customer1_number").val()) > parseInt($("#customer1_qty").val())){
+                if($("#customer1_number").val() != 0 && !$("#customer1_qty").val() || !$("#customer1_number").val()){
                     Swal.fire({
                         icon:'error',
                         title:'ผิดพลาด',
-                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
+                        text:' ข้อมูลผิดพลาดช่องที่ 1'
                     })
-                }else if(parseInt($("#customer2_number").val()) > parseInt($("#customer2_qty").val())){
-                    Swal.fire({
+                }else if($("#customer2_number").val()  != 0  && !$("#customer2_qty").val() || !$("#customer2_number").val()){
+                     Swal.fire({
                         icon:'error',
                         title:'ผิดพลาด',
-                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
+                        text:' ข้อมูลผิดพลาดช่องที่ 2'
                     })
-                }else if(parseInt($("#customer3_number").val()) > parseInt($("#customer3_qty").val())){
-                    Swal.fire({
+                }else if($("#customer3_number").val()  != 0  && !$("#customer3_qty").val() || !$("#customer3_number").val()){
+                     Swal.fire({
                         icon:'error',
                         title:'ผิดพลาด',
-                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
+                        text:' ข้อมูลผิดพลาดช่องที่ 3'
                     })
-                }else if(parseInt($("#customer4_number").val()) > parseInt($("#customer4_qty").val())){
-                    Swal.fire({
+                }else if($("#customer4_number").val()  != 0  && !$("#customer4_qty").val() || !$("#customer4_number").val()){
+                     Swal.fire({
                         icon:'error',
                         title:'ผิดพลาด',
-                        text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
+                        text:' ข้อมูลผิดพลาดช่องที่ 4'
                     })
                 }else{
-                   
-                    var firstdigit = $("#firstdigit").val();
-                    var posearch = $("#posearch").val();
-                    var numstart = firstdigit+$("#numstart").val();
                     
-                    var qty_result1 = $("#customer1_number").val();
-                    var qty_result2 = $("#customer2_number").val();
-                    var qty_result3 = $("#customer3_number").val();
-                    var qty_result4 = $("#customer4_number").val();
-                    var date = new Date().format('d-m-Y H:i:s');
-                    var userid = $("#user_edit").val();
-                    $.ajax({
-                        type:"post",
-                        url:"Detail",
-                        data:{
-                            type:"updateqtyfrombarcode",
-                            posearch:posearch,
-                            boxno:numstart,
-                            qty_result1:qty_result1,
-                            qty_result2:qty_result2,
-                            qty_result3:qty_result3,
-                            qty_result4:qty_result4,
-                            date:date,
-                            userid:userid
-                        },
-                        success:function(msg){
-                            if(msg){
-                                var js = JSON.parse(msg);
-                                if(js.status == "true"){
-                                    Swal.fire({
-                                        title:"บันทึก",
-                                        icon:"success",
-                                        text:"บันทึกสำเร็จ"
-                                    })
+                    if(parseInt($("#customer1_number").val()) > parseInt($("#customer1_qty").val())){
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 1'
+                        })
+                    }else if(parseInt($("#customer2_number").val()) > parseInt($("#customer2_qty").val())){
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 2'
+                        })
+                    }else if(parseInt($("#customer3_number").val()) > parseInt($("#customer3_qty").val())){
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 3'
+                        })
+                    }else if(parseInt($("#customer4_number").val()) > parseInt($("#customer4_qty").val())){
+                        Swal.fire({
+                            icon:'error',
+                            title:'ผิดพลาด',
+                            text:'จำนวนตัวนับได้มากกว่าจำนวนตัว ช่องที่ 4'
+                        })
+                    }else{
+                   
+                        var firstdigit = $("#firstdigit").val();
+                        var posearch = $("#posearch").val();
+                        var numstart = firstdigit+$("#numstart").val();
+                    
+                        var qty_result1 = $("#customer1_number").val();
+                        var qty_result2 = $("#customer2_number").val();
+                        var qty_result3 = $("#customer3_number").val();
+                        var qty_result4 = $("#customer4_number").val();
+                        var date = new Date().format('d-m-Y H:i:s');
+                        var userid = $("#user_edit").val();
+                    
+            
+                        $.ajax({
+                            type:"post",
+                            url:"Detail",
+                            data:{
+                                type:"updateqtyfrombarcode",
+                                posearch:posearch,
+                                boxno:numstart,
+                                qty_result1:qty_result1,
+                                qty_result2:qty_result2,
+                                qty_result3:qty_result3,
+                                qty_result4:qty_result4,
+                                date:date,
+                                userid:userid
+                            },
+                            success:function(msg){
+                                if(msg){
+                                    var js = JSON.parse(msg);
+                                    if(js.status == "true"){
+                                        Swal.fire({
+                                            title:"บันทึก",
+                                            icon:"success",
+                                            text:"บันทึกสำเร็จ"
+                                        })
+                                        clearinput()
+                                    }else if(js.status == "false"){
+                                        Swal.fire({
+                                            title:"บันทึก",
+                                            icon:"error",
+                                            text:"บันทึกไม่สำเร็จ"
+                                        })
+                                    }
                                     clearinput()
-                                }else if(js.status == "false"){
+                                }else{
                                     Swal.fire({
-                                        title:"บันทึก",
-                                        icon:"error",
-                                        text:"บันทึกไม่สำเร็จ"
-                                    })
+                                        icon:'error',
+                                        title:'บันทึก',
+                                        text:'บันทึกไม่สำเร็จ'
+                                    })  
                                 }
-                                clearinput()
-                            }else{
-                                Swal.fire({
-                                    icon:'error',
-                                    title:'บันทึก',
-                                    text:'บันทึกไม่สำเร็จ'
-                                })  
                             }
-                        }
-                    })
-                        
-
+                        })
+                    }
                 }
-               
+                
             }
+            
+
             function clearinput(){
                 $("#myform :input").val("");
             }

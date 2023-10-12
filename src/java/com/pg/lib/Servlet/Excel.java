@@ -34,6 +34,8 @@ public class Excel extends HttpServlet {
 
             if (type.equals("ExcelExport")) {
                 try {
+                 
+                    
                     String id = request.getParameter("id").trim();
                     String url = ExcelService.ExportExcelComputer(id);
                     out.print(url);

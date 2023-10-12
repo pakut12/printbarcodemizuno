@@ -22,7 +22,7 @@ public class PackingListService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
-    public static List<BCDetailBox> CheckSize(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+    public static List<BCDetailBox> CheckSize(String po, String firstdigit, String STARTBOX, String ENDBOX, String boxnoallbypo) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
@@ -32,15 +32,16 @@ public class PackingListService {
             sql += "  INNER JOIN MIZUNOCUSTOMER b ON b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4   ";
             sql += " GROUP BY a.PO,a.BOXNO,a.boxseq, b.customer_color,b.customer_size ";
             sql += " ) tb ";
-            sql += " WHERE firstdigit = ? and po = ?  and boxno in (   ";
-
+            sql += " WHERE firstdigit = ? and po = ?  and boxno in (" + boxnoallbypo + ") ";
+            /*
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
-                if (s < Integer.parseInt(ENDBOX)) {
-                    sql += "'" + firstdigit + String.valueOf(s) + "',";
-                } else {
-                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
-                }
+            if (s < Integer.parseInt(ENDBOX)) {
+            sql += "'" + firstdigit + String.valueOf(s) + "',";
+            } else {
+            sql += "'" + firstdigit + String.valueOf(s) + "') ";
             }
+            }
+             */
             sql += " group by customer_size ";
 
             conn = ConnectDB.getConnection();
@@ -165,7 +166,7 @@ public class PackingListService {
             sql += " order by a.DESTINATION,b.customer_no  ";
 
 
-            System.out.println("L : "+ sql);
+            System.out.println("L : " + sql);
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, firstdigit);
@@ -190,7 +191,7 @@ public class PackingListService {
         return listbox;
     }
 
-    public static List<BCDetailBox> GroupCustomeSizeTotal(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+    public static List<BCDetailBox> GroupCustomeSizeTotal(String po, String firstdigit, String STARTBOX, String ENDBOX,String boxnoallbypo) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
@@ -213,7 +214,9 @@ public class PackingListService {
             sql += " FROM   MIZUNONEWBARBOXDT a   ";
             sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  ";
             sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po  ";
-            sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN (   ";
+            sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN ("+boxnoallbypo+") ";
+           
+            /*
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
                 if (s < Integer.parseInt(ENDBOX)) {
                     sql += "'" + firstdigit + String.valueOf(s) + "',";
@@ -221,6 +224,7 @@ public class PackingListService {
                     sql += "'" + firstdigit + String.valueOf(s) + "') ";
                 }
             }
+             */
 
             sql += " group by a.PO, a.BOXNO,    b.customer_color,   b.customer_size,b.customer_no,CASE ";
             sql += "  WHEN customer_no = SKU_ITEM1 THEN SIZENO1 ";
@@ -250,7 +254,7 @@ public class PackingListService {
                 detail.setCustomer_size(rs.getString("customer_size"));
                 detail.setSumqty(rs.getString("QTY_RESULT"));
                 detail.setDestination(rs.getString("DESTINATION"));
-                
+
                 listbox.add(detail);
             }
 
@@ -265,7 +269,7 @@ public class PackingListService {
         return listbox;
     }
 
-    public static List<BCDetailBox> GroupCustomeSizeAllTotal(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+    public static List<BCDetailBox> GroupCustomeSizeAllTotal(String po, String firstdigit, String STARTBOX, String ENDBOX,String boxnoallbypo) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
@@ -288,7 +292,9 @@ public class PackingListService {
             sql += " FROM   MIZUNONEWBARBOXDT a   ";
             sql += " INNER JOIN   MIZUNOCUSTOMER b ON   b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4  ";
             sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po  ";
-            sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN (   ";
+            sql += " WHERE  REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? AND a.boxno IN ("+boxnoallbypo+")  ";
+            
+            /*
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
                 if (s < Integer.parseInt(ENDBOX)) {
                     sql += "'" + firstdigit + String.valueOf(s) + "',";
@@ -296,6 +302,7 @@ public class PackingListService {
                     sql += "'" + firstdigit + String.valueOf(s) + "') ";
                 }
             }
+             */
 
             sql += " group by a.PO, a.BOXNO,    b.customer_color,   b.customer_size,b.customer_no,CASE ";
             sql += "  WHEN customer_no = SKU_ITEM1 THEN SIZENO1 ";
@@ -308,7 +315,7 @@ public class PackingListService {
             sql += "  WHEN customer_no = SKU_ITEM3 THEN QTY_RESULT3 ";
             sql += "  WHEN customer_no = SKU_ITEM4 THEN QTY_RESULT3 ";
             sql += "  END,a.DESTINATION ) tb ";
-          
+
             sql += " group by customer_size ";
             sql += " order by customer_size ";
 
@@ -324,7 +331,7 @@ public class PackingListService {
                 BCDetailBox detail = new BCDetailBox();
                 detail.setCustomer_size(rs.getString("customer_size"));
                 detail.setSumqty(rs.getString("sumqty"));
-              
+
                 listbox.add(detail);
             }
 
@@ -338,9 +345,8 @@ public class PackingListService {
 
         return listbox;
     }
-    
-    
-    public static List<BCDetailBox> GroupCustomerSizeByPO(String po, String firstdigit, String STARTBOX, String ENDBOX, String BOXSEQ) throws SQLException {
+
+    public static List<BCDetailBox> GroupCustomerSizeByPO(String po, String firstdigit, String STARTBOX, String ENDBOX, String BOXSEQ,String boxnoallbypo) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
@@ -375,8 +381,8 @@ public class PackingListService {
             sql += "  b.customer_no = a.SKU_ITEM1 OR b.customer_no = a.SKU_ITEM2 OR b.customer_no = a.SKU_ITEM3 OR b.customer_no = a.SKU_ITEM4 ";
             sql += " INNER JOIN  MIZUNONEWBARBOXRESULT c ON  c.boxno = a.BOXNO AND c.po = a.po ";
             sql += "  WHERE ";
-            sql += "    REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? and a.BOXSEQ = ? AND a.boxno IN (";
-
+            sql += "    REGEXP_SUBSTR(a.BOXNO, '[[:alpha:]]+') = ? AND a.po = ? and a.BOXSEQ = ? AND a.boxno IN ("+boxnoallbypo+") ";
+/*
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
                 if (s < Integer.parseInt(ENDBOX)) {
                     sql += "'" + firstdigit + String.valueOf(s) + "',";
@@ -384,7 +390,7 @@ public class PackingListService {
                     sql += "'" + firstdigit + String.valueOf(s) + "') ";
                 }
             }
-
+*/
             sql += " GROUP BY a.po, a.boxno, b.customer_no, b.customer_color,b.customer_size,a.SIZENO1,a.SIZENO2,a.SIZENO3,SIZENO4,a.SKU_ITEM1,a.SKU_ITEM2,a.SKU_ITEM3,a.SKU_ITEM4,a.NETWEIGHT,a.GROSSWEIGHT,c.QTY_RESULT1,c.QTY_RESULT2, c.QTY_RESULT3,c.QTY_RESULT4,a.DESTINATION ";
             sql += " ) tb ";
             sql += " GROUP BY ";
@@ -486,7 +492,7 @@ public class PackingListService {
         return listbox;
     }
 
-    public static List<BCDetailBox> GroupCustomerNoBySEQ(String po, String firstdigit, String STARTBOX, String ENDBOX, String seq) throws SQLException {
+    public static List<BCDetailBox> GroupCustomerNoBySEQ(String po, String firstdigit, String STARTBOX, String ENDBOX, String seq, String boxnoallbypo) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
@@ -504,16 +510,16 @@ public class PackingListService {
             sql += " GROUP BY a.PO,a.BOXNO,a.boxseq, b.customer_color";
             sql += " ) tb ";
             sql += " WHERE firstdigit = ? and po = ? and boxseq = ? ";
-            sql += " and boxno in (";
-
+            sql += " and boxno in (" + boxnoallbypo + ") ";
+            /*
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
-                if (s < Integer.parseInt(ENDBOX)) {
-                    sql += "'" + firstdigit + String.valueOf(s) + "',";
-                } else {
-                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
-                }
+            if (s < Integer.parseInt(ENDBOX)) {
+            sql += "'" + firstdigit + String.valueOf(s) + "',";
+            } else {
+            sql += "'" + firstdigit + String.valueOf(s) + "') ";
             }
-
+            }
+             */
 
             sql += "  ORDER BY tb.PO,CAST(REGEXP_SUBSTR(tb.boxno, '\\d+')  as int) ";
 
@@ -591,7 +597,7 @@ public class PackingListService {
         return listbox;
     }
 
-    public static List<BCDetailBox> GroupCustomerNoByPO(String po, String firstdigit, String STARTBOX, String ENDBOX) throws SQLException {
+    public static List<BCDetailBox> GroupCustomerNoByPO(String po, String firstdigit, String STARTBOX, String ENDBOX, String boxnoallbypo) throws SQLException {
         List<BCDetailBox> listbox = new ArrayList<BCDetailBox>();
         String sql = "";
         try {
@@ -609,16 +615,18 @@ public class PackingListService {
             sql += " GROUP BY a.PO,a.BOXNO,a.boxseq, b.customer_color";
             sql += " ) tb ";
             sql += " WHERE firstdigit = ? and po = ?  ";
+            sql += " and boxno in (" + boxnoallbypo + ") ";
+            /*
             sql += " and boxno in (";
-
+            
             for (int s = Integer.parseInt(STARTBOX); s < Integer.parseInt(ENDBOX) + 1; s++) {
-                if (s < Integer.parseInt(ENDBOX)) {
-                    sql += "'" + firstdigit + String.valueOf(s) + "',";
-                } else {
-                    sql += "'" + firstdigit + String.valueOf(s) + "') ";
-                }
+            if (s < Integer.parseInt(ENDBOX)) {
+            sql += "'" + firstdigit + String.valueOf(s) + "',";
+            } else {
+            sql += "'" + firstdigit + String.valueOf(s) + "') ";
             }
-
+            }
+             */
 
             sql += "  ORDER BY tb.PO,CAST(REGEXP_SUBSTR(tb.boxno, '\\d+')  as int) ";
 
