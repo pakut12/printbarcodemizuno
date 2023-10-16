@@ -29,6 +29,32 @@ public class InvoiceService {
     private static PreparedStatement ps;
     private static ResultSet rs;
 
+    public static boolean ChackINVOICE(String INVOICEID) {
+        boolean status = false;
+
+        try {
+            String sql = "select count(*) as status from MIZUNONEWBARBOXINVOICE where INVOICENO = TRIM(?)";
+            conn = ConnectDB.getConnection();
+            ps = conn.prepareStatement(sql);
+            ps.setString(1, INVOICEID);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                if (rs.getInt("status") > 0) {
+                    status = false;
+                } else {
+                    status = true;
+                }
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return status;
+    }
+
     public static List<BCInvoice> getDataFromDatabaseById(String id) throws ClassNotFoundException, SQLException, NamingException {
         List<BCInvoice> list = new ArrayList<BCInvoice>();
         try {
@@ -201,7 +227,7 @@ public class InvoiceService {
             }
             sql += ")tb) where rnum BETWEEN ? and ? ";
 
-            
+
             conn = ConnectDB.getConnection();
             ps = conn.prepareStatement(sql);
             ps.setString(1, "%" + searchValue + "%");

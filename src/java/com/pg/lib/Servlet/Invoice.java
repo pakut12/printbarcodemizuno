@@ -54,15 +54,19 @@ public class Invoice extends HttpServlet {
                     String addfinal = request.getParameter("addfinal");
                     String user_create = session.getAttribute("user").toString();
 
+                    boolean statusiv = InvoiceService.ChackINVOICE(invoiceno);
 
-                    boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to, addfinal, user_create);
+                    if (statusiv) {
+                        boolean status = InvoiceService.addinvoice(invoiceno, invoicedate, saveingno, listpo, customer, shipper, from, to, addfinal, user_create);
 
-                    if (status) {
-                        out.print("true");
+                        if (status) {
+                            out.print("true");
+                        } else {
+                            out.print("false");
+                        }
                     } else {
-                        out.print("false");
+                        out.print("falseiv");
                     }
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -136,7 +140,7 @@ public class Invoice extends HttpServlet {
                     obj.put("mfg", listdata.get(0).getMfg());
                     obj.put("user_create", listdata.get(0).getUser_create());
                     obj.put("user_edit", listdata.get(0).getUser_edit());
-                    
+
                     out.print(obj);
 
                 } catch (Exception e) {
@@ -179,20 +183,24 @@ public class Invoice extends HttpServlet {
                     String user_create = request.getParameter("user_create");
 
 
+                    boolean statusiv = InvoiceService.ChackINVOICE(invoiceno);
 
-                    boolean delstatus = InvoiceService.delinvoice(delid);
+                    if (statusiv) {
+                        boolean delstatus = InvoiceService.delinvoice(delid);
 
-                    if (delstatus) {
-                        boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to, finald, user_edit,user_create);
-                        if (status) {
-                            out.print("true");
+                        if (delstatus) {
+                            boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to, finald, user_edit, user_create);
+                            if (status) {
+                                out.print("true");
+                            } else {
+                                out.print("false");
+                            }
                         } else {
                             out.print("false");
                         }
                     } else {
-                        out.print("false");
+                        out.print("falseiv");
                     }
-
 
 
                 } catch (Exception e) {

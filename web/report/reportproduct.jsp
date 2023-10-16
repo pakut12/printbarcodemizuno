@@ -182,7 +182,7 @@
                     }
 
                     sum += Integer.parseInt(ds.ChackNull(qty_result));
-                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "','" + ds.ChackNull(list.get(i).getCustomer_no()) + "','" + ds.ChackNull(list.get(i).getCustomer_product()) + "','" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
+                    out.print("[ '" + ds.ChackNull(D) + "','" + ds.ChackNull(list.get(i).getPo()) + "',{text: '" + ds.ChackNull(list.get(i).getCustomer_no()) + "',alignment: 'left'},{text: '" + ds.ChackNull(list.get(i).getCustomer_product()) + "',alignment: 'left'},'" + ds.ChackNull(list.get(i).getProdorder()) + "','" + ds.ChackNull(list.get(i).getBoxno()) + "','" + ds.ChackNull(qty_result) + "','" + ds.ChackNull(mark) + "'],");
 
 
                     boxsum.add(list.get(i).getBoxno());

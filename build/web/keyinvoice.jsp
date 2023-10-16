@@ -817,6 +817,12 @@
                                 icon:'success',
                                 text:'บันทึกสำเร็จ'
                             })
+                        }else if(msg == "falseiv"){
+                            Swal.fire({
+                                title:'บันทึก',
+                                icon:'error',
+                                text:'บันทึกไม่สำเร็จ : เลขที่ INVOICE นี้มีอยู่เเล้ว'
+                            })
                         }else{
                             Swal.fire({
                                 title:'บันทึก',
@@ -1161,7 +1167,6 @@
                         from:$("#add_from").val(),
                         to:$("#add_to").val(),
                         addfinal:$("#add_final").val(),
-                        
                         po:JSON.stringify(listpo)
                     },
                     success:function(msg){
@@ -1170,6 +1175,12 @@
                                 title:'บันทึก',
                                 icon:'success',
                                 text:'บันทึกสำเร็จ'
+                            })
+                        }else if(msg == "falseiv"){
+                            Swal.fire({
+                                title:'บันทึก',
+                                icon:'error',
+                                text:'บันทึกไม่สำเร็จ : เลขที่ INVOICE นี้มีอยู่เเล้ว'
                             })
                         }else{
                             Swal.fire({
