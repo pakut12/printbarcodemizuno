@@ -1327,7 +1327,7 @@
                             margin: [45, 2] 
                         },
                         tbcontent: {
-                            fontSize:11,
+                            fontSize:10,
                             bold: true,
                             margin: [10, 2],
                             alignment:'center'                      

@@ -170,6 +170,7 @@ public class Invoice extends HttpServlet {
 
                     String delid = request.getParameter("id").trim();
                     String invoiceno = request.getParameter("invoiceno");
+                    String invoicenoold = request.getParameter("invoicenoold");
                     String invoicedate = request.getParameter("invoicedate");
                     String saveingno = request.getParameter("saveingno");
                     String listpo = request.getParameter("po");
@@ -183,11 +184,9 @@ public class Invoice extends HttpServlet {
                     String user_create = request.getParameter("user_create");
 
 
-                    boolean statusiv = InvoiceService.ChackINVOICE(invoiceno);
 
-                    if (statusiv) {
+                    if (invoiceno.equals(invoicenoold)) {
                         boolean delstatus = InvoiceService.delinvoice(delid);
-
                         if (delstatus) {
                             boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to, finald, user_edit, user_create);
                             if (status) {
@@ -198,8 +197,25 @@ public class Invoice extends HttpServlet {
                         } else {
                             out.print("false");
                         }
+
                     } else {
-                        out.print("falseiv");
+                        boolean statusiv = InvoiceService.ChackINVOICE(invoiceno);
+                        if (statusiv) {
+                            boolean delstatus = InvoiceService.delinvoice(delid);
+
+                            if (delstatus) {
+                                boolean status = InvoiceService.updateinvoice(invoiceno, invoicedate, saveingno, listpo, datecreate, customer, shipper, from, to, finald, user_edit, user_create);
+                                if (status) {
+                                    out.print("true");
+                                } else {
+                                    out.print("false");
+                                }
+                            } else {
+                                out.print("false");
+                            }
+                        } else {
+                            out.print("falseiv");
+                        }
                     }
 
 

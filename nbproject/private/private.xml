@@ -3,8 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/1"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/1">
         <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/src/java/com/pg/lib/Servlet/Invoice.java</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/src/java/com/pg/lib/service/CustomerService.java</file>
         <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/src/java/com/pg/lib/service/InvoiceService.java</file>
-        <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/src/java/com/pg/lib/utility/ConnectDB.java</file>
         <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/web/keyinvoice.jsp</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/web/keyproduct.jsp</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/web/report/packinglist.jsp</file>
+        <file>file:/C:/Users/pakutsing/Desktop/Github/printbarcodemizuno/web/report/packinglistpdf.jsp</file>
     </open-files>
 </project-private>

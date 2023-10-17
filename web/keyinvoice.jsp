@@ -15,7 +15,6 @@
     <body>
         
         <%@ include file="share/navbar.jsp" %>
-        
         <div class="modal fade" id="modal_viewinvoice" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
@@ -24,13 +23,13 @@
                             <h1 class="modal-title fs-5" id="exampleModalLabel">รายละเอียดข้อมูล PackingList</h1>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        
                         <div class="container">
                             <div class="d-flex justify-content-center">
                                 <div class="row mt-3 mx-auto ">
                                     <div class="col-sm-12 col-md-3">
                                         <input id="edit_user_create" name="edit_user_create" type="hidden">
                                         <input id="edit_invoiceid" name="edit_invoiceid" type="hidden">
+                                        <input id="edit_invoicenoold" name="edit_invoicenoold" type="hidden">   
                                         <input id="edit_datecreate" name="edit_datecreate" type="hidden">
                                         <div class="input-group input-group-sm mb-3">
                                             <span class="input-group-text" id="inputGroup-sizing-sm">INVOICENO</span>
@@ -145,7 +144,7 @@
                             <div class="me-auto">
                                 <button type="button" class="btn btn-danger "  onclick="btdelinvoice()"  id="btn-delete">ลบ PackingList</button>
                             </div>
-                            <button type="button" class="btn btn-dark"  onclick="btloadexcel()"  id="btn-loadpdf">PackingList Excel</button>
+                            <!--<button type="button" class="btn btn-dark"  onclick="btloadexcel()"  id="btn-loadpdf">PackingList Excel</button>-->
                             <button type="button" class="btn btn-dark"  onclick="btloadinvoice()"  id="btn-loadpdf">PackingList PDF</button>
                             <button type="button" class="btn btn-success "  onclick="btprintinvoice()"  id="btn-print">พิมพ์ PackingList</button>
                             <button type="button" class="btn btn-primary " onclick="bteditinvoice()"  id="btn-edit">แก้ไข PackingList</button>
@@ -798,6 +797,7 @@
                     data:{
                         type:"updateinvoice",
                         user_create:$("#edit_user_create").val(),
+                        invoicenoold:$("#edit_invoicenoold").val().toUpperCase().trim(),
                         invoiceno:$("#edit_invoiceno").val().toUpperCase().trim(),
                         invoicedate:$("#edit_invoicedate").val().toUpperCase().trim(),
                         saveingno:$("#edit_saveingno").val().toUpperCase().trim(),
@@ -877,7 +877,7 @@
                         var js = JSON.parse(msg)
                         console.log(js)
                         var jsdecode = JSON.parse(js.data)
-           
+                        $("#edit_invoicenoold").val(js.invoiceno.toUpperCase().trim())
                         $("#edit_user_create").val(js.user_create)
                         $("#edit_invoiceid").val(js.invoiceid.toUpperCase().trim())
                         $("#edit_invoiceno").val(js.invoiceno.toUpperCase().trim())
