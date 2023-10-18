@@ -142,9 +142,9 @@
                         
                         <div class="modal-footer">
                             <div class="me-auto">
-                                <button type="button" class="btn btn-danger "  onclick="btdelinvoice()"  id="btn-delete">ลบ PackingList</button>
+                                <button type="button" class="btn btn-danger  "  onclick="btdelinvoice()"  id="btn-delete">ลบ PackingList</button>
                             </div>
-                            <!--<button type="button" class="btn btn-dark"  onclick="btloadexcel()"  id="btn-loadpdf">PackingList Excel</button>-->
+                            <!--<button type="button" class="btn bg-success-subtle text-success " onmouseover="$(this).addClass('border border-success')" onmouseout="$(this).removeClass('border border-success')"  onclick="btloadexcel()"  id="btn-loadexcel">PackingList Excel</button>-->
                             <button type="button" class="btn btn-dark"  onclick="btloadinvoice()"  id="btn-loadpdf">PackingList PDF</button>
                             <button type="button" class="btn btn-success "  onclick="btprintinvoice()"  id="btn-print">พิมพ์ PackingList</button>
                             <button type="button" class="btn btn-primary " onclick="bteditinvoice()"  id="btn-edit">แก้ไข PackingList</button>
@@ -243,7 +243,7 @@
                                     </div>
                                     <div class="col-sm-12 col-md-3">
                                         <div class="input-group input-group-sm mb-3">
-                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DESTINTION</span>
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">FINAL DESTINATION</span>
                                             <input type="text" class="form-control text-center" name="add_final" id="add_final" required>
                                         </div>
                                     </div>
